@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.midea.mapper.WmMovieMapper">
+
+    <resultMap type="WmMovie" id="WmMovieResult">
+        <result property="movieId"    column="movie_id"    />
+        <result property="images"    column="images"    />
+        <result property="title"    column="title"    />
+        <result property="movieType"    column="movie_type"    />
+        <result property="country"    column="country"    />
+        <result property="label"    column="label"    />
+        <result property="description"    column="description"    />
+        <result property="publishBy"    column="publish_by"    />
+        <result property="publishTime"    column="publish_time"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="readCount"    column="read_count"    />
+        <result property="commentCount"    column="comment_count"    />
+        <result property="followCount"    column="follow_count"    />
+        <result property="collectionCount"    column="collection_count"    />
+        <result property="likesCount"    column="likes_count"    />
+        <result property="unlikesCount"    column="unlikes_count"    />
+        <result property="shareCount"    column="share_count"    />
+        <result property="isComment"    column="is_comment"    />
+        <result property="isDownload"    column="is_download"    />
+    </resultMap>
+
+    <resultMap id="WmMovieWmMovieVideoResult" type="WmMovie" extends="WmMovieResult">
+        <collection property="wmMovieVideoList" notNullColumn="sub_movie_video_id" javaType="java.util.List" resultMap="WmMovieVideoResult" />
+    </resultMap>
+
+    <resultMap type="WmMovieVideo" id="WmMovieVideoResult">
+        <result property="movieVideoId"    column="sub_movie_video_id"    />
+        <result property="title"    column="sub_title"    />
+        <result property="url"    column="sub_url"    />
+        <result property="ext"    column="sub_ext"    />
+        <result property="length"    column="sub_length"    />
+        <result property="type"    column="sub_type"    />
+        <result property="storageType"    column="sub_storage_type"    />
+        <result property="createTime"    column="sub_create_time"    />
+        <result property="createBy"    column="sub_create_by"    />
+        <result property="updateTime"    column="sub_update_time"    />
+        <result property="updateBy"    column="sub_update_by"    />
+        <result property="delFlag"    column="sub_del_flag"    />
+        <result property="remark"    column="sub_remark"    />
+        <result property="movieId"    column="sub_movie_id"    />
+        <result property="filesize"    column="sub_filesize"    />
+    </resultMap>
+
+    <sql id="selectWmMovieVo">
+        select movie_id, images, title, movie_type, country, label, description, publish_by, publish_time, status, create_by, create_time, update_by, update_time, del_flag, remark, read_count, comment_count, follow_count, collection_count, likes_count, unlikes_count, share_count, is_comment, is_download from wm_movie
+    </sql>
+
+    <select id="selectWmMovieList" parameterType="WmMovie" resultMap="WmMovieResult">
+        <include refid="selectWmMovieVo"/>
+        <where>
+            <if test="images != null  and images != ''"> and images = #{images}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="movieType != null  and movieType != ''"> and movie_type = #{movieType}</if>
+            <if test="country != null  and country != ''"> and country = #{country}</if>
+            <if test="label != null  and label != ''"> and label = #{label}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="publishBy != null  and publishBy != ''"> and publish_by = #{publishBy}</if>
+            <if test="publishTime != null "> and publish_time = #{publishTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="readCount != null "> and read_count = #{readCount}</if>
+            <if test="commentCount != null "> and comment_count = #{commentCount}</if>
+            <if test="followCount != null "> and follow_count = #{followCount}</if>
+            <if test="collectionCount != null "> and collection_count = #{collectionCount}</if>
+            <if test="likesCount != null "> and likes_count = #{likesCount}</if>
+            <if test="unlikesCount != null "> and unlikes_count = #{unlikesCount}</if>
+            <if test="shareCount != null "> and share_count = #{shareCount}</if>
+            <if test="isComment != null  and isComment != ''"> and is_comment = #{isComment}</if>
+            <if test="isDownload != null  and isDownload != ''"> and is_download = #{isDownload}</if>
+        </where>
+    </select>
+
+    <select id="selectWmMovieById" parameterType="Long" resultMap="WmMovieWmMovieVideoResult">
+        select a.movie_id, a.images, a.title, a.movie_type, a.country, a.label, a.description, a.publish_by, a.publish_time, a.status, a.create_by, a.create_time, a.update_by, a.update_time, a.del_flag, a.remark, a.read_count, a.comment_count, a.follow_count, a.collection_count, a.likes_count, a.unlikes_count, a.share_count, a.is_comment, a.is_download,
+            b.movie_video_id as sub_movie_video_id, b.title as sub_title, b.url as sub_url, b.ext as sub_ext, b.length as sub_length, b.type as sub_type, b.storage_type as sub_storage_type, b.create_time as sub_create_time, b.create_by as sub_create_by, b.update_time as sub_update_time, b.update_by as sub_update_by, b.del_flag as sub_del_flag, b.remark as sub_remark, b.movie_id as sub_movie_id,
+            b.filesize as sub_filesize
+        from wm_movie a
+        left join wm_movie_video b on b.movie_id = a.movie_id
+        where a.movie_id = #{movieId}
+    </select>
+
+    <insert id="insertWmMovie" parameterType="WmMovie" useGeneratedKeys="true" keyProperty="movieId">
+        insert into wm_movie
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="images != null">images,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="movieType != null">movie_type,</if>
+            <if test="country != null">country,</if>
+            <if test="label != null">label,</if>
+            <if test="description != null">description,</if>
+            <if test="publishBy != null">publish_by,</if>
+            <if test="publishTime != null">publish_time,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="remark != null">remark,</if>
+            <if test="readCount != null">read_count,</if>
+            <if test="commentCount != null">comment_count,</if>
+            <if test="followCount != null">follow_count,</if>
+            <if test="collectionCount != null">collection_count,</if>
+            <if test="likesCount != null">likes_count,</if>
+            <if test="unlikesCount != null">unlikes_count,</if>
+            <if test="shareCount != null">share_count,</if>
+            <if test="isComment != null">is_comment,</if>
+            <if test="isDownload != null">is_download,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="images != null">#{images},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="movieType != null">#{movieType},</if>
+            <if test="country != null">#{country},</if>
+            <if test="label != null">#{label},</if>
+            <if test="description != null">#{description},</if>
+            <if test="publishBy != null">#{publishBy},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="readCount != null">#{readCount},</if>
+            <if test="commentCount != null">#{commentCount},</if>
+            <if test="followCount != null">#{followCount},</if>
+            <if test="collectionCount != null">#{collectionCount},</if>
+            <if test="likesCount != null">#{likesCount},</if>
+            <if test="unlikesCount != null">#{unlikesCount},</if>
+            <if test="shareCount != null">#{shareCount},</if>
+            <if test="isComment != null">#{isComment},</if>
+            <if test="isDownload != null">#{isDownload},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmMovie" parameterType="WmMovie">
+        update wm_movie
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="images != null">images = #{images},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="movieType != null">movie_type = #{movieType},</if>
+            <if test="country != null">country = #{country},</if>
+            <if test="label != null">label = #{label},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="publishBy != null">publish_by = #{publishBy},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="readCount != null">read_count = #{readCount},</if>
+            <if test="commentCount != null">comment_count = #{commentCount},</if>
+            <if test="followCount != null">follow_count = #{followCount},</if>
+            <if test="collectionCount != null">collection_count = #{collectionCount},</if>
+            <if test="likesCount != null">likes_count = #{likesCount},</if>
+            <if test="unlikesCount != null">unlikes_count = #{unlikesCount},</if>
+            <if test="shareCount != null">share_count = #{shareCount},</if>
+            <if test="isComment != null">is_comment = #{isComment},</if>
+            <if test="isDownload != null">is_download = #{isDownload},</if>
+        </trim>
+        where movie_id = #{movieId}
+    </update>
+
+    <delete id="deleteWmMovieById" parameterType="Long">
+        delete from wm_movie where movie_id = #{movieId}
+    </delete>
+
+    <delete id="deleteWmMovieByIds" parameterType="String">
+        delete from wm_movie where movie_id in
+        <foreach item="movieId" collection="array" open="(" separator="," close=")">
+            #{movieId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteWmMovieVideoByMovieIds" parameterType="String">
+        delete from wm_movie_video where movie_id in
+        <foreach item="movieId" collection="array" open="(" separator="," close=")">
+            #{movieId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteWmMovieVideoByMovieId" parameterType="Long">
+        delete from wm_movie_video where movie_id = #{movieId}
+    </delete>
+
+    <insert id="batchWmMovieVideo">
+        insert into wm_movie_video( movie_video_id, title, url, ext, length, type, storage_type, create_time, create_by, update_time, update_by, del_flag, remark, movie_id,filesize) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.movieVideoId}, #{item.title}, #{item.url}, #{item.ext}, #{item.length}, #{item.type}, #{item.storageType}, #{item.createTime}, #{item.createBy}, #{item.updateTime}, #{item.updateBy}, #{item.delFlag}, #{item.remark}, #{item.movieId}, #{item.filesize})
+        </foreach>
+    </insert>
+</mapper>
