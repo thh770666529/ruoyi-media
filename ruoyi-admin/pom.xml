@@ -12,7 +12,7 @@
     <artifactId>ruoyi-admin</artifactId>
 
     <description>
-        web服务入口
+        媒资视频后台管理系统
     </description>
 
     <dependencies>
