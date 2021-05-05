@@ -75,7 +75,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="bannerId" />
       <el-table-column label="标题" align="center" prop="title" />
-      <el-table-column label="图片地址" align="center" prop="imageUrl" />
+      <el-table-column prop="imageUrl" label="图片地址" align="center" width="200">
+        <template slot-scope="scope">
+          <el-image :src="scope.row.imageUrl" />
+        </template>
+      </el-table-column>
       <el-table-column label="链接地址" align="center" prop="linkUrl" />
       <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="备注" align="center" prop="remark" />

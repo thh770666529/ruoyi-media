@@ -58,6 +58,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select movie_id, images, title, movie_type, country, label, description, publish_by, publish_time, status, create_by, create_time, update_by, update_time, del_flag, remark, read_count, comment_count, follow_count, collection_count, likes_count, unlikes_count, share_count, is_comment, is_download from wm_movie
     </sql>
 
+    <select id="selectHotMovieList" parameterType="Integer" resultMap="WmMovieResult">
+        <include refid="selectWmMovieVo"/>
+        order by create_time desc limit #{top}
+    </select>
+
     <select id="selectWmMovieList" parameterType="WmMovie" resultMap="WmMovieResult">
         <include refid="selectWmMovieVo"/>
         <where>

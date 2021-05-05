@@ -104,7 +104,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="images" label="封面" align="center" width="200">
         <template slot-scope="scope">
-          <el-image :src="scope.row.images" />
+          <el-image :src="fileUploadHost+scope.row.images" />
         </template>
       </el-table-column>
       <el-table-column label="标题" align="center" prop="title" width="600" />
@@ -156,7 +156,7 @@ export default {
   },
   data() {
     return {
-      uploadImagesUrl:null,
+      fileUploadHost: null,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -223,7 +223,7 @@ export default {
     }
   },
   created() {
-    this.uploadImagesUrl =process.env.VUE_APP_BASE_API+"/media/movie/upload/images";
+    this.fileUploadHost =process.env.VUE_APP_FILE_UOLOAD_HOST;
     this.getList();
     this.getDicts("movie_country").then(response => {
       this.countryOptions = response.data;

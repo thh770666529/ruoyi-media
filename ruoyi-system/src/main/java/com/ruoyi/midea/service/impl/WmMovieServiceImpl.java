@@ -107,6 +107,11 @@ public class WmMovieServiceImpl implements IWmMovieService
         return wmMovieMapper.deleteWmMovieById(movieId);
     }
 
+    @Override
+    public List<WmMovie> selectHotMovieList(int top) {
+        return  wmMovieMapper.selectHotMovieList(top);
+    }
+
     /**
      * 新增电影视频信息
      *

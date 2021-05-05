@@ -58,4 +58,11 @@ public interface IWmMovieService
      * @return 结果
      */
     public int deleteWmMovieById(Long movieId);
+
+    /**
+     * 查询前几的热门电影
+     * @param top
+     * @return
+     */
+    public List<WmMovie> selectHotMovieList(int top);
 }

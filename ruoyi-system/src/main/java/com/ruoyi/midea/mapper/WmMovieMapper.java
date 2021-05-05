@@ -86,4 +86,11 @@ public interface WmMovieMapper
      * @return 结果
      */
     public int deleteWmMovieVideoByMovieId(Long movieId);
+
+    /**
+     * 查询前几的热门电影
+     * @param top
+     * @return
+     */
+    List<WmMovie> selectHotMovieList(int top);
 }

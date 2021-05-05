@@ -67,7 +67,7 @@
                 :headers="headers"
 
               >
-                <img v-if="form.images" :src="form.images" class="images">
+                <img v-if="form.images" :src="fileUploadHost+form.images" class="images">
                 <i v-else class="el-icon-plus images-uploader-icon"></i>
               </el-upload>
             </el-form-item>
@@ -231,6 +231,7 @@ export default {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
+      fileUploadHost: null,
       uploadImagesUrl: null,
       uploadVideoUrl: null,
       // 遮罩层
@@ -294,6 +295,7 @@ export default {
     this.init();
   },
   created() {
+    this.fileUploadHost = process.env.VUE_APP_FILE_UOLOAD_HOST;
     this.uploadImagesUrl =process.env.VUE_APP_BASE_API+"/media/movie/upload/images";
     this.uploadVideoUrl =process.env.VUE_APP_BASE_API+"/media/movie/upload/video";
 
@@ -501,7 +503,7 @@ export default {
     handleImagesSuccess(res, file) {
       const code = res.code;
       if (code == 200) {
-        this.form.images = process.env.VUE_APP_BASE_API + res.url;
+        this.form.images =  res.url;
         this.msgSuccess("上传成功！");
       } else {
         this.msgError(res.msg);
