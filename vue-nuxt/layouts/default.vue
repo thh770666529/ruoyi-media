@@ -78,7 +78,7 @@
       </section>
     </header>
     <!-- /公共头引入 -->
-      
+
     <nuxt/>
 
     <!-- 公共底引入 -->
@@ -89,8 +89,8 @@
             <span class="fsize18 f-fM c-999">友情链接</span>
           </h4>
           <ul class="of flink-list">
-            <li>
-              <a href="http://www.atguigu.com/" title="尚硅谷" target="_blank">尚硅谷</a>
+            <li v-for="link in linkList" :key="link.linkId">
+              <a :href="link.linkUrl" title="尚硅谷" :target="link.linkTarget">{{link.linkName}}</a>
             </li>
           </ul>
           <div class="clear"></div>
@@ -142,7 +142,7 @@ import '~/assets/css/nice_select.css'
 import '~/assets/css/order.css'
 import '~/assets/css/swiper-3.3.1.min.css'
 import "~/assets/css/pages-weixinpay.css"
-
+import index from '@/api/index'
 import cookie from 'js-cookie'
 import loginApi from '@/api/login'
 
@@ -157,7 +157,8 @@ export default {
           mobile: '',
           nickname: '',
           sex: ''
-        }
+        },
+        linkList:[]
     }
   },
   created() {
@@ -167,9 +168,12 @@ export default {
     if(this.token) {//判断路径是否有token值
        this.wxLogin()
     }
-
+    index.getLinkList().then(response => {
+      this.linkList = response.data.data;
+    })
     this.showInfo()
   },
+
   methods:{
     //微信登录显示的方法
     wxLogin() {

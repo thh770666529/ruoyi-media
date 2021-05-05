@@ -5,7 +5,7 @@
   <div v-swiper:mySwiper="swiperOption">
       <div class="swiper-wrapper">
 
-          <div v-for="banner in bannerList" :key="banner.id" class="swiper-slide" style="background: #040B1B;">
+          <div v-for="banner in bannerList" :key="banner.bannerId" class="swiper-slide" style="background: #040B1B;">
               <a target="_blank" :href="banner.linkUrl">
                   <img :src="banner.imageUrl" :alt="banner.title">
               </a>
@@ -18,36 +18,36 @@
   <!-- 幻灯片 结束 -->
 
      <div id="aCoursesList">
-      <!-- 网校课程 开始 -->
+      <!-- 热门电影 开始 -->
       <div>
         <section class="container">
           <header class="comm-title">
             <h2 class="tac">
-              <span class="c-333">热门课程</span>
+              <span class="c-333">热门电影</span>
             </h2>
           </header>
           <div>
             <article class="comm-course-list">
               <ul class="of" id="bna">
-                <li v-for="course in eduList" :key="course.id">
+                <li v-for="movie in movieList" :key="movie.movieId">
                   <div class="cc-l-wrap">
                     <section class="course-img">
                       <img
-                        :src="course.cover"
+                        :src="fileUploadHost+movie.images"
                         class="img-responsive"
-                        :alt="course.title"
+                        :alt="movie.title"
                       >
                       <div class="cc-mask">
-                        <a href="/course/1" title="开始学习" class="comm-btn c-btn-1">开始学习</a>
+                        <a href="/course/1" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
                       </div>
                     </section>
                     <h3 class="hLh30 txtOf mt10">
-                      <a href="/course/1" :title="course.title" class="course-title fsize18 c-333">{{course.title}}</a>
+                      <a href="/course/1" :title="movie.title" class="course-title fsize18 c-333">{{movie.title}}</a>
                     </h3>
                     <section class="mt10 hLh20 of">
-                      <span class="fr jgTag bg-green" v-if="Number(course.price) === 0">
+                    <!--  <span class="fr jgTag bg-green" v-if="Number(movie.price) === 0">
                         <i class="c-fff fsize12 f-fA">免费</i>
-                      </span>
+                      </span>-->
                       <span class="fl jgAttr c-ccc f-fA">
                         <i class="c-999 f-fA">9634人学习</i>
                         |
@@ -61,60 +61,18 @@
               <div class="clear"></div>
             </article>
             <section class="tac pt20">
-              <a href="#" title="全部课程" class="comm-btn c-btn-2">全部课程</a>
+              <a href="#" title="全部电影" class="comm-btn c-btn-2">全部电影</a>
             </section>
           </div>
         </section>
       </div>
-      <!-- /网校课程 结束 -->
-      <!-- 网校名师 开始 -->
-      <div>
-        <section class="container">
-          <header class="comm-title">
-            <h2 class="tac">
-              <span class="c-333">名师大咖</span>
-            </h2>
-          </header>
-          <div>
-            <article class="i-teacher-list">
-              <ul class="of">
-                <li v-for="teacher in teacherList" :key="teacher.id">
-                  <section class="i-teach-wrap">
-                    <div class="i-teach-pic">
-                      <a href="/teacher/1" :title="teacher.name">
-                        <img :alt="teacher.name" :src="teacher.avatar">
-                      </a>
-                    </div>
-                    <div class="mt10 hLh30 txtOf tac">
-                      <a href="/teacher/1" :title="teacher.name" class="fsize18 c-666">{{teacher.name}}</a>
-                    </div>
-                    <div class="hLh30 txtOf tac">
-                      <span class="fsize14 c-999">{{teacher.career}}</span>
-                    </div>
-                    <div class="mt15 i-q-txt">
-                      <p
-                        class="c-999 f-fA"
-                      >{{teacher.intro}}</p>
-                    </div>
-                  </section>
-                </li>
 
-              </ul>
-              <div class="clear"></div>
-            </article>
-            <section class="tac pt20">
-              <a href="#" title="全部讲师" class="comm-btn c-btn-2">全部讲师</a>
-            </section>
-          </div>
-        </section>
-      </div>
-      <!-- /网校名师 结束 -->
+      <!-- /热门电影 结束 -->
     </div>
   </div>
 </template>
 
 <script>
-import banner from '@/api/banner'
 import index from '@/api/index'
 export default {
   data () {
@@ -133,57 +91,32 @@ export default {
       },
       //banner数组
       bannerList:[],
-      eduList:[],
-      teacherList:[]
+      movieList:[],
+      teacherList:[],
+      fileUploadHost:'http://localhost:7070'
     }
   },
   created() {
-    //调用查询banner的方法
-    this.getBannerList()
-    //调用查询热门课程和名师的方法
-    this.getHotCourseTeacher()
+    //查看所有轮播图
+    this.getAllBannerList()
+    //查看热门电影
+    this.getHotMovieList()
   },
   methods:{
     //查询热门课程和名师
-    getHotCourseTeacher() {
-     /* index.getIndexData()
+    getHotMovieList() {
+     index.getHotMovieList()
         .then(response => {
-          this.eduList = response.data.data.eduList
-          this.teacherList = response.data.data.teacherList
-        })*/
-      this.eduList=[
-        {
-          "id": "1192252213659774977",
-          "teacherId": "1189389726308478977",
-          "subjectId": "1178214681139539969",
-          "subjectParentId": "1178214681118568449",
-          "title": "XHTML CSS2 JS整站制作教程课程学习",
-          "price": "0",
-        "lessonNum": "2",
-        "cover": "https://online-teach-file.oss-cn-beijing.aliyuncs.com/cms/2019/11/14/297acd3b-b592-4cfb-a446-a28310369675.jpg",
-        "buyCount": "2",
-        "viewCount": "387",
-        "version": "1",
-        "status": "Normal"
-    }
-      ];
+        this.movieList = response.data.data;
+        })
+
     },
     //查询banner数据
-    getBannerList() {
-      /*banner.getListBanner()
+    getAllBannerList() {
+      index.getAllBannerList()
         .then(response => {
-          this.bannerList = response.data.data.list
-        });*/
-      this.bannerList = [
-        {
-          "id":"1194556896025845762",
-          "title":"test",
-          "imageUrl": "https://online-teach-file.oss-cn-beijing.aliyuncs.com/cms/2019/11/14/297acd3b-b592-4cfb-a446-a28310369675.jpg",
-          "linkUrl":"/course"
-        }
-
-
-      ];
+          this.bannerList = response.data.data
+        });
     }
   }
 }

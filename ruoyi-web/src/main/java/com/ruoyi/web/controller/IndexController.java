@@ -4,7 +4,9 @@ package com.ruoyi.web.controller;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.midea.service.IWmMovieService;
 import com.ruoyi.website.domain.WebsiteBanner;
+import com.ruoyi.website.domain.WebsiteLink;
 import com.ruoyi.website.service.IWebsiteBannerService;
+import com.ruoyi.website.service.IWebsiteLinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,9 @@ public class IndexController {
     @Autowired
     private IWebsiteBannerService websiteBannerService;
 
+    @Autowired
+    private IWebsiteLinkService websiteLinkService;
+
 
     @GetMapping("/getHotMovieList")
     public AjaxResult getHotMovieList(){
@@ -39,6 +44,12 @@ public class IndexController {
     @GetMapping("/getAllBannerList")
     public AjaxResult getAllBannerList(){
         List<WebsiteBanner> list = websiteBannerService.selectWebsiteBannerList(null);
+        return AjaxResult.success(list);
+    }
+
+    @GetMapping("/getLinkList")
+    public AjaxResult getLinkList(){
+        List<WebsiteLink> list = websiteLinkService.selectWebsiteLinkList(null);
         return AjaxResult.success(list);
     }
 }

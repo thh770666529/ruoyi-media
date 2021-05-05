@@ -4,7 +4,7 @@ import cookie from 'js-cookie'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://localhost:9001', // api的base_url
+  baseURL: 'http://localhost:7070', // api的base_url
   timeout: 20000 // 请求超时时间
 })
 
@@ -34,7 +34,7 @@ service.interceptors.response.use(
         window.location.href="/login"
         return
     }else{
-      if (response.data.code !== 20000) {
+      if (response.data.code !== 200) {
         //25000：订单支付中，不做任何提示
         if(response.data.code != 25000) {
           Message({
