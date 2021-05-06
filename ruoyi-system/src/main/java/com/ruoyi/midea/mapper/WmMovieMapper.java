@@ -93,4 +93,11 @@ public interface WmMovieMapper
      * @return
      */
     List<WmMovie> selectHotMovieList(int top);
+
+    /**
+     * 查询视频详情
+     * @param movieVideoId
+     * @return
+     */
+    WmMovieVideo selectWmMovieVideoById(Long movieVideoId);
 }

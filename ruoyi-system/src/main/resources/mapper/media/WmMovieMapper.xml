@@ -54,9 +54,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="filesize"    column="sub_filesize"    />
     </resultMap>
 
+    <resultMap type="WmMovieVideo" id="movieVideoResult">
+        <result property="movieVideoId"    column="movie_video_id"    />
+        <result property="title"    column="title"    />
+        <result property="url"    column="url"    />
+        <result property="ext"    column="ext"    />
+        <result property="length"    column="length"    />
+        <result property="type"    column="type"    />
+        <result property="storageType"    column="storage_type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="movieId"    column="movie_id"    />
+        <result property="filesize"    column="filesize"    />
+    </resultMap>
+
+
     <sql id="selectWmMovieVo">
         select movie_id, images, title, movie_type, country, label, description, publish_by, publish_time, status, create_by, create_time, update_by, update_time, del_flag, remark, read_count, comment_count, follow_count, collection_count, likes_count, unlikes_count, share_count, is_comment, is_download from wm_movie
     </sql>
+
+
+    <select id="selectWmMovieVideoById" parameterType="Long" resultMap="movieVideoResult">
+      select * from wm_movie_video where movie_video_id = #{movieVideoId}
+    </select>
 
     <select id="selectHotMovieList" parameterType="Integer" resultMap="WmMovieResult">
         <include refid="selectWmMovieVo"/>

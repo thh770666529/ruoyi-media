@@ -54,4 +54,13 @@ public class WmMovieController extends BaseController
     {
         return AjaxResult.success(wmMovieService.selectWmMovieById(movieId));
     }
+
+    /**
+     * 获取电影管理详细信息
+     */
+    @GetMapping(value = "/movieVideo/{movieVideoId}")
+    public AjaxResult getMovieVideoDetail(@PathVariable("movieVideoId") Long movieVideoId)
+    {
+        return AjaxResult.success(wmMovieService.selectWmMovieVideoById(movieVideoId));
+    }
 }

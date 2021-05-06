@@ -112,6 +112,13 @@ public class WmMovieServiceImpl implements IWmMovieService
         return  wmMovieMapper.selectHotMovieList(top);
     }
 
+    @Override
+    public WmMovieVideo selectWmMovieVideoById(Long movieVideoId) {
+
+        return wmMovieMapper.selectWmMovieVideoById(movieVideoId);
+
+    }
+
     /**
      * 新增电影视频信息
      *

@@ -2,6 +2,7 @@ package com.ruoyi.midea.service;
 
 import java.util.List;
 import com.ruoyi.midea.domain.WmMovie;
+import com.ruoyi.midea.domain.WmMovieVideo;
 
 /**
  * 电影管理Service接口
@@ -65,4 +66,6 @@ public interface IWmMovieService
      * @return
      */
     public List<WmMovie> selectHotMovieList(int top);
+
+    WmMovieVideo selectWmMovieVideoById(Long movieVideoId);
 }
