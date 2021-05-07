@@ -4,8 +4,8 @@
     <header id="header">
       <section class="container">
         <h1 id="logo">
-          <a href="#" title="谷粒学院">
-            <img src="~/assets/img/logo.png" width="100%" alt="谷粒学院">
+          <a href="#" title="蘑菇影院">
+            <img src="~/assets/img/logo2.png" width="100%" alt="蘑菇影院">
           </a>
         </h1>
         <div class="h-r-nsl">
@@ -13,8 +13,8 @@
             <router-link to="/" tag="li" active-class="current" exact>
               <a>首页</a>
             </router-link>
-            <router-link to="/course" tag="li" active-class="current">
-              <a>课程</a>
+            <router-link to="/movie" tag="li" active-class="current">
+              <a>电影</a>
             </router-link>
             <router-link to="/teacher" tag="li" active-class="current">
               <a>名师</a>
@@ -63,7 +63,7 @@
           <aside class="h-r-search">
             <form action="#" method="post">
               <label class="h-r-s-box">
-                <input type="text" placeholder="输入你想学的课程" name="queryCourse.courseName" value>
+                <input type="text" placeholder="输入你想学的电影" name="queryCourse.courseName" value>
                 <button type="submit" class="s-btn">
                   <em class="icon18">&nbsp;</em>
                 </button>
@@ -104,10 +104,10 @@
                 <a href="#" title="帮助中心" target="_blank">帮助中心</a>|
                 <a href="#" title="资源下载" target="_blank">资源下载</a>|
                 <span>服务热线：010-56253825(北京) 0755-85293825(深圳)</span>
-                <span>Email：info@atguigu.com</span>
+                <span>Email：info@ithhit.com</span>
               </section>
               <section class="b-f-link mt10">
-                <span>©2018课程版权均归谷粒学院所有 京ICP备17055252号</span>
+                <span>©2021电影版权均归辉皇影院所有 京ICP备17055252号</span>
               </section>
             </section>
           </section>

@@ -1,6 +1,6 @@
 <template>
   <div id="aCoursesList" class="bg-fa of">
-    <!-- /课程详情 开始 -->
+    <!-- /电影详情 开始 -->
     <section class="container">
       <section class="path-wrap txtOf hLh30">
         <a href="#" title class="c-999 fsize14">首页</a>
@@ -71,20 +71,20 @@
         </aside>
         <div class="clear"></div>
       </div>
-      <!-- /课程封面介绍 -->
+      <!-- /电影封面介绍 -->
       <div class="mt20 c-infor-box">
         <article class="fl col-7">
           <section class="mr30">
             <div class="i-box">
               <div>
                 <section id="c-i-tabTitle" class="c-infor-tabTitle c-tab-title">
-                  <a name="c-i" class="current" title="课程详情">课程详情</a>
+                  <a name="c-i" class="current" title="电影详情">电影详情</a>
                 </section>
               </div>
               <article class="ml10 mr10 pt20">
                 <div>
                   <h6 class="c-i-content c-infor-title">
-                    <span>课程介绍</span>
+                    <span>电影介绍</span>
                   </h6>
                   <div class="course-txt-body-wrap">
                     <section class="course-txt-body">
@@ -92,10 +92,10 @@
                     </section>
                   </div>
                 </div>
-                <!-- /课程介绍 -->
+                <!-- /电影介绍 -->
                 <div class="mt50">
                   <h6 class="c-g-content c-infor-title">
-                    <span>课程大纲</span>
+                    <span>电影大纲</span>
                   </h6>
                   <section class="mt20">
                     <div class="lh-menu-wrap">
@@ -125,7 +125,7 @@
                     </div>
                   </section>
                 </div>
-                <!-- /课程大纲 -->
+                <!-- /电影大纲 -->
               </article>
             </div>
           </section>
@@ -159,7 +159,7 @@
         <div class="clear"></div>
       </div>
     </section>
-    <!-- /课程详情 结束 -->
+    <!-- /电影详情 结束 -->
   </div>
 </template>
 
@@ -182,7 +182,7 @@ export default {
       this.initCourseInfo()
    },
    methods:{
-     //查询课程详情信息
+     //查询电影详情信息
      initCourseInfo() {
         courseApi.getCourseInfo(this.courseId)
           .then(response => {

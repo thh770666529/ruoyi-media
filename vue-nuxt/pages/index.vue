@@ -103,7 +103,7 @@ export default {
     this.getHotMovieList()
   },
   methods:{
-    //查询热门课程和名师
+    //查询热门电影和名师
     getHotMovieList() {
      index.getHotMovieList()
         .then(response => {

@@ -26,7 +26,7 @@
         </div>
         <div class="clearfix"></div>
         <!-- <p><a href="pay.html" target="_blank">> 其他支付方式</a></p> -->
-        
+
       </div>
     </div>
   </div>
@@ -65,7 +65,7 @@ export default {
                             type: 'success',
                             message: '支付成功!'
                         })
-                        //跳转回到课程详情页面
+                        //跳转回到电影详情页面
                         this.$router.push({path: '/course/' + this.payObj.course_id})
                      }
                 })

@@ -35,7 +35,7 @@
         <div>
           <header class="comm-title all-teacher-title c-course-content">
             <h2 class="fl tac">
-              <span class="c-333">主讲课程</span>
+              <span class="c-333">主讲电影</span>
             </h2>
             <section class="c-tab-title">
               <a href="javascript: void(0)">&nbsp;</a>
@@ -62,7 +62,7 @@
                   </h3>
                 </div>
               </li>
-             
+
             </ul>
             <div class="clear"></div>
           </article>
