@@ -37,8 +37,8 @@ public class IndexController {
 
     @GetMapping("/getHotMovieList")
     public AjaxResult getHotMovieList(){
-        //查询前5的热门电影
-        return AjaxResult.success(wmMovieService.selectHotMovieList(5));
+        //查询前8的热门电影
+        return AjaxResult.success(wmMovieService.selectHotMovieList(8));
     }
 
     @GetMapping("/getAllBannerList")

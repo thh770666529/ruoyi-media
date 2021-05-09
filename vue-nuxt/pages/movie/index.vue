@@ -64,49 +64,69 @@
                   <span :class="{hide:priceSort==''}">↓</span>
                 </a>
               </li>-->
+
+              <li class="current bg-orange">
+                <a title="销量" href="javascript:void(0);" >销量
+                  <span >↓</span>
+                </a>
+              </li>
+              <li class="current bg-orange">
+                <a title="最新" href="javascript:void(0);" >最新
+                  <span >↓</span>
+                </a>
+              </li>
+              <li class="current bg-orange">
+                <a title="价格" href="javascript:void(0);" >价格&nbsp;
+                  <span >↓</span>
+                </a>
+              </li>
             </ol>
           </section>
         </div>
         <div class="mt40">
           <!-- /无数据提示 开始-->
-          <section class="no-data-wrap" v-if="total==0">
+          <section class="no-data-wrap" >
             <em class="icon30 no-data-ico">&nbsp;</em>
             <span class="c-666 fsize14 ml10 vam">没有相关数据，小编正在努力整理中...</span>
           </section>
-          <!-- /无数据提示 结束-->
-          <article  v-if="total>0" class="comm-course-list">
-            <ul class="of" id="bna">
+
+
+
+
+          <article v-if="total>0" class="comm-course-list">
+            <ul id="bna" class="of">
               <li v-for="movie in movieList" :key="movie.movieId">
                 <div class="cc-l-wrap">
                   <section class="course-img">
-                    <img
-                      :src="fileUploadHost+movie.images"
-                      class="img-responsive"
-                      :alt="movie.title"
-                    >
+                    <img :src="fileUploadHost+movie.images" :alt="movie.title" class="img-responsive">
                     <div class="cc-mask">
-                      <a  :href="'/movie/'+movie.movieId" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
+                      <a :href="'/movie/'+movie.movieId" title="开始学习" class="comm-btn c-btn-1">开始学习</a>
                     </div>
                   </section>
                   <h3 class="hLh30 txtOf mt10">
-                    <a :href="'/movie/'+movie.movieId" :title="movie.title" class="course-title fsize18 c-333">{{movie.title}}</a>
+                    <a :href="'/movie/'+movie.movieId" :title="movie.title" class="course-title fsize18 c-333">{{ movie.title }}</a>
                   </h3>
                   <section class="mt10 hLh20 of">
-                    <!--  <span class="fr jgTag bg-green" v-if="Number(movie.price) === 0">
-                        <i class="c-fff fsize12 f-fA">免费</i>
-                      </span>-->
+                    <span  class="fr jgTag bg-green">
+                      <i class="c-fff fsize12 f-fA">免费</i>
+                    </span>
+                    <!--<span v-else class="fr jgTag ">
+                      <i class="c-orange fsize12 f-fA"> ￥0</i>
+                    </span>-->
                     <span class="fl jgAttr c-ccc f-fA">
-                        <i class="c-999 f-fA">9634人学习</i>
-                        |
-                        <i class="c-999 f-fA">9634评论</i>
-                      </span>
+                      <i class="c-999 f-fA">0人学习</i>
+                      |
+                      <i class="c-999 f-fA">0人购买</i>
+                    </span>
                   </section>
                 </div>
               </li>
-
             </ul>
-            <div class="clear"></div>
+            <div class="clear"/>
           </article>
+
+
+
         </div>
         <!-- 公共分页 开始 -->
         <div>
@@ -133,11 +153,11 @@
         <a
           href="#"
           title="后一页"
-          @click.prevent="gotoPage(queryParams.pageNum+1)">&gt;</a>
+          @click.prevent="queryParams.pageNum<pages?gotoPage(queryParams.pageNum+1):gotoPage(queryParams.pageNum)">&gt;</a>
         <a
           href="#"
           title="末页"
-          @click.prevent="gotoPage(queryParams.pageNum)">末</a>
+          @click.prevent="gotoPage(pages)">末</a>
 
         <div class="clear"/>
       </div>
@@ -159,10 +179,11 @@ export default {
       subSubjectList: [], // 二级分类列表
       total: 0,
       searchObj: {}, // 查询表单对象
-      totalPage:[1],
+      totalPage:[],
+      pages:0,
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 8,
         images: null,
         title: null,
         movieType: null,
@@ -190,8 +211,22 @@ export default {
       movieApi.listMovie(this.queryParams).then(response => {
         this.movieList = response.data.rows;
         this.total = response.data.total;
-
+        this.getTotalPage();
       })
+    },
+
+    getTotalPage(){
+      this.pages = 0;
+      this.pages = this.total / this.queryParams.pageSize;
+      if (this.total % this.queryParams.pageSize != 0) {
+        this.pages++;
+      }
+      if (this.pages>0){
+        this.totalPage = [];
+        for (let i = 1; i < this.pages; i++) {
+          this.totalPage.push(i);
+        }
+      }
     },
 
     //2 查询所有一级分类

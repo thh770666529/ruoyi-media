@@ -144,7 +144,7 @@ public class WmMovieController extends BaseController
             String imagesUrl = FileUploadUtils.upload(RuoYiConfig.getMovieVideoPath(), file , MimeTypeUtils.MEDIA_EXTENSION);
             String filename = file.getOriginalFilename();
             filename= filename.substring(0,filename.lastIndexOf("."));
-            Map<String,Object> data = new HashMap<>();
+            Map<String,Object> data = new HashMap<>(10);
             data.put("url", imagesUrl);
             data.put("title", filename);
             data.put("ext", FileUploadUtils.getExtension(file));
