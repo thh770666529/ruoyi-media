@@ -454,7 +454,7 @@ div.Empty {text-align: center;line-height: 40px;color:#666;}
 .exit_slide{ position: fixed; z-index:999; right:40px; top:50%; display:inline-block; line-height: 1;}
 .exit_slide .pre,.exit_slide .after{ height:50px;width:50px; display:inline-block; text-align: center;}
 .exit_slide .after,.exit_slide .cur .pre{ display:none;}
-.exit_slide .cur .after,.exit_slide .pre{ display:block;} 
+.exit_slide .cur .after,.exit_slide .pre{ display:block;}
 
 .exit_slide .customer{ border-radius: 5px; overflow:hidden;cursor: pointer;}
 .exit_slide .customer .pre {

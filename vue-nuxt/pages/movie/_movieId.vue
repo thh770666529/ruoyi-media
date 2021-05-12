@@ -1,5 +1,5 @@
 <template>
-  <div id="aCoursesList" class="bg-fa of">
+  <div id="aCoursesList"  class="bg-fa of">
     <!-- /电影详情 开始 -->
     <section class="container">
       <section class="path-wrap txtOf hLh30">
@@ -10,9 +10,9 @@
         <span class="c-333 fsize14">{{movieVo.subjectLevelTwo}}</span>
       </section>
       <div>
-        <article class="c-v-pic-wrap" style="height: 357px;">
+        <article class="c-v-pic-wrap" style="height: 380px;">
           <section class="p-h-video-box" id="videoPlay">
-            <img height="357px" :src="`http://localhost:7070`+movieVo.images" :alt="movieVo.title" class="dis c-v-pic">
+            <img height="380px" :src="`http://localhost:7070`+movieVo.images" :alt="movieVo.title" class="dis c-v-pic">
           </section>
         </article>
         <aside class="c-attr-wrap">
@@ -20,38 +20,48 @@
             <h2 class="hLh30 txtOf mt15">
               <span class="c-fff fsize24">{{movieVo.title}}</span>
             </h2>
+            <section class="c-attr-mt10 c-attr-undis">
+              <span class="c-fff fsize14">分类：&nbsp;电影</span>&nbsp;&nbsp;
+              <span class="c-fff fsize14">地区：&nbsp;大陆</span>&nbsp;&nbsp;
+              <span class="c-fff fsize14">年份：&nbsp;2021</span>
+            </section>
             <section class="c-attr-jg">
-              <span class="c-fff">价格：</span>
-              <b class="c-yellow" style="font-size:24px;">￥<!--{{movieVo.price}}--></b>
+              <span class="c-fff">评分：</span>
+              <b class="c-yellow" style="font-size:20px;">7.9分</b>
             </section>
-            <section class="c-attr-mt c-attr-undis">
-              <span class="c-fff fsize14">主讲： <!--{{movieVo.teacherName}}-->&nbsp;&nbsp;&nbsp;</span>
+            <section class="c-attr-mt10 c-attr-undis">
+              <span class="c-fff fsize14">导演：&nbsp;妹妹</span>
             </section>
+            <section class="c-attr-mt10 c-attr-undis">
+              <span class="c-fff fsize14">主演：&nbsp;小美&nbsp;小明&nbsp;小张</span>
+            </section>
+            <section class="c-attr-mt10 c-attr-undis">
+              <span class="c-fff fsize14">标签：&nbsp;诱惑&nbsp;户外&nbsp;</span>
+            </section>
+
             <section class="c-attr-mt of">
               <span class="ml10 vam">
                 <em class="icon18 scIcon"></em>
                 <a class="c-fff vam" title="收藏" href="#" >收藏</a>
               </span>
             </section>
-            <!--<section  v-if="isbuy || Number(movieVo.price) === 0" class="c-attr-mt">
-              <a href="#" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
-            </section>-->
+
             <section   class="c-attr-mt">
-              <a href="#" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
+              <a @click="play()" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
             </section>
-           <!-- <section  v-else class="c-attr-mt">
-              <a @click="createOrders()" href="#" title="立即购买" class="comm-btn c-btn-3">立即购买</a>
+            <!--<section  class="c-attr-mt">
+              <a  href="#" title="立即购买" class="comm-btn c-btn-3">立即购买</a>
             </section>-->
           </section>
         </aside>
-        <aside class="thr-attr-box">
+       <!-- <aside class="thr-attr-box">
           <ol class="thr-attr-ol">
             <li>
               <p>&nbsp;</p>
               <aside>
                 <span class="c-fff f-fM">购买数</span>
                 <br>
-                <h6 class="c-fff f-fM mt10">0<!--{{movieVo.buyCount}}--></h6>
+                <h6 class="c-fff f-fM mt10">0&lt;!&ndash;{{movieVo.buyCount}}&ndash;&gt;</h6>
               </aside>
             </li>
             <li>
@@ -71,13 +81,13 @@
               </aside>
             </li>
           </ol>
-        </aside>
+        </aside>-->
         <div class="clear"></div>
       </div>
       <!-- /电影封面介绍 -->
       <div class="mt20 c-infor-box">
-        <article class="fl col-7">
-          <section class="mr30">
+        <article class="fl col-12">
+          <section class="mr5">
             <div class="i-box">
               <div>
                 <section id="c-i-tabTitle" class="c-infor-tabTitle c-tab-title">
@@ -98,7 +108,7 @@
                 <!-- /电影介绍 -->
                 <div class="mt50">
                   <h6 class="c-g-content c-infor-title">
-                    <span>电影详情</span>
+                    <span>剧集列表</span>
                   </h6>
                   <section class="mt20">
                     <div class="lh-menu-wrap">
@@ -106,20 +116,7 @@
                         <ul>
                           <!-- 文件目录 -->
                           <li class="lh-menu-stair" v-for="movieVideo in movieVideoList" :key="movieVideo.movieVideoId">
-                            <!--<a href="javascript: void(0)" :title="movieVideo.title" class="current-1">
-                              <em class="lh-menu-i-1 icon18 mr10"></em>{{movieVideo.title}}
-                            </a>-->
 
-
-                              <!--<li class="lh-menu-second ml30" v-for="video in chapter.children" :key="video.id">
-                                <a :href="'/player/'+video.videoSourceId" target="_blank">
-                                  <span class="fr">
-                                    <i class="free-icon vam mr10">免费试听</i>
-                                  </span>
-                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{video.title}}
-                                </a>
-                              </li>
--->
                             <ol class="lh-menu-ol" style="display: block;">
                               <li class="lh-menu-second ml30">
                                 <a :href="'/player/'+movieVideo.movieVideoId" target="_blank">
@@ -142,7 +139,7 @@
             </div>
           </section>
         </article>
-        <aside class="fl col-3">
+       <!-- <aside class="fl col-3">
           <div class="i-box">
             <div>
               <section class="c-infor-tabTitle c-tab-title">
@@ -167,7 +164,7 @@
               </section>
             </div>
           </div>
-        </aside>
+        </aside>-->
         <div class="clear"></div>
       </div>
     </section>
@@ -178,6 +175,7 @@
 <script>
 import movieApi from '@/api/movie'
 import ordersApi from '@/api/orders'
+import { MessageBox, Message } from 'element-ui'
 export default {
   // 异步调用
    asyncData({ params, error }) {
@@ -211,6 +209,17 @@ export default {
           //生成订单之后，跳转订单显示页面
           this.$router.push({path:'/orders/'+response.data.data.orderId})
         })*/
+     },
+     //播放
+     play(){
+       if (this.movieVideoList.length==0){
+         Message({
+           message: '暂时没有播放的视频！请联系管理员进行上传',
+           type: 'error'
+         })
+       }else {
+         window.open("/player/"+this.movieVideoList[0].movieVideoId);
+       }
      }
    }
 };

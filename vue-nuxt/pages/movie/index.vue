@@ -85,12 +85,10 @@
         </div>
         <div class="mt40">
           <!-- /无数据提示 开始-->
-          <section class="no-data-wrap" >
+          <section v-if="total==0" class="no-data-wrap" >
             <em class="icon30 no-data-ico">&nbsp;</em>
             <span class="c-666 fsize14 ml10 vam">没有相关数据，小编正在努力整理中...</span>
           </section>
-
-
 
 
           <article v-if="total>0" class="comm-course-list">
@@ -183,7 +181,7 @@ export default {
       pages:0,
       queryParams: {
         pageNum: 1,
-        pageSize: 8,
+        pageSize: 12,
         images: null,
         title: null,
         movieType: null,

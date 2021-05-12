@@ -11,6 +11,7 @@ import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.MimeTypeUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.midea.domain.WmMovie;
+import com.ruoyi.midea.domain.WmMovieVideo;
 import com.ruoyi.midea.service.IWmMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -61,6 +62,12 @@ public class WmMovieController extends BaseController
     @GetMapping(value = "/movieVideo/{movieVideoId}")
     public AjaxResult getMovieVideoDetail(@PathVariable("movieVideoId") Long movieVideoId)
     {
-        return AjaxResult.success(wmMovieService.selectWmMovieVideoById(movieVideoId));
+        WmMovieVideo wmMovieVideo = wmMovieService.selectWmMovieVideoById(movieVideoId);
+        Long movieId = wmMovieVideo.getMovieId();
+        WmMovie wmMovie = wmMovieService.selectWmMovieById(movieId);
+        Map data = new HashMap();
+        data.put("wmMovieVideo",wmMovieVideo);
+        data.put("wmMovie",wmMovie);
+        return AjaxResult.success(data);
     }
 }

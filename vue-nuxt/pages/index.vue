@@ -61,7 +61,7 @@
               <div class="clear"></div>
             </article>
             <section class="tac pt20">
-              <a href="#" title="全部电影" class="comm-btn c-btn-2">全部电影</a>
+              <a href="/movie" title="全部电影" class="comm-btn c-btn-2">全部电影</a>
             </section>
           </div>
         </section>

@@ -11,9 +11,11 @@
     </div >-->
       <vueCkplayer ref="player" :style="playStyle"/>
 
-    <div class="mt20 c-infor-box">
-      <article class="fl col-7">
-        <section class="mr30">
+    <div class="mt20">
+      <article class="fl col-12">
+
+
+        <section class="mr30 mb25">
           <div class="i-box">
             <div>
               <section id="c-i-tabTitle" class="c-infor-tabTitle c-tab-title">
@@ -27,18 +29,53 @@
                 </h6>
                 <div class="course-txt-body-wrap">
                   <section class="course-txt-body">
-                   <!-- <p v-html="movieVo.description">{{movieVo.description}}</p>-->
-                    <p>  极为平凡的御宅族大学生·岩谷尚文，受到在图书馆发现的一本书所引导，被召唤到了异世界。他被赋予的使命，是作为装备着剑、枪、弓、盾的四圣勇者之一“盾之勇者”，驱逐给世界带来混沌的灾害“波”。因为大冒险而心潮澎湃，和同伴一同踏上旅程的尚文。但，他刚出发没几天就遭到背叛，金钱和立场全都失去。变得无法相信他人的尚文，驱使着奴隶少女·拉芙塔莉雅，向波和世界发起对抗——。究竟他能否打破这种绝望的状况？失去一切的男人的成名奇幻故事，开幕。
-                    </p>
+                    <p v-html="movieVo.description">{{movieVo.description}}</p>
                   </section>
                 </div>
               </div>
             </article>
+
+            <article class="ml10 mr10  pt20">
+              <div>
+                <h6 class="c-i-content c-infor-title">
+                  <span>剧集列表</span>
+                </h6>
+                <div class="course-txt-body-wrap">
+                  <section class="course-txt-body">
+                    <menu id="lh-menu" class="lh-menu mt10 mr10 ">
+                      <ul>
+                        <!-- 文件目录 -->
+                        <li class="lh-menu-stair" v-for="movieVideo in movieVo.wmMovieVideoList" :key="movieVideo.movieVideoId">
+
+                          <ol class="lh-menu-ol" style="display: block;">
+                            <li class="lh-menu-second ml30">
+                              <a :href="'/player/'+movieVideo.movieVideoId" target="_blank">
+                                  <span class="fr">
+                                    <i class="free-icon vam mr10">免费试听</i>
+                                  </span>
+                                <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{movieVideo.title}}
+                              </a>
+                            </li>
+                          </ol>
+
+                        </li>
+                      </ul>
+                    </menu>
+                  </section>
+                </div>
+              </div>
+            </article>
+
+
           </div>
         </section>
-      </article>
-    </div>
 
+
+      </article>
+
+
+
+    </div>
 
     </section>
    <!-- <button @click="setFull">全屏</button>
@@ -63,7 +100,8 @@
       return movieApi.getMovieVideoDetail(params.movieVideoId)
         .then(response => {
           return {
-            movieVideo: response.data.data
+            movieVideoVo: response.data.data.wmMovieVideo,
+            movieVo: response.data.data.wmMovie
           }
         })
     },
@@ -95,15 +133,15 @@
 
     },
     mounted(){
-      console.log("this.movieVideo",this.movieVideo)
       this.$nextTick(() => {
+        debugger
         this.player();
       });
     },
     methods:{
       player() {
-         this.$refs.player.loadPlayer(this.fileUploadHost+this.movieVideo.url);
-        this.$refs.player.load(this.fileUploadHost+this.movieVideo.url);
+         this.$refs.player.loadPlayer(this.fileUploadHost+this.movieVideoVo.url);
+        this.$refs.player.load(this.fileUploadHost+this.movieVideoVo.url);
         //this.$refs.player.load('http://ckplayer-video-sample.oss-cn-shanghai.aliyuncs.com/sample-mp4/d30e02a5626c066.mp4');
       },
       setFull() {

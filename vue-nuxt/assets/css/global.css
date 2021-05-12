@@ -105,7 +105,7 @@ a.current-2 .lh-p-icon{background-position:0 -254px}
 .sf-lr-wrap a.wx-sf:hover{background:url(../img/wx-icon-hover-32.png) no-repeat 50% 50%}
 .sf-lr-wrap a.qq-sf{background:url(../img/qq-icon-32.png) no-repeat 50% 50%}
 .sf-lr-wrap a.qq-sf:hover{background:url(../img/qq-icon-hover-32.png) no-repeat 50% 50%}
-.i-box{background-color:#fff;border:1px solid #f0f0f0;padding:0 15px 20px;overflow:hidden}
+.i-box{background-color:#fff;border:1px solid #f0f0f0;padding:0 10px 20px;overflow:hidden}
 .blue-btn,.comm-btn,.goBack-btn,.order-submit{border:1px solid;border-radius:16px;display:inline-block;text-align:center;height:32px;line-height:32px;padding:0 12px}
 .comm-btn{padding: 0 8px;}
 .c-btn-1{border-color:#fff;color:#fff;width:120px;font-size:18px}
@@ -458,9 +458,9 @@ a.current-2 .lh-p-icon{background-position:0 -254px}
 	.i-slide,.swiper-container{height:480px}
 	.col-7{width:75%}
 	.col-3{width:25%}
-	.c-v-pic-wrap{width:640px;height:357px}
-	.thr-attr-box{width:120px;height:357px}
-	.c-attr-wrap{width:400px;height:357px}
+	.c-v-pic-wrap{width:640px;height:380px}
+	.thr-attr-box{width:120px;height:380px}
+	.c-attr-wrap{width:520px;height:380px}
 	.u-course-list .comm-course-list li{width:33.33%}
 }
 @media (min-width:1200px) and (max-width:1299px){
