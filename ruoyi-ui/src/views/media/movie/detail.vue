@@ -54,6 +54,20 @@
               </el-select>
             </el-form-item>
 
+            <el-form-item label="标签" :label-width="formLabelWidth">
+              <el-select
+                v-model="labelList"
+                multiple
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="dict in labelOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.dictValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
 
           </el-col>
           <el-col :span="12">
@@ -74,11 +88,6 @@
           </el-col>
 
         </el-row>
-
-        <!--<el-form-item label="标签" :label-width="formLabelWidth" prop="label">
-          <el-input v-model="form.label" placeholder="请输入标签" />
-        </el-form-item>-->
-
 
 
         <el-form-item label="简介" :label-width="formLabelWidth" prop="description">
@@ -165,6 +174,7 @@
     <el-divider content-position="center"></el-divider>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" @click="save">保 存</el-button>
         <el-button @click="cancel">取 消</el-button>
         <el-button @click="reset">重 置</el-button>
       </div>
@@ -265,6 +275,9 @@ export default {
 
       //字典是否
       sysYesNoOptions: [],
+      //标签字典
+      labelOptions: [],
+      labelList:[],
       // 表单参数
       formLabelWidth: "120px",
       lineLabelWidth: "120px",//一行的间隔数
@@ -311,6 +324,10 @@ export default {
     this.getDicts("sys_yes_no").then(response => {
       this.sysYesNoOptions = response.data;
     });
+    this.getDicts("movie_label").then(response => {
+      this.labelOptions = response.data;
+    });
+
   },
   watch:{
     "$route":{
@@ -332,6 +349,14 @@ export default {
         getMovie(movieId).then(response => {
           this.form = response.data;
           this.wmMovieVideoList = response.data.wmMovieVideoList;
+          let that = this;
+          that.labelList = [];
+          var dbLabelList = that.form.label.split(",");
+          for (var a = 0; a < dbLabelList.length; a++) {
+            if (dbLabelList[a] != null && dbLabelList[a] != "") {
+              that.labelList.push(dbLabelList[a]);
+            }
+          }
         });
       }
     },
@@ -406,8 +431,20 @@ export default {
       this.open = true;
     },
 
-    /** 提交按钮 */
-    submitForm() {
+    submitForm(){
+      this.save();
+      this.$router.push({
+        path: "/media/movie"
+      });
+    },
+    /** 保存按钮 */
+    save() {
+      if(this.labelList.length <= 0) {
+      this.msgError("标签不能为空!");
+        return;
+      }
+      var that = this;
+      that.form.label = that.labelList.join(",");
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.form.wmMovieVideoList = this.wmMovieVideoList;

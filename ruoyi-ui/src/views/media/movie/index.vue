@@ -269,14 +269,14 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.$router.push({
-        path: "/media/movie/detail",
+        path: "/media/movie/detail"
       });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       const movieId = row.movieId || this.ids;
        this.$router.push({
-         path: "/media/movie/detail/"+movieId,
+         path: "/media/movie/detail/"+movieId
        });
     },
     /** 提交按钮 */
