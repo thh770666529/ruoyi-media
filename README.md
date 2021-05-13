@@ -1,109 +1,47 @@
-## ruoyi平台简介
+## 视频平台简介
 
-若依是一套全部开源的快速开发平台，毫无保留给个人及企业免费使用。
+借助**ruoyi**这个平台开发一套**视频播放网站**。直接采用了[RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue)前后端分离基础平台。在原基础上加媒资管理
 
-* 前端采用Vue、Element UI。
-* 后端采用Spring Boot、Spring Security、Redis & Jwt。
-* 权限认证使用Jwt，支持多终端认证系统。
-* 支持加载动态权限菜单，多方式轻松权限控制。
-* 高效率开发，使用代码生成器可以一键生成前后端代码。
-* 特别鸣谢：[element](https://github.com/ElemeFE/element)，[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)，[eladmin-web](https://github.com/elunez/eladmin-web)。
+目前做的了简单的保存上传视频功能。目前这个系统分有 门户和后台管理，各一个有前端和后端项目。
 
-## 内置功能
 
-1.  用户管理：用户是系统操作者，该功能主要完成系统用户配置。
-2.  部门管理：配置系统组织机构（公司、部门、小组），树结构展现支持数据权限。
-3.  岗位管理：配置系统用户所属担任职务。
-4.  菜单管理：配置系统菜单，操作权限，按钮权限标识等。
-5.  角色管理：角色菜单权限分配、设置角色按机构进行数据范围权限划分。
-6.  字典管理：对系统中经常使用的一些较为固定的数据进行维护。
-7.  参数管理：对系统动态配置常用参数。
-8.  通知公告：系统通知公告信息发布维护。
-9.  操作日志：系统正常操作日志记录和查询；系统异常信息日志记录和查询。
-10. 登录日志：系统登录日志记录查询包含登录异常。
-11. 在线用户：当前系统中活跃用户状态监控。
-12. 定时任务：在线（添加、修改、删除)任务调度包含执行结果日志。
-13. 代码生成：前后端代码的生成（java、html、xml、sql）支持CRUD下载 。
-14. 系统接口：根据业务代码自动生成相关的api接口文档。
-15. 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
-16. 缓存监控：对系统的缓存信息查询，命令统计等。
-17. 在线构建器：拖动表单元素生成相应的HTML代码。
-18. 连接池监视：监视当前系统数据库连接池状态，可进行分析SQL找出系统性能瓶颈。
 
-## 在线体验
 
-- admin/admin123  
-- 陆陆续续收到一些打赏，为了更好的体验已用于演示服务器升级。谢谢各位小伙伴。
 
-演示地址：http://vue.ruoyi.vip  
-文档地址：http://doc.ruoyi.vip
+## 技术要点
 
-## 演示图
+- 前端采用Vue、Element UI、nuxt
+- 后端采用Spring Boot、Spring Security、Redis & Jwt。
+- 权限认证使用Jwt，支持多终端认证系统。
+- 支持加载动态权限菜单，多方式轻松权限控制。
+- 高效率开发，使用代码生成器可以一键生成前后端代码。
+- ckplay视频播放插件
+
+
+
+## 项目截图
 
 <table>
     <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/cd1f90be5f2684f4560c9519c0f2a232ee8.jpg"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/1cbcf0e6f257c7d3a063c0e3f2ff989e4b3.jpg"/></td>
+        <td><img src="README.assets/1620136711824.png"   /></td>
+        <td><img src="README.assets/1620136766206.png"/></td>
     </tr>
     <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-8074972883b5ba0622e13246738ebba237a.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-9f88719cdfca9af2e58b352a20e23d43b12.png"/></td>
+        <td><img src="README.assets/1620916084942.png"  /></td>
+        <td><img src="README.assets/1620916145657.png"/></td>
     </tr>
     <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-39bf2584ec3a529b0d5a3b70d15c9b37646.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-936ec82d1f4872e1bc980927654b6007307.png"/></td>
-    </tr>
-	<tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-b2d62ceb95d2dd9b3fbe157bb70d26001e9.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-d67451d308b7a79ad6819723396f7c3d77a.png"/></td>
-    </tr>	 
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/5e8c387724954459291aafd5eb52b456f53.jpg"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/644e78da53c2e92a95dfda4f76e6d117c4b.jpg"/></td>
-    </tr>
-	<tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-8370a0d02977eebf6dbf854c8450293c937.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-49003ed83f60f633e7153609a53a2b644f7.png"/></td>
-    </tr>
-	<tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-d4fe726319ece268d4746602c39cffc0621.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-c195234bbcd30be6927f037a6755e6ab69c.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/b6115bc8c31de52951982e509930b20684a.jpg"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-5e4daac0bb59612c5038448acbcef235e3a.png"/></td>
+        <td><img src="README.assets/1620916190453.png"/></td>
     </tr>
 </table>
 
 
 
-## 视频平台简介
-
-借助**ruoyi**这个平台开发一套**视频播放网站**。后台直接采用了**ruoyi-vue**前后端分离项目。在原基础上加媒资管理
-
-目前做的了简单的保存上传视频功能。
-
-<img src="README.assets/1620136711824.png" alt="1620136711824" style="zoom:80%;" />
-
-![1620136766206](README.assets/1620136766206.png)
-
 ##### 已完成
 
-  目前已经完成简单页面实现了视频上传功能
-安装node12后解决前端报错问题。
+目前已经完成简单页面实现了视频上传功能
 
 ##### 待办事项
-
-之后会通过修改谷粒学院前端主要完成一下内容
-增加列表展示电影。点击后详情页
-再点击后播放视频功能  将引入视频插件
-后端将再搞一个门户后端api出来。
-主要是有几个功能。查询所有电影
-点击电影封面后查询 电影明细以及所属视频
-增加电影的评论功能。增加评论表。将进行表设计。
-增加搜索视频功能。增加搜索记录功能。关于设备id以及登录用户来进行的。
-后续引入第三方登录
-关注视频。视频更新时进行提醒。
 
 
 
