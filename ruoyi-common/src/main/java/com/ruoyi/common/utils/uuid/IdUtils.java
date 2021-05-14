@@ -5,7 +5,7 @@ import com.ruoyi.common.utils.uuid.UUID;
 /**
  * ID生成器工具类
  *
- * @author ruoyi 测试
+ * @author ruoyi
  */
 public class IdUtils
 {
