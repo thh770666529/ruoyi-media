@@ -1,4 +1,4 @@
-package com.ruoyi.midea.domain;
+package com.ruoyi.media.domain;
 
 import java.math.BigDecimal;
 import java.util.List;

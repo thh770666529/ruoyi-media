@@ -1,4 +1,4 @@
-package com.ruoyi.midea.domain;
+package com.ruoyi.media.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

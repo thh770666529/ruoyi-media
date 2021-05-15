@@ -48,7 +48,7 @@ CREATE TABLE `gen_table`  (
 -- ----------------------------
 -- Records of gen_table
 -- ----------------------------
-INSERT INTO `gen_table` VALUES (13, 'wm_movie', '电影表', 'wm_movie_video', 'movie_id', 'WmMovie', 'sub', 'com.ruoyi.midea', 'media', 'movie', '电影管理', 'ruoyi', '0', '/', '{}', 'admin', '2021-05-01 17:06:31', '', '2021-05-01 17:19:10', NULL);
+INSERT INTO `gen_table` VALUES (13, 'wm_movie', '电影表', 'wm_movie_video', 'movie_id', 'WmMovie', 'sub', 'com.ruoyi.media', 'media', 'movie', '电影管理', 'ruoyi', '0', '/', '{}', 'admin', '2021-05-01 17:06:31', '', '2021-05-01 17:19:10', NULL);
 INSERT INTO `gen_table` VALUES (14, 'wm_movie_video', '电影视频表', NULL, NULL, 'WmMovieVideo', 'crud', 'com.ruoyi.system', 'system', 'video', '电影视频', 'ruoyi', '0', '/', NULL, 'admin', '2021-05-01 17:06:31', '', NULL, NULL);
 
 -- ----------------------------

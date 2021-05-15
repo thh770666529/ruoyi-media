@@ -1,19 +1,14 @@
 package com.ruoyi.web.controller.media;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.common.config.RuoYiConfig;
-import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.exception.file.InvalidExtensionException;
-import com.ruoyi.common.utils.ServletUtils;
-import com.ruoyi.common.utils.file.FileTypeUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.MimeTypeUtils;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +16,8 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.midea.domain.WmMovie;
-import com.ruoyi.midea.service.IWmMovieService;
+import com.ruoyi.media.domain.WmMovie;
+import com.ruoyi.media.service.IWmMovieService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;

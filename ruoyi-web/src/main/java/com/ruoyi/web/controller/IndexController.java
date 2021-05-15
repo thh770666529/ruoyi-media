@@ -2,7 +2,7 @@ package com.ruoyi.web.controller;
 
 
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.midea.service.IWmMovieService;
+import com.ruoyi.media.service.IWmMovieService;
 import com.ruoyi.website.domain.WebsiteBanner;
 import com.ruoyi.website.domain.WebsiteLink;
 import com.ruoyi.website.service.IWebsiteBannerService;

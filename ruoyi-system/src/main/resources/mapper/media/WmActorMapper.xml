@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.media.mapper.WmActorMapper">
+    
+    <resultMap type="WmActor" id="WmActorResult">
+        <result property="actorId"    column="actor_id"    />
+        <result property="name"    column="name"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="description"    column="description"    />
+        <result property="awards"    column="awards"    />
+        <result property="label"    column="label"    />
+    </resultMap>
+
+    <sql id="selectWmActorVo">
+        select actor_id, name, avatar, description, awards, label from wm_actor
+    </sql>
+
+    <select id="selectWmActorList" parameterType="WmActor" resultMap="WmActorResult">
+        <include refid="selectWmActorVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="awards != null  and awards != ''"> and awards = #{awards}</if>
+            <if test="label != null  and label != ''"> and label = #{label}</if>
+        </where>
+    </select>
+    
+    <select id="selectWmActorById" parameterType="Long" resultMap="WmActorResult">
+        <include refid="selectWmActorVo"/>
+        where actor_id = #{actorId}
+    </select>
+        
+    <insert id="insertWmActor" parameterType="WmActor" useGeneratedKeys="true" keyProperty="actorId">
+        insert into wm_actor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="description != null">description,</if>
+            <if test="awards != null">awards,</if>
+            <if test="label != null">label,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="description != null">#{description},</if>
+            <if test="awards != null">#{awards},</if>
+            <if test="label != null">#{label},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWmActor" parameterType="WmActor">
+        update wm_actor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="awards != null">awards = #{awards},</if>
+            <if test="label != null">label = #{label},</if>
+        </trim>
+        where actor_id = #{actorId}
+    </update>
+
+    <delete id="deleteWmActorById" parameterType="Long">
+        delete from wm_actor where actor_id = #{actorId}
+    </delete>
+
+    <delete id="deleteWmActorByIds" parameterType="String">
+        delete from wm_actor where actor_id in 
+        <foreach item="actorId" collection="array" open="(" separator="," close=")">
+            #{actorId}
+        </foreach>
+    </delete>
+</mapper>

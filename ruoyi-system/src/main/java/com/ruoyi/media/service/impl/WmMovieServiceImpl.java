@@ -1,4 +1,4 @@
-package com.ruoyi.midea.service.impl;
+package com.ruoyi.media.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
-import com.ruoyi.midea.domain.WmMovieVideo;
-import com.ruoyi.midea.mapper.WmMovieMapper;
-import com.ruoyi.midea.domain.WmMovie;
-import com.ruoyi.midea.service.IWmMovieService;
+import com.ruoyi.media.domain.WmMovieVideo;
+import com.ruoyi.media.mapper.WmMovieMapper;
+import com.ruoyi.media.domain.WmMovie;
+import com.ruoyi.media.service.IWmMovieService;
 
 /**
  * 电影管理Service业务层处理
