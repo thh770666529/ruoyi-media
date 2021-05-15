@@ -10,33 +10,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="头像" prop="avatar">
+     <el-form-item label="描述" prop="description">
         <el-input
-          v-model="queryParams.avatar"
-          placeholder="请输入头像"
+          v-model="queryParams.description"
+          placeholder="请输入描述"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="奖项" prop="awards">
-        <el-input
-          v-model="queryParams.awards"
-          placeholder="请输入奖项"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="标签 " prop="label">
-        <el-input
-          v-model="queryParams.label"
-          placeholder="请输入标签 "
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -91,13 +74,22 @@
 
     <el-table v-loading="loading" :data="actorList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="actorId" />
-      <el-table-column label="姓名" align="center" prop="name" />
-      <el-table-column label="头像" align="center" prop="avatar" />
-      <el-table-column label="简述" align="center" prop="description" />
-      <el-table-column label="奖项" align="center" prop="awards" />
-      <el-table-column label="标签 " align="center" prop="label" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="主键" align="left" prop="actorId" width="50" />
+      <el-table-column label="姓名" align="center" prop="name"  width="150" />
+      <el-table-column prop="avatar" label="头像" align="center" width="200">
+        <template slot-scope="scope">
+          <el-image :src="fileUploadHost+scope.row.avatar" lazy />
+        </template>
+      </el-table-column>
+      <el-table-column prop="description" label="简述" align="left"  >
+        <template slot-scope="scope">
+          {{scope.row.description | ellipsis}}
+        </template>
+      </el-table-column>
+
+     <!-- <el-table-column label="奖项" align="center" prop="awards" />-->
+      <el-table-column label="标签 " align="center" prop="label" width="100" />
+      <el-table-column label="操作" align="center" width="100"  class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -126,7 +118,7 @@
     />
 
     <!-- 添加或修改演员对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name" placeholder="请输入姓名" />
@@ -161,6 +153,7 @@
     },
     data() {
       return {
+        fileUploadHost: null,
         // 遮罩层
         loading: true,
         // 选中数组
@@ -200,7 +193,18 @@
       };
     },
     created() {
+      this.fileUploadHost =process.env.VUE_APP_FILE_UOLOAD_HOST;
       this.getList();
+    },
+    filters: {
+      // 当标题字数超出时，超出部分显示’...
+      ellipsis (value) {
+        if (!value) return '';
+        if (value.length > 80) {
+          return value.slice(0, 80) + '...'
+        }
+        return value
+      }
     },
     methods: {
       /** 查询演员列表 */
