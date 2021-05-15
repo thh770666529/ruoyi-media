@@ -83,7 +83,13 @@ public class WmMovieController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody WmMovie wmMovie)
     {
-        return toAjax(wmMovieService.insertWmMovie(wmMovie));
+        int row = wmMovieService.insertWmMovie(wmMovie);
+        if(row>0){
+            return AjaxResult.success(wmMovieService.selectWmMovieById(wmMovie.getMovieId()));
+        }else {
+            return AjaxResult.error();
+        }
+
     }
 
     /**

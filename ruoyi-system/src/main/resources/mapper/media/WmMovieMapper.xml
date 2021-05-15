@@ -30,6 +30,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="shareCount"    column="share_count"    />
         <result property="isComment"    column="is_comment"    />
         <result property="isDownload"    column="is_download"    />
+        <result property="price"    column="price"    />
+        <result property="rate"    column="rate"    />
     </resultMap>
 
     <resultMap id="WmMovieWmMovieVideoResult" type="WmMovie" extends="WmMovieResult">
@@ -74,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectWmMovieVo">
-        select movie_id, images, title, movie_type, country, label, description, publish_by, publish_time, status, create_by, create_time, update_by, update_time, del_flag, remark, read_count, comment_count, follow_count, collection_count, likes_count, unlikes_count, share_count, is_comment, is_download from wm_movie
+        select movie_id, images, title, movie_type, country, label, description, publish_by, publish_time, status, create_by, create_time, update_by, update_time, del_flag, remark, read_count, comment_count, follow_count, collection_count, likes_count, unlikes_count, share_count, is_comment, is_download,price,rate from wm_movie
     </sql>
 
 
@@ -108,11 +110,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="shareCount != null "> and share_count = #{shareCount}</if>
             <if test="isComment != null  and isComment != ''"> and is_comment = #{isComment}</if>
             <if test="isDownload != null  and isDownload != ''"> and is_download = #{isDownload}</if>
+            <if test="price != null  and price != ''"> and price = #{price}</if>
+            <if test="rate != null  and rate != ''"> and rate = #{rate}</if>
         </where>
     </select>
 
     <select id="selectWmMovieById" parameterType="Long" resultMap="WmMovieWmMovieVideoResult">
-        select a.movie_id, a.images, a.title, a.movie_type, a.country, a.label, a.description, a.publish_by, a.publish_time, a.status, a.create_by, a.create_time, a.update_by, a.update_time, a.del_flag, a.remark, a.read_count, a.comment_count, a.follow_count, a.collection_count, a.likes_count, a.unlikes_count, a.share_count, a.is_comment, a.is_download,
+        select a.movie_id, a.images, a.title, a.movie_type, a.country, a.label, a.description, a.publish_by, a.publish_time, a.status, a.create_by, a.create_time, a.update_by, a.update_time, a.del_flag, a.remark, a.read_count, a.comment_count, a.follow_count, a.collection_count, a.likes_count, a.unlikes_count, a.share_count, a.is_comment, a.is_download,a.price,a.rate,
             b.movie_video_id as sub_movie_video_id, b.title as sub_title, b.url as sub_url, b.ext as sub_ext, b.length as sub_length, b.type as sub_type, b.storage_type as sub_storage_type, b.create_time as sub_create_time, b.create_by as sub_create_by, b.update_time as sub_update_time, b.update_by as sub_update_by, b.del_flag as sub_del_flag, b.remark as sub_remark, b.movie_id as sub_movie_id,
             b.filesize as sub_filesize
         from wm_movie a
@@ -147,6 +151,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="shareCount != null">share_count,</if>
             <if test="isComment != null">is_comment,</if>
             <if test="isDownload != null">is_download,</if>
+            <if test="price != null">price,</if>
+            <if test="rate != null">rate,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="images != null">#{images},</if>
@@ -173,6 +179,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="shareCount != null">#{shareCount},</if>
             <if test="isComment != null">#{isComment},</if>
             <if test="isDownload != null">#{isDownload},</if>
+            <if test="price != null">#{price},</if>
+            <if test="rate != null">#{rate},</if>
          </trim>
     </insert>
 
@@ -203,6 +211,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="shareCount != null">share_count = #{shareCount},</if>
             <if test="isComment != null">is_comment = #{isComment},</if>
             <if test="isDownload != null">is_download = #{isDownload},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="rate != null">rate = #{rate},</if>
         </trim>
         where movie_id = #{movieId}
     </update>

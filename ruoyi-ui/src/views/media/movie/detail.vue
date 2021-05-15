@@ -69,6 +69,13 @@
               </el-select>
             </el-form-item>
 
+            <el-form-item label="价格" prop="price" style="width: 200px" :label-width="formLabelWidth" >
+              <el-input v-model="form.price" type="text" placeholder="请输入内容" />
+            </el-form-item>
+
+            <el-form-item label="评分" prop="rate" style="width: 200px" :label-width="formLabelWidth" >
+              <el-input v-model="form.rate" type="text" placeholder="评分" />
+            </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="" class="images-uploader"  :label-width="formLabelWidth" prop="images">
@@ -98,6 +105,7 @@
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
 
+
         <el-form-item label="是否可以评论" prop="isComment" :label-width="formLabelWidth" >
           <el-select v-model="form.isComment"  placeholder="是否可以评论" clearable size="small">
             <el-option
@@ -118,6 +126,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
+
+
+
+
 
         <el-divider content-position="center">电影视频信息</el-divider>
         <el-row :gutter="10" class="mb8">
@@ -342,7 +354,7 @@ export default {
       const movieId = this.$route.params && this.$route.params.movieId;
       console.log(this.$route.params, this.$route.params.movieId);
      // const movieId =  this.$route.query.movieId;
-      console.log(movieId);
+      this.labelList=[];
       if (movieId ==undefined){
         this.reset();
       }else {
@@ -395,15 +407,17 @@ export default {
         updateTime: null,
         delFlag: null,
         remark: null,
-        readCount: null,
-        commentCount: null,
-        followCount: null,
-        collectionCount: null,
-        likesCount: null,
-        unlikesCount: null,
-        shareCount: null,
-        isComment: null,
-        isDownload: null
+        readCount: 0,
+        commentCount: 0,
+        followCount: 0,
+        collectionCount: 0,
+        likesCount: 0,
+        unlikesCount: 0,
+        shareCount: 0,
+        isComment: 0,
+        isDownload: 0,
+        price:0,
+        rate:0
       };
       this.wmMovieVideoList = [];
       this.resetForm("form");
@@ -433,9 +447,7 @@ export default {
 
     submitForm(){
       this.save();
-      this.$router.push({
-        path: "/media/movie"
-      });
+      this.cancel();
     },
     /** 保存按钮 */
     save() {
@@ -454,6 +466,7 @@ export default {
             });
           } else {
             addMovie(this.form).then(response => {
+              this.form = response.data;
               this.msgSuccess("新增成功");
             });
           }

@@ -4,10 +4,6 @@
     <section class="container">
       <section class="path-wrap txtOf hLh30">
         <a href="#" title class="c-999 fsize14">首页</a>
-        \
-        <a href="#" title class="c-999 fsize14">{{movieVo.subjectLevelOne}}</a>
-        \
-        <span class="c-333 fsize14">{{movieVo.subjectLevelTwo}}</span>
       </section>
       <div>
         <article class="c-v-pic-wrap" style="height: 380px;">
@@ -21,13 +17,21 @@
               <span class="c-fff fsize24">{{movieVo.title}}</span>
             </h2>
             <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fsize14">分类：&nbsp;电影</span>&nbsp;&nbsp;
-              <span class="c-fff fsize14">地区：&nbsp;大陆</span>&nbsp;&nbsp;
-              <span class="c-fff fsize14">年份：&nbsp;2021</span>
+              <span class="c-fff fsize14">分类：&nbsp;{{selectDictLabel(movieTypeOptions, movieVo.movieType)}}</span>&nbsp;&nbsp;
+              <span class="c-fff fsize14">地区：&nbsp;{{selectDictLabel(countryOptions, movieVo.country)}}</span>&nbsp;&nbsp;
+              <span class="c-fff fsize14">年份：&nbsp;{{ parseTime(movieVo.publishTime, '{y}') }}</span>
             </section>
-            <section class="c-attr-jg">
-              <span class="c-fff">评分：</span>
-              <b class="c-yellow" style="font-size:20px;">7.9分</b>
+
+            <section class="c-attr-mt10 c-attr-undis">
+              <span class="c-fff fl">评分：</span>
+              <el-rate
+                v-model="movieVo.rate"
+                disabled
+                style="font-size:20px;"
+                show-score
+                text-color="#ff9900"
+                score-template="{value}">
+              </el-rate>
             </section>
             <section class="c-attr-mt10 c-attr-undis">
               <span class="c-fff fsize14">导演：&nbsp;妹妹</span>
@@ -36,7 +40,7 @@
               <span class="c-fff fsize14">主演：&nbsp;小美&nbsp;小明&nbsp;小张</span>
             </section>
             <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fsize14">标签：&nbsp;诱惑&nbsp;户外&nbsp;</span>
+              <span class="c-fff fsize14">标签：&nbsp;{{labelValue}}</span>
             </section>
 
             <section class="c-attr-mt of">
@@ -186,11 +190,34 @@ export default {
         movieVo: {},
         movieVideoList: [],
         isbuy: false,
+       //电影国家字典
+       countryOptions:[],
+       //状态字典
+       statusOptions:[],
+       //电影类型
+       movieTypeOptions:[],
+       //标签字典
+       labelOptions:[],
+       //标签值
+       labelValue:''
      }
    },
-   created() {//在页面渲染之前执行
-      this.initInfo()
-   },
+  created() {//在页面渲染之前执行
+    this.getDicts("movie_country").then(response => {
+      this.countryOptions = response.data.data;
+    });
+    this.getDicts("wm_movie_status").then(response => {
+      this.statusOptions = response.data.data;
+    });
+    this.getDicts("wm_movie_type").then(response => {
+      this.movieTypeOptions = response.data.data;
+    });
+    this.getDicts("movie_label").then(response => {
+      this.labelOptions = response.data.data;
+    });
+
+    this.initInfo();
+  },
    methods:{
      //查询电影详情信息
      initInfo() {
@@ -199,6 +226,7 @@ export default {
             this.movieVo=response.data.data;
             this.movieVideoList=this.movieVo.wmMovieVideoList;
             //this.isbuy=response.data.data.isBuy
+            this.labelValue =  this.selectDictLabels(this.labelOptions, this.movieVo.label);
         })
      },
      //生成订单

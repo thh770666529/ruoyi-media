@@ -1,5 +1,6 @@
 package com.ruoyi.midea.domain;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -97,6 +98,14 @@ public class WmMovie extends BaseEntity
     @Excel(name = "是否可以下载")
     private String isDownload;
 
+    /**
+     * 价格
+     */
+    @Excel(name = "价格")
+    private BigDecimal price;
+
+    @Excel(name = "评分")
+    private Double rate;
     /** 电影视频信息 */
     private List<WmMovieVideo> wmMovieVideoList;
 
@@ -291,6 +300,14 @@ public class WmMovie extends BaseEntity
         this.wmMovieVideoList = wmMovieVideoList;
     }
 
+    public Double getRate() {
+        return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -319,7 +336,17 @@ public class WmMovie extends BaseEntity
             .append("shareCount", getShareCount())
             .append("isComment", getIsComment())
             .append("isDownload", getIsDownload())
+            .append("price", getPrice())
+            .append("rate", getRate())
             .append("wmMovieVideoList", getWmMovieVideoList())
             .toString();
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }
