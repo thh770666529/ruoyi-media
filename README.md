@@ -1,4 +1,4 @@
-## 视频平台简介
+## 电影平台简介
 
 借助**ruoyi**这个平台开发一套资源平台。直接采用了[RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue)前后端分离基础平台。在原基础上加媒资管理
 
@@ -19,19 +19,6 @@
 
 
 
-## 项目截图
-
-<table>
-    <tr>
-        <td><img src="README.assets/1620136711824.png"   /></td>
-        <td><img src="README.assets/1620136766206.png"/></td>
-    </tr>
-</table>    
-
-
-
-
-![1620991944254](README.assets/1620991944254.png)
 
 ##### 已完成
 
