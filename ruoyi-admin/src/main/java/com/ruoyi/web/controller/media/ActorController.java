@@ -1,6 +1,9 @@
 package com.ruoyi.web.controller.media;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.ruoyi.common.utils.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,7 +68,7 @@ public class ActorController extends BaseController
     @GetMapping(value = "/{actorId}")
     public AjaxResult getInfo(@PathVariable("actorId") Long actorId)
     {
-        return AjaxResult.success(actorService.selectActorById(actorId));
+        return AjaxResult.success(actorService.getById(actorId));
     }
 
     /**
@@ -76,7 +79,7 @@ public class ActorController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Actor actor)
     {
-        return toAjax(actorService.insertActor(actor));
+        return toAjax(actorService.saveOrUpdate(actor));
     }
 
     /**
@@ -87,7 +90,7 @@ public class ActorController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody Actor actor)
     {
-        return toAjax(actorService.updateActor(actor));
+        return toAjax(actorService.saveOrUpdate(actor));
     }
 
     /**
@@ -98,6 +101,11 @@ public class ActorController extends BaseController
 	@DeleteMapping("/{actorIds}")
     public AjaxResult remove(@PathVariable Long[] actorIds)
     {
-        return toAjax(actorService.deleteActorByIds(actorIds));
+        if (StringUtils.isEmpty(actorIds)){
+           return error();
+        }else {
+            List<Long> ids = Arrays.asList(actorIds);
+            return toAjax(actorService.removeByIds(ids));
+        }
     }
 }

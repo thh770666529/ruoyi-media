@@ -3,6 +3,11 @@ package com.ruoyi.media.domain;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,11 +22,14 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @date 2021-05-16
  */
 @Data
+@TableName(value = "wm_movie")
 public class Movie extends BaseEntity
 {
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @TableId(type = IdType.AUTO)
     private Long movieId;
 
     /** 封面 */
@@ -34,7 +42,7 @@ public class Movie extends BaseEntity
 
     /** 电影类型 */
     @Excel(name = "电影类型")
-    private String movieType;
+    private String type;
 
     /** 国家 */
     @Excel(name = "国家")

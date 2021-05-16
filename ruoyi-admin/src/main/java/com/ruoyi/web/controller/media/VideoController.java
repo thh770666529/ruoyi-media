@@ -1,8 +1,10 @@
 package com.ruoyi.web.controller.media;
 
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,6 +21,8 @@ import com.ruoyi.media.domain.Video;
 import com.ruoyi.media.service.IVideoService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 电影视频Controller
@@ -65,7 +69,7 @@ public class VideoController extends BaseController
     @GetMapping(value = "/{videoId}")
     public AjaxResult getInfo(@PathVariable("videoId") Long videoId)
     {
-        return AjaxResult.success(videoService.selectVideoById(videoId));
+        return AjaxResult.success(videoService.getById(videoId));
     }
 
     /**
@@ -76,7 +80,7 @@ public class VideoController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Video video)
     {
-        return toAjax(videoService.insertVideo(video));
+        return toAjax(videoService.saveOrUpdate(video));
     }
 
     /**
@@ -87,7 +91,7 @@ public class VideoController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody Video video)
     {
-        return toAjax(videoService.updateVideo(video));
+        return toAjax(videoService.saveOrUpdate(video));
     }
 
     /**
@@ -96,8 +100,10 @@ public class VideoController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:video:remove')")
     @Log(title = "电影视频", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{movieVideoIds}")
-    public AjaxResult remove(@PathVariable Long[] movieVideoIds)
+    public AjaxResult remove(@PathVariable @NotNull Long[] movieVideoIds)
     {
-        return toAjax(videoService.deleteVideoByIds(movieVideoIds));
+        List<@NotNull Long> idList = Arrays.asList(movieVideoIds);
+
+        return toAjax(videoService.removeByIds(idList));
     }
 }

@@ -13,7 +13,7 @@
       <el-form-item label="电影类型" prop="movieType">
         <el-select v-model="queryParams.movieType" placeholder="请选择电影类型" clearable size="small">
           <el-option
-            v-for="dict in movieTypeOptions"
+            v-for="dict in typeOptions"
             :key="dict.dictValue"
             :label="dict.dictLabel"
             :value="dict.dictValue"
@@ -108,7 +108,7 @@
         </template>
       </el-table-column>
       <el-table-column label="标题" align="center" prop="title" width="600" />
-      <el-table-column label="电影类型" align="center"  prop="movieType" :formatter="movieTypeFormat" width="100" />
+      <el-table-column label="电影类型" align="center"  prop="type" :formatter="movieTypeFormat" width="100" />
       <el-table-column label="国家" align="center" prop="country" :formatter="countryTypeFormat" width="100" />
       <el-table-column label="发布人" align="center" prop="publishBy" width="100" />
       <el-table-column label="发布时间" align="center" prop="publishTime" >
@@ -203,7 +203,7 @@ export default {
       //状态字典
       statusOptions:[],
       //电影类型
-      movieTypeOptions:[],
+      typeOptions:[],
       // 表单参数
       form: {},
 
@@ -232,7 +232,7 @@ export default {
       this.statusOptions = response.data;
     });
     this.getDicts("wm_movie_type").then(response => {
-      this.movieTypeOptions = response.data;
+      this.typeOptions = response.data;
     });
   },
   methods: {
@@ -335,7 +335,7 @@ export default {
     },
     //电影类型字典翻译
     movieTypeFormat(row, column) {
-      return this.selectDictLabel(this.movieTypeOptions, row.movieType);
+      return this.selectDictLabel(this.typeOptions, row.type);
     },
     //国家类型字典翻译
     countryTypeFormat(row, column){

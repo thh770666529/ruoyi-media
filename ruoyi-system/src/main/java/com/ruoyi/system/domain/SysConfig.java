@@ -2,6 +2,11 @@ package com.ruoyi.system.domain;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -10,15 +15,18 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 参数配置表 sys_config
- * 
+ *
  * @author ruoyi
  */
+@TableName(value = "sys_config")
 public class SysConfig extends BaseEntity
 {
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
     /** 参数主键 */
     @Excel(name = "参数主键", cellType = ColumnType.NUMERIC)
+    @TableId(type = IdType.AUTO)
     private Long configId;
 
     /** 参数名称 */
@@ -92,7 +100,7 @@ public class SysConfig extends BaseEntity
     {
         this.configType = configType;
     }
-    
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

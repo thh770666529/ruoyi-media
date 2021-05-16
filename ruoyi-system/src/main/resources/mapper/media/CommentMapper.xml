@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.media.mapper.CommentMapper">
-    
+
     <resultMap type="Comment" id="CommentResult">
         <result property="id"    column="id"    />
         <result property="userId"    column="user_id"    />
@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCommentList" parameterType="Comment" resultMap="CommentResult">
         <include refid="selectCommentVo"/>
-        <where>  
+        <where>
             <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
             <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
             <if test="movieId != null  and movieId != ''"> and movie_id = #{movieId}</if>
@@ -45,82 +45,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="top != null "> and top = #{top}</if>
         </where>
     </select>
-    
-    <select id="selectCommentById" parameterType="Long" resultMap="CommentResult">
-        <include refid="selectCommentVo"/>
-        where id = #{id}
-    </select>
-        
-    <insert id="insertComment" parameterType="Comment">
-        insert into wm_comment
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">id,</if>
-            <if test="userId != null and userId != ''">user_id,</if>
-            <if test="userName != null and userName != ''">user_name,</if>
-            <if test="movieId != null and movieId != ''">movie_id,</if>
-            <if test="movieTitle != null">movie_title,</if>
-            <if test="parentCommentId != null">parent_comment_id,</if>
-            <if test="parentCommentUserId != null and parentCommentUserId != ''">parent_comment_user_id,</if>
-            <if test="replyCommentId != null">reply_comment_id,</if>
-            <if test="replyCommentUserId != null">reply_comment_user_id,</if>
-            <if test="commentLevel != null">comment_level,</if>
-            <if test="content != null and content != ''">content,</if>
-            <if test="status != null">status,</if>
-            <if test="likes != null">likes,</if>
-            <if test="top != null">top,</if>
-            <if test="createTime != null">create_time,</if>
-            <if test="updateTime != null">update_time,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
-            <if test="userId != null and userId != ''">#{userId},</if>
-            <if test="userName != null and userName != ''">#{userName},</if>
-            <if test="movieId != null and movieId != ''">#{movieId},</if>
-            <if test="movieTitle != null">#{movieTitle},</if>
-            <if test="parentCommentId != null">#{parentCommentId},</if>
-            <if test="parentCommentUserId != null and parentCommentUserId != ''">#{parentCommentUserId},</if>
-            <if test="replyCommentId != null">#{replyCommentId},</if>
-            <if test="replyCommentUserId != null">#{replyCommentUserId},</if>
-            <if test="commentLevel != null">#{commentLevel},</if>
-            <if test="content != null and content != ''">#{content},</if>
-            <if test="status != null">#{status},</if>
-            <if test="likes != null">#{likes},</if>
-            <if test="top != null">#{top},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-         </trim>
-    </insert>
-
-    <update id="updateComment" parameterType="Comment">
-        update wm_comment
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="userId != null and userId != ''">user_id = #{userId},</if>
-            <if test="userName != null and userName != ''">user_name = #{userName},</if>
-            <if test="movieId != null and movieId != ''">movie_id = #{movieId},</if>
-            <if test="movieTitle != null">movie_title = #{movieTitle},</if>
-            <if test="parentCommentId != null">parent_comment_id = #{parentCommentId},</if>
-            <if test="parentCommentUserId != null and parentCommentUserId != ''">parent_comment_user_id = #{parentCommentUserId},</if>
-            <if test="replyCommentId != null">reply_comment_id = #{replyCommentId},</if>
-            <if test="replyCommentUserId != null">reply_comment_user_id = #{replyCommentUserId},</if>
-            <if test="commentLevel != null">comment_level = #{commentLevel},</if>
-            <if test="content != null and content != ''">content = #{content},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="likes != null">likes = #{likes},</if>
-            <if test="top != null">top = #{top},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
-        </trim>
-        where id = #{id}
-    </update>
-
-    <delete id="deleteCommentById" parameterType="Long">
-        delete from wm_comment where id = #{id}
-    </delete>
-
-    <delete id="deleteCommentByIds" parameterType="String">
-        delete from wm_comment where id in 
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
 </mapper>

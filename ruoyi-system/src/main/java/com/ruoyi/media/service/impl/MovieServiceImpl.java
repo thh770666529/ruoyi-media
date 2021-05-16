@@ -1,8 +1,13 @@
 package com.ruoyi.media.service.impl;
 
+
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.media.domain.vo.MovieVO;
+import com.ruoyi.media.mapper.VideoMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -20,11 +25,13 @@ import com.ruoyi.media.service.IMovieService;
  * @date 2021-05-16
  */
 @Service
-public class MovieServiceImpl implements IMovieService
+public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements IMovieService
 {
     @Autowired
     private MovieMapper movieMapper;
 
+    @Autowired
+    private VideoMapper videoMapper;
     /**
      * 查询电影
      *
@@ -34,7 +41,16 @@ public class MovieServiceImpl implements IMovieService
     @Override
     public MovieVO selectMovieById(Long movieId)
     {
-        return movieMapper.selectMovieById(movieId);
+        Movie movie = movieMapper.selectById(movieId);
+        MovieVO movieVO = new MovieVO();
+        if (movie!=null){
+            BeanUtils.copyProperties(movie,movieVO);
+            Video video = new Video();
+            video.setMovieId(movieId);
+            List<Video> videoList = videoMapper.selectVideoList(video);
+            movieVO.setVideoList(videoList);
+        }
+        return movieVO;
     }
 
     /**
@@ -60,7 +76,7 @@ public class MovieServiceImpl implements IMovieService
     public int insertMovie(MovieVO movieVO)
     {
         movieVO.setCreateTime(DateUtils.getNowDate());
-        int rows = movieMapper.insertMovie(movieVO);
+        int rows = movieMapper.insert(movieVO);
         insertVideo(movieVO);
         return rows;
     }
@@ -76,24 +92,11 @@ public class MovieServiceImpl implements IMovieService
     public int updateMovie(MovieVO movieVO)
     {
         movieVO.setUpdateTime(DateUtils.getNowDate());
-        movieMapper.deleteVideoByMovieId(movieVO.getMovieId());
+        videoMapper.deleteByMovieId(movieVO.getMovieId());
         insertVideo(movieVO);
-        return movieMapper.updateMovie(movieVO);
+        return  movieMapper.updateById(movieVO);
     }
 
-    /**
-     * 批量删除电影
-     *
-     * @param movieIds 需要删除的电影ID
-     * @return 结果
-     */
-    @Transactional
-    @Override
-    public int deleteMovieByIds(Long[] movieIds)
-    {
-        movieMapper.deleteVideoByVideoIds(movieIds);
-        return movieMapper.deleteMovieByIds(movieIds);
-    }
 
     /**
      * 删除电影信息
@@ -104,8 +107,8 @@ public class MovieServiceImpl implements IMovieService
     @Override
     public int deleteMovieById(Long movieId)
     {
-        movieMapper.deleteVideoByMovieId(movieId);
-        return movieMapper.deleteMovieById(movieId);
+        videoMapper.deleteByMovieId(movieId);
+        return movieMapper.deleteById(movieId);
     }
 
     @Override
@@ -132,7 +135,7 @@ public class MovieServiceImpl implements IMovieService
             }
             if (list.size() > 0)
             {
-                movieMapper.batchVideo(list);
+                videoMapper.batchVideo(list);
             }
         }
     }

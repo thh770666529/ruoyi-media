@@ -1,6 +1,9 @@
 package com.ruoyi.media.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.ruoyi.media.domain.Movie;
 import com.ruoyi.media.domain.Video;
 
 /**
@@ -9,53 +12,8 @@ import com.ruoyi.media.domain.Video;
  * @author thh
  * @date 2021-05-16
  */
-public interface IVideoService
+public interface IVideoService extends IService<Video>
 {
-    /**
-     * 查询电影视频
-     *
-     * @param videoId 电影视频ID
-     * @return 电影视频
-     */
-    public Video selectVideoById(Long videoId);
 
-    /**
-     * 查询电影视频列表
-     *
-     * @param video 电影视频
-     * @return 电影视频集合
-     */
-    public List<Video> selectVideoList(Video video);
-
-    /**
-     * 新增电影视频
-     *
-     * @param video 电影视频
-     * @return 结果
-     */
-    public int insertVideo(Video video);
-
-    /**
-     * 修改电影视频
-     *
-     * @param video 电影视频
-     * @return 结果
-     */
-    public int updateVideo(Video video);
-
-    /**
-     * 批量删除电影视频
-     *
-     * @param movieVideoIds 需要删除的电影视频ID
-     * @return 结果
-     */
-    public int deleteVideoByIds(Long[] movieVideoIds);
-
-    /**
-     * 删除电影视频信息
-     *
-     * @param videoId 电影视频ID
-     * @return 结果
-     */
-    public int deleteVideoById(Long videoId);
+    List<Video> selectVideoList(Video video);
 }

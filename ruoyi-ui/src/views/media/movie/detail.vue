@@ -8,10 +8,10 @@
               <el-input v-model="form.title" placeholder="请输入标题"  auto-complete="off" ></el-input>
             </el-form-item>
 
-            <el-form-item label="电影类型" :label-width="formLabelWidth" prop="movieType">
-              <el-select v-model="form.movieType" placeholder="请选择电影类型">
+            <el-form-item label="电影类型" :label-width="formLabelWidth" prop="type">
+              <el-select v-model="form.type" placeholder="请选择电影类型">
                 <el-option
-                  v-for="dict in movieTypeOptions"
+                  v-for="dict in typeOptions"
                   :key="dict.dictValue"
                   :label="dict.dictLabel"
                   :value="dict.dictValue"
@@ -283,7 +283,7 @@ export default {
       //状态字典
       statusOptions:[],
       //电影类型
-      movieTypeOptions:[],
+      typeOptions:[],
 
       //字典是否
       sysYesNoOptions: [],
@@ -331,7 +331,7 @@ export default {
       this.statusOptions = response.data;
     });
     this.getDicts("wm_movie_type").then(response => {
-      this.movieTypeOptions = response.data;
+      this.typeOptions = response.data;
     });
     this.getDicts("sys_yes_no").then(response => {
       this.sysYesNoOptions = response.data;
@@ -394,7 +394,7 @@ export default {
         movieId: null,
         images: null,
         title: null,
-        movieType: null,
+        type: null,
         country: null,
         label: null,
         description: null,

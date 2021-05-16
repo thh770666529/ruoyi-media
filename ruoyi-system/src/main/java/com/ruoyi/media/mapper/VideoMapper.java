@@ -1,6 +1,9 @@
 package com.ruoyi.media.mapper;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.media.domain.Movie;
 import com.ruoyi.media.domain.Video;
 
 /**
@@ -9,16 +12,8 @@ import com.ruoyi.media.domain.Video;
  * @author thh
  * @date 2021-05-16
  */
-public interface VideoMapper
+public interface VideoMapper extends BaseMapper<Video>
 {
-    /**
-     * 查询电影视频
-     *
-     * @param videoId 电影视频ID
-     * @return 电影视频
-     */
-    public Video selectVideoById(Long videoId);
-
     /**
      * 查询电影视频列表
      *
@@ -28,34 +23,18 @@ public interface VideoMapper
     public List<Video> selectVideoList(Video video);
 
     /**
-     * 新增电影视频
+     * 批量新增电影视频
      *
-     * @param video 电影视频
+     * @param videoList 电影视频列表
      * @return 结果
      */
-    public int insertVideo(Video video);
+    public int batchVideo(List<Video> videoList);
+
 
     /**
-     * 修改电影视频
-     *
-     * @param video 电影视频
-     * @return 结果
+     * 根据电影Id删除视频
+     * @param movieId
+     * @return
      */
-    public int updateVideo(Video video);
-
-    /**
-     * 删除电影视频
-     *
-     * @param videoId 电影视频ID
-     * @return 结果
-     */
-    public int deleteVideoById(Long videoId);
-
-    /**
-     * 批量删除电影视频
-     *
-     * @param movieVideoIds 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteVideoByIds(Long[] movieVideoIds);
+    public int deleteByMovieId(Long movieId);
 }

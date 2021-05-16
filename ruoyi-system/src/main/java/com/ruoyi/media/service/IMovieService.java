@@ -1,6 +1,8 @@
 package com.ruoyi.media.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.media.domain.Movie;
 import com.ruoyi.media.domain.vo.MovieVO;
 
@@ -10,7 +12,7 @@ import com.ruoyi.media.domain.vo.MovieVO;
  * @author thh
  * @date 2021-05-16
  */
-public interface IMovieService
+public interface IMovieService extends IService<Movie>
 {
     /**
      * 查询电影
@@ -46,13 +48,6 @@ public interface IMovieService
      */
     public int updateMovie(MovieVO movieVO);
 
-    /**
-     * 批量删除电影
-     *
-     * @param movieIds 需要删除的电影ID
-     * @return 结果
-     */
-    public int deleteMovieByIds(Long[] movieIds);
 
     /**
      * 删除电影信息

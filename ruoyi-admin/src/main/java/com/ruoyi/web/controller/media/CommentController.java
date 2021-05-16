@@ -1,6 +1,9 @@
 package com.ruoyi.web.controller.media;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.ruoyi.common.utils.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,7 +68,7 @@ public class CommentController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(commentService.selectCommentById(id));
+        return AjaxResult.success(commentService.getById(id));
     }
 
     /**
@@ -76,7 +79,7 @@ public class CommentController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Comment comment)
     {
-        return toAjax(commentService.insertComment(comment));
+        return toAjax(commentService.saveOrUpdate(comment));
     }
 
     /**
@@ -87,7 +90,7 @@ public class CommentController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody Comment comment)
     {
-        return toAjax(commentService.updateComment(comment));
+        return toAjax(commentService.saveOrUpdate(comment));
     }
 
     /**
@@ -98,6 +101,10 @@ public class CommentController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        return toAjax(commentService.deleteCommentByIds(ids));
+        if (StringUtils.isNotEmpty(ids)){
+            List<Long> idList = Arrays.asList(ids);
+            return toAjax(commentService.removeByIds(idList));
+        }
+        return error();
     }
 }

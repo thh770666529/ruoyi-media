@@ -17,7 +17,7 @@
               <span class="c-fff fsize24">{{movieVo.title}}</span>
             </h2>
             <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fsize14">分类：&nbsp;{{selectDictLabel(movieTypeOptions, movieVo.movieType)}}</span>&nbsp;&nbsp;
+              <span class="c-fff fsize14">分类：&nbsp;{{selectDictLabel(typeOptions, movieVo.type)}}</span>&nbsp;&nbsp;
               <span class="c-fff fsize14">地区：&nbsp;{{selectDictLabel(countryOptions, movieVo.country)}}</span>&nbsp;&nbsp;
               <span class="c-fff fsize14">年份：&nbsp;{{ parseTime(movieVo.publishTime, '{y}') }}</span>
             </section>
@@ -195,7 +195,7 @@ export default {
        //状态字典
        statusOptions:[],
        //电影类型
-       movieTypeOptions:[],
+       typeOptions:[],
        //标签字典
        labelOptions:[],
        //标签值
@@ -210,7 +210,7 @@ export default {
       this.statusOptions = response.data.data;
     });
     this.getDicts("wm_movie_type").then(response => {
-      this.movieTypeOptions = response.data.data;
+      this.typeOptions = response.data.data;
     });
     this.getDicts("movie_label").then(response => {
       this.labelOptions = response.data.data;

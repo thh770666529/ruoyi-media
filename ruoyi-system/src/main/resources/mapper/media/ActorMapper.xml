@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.media.mapper.ActorMapper">
-    
+
     <resultMap type="Actor" id="ActorResult">
         <result property="actorId"    column="actor_id"    />
         <result property="name"    column="name"    />
@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectActorList" parameterType="Actor" resultMap="ActorResult">
         <include refid="selectActorVo"/>
-        <where>  
+        <where>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
             <if test="description != null  and description != ''"> and description = #{description}</if>
@@ -27,50 +27,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="label != null  and label != ''"> and label = #{label}</if>
         </where>
     </select>
-    
-    <select id="selectActorById" parameterType="Long" resultMap="ActorResult">
-        <include refid="selectActorVo"/>
-        where actor_id = #{actorId}
-    </select>
-        
-    <insert id="insertActor" parameterType="Actor" useGeneratedKeys="true" keyProperty="actorId">
-        insert into wm_actor
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="name != null and name != ''">name,</if>
-            <if test="avatar != null">avatar,</if>
-            <if test="description != null">description,</if>
-            <if test="awards != null">awards,</if>
-            <if test="label != null">label,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="name != null and name != ''">#{name},</if>
-            <if test="avatar != null">#{avatar},</if>
-            <if test="description != null">#{description},</if>
-            <if test="awards != null">#{awards},</if>
-            <if test="label != null">#{label},</if>
-         </trim>
-    </insert>
-
-    <update id="updateActor" parameterType="Actor">
-        update wm_actor
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="name != null and name != ''">name = #{name},</if>
-            <if test="avatar != null">avatar = #{avatar},</if>
-            <if test="description != null">description = #{description},</if>
-            <if test="awards != null">awards = #{awards},</if>
-            <if test="label != null">label = #{label},</if>
-        </trim>
-        where actor_id = #{actorId}
-    </update>
-
-    <delete id="deleteActorById" parameterType="Long">
-        delete from wm_actor where actor_id = #{actorId}
-    </delete>
-
-    <delete id="deleteActorByIds" parameterType="String">
-        delete from wm_actor where actor_id in 
-        <foreach item="actorId" collection="array" open="(" separator="," close=")">
-            #{actorId}
-        </foreach>
-    </delete>
 </mapper>

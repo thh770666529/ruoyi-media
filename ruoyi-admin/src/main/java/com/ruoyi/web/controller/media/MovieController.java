@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.media;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +107,8 @@ public class MovieController extends BaseController
 	@DeleteMapping("/{movieIds}")
     public AjaxResult remove(@PathVariable Long[] movieIds)
     {
-        return toAjax(movieService.deleteMovieByIds(movieIds));
+        List<Long> ids = Arrays.asList(movieIds);
+        return toAjax(movieService.removeByIds(ids));
     }
 
 

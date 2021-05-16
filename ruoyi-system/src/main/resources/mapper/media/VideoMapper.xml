@@ -40,76 +40,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectVideoById" parameterType="Long" resultMap="VideoResult">
-        <include refid="selectVideoVo"/>
-        where video_id = #{videoId}
-    </select>
 
-    <insert id="insertVideo" parameterType="Video" useGeneratedKeys="true" keyProperty="videoId">
-        insert into wm_video
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="title != null">title,</if>
-            <if test="url != null">url,</if>
-            <if test="ext != null">ext,</if>
-            <if test="length != null">length,</if>
-            <if test="type != null">type,</if>
-            <if test="storageType != null">storage_type,</if>
-            <if test="createTime != null">create_time,</if>
-            <if test="createBy != null">create_by,</if>
-            <if test="updateTime != null">update_time,</if>
-            <if test="updateBy != null">update_by,</if>
-            <if test="delFlag != null">del_flag,</if>
-            <if test="remark != null">remark,</if>
-            <if test="movieId != null">movie_id,</if>
-            <if test="filesize != null">filesize,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="title != null">#{title},</if>
-            <if test="url != null">#{url},</if>
-            <if test="ext != null">#{ext},</if>
-            <if test="length != null">#{length},</if>
-            <if test="type != null">#{type},</if>
-            <if test="storageType != null">#{storageType},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="createBy != null">#{createBy},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if test="updateBy != null">#{updateBy},</if>
-            <if test="delFlag != null">#{delFlag},</if>
-            <if test="remark != null">#{remark},</if>
-            <if test="movieId != null">#{movieId},</if>
-            <if test="filesize != null">#{filesize},</if>
-         </trim>
+    <insert id="batchVideo">
+        insert into wm_video( video_id, title, url, ext, length, type, storage_type, create_time, create_by, update_time, update_by, del_flag, remark, movie_id, filesize) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.videoId}, #{item.title}, #{item.url}, #{item.ext}, #{item.length}, #{item.type}, #{item.storageType}, #{item.createTime}, #{item.createBy}, #{item.updateTime}, #{item.updateBy}, #{item.delFlag}, #{item.remark}, #{item.movieId}, #{item.filesize})
+        </foreach>
     </insert>
 
-    <update id="updateVideo" parameterType="Video">
-        update wm_video
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="title != null">title = #{title},</if>
-            <if test="url != null">url = #{url},</if>
-            <if test="ext != null">ext = #{ext},</if>
-            <if test="length != null">length = #{length},</if>
-            <if test="type != null">type = #{type},</if>
-            <if test="storageType != null">storage_type = #{storageType},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="createBy != null">create_by = #{createBy},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="updateBy != null">update_by = #{updateBy},</if>
-            <if test="delFlag != null">del_flag = #{delFlag},</if>
-            <if test="remark != null">remark = #{remark},</if>
-            <if test="movieId != null">movie_id = #{movieId},</if>
-            <if test="filesize != null">filesize = #{filesize},</if>
-        </trim>
-        where video_id = #{videoId}
-    </update>
 
-    <delete id="deleteVideoById" parameterType="Long">
-        delete from wm_video where video_id = #{videoId}
-    </delete>
-
-    <delete id="deleteVideoByIds" parameterType="String">
-        delete from wm_video where video_id in
-        <foreach item="videoId" collection="array" open="(" separator="," close=")">
-            #{videoId}
-        </foreach>
+    <delete id="deleteByMovieId" parameterType="Long">
+        delete from wm_video where movie_id = #{movie_id}
     </delete>
 </mapper>

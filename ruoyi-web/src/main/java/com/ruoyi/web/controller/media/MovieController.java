@@ -57,7 +57,7 @@ public class MovieController extends BaseController
     @GetMapping(value = "/video/{videoId}")
     public AjaxResult getMovieVideoDetail(@PathVariable("videoId") Long videoId)
     {
-        Video video = videoService.selectVideoById(videoId);
+        Video video = videoService.getById(videoId);
         Long movieId = video.getMovieId();
         MovieVO movieVO = movieService.selectMovieById(movieId);
         Map data = new HashMap();
