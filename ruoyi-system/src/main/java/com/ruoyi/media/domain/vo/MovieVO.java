@@ -19,4 +19,9 @@ public class MovieVO extends Movie
     /** 电影视频信息 */
     private List<Video> videoList;
 
+    /**
+     * 发布人姓名
+     */
+    private String publishUsername;
+
 }

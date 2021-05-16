@@ -3,6 +3,7 @@ package com.ruoyi.media.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -14,6 +15,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @date 2021-05-16
  */
 @Data
+@TableName("wm_video")
 public class Video extends BaseEntity
 {
     @TableField(exist = false)

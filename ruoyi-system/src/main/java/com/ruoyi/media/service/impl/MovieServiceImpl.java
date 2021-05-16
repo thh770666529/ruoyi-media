@@ -4,9 +4,11 @@ package com.ruoyi.media.service.impl;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.media.domain.vo.MovieVO;
 import com.ruoyi.media.mapper.VideoMapper;
+import com.ruoyi.system.mapper.SysUserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
 
     @Autowired
     private VideoMapper videoMapper;
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
     /**
      * 查询电影
      *
@@ -45,6 +50,11 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         MovieVO movieVO = new MovieVO();
         if (movie!=null){
             BeanUtils.copyProperties(movie,movieVO);
+            String publishBy = movieVO.getPublishBy();
+            if (StringUtils.isNotEmpty(publishBy)){
+                SysUser sysUser = sysUserMapper.selectUserById(Long.valueOf(publishBy));
+                movieVO.setPublishUsername(sysUser.getUserName());
+            }
             Video video = new Video();
             video.setMovieId(movieId);
             List<Video> videoList = videoMapper.selectVideoList(video);

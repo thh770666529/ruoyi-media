@@ -12,7 +12,7 @@
       <vueCkplayer ref="player" :style="playStyle"/>
 
     <div class="mt20">
-      <article class="fl col-12">
+      <article class="fl col-12" style="width: 100%" >
 
 
         <section class="mr30 mb25">
@@ -49,7 +49,7 @@
 
                           <ol class="lh-menu-ol" style="display: block;">
                             <li class="lh-menu-second ml30">
-                              <a :href="'/video/'+video.videoId" target="_blank">
+                              <a :href="'/video/'+video.videoId" target="_self">
                                   <span class="fr">
                                     <i class="free-icon vam mr10">免费试听</i>
                                   </span>

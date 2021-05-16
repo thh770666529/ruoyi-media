@@ -510,10 +510,10 @@ INSERT INTO `sys_dict_data` VALUES (101, 0, '美国', 'american', 'movie_country
 INSERT INTO `sys_dict_data` VALUES (102, 0, '日本', 'japan', 'movie_country', NULL, NULL, 'N', '0', 'admin', '2021-05-01 17:57:35', '', NULL, '日本');
 INSERT INTO `sys_dict_data` VALUES (103, 0, '韩国', 'korea', 'movie_country', NULL, NULL, 'N', '0', 'admin', '2021-05-01 17:58:08', '', NULL, '韩国');
 INSERT INTO `sys_dict_data` VALUES (104, 0, '印度', 'india', 'movie_country', NULL, NULL, 'N', '0', 'admin', '2021-05-01 17:58:34', '', NULL, '印度');
-INSERT INTO `sys_dict_data` VALUES (105, 0, '正常', '0', 'wm_movie_status', NULL, NULL, 'N', '0', 'admin', '2021-05-01 18:08:22', '', NULL, '正常');
-INSERT INTO `sys_dict_data` VALUES (106, 0, '关闭', '1', 'wm_movie_status', NULL, NULL, 'N', '0', 'admin', '2021-05-01 18:08:32', '', NULL, '关闭');
-INSERT INTO `sys_dict_data` VALUES (107, 0, '电视剧', 'teleplay', 'wm_movie_type', NULL, NULL, 'N', '0', 'admin', '2021-05-01 20:15:56', '', NULL, '电视剧');
-INSERT INTO `sys_dict_data` VALUES (108, 0, '电影', ' film', 'wm_movie_type', NULL, NULL, 'N', '0', 'admin', '2021-05-01 20:16:34', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (105, 0, '正常', '0', 'movie_status', NULL, NULL, 'N', '0', 'admin', '2021-05-01 18:08:22', '', NULL, '正常');
+INSERT INTO `sys_dict_data` VALUES (106, 0, '关闭', '1', 'movie_status', NULL, NULL, 'N', '0', 'admin', '2021-05-01 18:08:32', '', NULL, '关闭');
+INSERT INTO `sys_dict_data` VALUES (107, 0, '电视剧', 'teleplay', 'movie_type', NULL, NULL, 'N', '0', 'admin', '2021-05-01 20:15:56', '', NULL, '电视剧');
+INSERT INTO `sys_dict_data` VALUES (108, 0, '电影', ' film', 'movie_type', NULL, NULL, 'N', '0', 'admin', '2021-05-01 20:16:34', '', NULL, NULL);
 INSERT INTO `sys_dict_data` VALUES (109, 0, '户外', 'outdoor', 'movie_label', NULL, NULL, 'N', '0', 'admin', '2021-05-13 23:08:32', 'admin', '2021-05-13 23:25:18', '户外');
 INSERT INTO `sys_dict_data` VALUES (110, 0, '功夫', 'KungFu', 'movie_label', NULL, NULL, 'N', '0', 'admin', '2021-05-13 23:08:55', 'admin', '2021-05-13 23:25:23', '1');
 
@@ -549,8 +549,8 @@ INSERT INTO `sys_dict_type` VALUES (8, '通知状态', 'sys_notice_status', '0',
 INSERT INTO `sys_dict_type` VALUES (9, '操作类型', 'sys_oper_type', '0', 'admin', '2021-04-29 21:28:15', '', NULL, '操作类型列表');
 INSERT INTO `sys_dict_type` VALUES (10, '系统状态', 'sys_common_status', '0', 'admin', '2021-04-29 21:28:15', '', NULL, '登录状态列表');
 INSERT INTO `sys_dict_type` VALUES (100, '电影国家', 'movie_country', '0', 'admin', '2021-05-01 17:53:34', '', NULL, '电影国家列表');
-INSERT INTO `sys_dict_type` VALUES (101, '电影状态', 'wm_movie_status', '0', 'admin', '2021-05-01 18:07:17', '', NULL, '电影状态');
-INSERT INTO `sys_dict_type` VALUES (102, '电影类型', 'wm_movie_type', '0', 'admin', '2021-05-01 20:15:13', '', NULL, '电影类型');
+INSERT INTO `sys_dict_type` VALUES (101, '电影状态', 'movie_status', '0', 'admin', '2021-05-01 18:07:17', '', NULL, '电影状态');
+INSERT INTO `sys_dict_type` VALUES (102, '电影类型', 'movie_type', '0', 'admin', '2021-05-01 20:15:13', '', NULL, '电影类型');
 INSERT INTO `sys_dict_type` VALUES (103, '电影标签', 'movie_label', '0', 'admin', '2021-05-13 23:06:49', '', NULL, '电影标签');
 
 -- ----------------------------

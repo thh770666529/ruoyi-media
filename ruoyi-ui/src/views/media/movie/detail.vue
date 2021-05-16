@@ -327,10 +327,10 @@ export default {
     this.getDicts("movie_country").then(response => {
       this.countryOptions = response.data;
     });
-    this.getDicts("wm_movie_status").then(response => {
+    this.getDicts("movie_status").then(response => {
       this.statusOptions = response.data;
     });
-    this.getDicts("wm_movie_type").then(response => {
+    this.getDicts("movie_type").then(response => {
       this.typeOptions = response.data;
     });
     this.getDicts("sys_yes_no").then(response => {

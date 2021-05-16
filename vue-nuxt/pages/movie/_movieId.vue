@@ -43,6 +43,10 @@
               <span class="c-fff fsize14">标签：&nbsp;{{labelValue}}</span>
             </section>
 
+            <section class="c-attr-mt10 c-attr-undis">
+              <span class="c-fff fsize14">发布人：&nbsp;{{movieVo.publishUsername}}</span>
+            </section>
+
             <section class="c-attr-mt of">
               <span class="ml10 vam">
                 <em class="icon18 scIcon"></em>
@@ -114,7 +118,7 @@
                   <h6 class="c-g-content c-infor-title">
                     <span>剧集列表</span>
                   </h6>
-                  <section class="mt20">
+                  <section class="mt20" >
                     <div class="lh-menu-wrap">
                       <menu id="lh-menu" class="lh-menu mt10 mr10">
                         <ul>
@@ -206,10 +210,10 @@ export default {
     this.getDicts("movie_country").then(response => {
       this.countryOptions = response.data.data;
     });
-    this.getDicts("wm_movie_status").then(response => {
+    this.getDicts("movie_status").then(response => {
       this.statusOptions = response.data.data;
     });
-    this.getDicts("wm_movie_type").then(response => {
+    this.getDicts("movie_type").then(response => {
       this.typeOptions = response.data.data;
     });
     this.getDicts("movie_label").then(response => {

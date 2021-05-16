@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.media.mapper.MovieMapper">
 
-    <resultMap type="Movie" id="MovieResult">
+    <resultMap type="MovieVO" id="MovieResult">
         <result property="movieId"    column="movie_id"    />
         <result property="images"    column="images"    />
         <result property="title"    column="title"    />
@@ -32,11 +32,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isDownload"    column="is_download"    />
         <result property="price"    column="price"    />
         <result property="rate"    column="rate"    />
+        <result property="publishUsername"    column="publishUsername"    />
     </resultMap>
 
 
     <sql id="selectMovieVo">
-        select movie_id, images, title, type, country, label, description, publish_by, publish_time, status, create_by, create_time, update_by, update_time, del_flag, remark, read_count, comment_count, follow_count, collection_count, likes_count, unlikes_count, share_count, is_comment, is_download, price, rate from wm_movie
+        select m.movie_id, m.images, m.title, m.type, m.country, m.label, m.description, m.publish_by, m.publish_time,
+        m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
+        m.is_comment, m.is_download, m.price, m.rate,u.nick_name as publishUsername
+        from wm_movie m
+        left join sys_user u on m.publish_by = u.user_id
     </sql>
 
 

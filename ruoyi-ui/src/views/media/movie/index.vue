@@ -110,7 +110,7 @@
       <el-table-column label="标题" align="center" prop="title" width="600" />
       <el-table-column label="电影类型" align="center"  prop="type" :formatter="movieTypeFormat" width="100" />
       <el-table-column label="国家" align="center" prop="country" :formatter="countryTypeFormat" width="100" />
-      <el-table-column label="发布人" align="center" prop="publishBy" width="100" />
+      <el-table-column label="发布人" align="center" prop="publishUsername" width="100" />
       <el-table-column label="发布时间" align="center" prop="publishTime" >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.publishTime, '{y}-{m}-{d}') }}</span>
@@ -228,10 +228,10 @@ export default {
     this.getDicts("movie_country").then(response => {
       this.countryOptions = response.data;
     });
-    this.getDicts("wm_movie_status").then(response => {
+    this.getDicts("movie_status").then(response => {
       this.statusOptions = response.data;
     });
-    this.getDicts("wm_movie_type").then(response => {
+    this.getDicts("movie_type").then(response => {
       this.typeOptions = response.data;
     });
   },
