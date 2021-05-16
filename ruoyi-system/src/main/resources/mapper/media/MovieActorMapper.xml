@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.media.mapper.MovieActorMapper">
+    
+    <resultMap type="MovieActor" id="MovieActorResult">
+        <result property="actorId"    column="actor_id"    />
+        <result property="movieId"    column="movie_id"    />
+        <result property="type"    column="type"    />
+    </resultMap>
+
+    <sql id="selectMovieActorVo">
+        select actor_id, movie_id, type from wm_movie_actor
+    </sql>
+
+    <select id="selectMovieActorList" parameterType="MovieActor" resultMap="MovieActorResult">
+        <include refid="selectMovieActorVo"/>
+        <where>  
+            <if test="actorId != null "> and actor_id = #{actorId}</if>
+            <if test="movieId != null "> and movie_id = #{movieId}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectMovieActorById" parameterType="Long" resultMap="MovieActorResult">
+        <include refid="selectMovieActorVo"/>
+        where actor_id = #{actorId}
+    </select>
+        
+    <insert id="insertMovieActor" parameterType="MovieActor">
+        insert into wm_movie_actor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="actorId != null">actor_id,</if>
+            <if test="movieId != null">movie_id,</if>
+            <if test="type != null">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="actorId != null">#{actorId},</if>
+            <if test="movieId != null">#{movieId},</if>
+            <if test="type != null">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMovieActor" parameterType="MovieActor">
+        update wm_movie_actor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="movieId != null">movie_id = #{movieId},</if>
+            <if test="type != null">type = #{type},</if>
+        </trim>
+        where actor_id = #{actorId}
+    </update>
+
+    <delete id="deleteMovieActorById" parameterType="Long">
+        delete from wm_movie_actor where actor_id = #{actorId}
+    </delete>
+
+    <delete id="deleteMovieActorByIds" parameterType="String">
+        delete from wm_movie_actor where actor_id in 
+        <foreach item="actorId" collection="array" open="(" separator="," close=")">
+            #{actorId}
+        </foreach>
+    </delete>
+</mapper>

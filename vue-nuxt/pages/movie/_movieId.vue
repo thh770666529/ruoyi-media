@@ -90,7 +90,7 @@
       </div>
       <!-- /电影封面介绍 -->
       <div class="mt20 c-infor-box">
-        <article class="fl col-12">
+        <article class="fl col-12" style="width: 100%">
           <section class="mr5">
             <div class="i-box">
               <div>
@@ -119,15 +119,15 @@
                       <menu id="lh-menu" class="lh-menu mt10 mr10">
                         <ul>
                           <!-- 文件目录 -->
-                          <li class="lh-menu-stair" v-for="movieVideo in movieVideoList" :key="movieVideo.movieVideoId">
+                          <li class="lh-menu-stair" v-for="video in videoList" :key="video.videoId">
 
                             <ol class="lh-menu-ol" style="display: block;">
                               <li class="lh-menu-second ml30">
-                                <a :href="'/player/'+movieVideo.movieVideoId" target="_blank">
+                                <a :href="'/video/'+video.videoId" target="_blank">
                                   <span class="fr">
                                     <i class="free-icon vam mr10">免费试听</i>
                                   </span>
-                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{movieVideo.title}}
+                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{video.title}}
                                 </a>
                               </li>
                             </ol>
@@ -188,7 +188,7 @@ export default {
    data() {
      return {
         movieVo: {},
-        movieVideoList: [],
+        videoList: [],
         isbuy: false,
        //电影国家字典
        countryOptions:[],
@@ -224,7 +224,7 @@ export default {
        movieApi.getMovie(this.movieId)
           .then(response => {
             this.movieVo=response.data.data;
-            this.movieVideoList=this.movieVo.wmMovieVideoList;
+            this.videoList=this.movieVo.videoList;
             //this.isbuy=response.data.data.isBuy
             this.labelValue =  this.selectDictLabels(this.labelOptions, this.movieVo.label);
         })
@@ -240,13 +240,13 @@ export default {
      },
      //播放
      play(){
-       if (this.movieVideoList.length==0){
+       if (this.videoList.length==0){
          Message({
            message: '暂时没有播放的视频！请联系管理员进行上传',
            type: 'error'
          })
        }else {
-         window.open("/player/"+this.movieVideoList[0].movieVideoId);
+         window.open("/video/"+this.videoList[0].videoId);
        }
      }
    }

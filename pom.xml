@@ -33,6 +33,7 @@
         <poi.version>4.1.2</poi.version>
         <velocity.version>1.7</velocity.version>
         <jwt.version>0.9.1</jwt.version>
+        <lombok.version>1.18.10</lombok.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -216,6 +217,12 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!--lombok用来简化实体类：需要安装lombok插件-->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

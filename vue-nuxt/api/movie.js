@@ -18,9 +18,9 @@ export default {
       method: 'get'
     })
   },
-  getMovieVideoDetail(movieVideoId) {
+  getMovieVideo(videoId) {
     return request({
-      url: '/media/movie/movieVideo/' + movieVideoId,
+      url: '/media/movie/video/' + videoId,
       method: 'get'
     })
   }

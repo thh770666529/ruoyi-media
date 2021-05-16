@@ -2,7 +2,7 @@ package com.ruoyi.web.controller;
 
 
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.media.service.IWmMovieService;
+import com.ruoyi.media.service.IMovieService;
 import com.ruoyi.website.domain.WebsiteBanner;
 import com.ruoyi.website.domain.WebsiteLink;
 import com.ruoyi.website.service.IWebsiteBannerService;
@@ -26,7 +26,7 @@ public class IndexController {
 
 
     @Autowired
-    private IWmMovieService wmMovieService;
+    private IMovieService movieService;
 
     @Autowired
     private IWebsiteBannerService websiteBannerService;
@@ -38,7 +38,7 @@ public class IndexController {
     @GetMapping("/getHotMovieList")
     public AjaxResult getHotMovieList(){
         //查询前8的热门电影
-        return AjaxResult.success(wmMovieService.selectHotMovieList(8));
+        return AjaxResult.success(movieService.selectHotMovieList(8));
     }
 
     @GetMapping("/getAllBannerList")

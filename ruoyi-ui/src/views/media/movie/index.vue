@@ -22,7 +22,7 @@
       </el-form-item>
 
       <el-form-item label="国家" prop="country">
-        <el-select v-model="queryParams.country" placeholder="请输入国家">
+        <el-select v-model="queryParams.country" clearable  placeholder="请输入国家">
           <el-option
             v-for="dict in countryOptions"
             :key="dict.dictValue"

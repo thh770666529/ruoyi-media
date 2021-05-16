@@ -17,7 +17,7 @@
               <a>电影</a>
             </router-link>
             <router-link to="/teacher" tag="li" active-class="current">
-              <a>名师</a>
+              <a>演员</a>
             </router-link>
             <router-link to="/article" tag="li" active-class="current">
               <a>文章</a>

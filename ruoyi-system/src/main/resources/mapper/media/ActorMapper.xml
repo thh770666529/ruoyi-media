@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.media.mapper.WmActorMapper">
+<mapper namespace="com.ruoyi.media.mapper.ActorMapper">
     
-    <resultMap type="WmActor" id="WmActorResult">
+    <resultMap type="Actor" id="ActorResult">
         <result property="actorId"    column="actor_id"    />
         <result property="name"    column="name"    />
         <result property="avatar"    column="avatar"    />
@@ -13,12 +13,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="label"    column="label"    />
     </resultMap>
 
-    <sql id="selectWmActorVo">
+    <sql id="selectActorVo">
         select actor_id, name, avatar, description, awards, label from wm_actor
     </sql>
 
-    <select id="selectWmActorList" parameterType="WmActor" resultMap="WmActorResult">
-        <include refid="selectWmActorVo"/>
+    <select id="selectActorList" parameterType="Actor" resultMap="ActorResult">
+        <include refid="selectActorVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
@@ -28,12 +28,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectWmActorById" parameterType="Long" resultMap="WmActorResult">
-        <include refid="selectWmActorVo"/>
+    <select id="selectActorById" parameterType="Long" resultMap="ActorResult">
+        <include refid="selectActorVo"/>
         where actor_id = #{actorId}
     </select>
         
-    <insert id="insertWmActor" parameterType="WmActor" useGeneratedKeys="true" keyProperty="actorId">
+    <insert id="insertActor" parameterType="Actor" useGeneratedKeys="true" keyProperty="actorId">
         insert into wm_actor
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">name,</if>
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateWmActor" parameterType="WmActor">
+    <update id="updateActor" parameterType="Actor">
         update wm_actor
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name != ''">name = #{name},</if>
@@ -63,11 +63,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where actor_id = #{actorId}
     </update>
 
-    <delete id="deleteWmActorById" parameterType="Long">
+    <delete id="deleteActorById" parameterType="Long">
         delete from wm_actor where actor_id = #{actorId}
     </delete>
 
-    <delete id="deleteWmActorByIds" parameterType="String">
+    <delete id="deleteActorByIds" parameterType="String">
         delete from wm_actor where actor_id in 
         <foreach item="actorId" collection="array" open="(" separator="," close=")">
             #{actorId}

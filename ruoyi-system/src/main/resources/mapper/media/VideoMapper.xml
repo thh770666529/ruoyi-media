@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.media.mapper.VideoMapper">
+
+    <resultMap type="Video" id="VideoResult">
+        <result property="videoId"    column="video_id"    />
+        <result property="title"    column="title"    />
+        <result property="url"    column="url"    />
+        <result property="ext"    column="ext"    />
+        <result property="length"    column="length"    />
+        <result property="type"    column="type"    />
+        <result property="storageType"    column="storage_type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="movieId"    column="movie_id"    />
+        <result property="filesize"    column="filesize"    />
+    </resultMap>
+
+    <sql id="selectVideoVo">
+        select video_id, title, url, ext, length, type, storage_type, create_time, create_by, update_time, update_by, del_flag, remark, movie_id, filesize from wm_video
+    </sql>
+
+    <select id="selectVideoList" parameterType="Video" resultMap="VideoResult">
+        <include refid="selectVideoVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="ext != null  and ext != ''"> and ext = #{ext}</if>
+            <if test="length != null  and length != ''"> and length = #{length}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="storageType != null  and storageType != ''"> and storage_type = #{storageType}</if>
+            <if test="movieId != null "> and movie_id = #{movieId}</if>
+            <if test="filesize != null "> and filesize = #{filesize}</if>
+        </where>
+    </select>
+
+    <select id="selectVideoById" parameterType="Long" resultMap="VideoResult">
+        <include refid="selectVideoVo"/>
+        where video_id = #{videoId}
+    </select>
+
+    <insert id="insertVideo" parameterType="Video" useGeneratedKeys="true" keyProperty="videoId">
+        insert into wm_video
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="url != null">url,</if>
+            <if test="ext != null">ext,</if>
+            <if test="length != null">length,</if>
+            <if test="type != null">type,</if>
+            <if test="storageType != null">storage_type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="remark != null">remark,</if>
+            <if test="movieId != null">movie_id,</if>
+            <if test="filesize != null">filesize,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="url != null">#{url},</if>
+            <if test="ext != null">#{ext},</if>
+            <if test="length != null">#{length},</if>
+            <if test="type != null">#{type},</if>
+            <if test="storageType != null">#{storageType},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="movieId != null">#{movieId},</if>
+            <if test="filesize != null">#{filesize},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVideo" parameterType="Video">
+        update wm_video
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="ext != null">ext = #{ext},</if>
+            <if test="length != null">length = #{length},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="storageType != null">storage_type = #{storageType},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="movieId != null">movie_id = #{movieId},</if>
+            <if test="filesize != null">filesize = #{filesize},</if>
+        </trim>
+        where video_id = #{videoId}
+    </update>
+
+    <delete id="deleteVideoById" parameterType="Long">
+        delete from wm_video where video_id = #{videoId}
+    </delete>
+
+    <delete id="deleteVideoByIds" parameterType="String">
+        delete from wm_video where video_id in
+        <foreach item="videoId" collection="array" open="(" separator="," close=")">
+            #{videoId}
+        </foreach>
+    </delete>
+</mapper>

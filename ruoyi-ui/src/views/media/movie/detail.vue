@@ -151,7 +151,7 @@
           </el-col>
         </el-row>
 
-        <el-table :data="wmMovieVideoList" :row-class-name="rowWmMovieVideoIndex" @selection-change="handleWmMovieVideoSelectionChange" ref="wmMovieVideo">
+        <el-table :data="videoList" :row-class-name="rowWmMovieVideoIndex" @selection-change="handleWmMovieVideoSelectionChange" ref="wmMovieVideo">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
           <el-table-column label="标题" prop="title"/>
@@ -194,24 +194,24 @@
 
     <!-- 添加或修改电影管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="wmMovieVideoForm" :model="wmMovieVideoForm" :rules="videoRules" label-width="80px">
+      <el-form ref="movieVideoForm" :model="movieVideoForm" :rules="videoRules" label-width="80px">
         <el-form-item label="标题" prop="title">
-          <el-input v-model="wmMovieVideoForm.title" placeholder="请输入标题" />
+          <el-input v-model="movieVideoForm.title" placeholder="请输入标题" />
         </el-form-item>
 
         <el-form-item label="url地址" prop="url">
-          <el-input v-model="wmMovieVideoForm.url" placeholder="请输入url地址" />
+          <el-input v-model="movieVideoForm.url" placeholder="请输入url地址" />
         </el-form-item>
 
         <el-form-item label="文件后缀" prop="ext">
-          <el-input v-model="wmMovieVideoForm.ext" placeholder="请输入文件后缀" />
+          <el-input v-model="movieVideoForm.ext" placeholder="请输入文件后缀" />
         </el-form-item>
         <el-form-item label="播放长度" prop="length">
-          <el-input v-model="wmMovieVideoForm.length" placeholder="请输入播放长度" />
+          <el-input v-model="movieVideoForm.length" placeholder="请输入播放长度" />
         </el-form-item>
 
         <el-form-item label="文件大小" prop="length">
-          <el-input v-model="wmMovieVideoForm.filesize" placeholder="文件大小" />
+          <el-input v-model="movieVideoForm.filesize" placeholder="文件大小" />
         </el-form-item>
 
         <el-form-item label="上传视频" prop="url">
@@ -261,7 +261,7 @@ export default {
       // 选中数组
       ids: [],
       // 子表选中数据
-      checkedWmMovieVideo: [],
+      checkedMovieVideo: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -273,7 +273,7 @@ export default {
       // 电影管理表格数据
       movieList: [],
       // 电影视频表格数据
-      wmMovieVideoList: [],
+      videoList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -297,7 +297,7 @@ export default {
       images:[],
       photoVisible: false,
       //电影视频信息Form
-      wmMovieVideoForm:{},
+      movieVideoForm:{},
       // 表单校验
       rules: {
         title: [
@@ -360,7 +360,7 @@ export default {
       }else {
         getMovie(movieId).then(response => {
           this.form = response.data;
-          this.wmMovieVideoList = response.data.wmMovieVideoList;
+          this.videoList = response.data.videoList;
           let that = this;
           that.labelList = [];
           var dbLabelList = that.form.label.split(",");
@@ -419,7 +419,7 @@ export default {
         price:0,
         rate:0
       };
-      this.wmMovieVideoList = [];
+      this.videoList = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -441,7 +441,7 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.wmMovieVideoForm = this.checkedWmMovieVideo[0];
+      this.movieVideoForm = this.checkedMovieVideo[0];
       this.open = true;
     },
 
@@ -459,7 +459,7 @@ export default {
       that.form.label = that.labelList.join(",");
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.form.wmMovieVideoList = this.wmMovieVideoList;
+          this.form.videoList = this.videoList;
           if (this.form.movieId != null) {
             updateMovie(this.form).then(response => {
               this.msgSuccess("修改成功");
@@ -497,26 +497,26 @@ export default {
       this.title ="添加电影视频";
     },
     submitVideoForm(){
-      this.$refs["wmMovieVideoForm"].validate(valid => {
+      this.$refs["movieVideoForm"].validate(valid => {
         if (valid) {
-          const movieVideoId =  this.wmMovieVideoForm.movieVideoId;
-          if (!movieVideoId){
-            this.wmMovieVideoList.push(this.wmMovieVideoForm);
+          const videoId =  this.movieVideoForm.videoId;
+          if (!videoId){
+            this.videoList.push(this.movieVideoForm);
           }
           this.open = false;
-          this.wmMovieVideoForm ={};
+          this.movieVideoForm ={};
         }
       });
-      this.submitForm();
+      this.save();
     },
     /** 电影视频删除按钮操作 */
     handleDeleteWmMovieVideo(row) {
-      const movieVideoIds = row.movieVideoId || this.ids;
-      if (this.checkedWmMovieVideo.length == 0) {
+      const movieVideoIds = row.videoId || this.ids;
+      if (this.checkedMovieVideo.length == 0) {
         this.$alert("请先选择要删除的电影视频数据", "提示", { confirmButtonText: "确定" });
       } else {
-        this.wmMovieVideoList.splice(this.checkedWmMovieVideo[0].index - 1, 1);
-        this.submitForm();
+        this.videoList.splice(this.checkedMovieVideo[0].index - 1, 1);
+        this.save();
       }
     },
 
@@ -528,7 +528,7 @@ export default {
         this.$refs.wmMovieVideo.clearSelection();
         this.$refs.wmMovieVideo.toggleRowSelection(selection.pop());
       } else {
-        this.checkedWmMovieVideo = selection;
+        this.checkedMovieVideo = selection;
       }
       this.single = selection.length != 1;
     },
@@ -576,7 +576,7 @@ export default {
     handleVideoSuccess(res, file) {
       const code = res.code;
       if (code == 200) {
-        this.wmMovieVideoForm = res.data;
+        this.movieVideoForm = res.data;
         this.msgSuccess("上传成功！");
       } else {
         this.msgError(res.msg);

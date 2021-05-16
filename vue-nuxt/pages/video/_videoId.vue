@@ -45,15 +45,15 @@
                     <menu id="lh-menu" class="lh-menu mt10 mr10 ">
                       <ul>
                         <!-- 文件目录 -->
-                        <li class="lh-menu-stair" v-for="movieVideo in movieVo.wmMovieVideoList" :key="movieVideo.movieVideoId">
+                        <li class="lh-menu-stair" v-for="video in movieVo.videoList" :key="video.videoId">
 
                           <ol class="lh-menu-ol" style="display: block;">
                             <li class="lh-menu-second ml30">
-                              <a :href="'/player/'+movieVideo.movieVideoId" target="_blank">
+                              <a :href="'/video/'+video.videoId" target="_blank">
                                   <span class="fr">
                                     <i class="free-icon vam mr10">免费试听</i>
                                   </span>
-                                <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{movieVideo.title}}
+                                <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{video.title}}
                               </a>
                             </li>
                           </ol>
@@ -97,11 +97,11 @@
     },
     // 异步调用
     asyncData({ params, error }) {
-      return movieApi.getMovieVideoDetail(params.movieVideoId)
+      return movieApi.getMovieVideo(params.videoId)
         .then(response => {
           return {
-            movieVideoVo: response.data.data.wmMovieVideo,
-            movieVo: response.data.data.wmMovie
+            videoVo: response.data.data.video,
+            movieVo: response.data.data.movie
           }
         })
     },
@@ -140,8 +140,8 @@
     },
     methods:{
       player() {
-         this.$refs.player.loadPlayer(this.fileUploadHost+this.movieVideoVo.url);
-        this.$refs.player.load(this.fileUploadHost+this.movieVideoVo.url);
+         this.$refs.player.loadPlayer(this.fileUploadHost+this.videoVo.url);
+        this.$refs.player.load(this.fileUploadHost+this.videoVo.url);
         //this.$refs.player.load('http://ckplayer-video-sample.oss-cn-shanghai.aliyuncs.com/sample-mp4/d30e02a5626c066.mp4');
       },
       setFull() {
