@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.media.mapper.CommentMapper">
 
     <resultMap type="Comment" id="CommentResult">
-        <result property="id"    column="id"    />
+        <result property="commentId"    column="id"    />
         <result property="userId"    column="user_id"    />
         <result property="userName"    column="user_name"    />
         <result property="movieId"    column="movie_id"    />
@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCommentVo">
-        select id, user_id, user_name, movie_id, movie_title, parent_comment_id, parent_comment_user_id, reply_comment_id, reply_comment_user_id, comment_level, content, status, likes, top, create_time, update_time from wm_comment
+        select comment_id, user_id, user_name, movie_id, movie_title, parent_comment_id, parent_comment_user_id, reply_comment_id, reply_comment_user_id, comment_level, content, status, likes, top, create_time, update_time from wm_comment
     </sql>
 
     <select id="selectCommentList" parameterType="Comment" resultMap="CommentResult">

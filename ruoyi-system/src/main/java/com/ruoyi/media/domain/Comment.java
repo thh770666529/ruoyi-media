@@ -1,10 +1,17 @@
 package com.ruoyi.media.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.util.Date;
 
 /**
  * 电影评论对象 wm_comment
@@ -13,12 +20,15 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @date 2021-05-16
  */
 @Data
-public class Comment extends BaseEntity
+@TableName("wm_comment")
+public class Comment
 {
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
     /** 评论id */
-    private Long id;
+    @TableId(type = IdType.AUTO)
+    private Long commentId;
 
     /** 评论人userId */
     @Excel(name = "评论人userId")
@@ -38,7 +48,7 @@ public class Comment extends BaseEntity
 
     /** 父评论id */
     @Excel(name = "父评论id")
-    private String parentCommentId;
+    private Long parentCommentId;
 
     /** 父评论的用户id */
     @Excel(name = "父评论的用户id")
@@ -72,152 +82,12 @@ public class Comment extends BaseEntity
     @Excel(name = "置顶状态[ 1 置顶，0 不置顶 默认 ]")
     private Long top;
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+    @Excel(name = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
-    public Long getId()
-    {
-        return id;
-    }
-    public void setUserId(String userId)
-    {
-        this.userId = userId;
-    }
+    @Excel(name = "更新时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
 
-    public String getUserId()
-    {
-        return userId;
-    }
-    public void setUserName(String userName)
-    {
-        this.userName = userName;
-    }
-
-    public String getUserName()
-    {
-        return userName;
-    }
-    public void setMovieId(String movieId)
-    {
-        this.movieId = movieId;
-    }
-
-    public String getMovieId()
-    {
-        return movieId;
-    }
-    public void setMovieTitle(String movieTitle)
-    {
-        this.movieTitle = movieTitle;
-    }
-
-    public String getMovieTitle()
-    {
-        return movieTitle;
-    }
-    public void setParentCommentId(String parentCommentId)
-    {
-        this.parentCommentId = parentCommentId;
-    }
-
-    public String getParentCommentId()
-    {
-        return parentCommentId;
-    }
-    public void setParentCommentUserId(String parentCommentUserId)
-    {
-        this.parentCommentUserId = parentCommentUserId;
-    }
-
-    public String getParentCommentUserId()
-    {
-        return parentCommentUserId;
-    }
-    public void setReplyCommentId(String replyCommentId)
-    {
-        this.replyCommentId = replyCommentId;
-    }
-
-    public String getReplyCommentId()
-    {
-        return replyCommentId;
-    }
-    public void setReplyCommentUserId(String replyCommentUserId)
-    {
-        this.replyCommentUserId = replyCommentUserId;
-    }
-
-    public String getReplyCommentUserId()
-    {
-        return replyCommentUserId;
-    }
-    public void setCommentLevel(Long commentLevel)
-    {
-        this.commentLevel = commentLevel;
-    }
-
-    public Long getCommentLevel()
-    {
-        return commentLevel;
-    }
-    public void setContent(String content)
-    {
-        this.content = content;
-    }
-
-    public String getContent()
-    {
-        return content;
-    }
-    public void setStatus(Long status)
-    {
-        this.status = status;
-    }
-
-    public Long getStatus()
-    {
-        return status;
-    }
-    public void setLikes(Long likes)
-    {
-        this.likes = likes;
-    }
-
-    public Long getLikes()
-    {
-        return likes;
-    }
-    public void setTop(Long top)
-    {
-        this.top = top;
-    }
-
-    public Long getTop()
-    {
-        return top;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("userId", getUserId())
-            .append("userName", getUserName())
-            .append("movieId", getMovieId())
-            .append("movieTitle", getMovieTitle())
-            .append("parentCommentId", getParentCommentId())
-            .append("parentCommentUserId", getParentCommentUserId())
-            .append("replyCommentId", getReplyCommentId())
-            .append("replyCommentUserId", getReplyCommentUserId())
-            .append("commentLevel", getCommentLevel())
-            .append("content", getContent())
-            .append("status", getStatus())
-            .append("likes", getLikes())
-            .append("top", getTop())
-            .append("createTime", getCreateTime())
-            .append("updateTime", getUpdateTime())
-            .toString();
-    }
 }

@@ -1,5 +1,6 @@
 package com.ruoyi.media.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -13,9 +14,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @date 2021-05-16
  */
 @Data
-public class MovieActor extends BaseEntity
+@TableName("wm_movie_actor")
+public class MovieActor
 {
-    private static final long serialVersionUID = 1L;
 
     /** 演员ID */
     @Excel(name = "演员ID")

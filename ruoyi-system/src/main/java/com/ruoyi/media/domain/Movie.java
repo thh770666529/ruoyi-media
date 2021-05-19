@@ -25,8 +25,6 @@ import com.ruoyi.common.core.domain.BaseEntity;
 @TableName(value = "wm_movie")
 public class Movie extends BaseEntity
 {
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 
     /** 主键 */
     @TableId(type = IdType.AUTO)

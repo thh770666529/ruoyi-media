@@ -45,9 +45,9 @@
                       <a :href="'/movie/'+movie.movieId" :title="movie.title" class="course-title fsize18 c-333">{{movie.title}}</a>
                     </h3>
                     <section class="mt10 hLh20 of">
-                    <!--  <span class="fr jgTag bg-green" v-if="Number(movie.price) === 0">
+                     <span class="fr jgTag bg-green" v-if="Number(movie.price) === 0">
                         <i class="c-fff fsize12 f-fA">免费</i>
-                      </span>-->
+                      </span>
                       <span class="fl jgAttr c-ccc f-fA">
                         <i class="c-999 f-fA">9634人学习</i>
                         |
@@ -68,6 +68,11 @@
       </div>
 
       <!-- /热门电影 结束 -->
+
+
+
+
+
     </div>
   </div>
 </template>

@@ -18,8 +18,6 @@ import com.ruoyi.common.core.domain.BaseEntity;
 @TableName("wm_video")
 public class Video extends BaseEntity
 {
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 
     /** 主键 */
     @TableId(type = IdType.AUTO)

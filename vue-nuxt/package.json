@@ -1,8 +1,8 @@
 {
   "name": "vue-nuxt",
   "version": "1.0.0",
-  "description": "谷粒学院前台网站",
-  "author": "Helen <55317332@qq.com>",
+  "description": "媒资视频网站",
+  "author": "thh <770666529@qq.com>",
   "private": true,
   "scripts": {
     "dev": "nuxt",

@@ -16,7 +16,7 @@
             <router-link to="/movie" tag="li" active-class="current">
               <a>电影</a>
             </router-link>
-            <router-link to="/teacher" tag="li" active-class="current">
+            <router-link to="/actor" tag="li" active-class="current">
               <a>演员</a>
             </router-link>
             <router-link to="/article" tag="li" active-class="current">
