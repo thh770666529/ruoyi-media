@@ -81,7 +81,7 @@
                   <section class="course-img">
                     <img :src="item.cover" class="img-responsive" :alt="item.title">
                     <div class="cc-mask">
-                      <a :href="'/course/'+item.id" title="开始学习" class="comm-btn c-btn-1">开始学习</a>
+                      <a :href="'/course/'+item.id" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
                     </div>
                   </section>
                   <h3 class="hLh30 txtOf mt10">

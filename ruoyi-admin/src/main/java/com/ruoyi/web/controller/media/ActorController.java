@@ -1,19 +1,19 @@
 package com.ruoyi.web.controller.media;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.ruoyi.common.config.RuoYiConfig;
+import com.ruoyi.common.exception.file.InvalidExtensionException;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.file.FileUploadUtils;
+import com.ruoyi.common.utils.file.MimeTypeUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -22,6 +22,7 @@ import com.ruoyi.media.domain.Actor;
 import com.ruoyi.media.service.IActorService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 演员Controller
@@ -107,5 +108,19 @@ public class ActorController extends BaseController
             List<Long> ids = Arrays.asList(actorIds);
             return toAjax(actorService.removeByIds(ids));
         }
+    }
+
+    @Log(title = "上传头像", businessType = BusinessType.UPDATE)
+    @PostMapping("/uploadAvatar")
+    public AjaxResult uploadAvatar(@RequestParam("file") MultipartFile file) throws IOException
+    {
+        if (!file.isEmpty())
+        {
+            String avatarUrl = FileUploadUtils.upload(RuoYiConfig.getActorAvatarPath(), file);
+            AjaxResult ajax = AjaxResult.success();
+            ajax.put("url", avatarUrl);
+            return ajax;
+        }
+        return AjaxResult.error("上传图片异常，请联系管理员");
     }
 }

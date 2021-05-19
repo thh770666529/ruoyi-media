@@ -78,7 +78,7 @@
       <el-table-column label="姓名" align="center" prop="name"  width="150" />
       <el-table-column prop="avatar" label="头像" align="center" width="200">
         <template slot-scope="scope">
-          <el-image :src="fileUploadHost+scope.row.avatar" lazy />
+          <el-image class="images" :src="fileUploadHost+scope.row.avatar" lazy />
         </template>
       </el-table-column>
       <el-table-column prop="description" label="简述" align="left"  >
@@ -118,23 +118,43 @@
     />
 
     <!-- 添加或修改演员对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="960px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入姓名" />
-        </el-form-item>
-        <el-form-item label="头像" prop="avatar">
-          <el-input v-model="form.avatar" placeholder="请输入头像" />
-        </el-form-item>
-        <el-form-item label="简述" prop="description">
-          <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="奖项" prop="awards">
-          <el-input v-model="form.awards" placeholder="请输入奖项" />
-        </el-form-item>
-        <el-form-item label="标签 " prop="label">
-          <el-input v-model="form.label" placeholder="请输入标签 " />
-        </el-form-item>
+
+        <el-row>
+          <el-col :span="16">
+            <el-form-item label="姓名" prop="name">
+              <el-input v-model="form.name" placeholder="请输入姓名" />
+            </el-form-item>
+            <!--<el-form-item label="头像" prop="avatar">
+              <el-input v-model="form.avatar" placeholder="请输入头像" />
+            </el-form-item>-->
+            <!--<el-form-item label="标签 " prop="label">
+              <el-input v-model="form.label" placeholder="请输入标签 " />
+            </el-form-item>-->
+            <el-form-item label="简述" prop="description">
+              <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
+              <Editor ref="currentValue" :value="form.description"   :height="360"></Editor>
+            </el-form-item>
+            <el-form-item label="奖项" prop="awards">
+              <el-input v-model="form.awards" placeholder="请输入奖项" />
+            </el-form-item>
+          </el-col>
+        <el-col :span="8">
+          <el-form-item label="" class="images-uploader"  :label-width="formLabelWidth" prop="images">
+            <el-upload
+              class="el-upload"
+              :action="uploadImagesUrl"
+              :show-file-list="false"
+              :on-success="handleImagesSuccess"
+              :before-upload="beforeImagesUpload"
+              :headers="headers">
+              <img v-if="form.avatar" :src="fileUploadHost+form.avatar" class="images">
+              <i v-else class="el-icon-plus images-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -146,14 +166,21 @@
 
 <script>
   import { listActor, getActor, delActor, addActor, updateActor, exportActor } from "@/api/media/actor";
-
+  import { getToken } from "@/utils/auth";
+  import Editor from "../../../components/Editor";
   export default {
     name: "Actor",
     components: {
+      Editor
     },
     data() {
       return {
+        headers: {
+          Authorization: "Bearer " + getToken(),
+        },
         fileUploadHost: null,
+        uploadImagesUrl:null,
+        formLabelWidth: "80px",
         // 遮罩层
         loading: true,
         // 选中数组
@@ -194,6 +221,7 @@
     },
     created() {
       this.fileUploadHost =process.env.VUE_APP_FILE_UOLOAD_HOST;
+      this.uploadImagesUrl =process.env.VUE_APP_BASE_API+"/media/actor/uploadAvatar";
       this.getList();
     },
     filters: {
@@ -207,6 +235,27 @@
       }
     },
     methods: {
+      handleImagesSuccess(res, file) {
+        const code = res.code;
+        if (code == 200) {
+          this.form.avatar =  res.url;
+          this.msgSuccess("上传成功！");
+        } else {
+          this.msgError(res.msg);
+        }
+      },
+      beforeImagesUpload(file) {
+        console.log(file.type);
+        const isImages = (file.type === 'image/jpeg') || (file.type === 'image/png');
+        const isLt10M = file.size / 1024 / 1024 < 10;
+        if (!isImages) {
+          this.msgError('上传头像图片只能是 JPG 格式 和 PNG 格式!');
+        }
+        if (!isLt10M) {
+          this.msgError('上传头像图片大小不能超过 10MB!');
+        }
+        return isImages && isLt10M;
+      },
       /** 查询演员列表 */
       getList() {
         this.loading = true;
@@ -268,6 +317,7 @@
       /** 提交按钮 */
       submitForm() {
         this.$refs["form"].validate(valid => {
+         this.form.description = this.$refs.currentValue.currentValue;
           if (valid) {
             if (this.form.actorId != null) {
               updateActor(this.form).then(response => {
@@ -315,3 +365,30 @@
     }
   };
 </script>
+<style scoped>
+  .images-uploader .el-upload {
+    border: 2px dashed #d9d9d9;
+    border-radius: 1px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .images-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .images-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 200px;
+    height: 288px;
+    line-height:288px;
+    text-align: center;
+  }
+  .images {
+    left: 10px;
+    width: 200px;
+    height: 288px;
+    display: block;
+  }
+
+</style>

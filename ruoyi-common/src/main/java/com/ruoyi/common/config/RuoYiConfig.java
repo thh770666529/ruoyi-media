@@ -97,6 +97,13 @@ public class RuoYiConfig
     {
         return getProfile() + "/avatar";
     }
+    /**
+     * 获取电演员头像上传路径
+     */
+    public static String getActorAvatarPath()
+    {
+        return getProfile() + "/actor/avatar";
+    }
 
     /**
      * 获取电影封面上传路径
