@@ -88,7 +88,7 @@
       </el-table-column>
 
      <!-- <el-table-column label="奖项" align="center" prop="awards" />-->
-      <el-table-column label="标签 " align="center" prop="label" width="100" />
+      <el-table-column label="标签 " align="center" prop="label" :formatter="labelFormat" width="200" />
       <el-table-column label="操作" align="center" width="100"  class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -123,25 +123,30 @@
 
         <el-row>
           <el-col :span="16">
-            <el-form-item label="姓名" prop="name">
-              <el-input v-model="form.name" placeholder="请输入姓名" />
+            <el-form-item label="姓名" prop="name"  >
+              <el-input v-model="form.name" style="width: 50%" placeholder="请输入姓名" />
             </el-form-item>
-            <!--<el-form-item label="头像" prop="avatar">
-              <el-input v-model="form.avatar" placeholder="请输入头像" />
-            </el-form-item>-->
-            <!--<el-form-item label="标签 " prop="label">
-              <el-input v-model="form.label" placeholder="请输入标签 " />
-            </el-form-item>-->
+            <el-form-item label="标签"   prop="label" >
+              <el-select v-model="labelList" multiple style="width: 60%"  placeholder="请选择标签">
+                <el-option
+                  v-for="dict in labelOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.dictValue">
+                  <span style="float: left">{{ dict.dictLabel }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.dictValue }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="简述" prop="description">
-              <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
-              <Editor ref="currentValue" :value="form.description"   :height="360"></Editor>
+            <Editor ref="descriptionEditor" :value="form.description"   :height="200"></Editor>
             </el-form-item>
             <el-form-item label="奖项" prop="awards">
-              <el-input v-model="form.awards" placeholder="请输入奖项" />
+              <Editor ref="awardsEditor" :value="form.awards"  :height="200"></Editor>
             </el-form-item>
           </el-col>
         <el-col :span="8">
-          <el-form-item label="" class="images-uploader"  :label-width="formLabelWidth" prop="images">
+          <el-form-item label="" class="images-uploader"  :label-width="formLabelWidth" prop="avatar">
             <el-upload
               class="el-upload"
               :action="uploadImagesUrl"
@@ -209,6 +214,10 @@
           awards: null,
           label: null
         },
+        //标签类型
+        labelOptions:[],
+        //标签数据
+        labelList:[],
         // 表单参数
         form: {},
         // 表单校验
@@ -216,25 +225,35 @@
           name: [
             { required: true, message: "姓名不能为空", trigger: "blur" }
           ],
+          avatar:[{ required: true, message: "必须上传一张图片", trigger: "blur" }],
+          label:[{ required: true, message: "标签不能为空", trigger: "blur" }]
         }
       };
     },
     created() {
       this.fileUploadHost =process.env.VUE_APP_FILE_UOLOAD_HOST;
       this.uploadImagesUrl =process.env.VUE_APP_BASE_API+"/media/actor/uploadAvatar";
+      this.getDicts("actor_label").then(response => {
+        this.labelOptions = response.data;
+      });
       this.getList();
     },
     filters: {
       // 当标题字数超出时，超出部分显示’...
       ellipsis (value) {
         if (!value) return '';
-        if (value.length > 80) {
-          return value.slice(0, 80) + '...'
+        if (value.length > 50) {
+          return value.slice(0, 50) + '...'
         }
         return value
       }
     },
     methods: {
+      //标签类型字典翻译
+      labelFormat(row, column){
+        if (!row.label) return '';
+        return this.selectDictLabels(this.labelOptions, row.label);
+      },
       handleImagesSuccess(res, file) {
         const code = res.code;
         if (code == 200) {
@@ -303,6 +322,7 @@
         this.reset();
         this.open = true;
         this.title = "添加演员";
+        this.labelList=[];
       },
       /** 修改按钮操作 */
       handleUpdate(row) {
@@ -312,12 +332,28 @@
           this.form = response.data;
           this.open = true;
           this.title = "修改演员";
+          let that = this;
+          that.labelList = [];
+          var dbLabelList = that.form.label.split(",");
+          for (var a = 0; a < dbLabelList.length; a++) {
+            if (dbLabelList[a] != null && dbLabelList[a] != "") {
+              that.labelList.push(dbLabelList[a]);
+            }
+          }
         });
       },
       /** 提交按钮 */
       submitForm() {
+        if(this.labelList.length <= 0) {
+          this.msgError("标签不能为空!");
+          return;
+        }
+        var that = this;
+        that.form.label = that.labelList.join(",");
+        console.log(that.form.label);
         this.$refs["form"].validate(valid => {
-         this.form.description = this.$refs.currentValue.currentValue;
+         this.form.description = this.$refs.descriptionEditor.currentValue;
+         this.form.awards = this.$refs.awardsEditor.currentValue;
           if (valid) {
             if (this.form.actorId != null) {
               updateActor(this.form).then(response => {

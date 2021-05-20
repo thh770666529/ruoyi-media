@@ -98,7 +98,7 @@
 
 
         <el-form-item label="简介" :label-width="formLabelWidth" prop="description">
-          <el-input v-model="form.description" auto-complete="off" placeholder="请输入内容" ></el-input>
+          <Editor ref="descriptionEditor" :value="form.description"   :height="200"></Editor>
         </el-form-item>
 
         <el-form-item label="备注" prop="remark" :label-width="formLabelWidth" >
@@ -150,7 +150,6 @@
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteWmMovieVideo">删除</el-button>
           </el-col>
         </el-row>
-
         <el-table :data="videoList" :row-class-name="rowWmMovieVideoIndex" @selection-change="handleWmMovieVideoSelectionChange" ref="wmMovieVideo">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
@@ -181,6 +180,28 @@
             </template>
           </el-table-column>
         </el-table>
+
+
+        <el-divider content-position="center">演员信息</el-divider>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddActor">添加</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-edit"
+              size="mini"
+              :disabled="single"
+              @click="handleUpdateActor"
+            >修改</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteActor">删除</el-button>
+          </el-col>
+        </el-row>
+
       </el-form>
 
     <el-divider content-position="center"></el-divider>
@@ -244,9 +265,11 @@
 <script>
 import { listMovie, getMovie, delMovie, addMovie, updateMovie, exportMovie } from "@/api/media/movie";
 import { getToken } from "@/utils/auth";
+import Editor from "../../../components/Editor";
 export default {
   name: "Movie",
   components: {
+    Editor
   },
   data() {
     return {
@@ -303,6 +326,10 @@ export default {
         title: [
           { required: true, message: "标题不能为空", trigger: "blur" }
         ],
+        label: [
+          { required: true, message: "标签不能为空", trigger: "blur" }
+        ]
+
       },
       // 表单校验
       videoRules: {
@@ -352,8 +379,6 @@ export default {
   methods: {
     init(){
       const movieId = this.$route.params && this.$route.params.movieId;
-      console.log(this.$route.params, this.$route.params.movieId);
-     // const movieId =  this.$route.query.movieId;
       this.labelList=[];
       if (movieId ==undefined){
         this.reset();
@@ -372,6 +397,7 @@ export default {
         });
       }
     },
+
     /** 查询电影管理列表 */
     getList() {
       this.loading = true;
@@ -458,6 +484,7 @@ export default {
       var that = this;
       that.form.label = that.labelList.join(",");
       this.$refs["form"].validate(valid => {
+        this.form.description = this.$refs.descriptionEditor.currentValue;
         if (valid) {
           this.form.videoList = this.videoList;
           if (this.form.movieId != null) {
@@ -544,6 +571,18 @@ export default {
         }).then(response => {
           this.download(response.msg);
         })
+    },
+    // 添加演员
+    handleAddActor(){
+
+    },
+    // 更新演员
+    handleUpdateActor(){
+
+    },
+    //删除演员
+    handleDeleteActor(){
+
     },
     // 状态字典翻译
     statusFormat(row, column) {

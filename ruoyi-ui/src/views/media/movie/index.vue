@@ -108,8 +108,8 @@
         </template>
       </el-table-column>
       <el-table-column label="标题" align="center" prop="title" width="600" />
-      <el-table-column label="电影类型" align="center"  prop="type" :formatter="movieTypeFormat" width="100" />
-      <el-table-column label="国家" align="center" prop="country" :formatter="countryTypeFormat" width="100" />
+      <el-table-column label="电影类型" align="center"  prop="type" :formatter="typeFormat" width="100" />
+      <el-table-column label="国家" align="center" prop="country" :formatter="countryFormat" width="100" />
       <el-table-column label="发布人" align="center" prop="publishUsername" width="100" />
       <el-table-column label="发布时间" align="center" prop="publishTime" >
         <template slot-scope="scope">
@@ -334,11 +334,11 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     //电影类型字典翻译
-    movieTypeFormat(row, column) {
+    typeFormat(row, column) {
       return this.selectDictLabel(this.typeOptions, row.type);
     },
     //国家类型字典翻译
-    countryTypeFormat(row, column){
+    countryFormat(row, column){
       return this.selectDictLabel(this.countryOptions, row.country);
     }
 
