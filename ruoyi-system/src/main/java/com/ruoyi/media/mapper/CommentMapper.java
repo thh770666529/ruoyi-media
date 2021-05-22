@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.media.domain.Comment;
+import org.springframework.stereotype.Repository;
 
 /**
  * 电影评论Mapper接口
@@ -11,6 +12,7 @@ import com.ruoyi.media.domain.Comment;
  * @author thh
  * @date 2021-05-16
  */
+@Repository
 public interface CommentMapper extends BaseMapper<Comment>
 {
     /**

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.media.domain.Actor;
+import org.springframework.stereotype.Repository;
 
 /**
  * 演员Mapper接口
@@ -11,6 +12,7 @@ import com.ruoyi.media.domain.Actor;
  * @author thh
  * @date 2021-05-16
  */
+@Repository
 public interface ActorMapper extends BaseMapper<Actor>
 {
     /**

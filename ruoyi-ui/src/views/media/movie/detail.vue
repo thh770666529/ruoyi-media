@@ -134,7 +134,7 @@
         <el-divider content-position="center">电影视频信息</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddWmMovieVideo">添加</el-button>
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddMovieVideo">添加</el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button
@@ -147,14 +147,14 @@
             >修改</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteWmMovieVideo">删除</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteMovieVideo">删除</el-button>
           </el-col>
         </el-row>
-        <el-table :data="videoList" :row-class-name="rowWmMovieVideoIndex" @selection-change="handleWmMovieVideoSelectionChange" ref="wmMovieVideo">
+        <el-table :data="videoList" :row-class-name="rowIndex" @selection-change="handleVideoSelectionChange" ref="movieVideo">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
           <el-table-column label="标题" prop="title"/>
-          <el-table-column label="预览" width="200" prop="url" align="center"/>
+          <el-table-column label="url" width="200" prop="url" align="center"/>
           <el-table-column label="文件后缀" prop="ext"/>
           <el-table-column label="播放长度" prop="length"/>
           <el-table-column label="文件大小" :formatter="filesizeFormat" prop="length" align="center" />
@@ -182,25 +182,40 @@
         </el-table>
 
 
+        <el-divider content-position="center">导演信息</el-divider>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddDirector">添加</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteDirector">删除</el-button>
+          </el-col>
+        </el-row>
+        <el-table  :data="directorList" :row-class-name="rowIndex" @selection-change="handleActorSelectionChange" ref="movieDirector">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50"/>
+          <el-table-column label="姓名" prop="name"/>
+          <el-table-column label="头像" prop="avatar"/>
+          <el-table-column label="标签" prop="label" :formatter="actorLabelFormat" width="200"/>
+        </el-table>
+
+
         <el-divider content-position="center">演员信息</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddActor">添加</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button
-              type="success"
-              plain
-              icon="el-icon-edit"
-              size="mini"
-              :disabled="single"
-              @click="handleUpdateActor"
-            >修改</el-button>
-          </el-col>
-          <el-col :span="1.5">
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteActor">删除</el-button>
           </el-col>
         </el-row>
+        <el-table  :data="actorList" :row-class-name="rowIndex" @selection-change="handleActorSelectionChange" ref="movieActor">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50"/>
+          <el-table-column label="姓名" prop="name"/>
+          <el-table-column label="头像" prop="avatar"/>
+          <el-table-column label="标签" prop="label" :formatter="actorLabelFormat" width="200"/>
+        </el-table>
 
       </el-form>
 
@@ -258,12 +273,42 @@
       </div>
     </el-dialog>
 
+       <!--添加演员模态框-->
+    <el-dialog :title="actorTitle" :visible.sync="actorOpen" width="900px" append-to-body>
+      <el-table  :data="notSelectedActorList" @selection-change="handleActorSelectionChange">
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="主键" align="left" prop="actorId" width="50" />
+        <el-table-column label="姓名" align="center" prop="name"  width="150" />
+        <el-table-column prop="avatar" label="头像" align="center" width="200" >
+          <template slot-scope="scope">
+            <el-image class="actorImages" :src="fileUploadHost+scope.row.avatar" />
+          </template>
+        </el-table-column>
+        <el-table-column label="标签" prop="label" :formatter="actorLabelFormat" width="300"/>
+      </el-table>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitActorForm">确 定</el-button>
+        <el-button @click="actorOpen = false">取 消</el-button>
+      </div>
+
+      <pagination
+        v-show="actorTotal>0"
+        :total="actorTotal"
+        :page.sync="queryActorParams.pageNum"
+        :limit.sync="queryActorParams.pageSize"
+        :pageSizes="[4,8,10,20]"
+        @pagination="getActorList"
+      />
+    </el-dialog>
+
 
   </div>
 </template>
 
 <script>
-import { listMovie, getMovie, delMovie, addMovie, updateMovie, exportMovie } from "@/api/media/movie";
+import { deleteMovieActor,listMovie, getMovie, delMovie, addMovie, updateMovie, exportMovie } from "@/api/media/movie";
+import { listActor, getActor, delActor, addActor, updateActor, exportActor } from "@/api/media/actor";
 import { getToken } from "@/utils/auth";
 import Editor from "../../../components/Editor";
 export default {
@@ -284,7 +329,7 @@ export default {
       // 选中数组
       ids: [],
       // 子表选中数据
-      checkedMovieVideo: [],
+      selectedMovieVideo: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -297,6 +342,24 @@ export default {
       movieList: [],
       // 电影视频表格数据
       videoList: [],
+      actorTitle:"",
+      actorOpen: false,
+      movieActorType:"",
+      // 演员信息
+      actorList:[
+      ],
+      // 导演信息
+      directorList:[],
+      actorTotal:0,
+      queryActorParams: {
+        pageNum: 1,
+        pageSize: 4,
+        name: null,
+        avatar: null,
+        description: null,
+        awards: null,
+        label: null
+      },
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -312,7 +375,11 @@ export default {
       sysYesNoOptions: [],
       //标签字典
       labelOptions: [],
+      //演员标签
+      actorLabelOptions:[],
       labelList:[],
+      notSelectedActorList:[],
+      selectedActorList:[],
       // 表单参数
       formLabelWidth: "120px",
       lineLabelWidth: "120px",//一行的间隔数
@@ -366,6 +433,9 @@ export default {
     this.getDicts("movie_label").then(response => {
       this.labelOptions = response.data;
     });
+    this.getDicts("actor_label").then(response => {
+      this.actorLabelOptions = response.data;
+    });
 
   },
   watch:{
@@ -386,12 +456,14 @@ export default {
         getMovie(movieId).then(response => {
           this.form = response.data;
           this.videoList = response.data.videoList;
+          this.actorList = response.data.actorList;
+          this.directorList = response.data.directorList;
           let that = this;
           that.labelList = [];
-          var dbLabelList = that.form.label.split(",");
-          for (var a = 0; a < dbLabelList.length; a++) {
-            if (dbLabelList[a] != null && dbLabelList[a] != "") {
-              that.labelList.push(dbLabelList[a]);
+          const dbLabelList = that.form.label.split(",");
+          for (let index = 0; index < dbLabelList.length; index++) {
+            if (dbLabelList[index] != null && dbLabelList[index] != "") {
+              that.labelList.push(dbLabelList[index]);
             }
           }
         });
@@ -403,7 +475,7 @@ export default {
       this.loading = true;
       listMovie(this.queryParams).then(response => {
         this.movieList = response.rows;
-        this.total = response.total;
+        this.actorTotal = response.total;
         this.loading = false;
       });
     },
@@ -467,7 +539,7 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.movieVideoForm = this.checkedMovieVideo[0];
+      this.movieVideoForm = this.selectedMovieVideo[0];
       this.open = true;
     },
 
@@ -487,9 +559,12 @@ export default {
         this.form.description = this.$refs.descriptionEditor.currentValue;
         if (valid) {
           this.form.videoList = this.videoList;
+          this.form.actorList = this.actorList;
+          this.form.directorList = this.directorList;
           if (this.form.movieId != null) {
             updateMovie(this.form).then(response => {
               this.msgSuccess("修改成功");
+              this.init();
             });
           } else {
             addMovie(this.form).then(response => {
@@ -515,11 +590,11 @@ export default {
         })
     },
 	/** 电影视频序号 */
-    rowWmMovieVideoIndex({ row, rowIndex }) {
+    rowIndex({ row, rowIndex }) {
       row.index = rowIndex + 1;
     },
     /** 电影视频添加按钮操作 */
-    handleAddWmMovieVideo() {
+    handleAddMovieVideo() {
       this.open = true;
       this.title ="添加电影视频";
     },
@@ -537,26 +612,33 @@ export default {
       this.save();
     },
     /** 电影视频删除按钮操作 */
-    handleDeleteWmMovieVideo(row) {
-      const movieVideoIds = row.videoId || this.ids;
-      if (this.checkedMovieVideo.length == 0) {
+    handleDeleteMovieVideo(row) {
+     // const movieVideoIds = row.videoId || this.ids;
+      if (this.selectedMovieVideo.length == 0) {
         this.$alert("请先选择要删除的电影视频数据", "提示", { confirmButtonText: "确定" });
       } else {
-        this.videoList.splice(this.checkedMovieVideo[0].index - 1, 1);
+        for (let index = 0; index < this.selectedMovieVideo.length; index++) {
+          if (this.selectedMovieVideo[index] != null && this.selectedMovieVideo[index] != "") {
+            this.videoList.splice(this.selectedMovieVideo[index].index - 1, 1);
+          }
+        }
         this.save();
       }
     },
 
-
+    handleActorSelectionChange(selection){
+      this.selectedActorList = selection;
+    },
     /** 单选框选中数据 */
-    handleWmMovieVideoSelectionChange(selection) {
+    handleVideoSelectionChange(selection) {
 
-      if (selection.length > 1) {
-        this.$refs.wmMovieVideo.clearSelection();
-        this.$refs.wmMovieVideo.toggleRowSelection(selection.pop());
+     /* if (selection.length > 1) {
+        this.$refs.movieVideo.clearSelection();
+        this.$refs.movieVideo.toggleRowSelection(selection.pop());
       } else {
-        this.checkedMovieVideo = selection;
-      }
+        this.selectedMovieVideo = selection;
+      }*/
+      this.selectedMovieVideo = selection;
       this.single = selection.length != 1;
     },
     /** 导出按钮操作 */
@@ -572,21 +654,93 @@ export default {
           this.download(response.msg);
         })
     },
-    // 添加演员
-    handleAddActor(){
+    submitActorForm(){
+      if (!this.selectedActorList || this.selectedActorList.length == 0){
+        this.msgError("请选择要添加的演员！");
+      }
+      for (let index = 0; index < this.selectedActorList.length; index++) {
+        if (this.selectedActorList[index] != null && this.selectedActorList[index] != "") {
+          if (this.movieActorType =='actor'){
+            this.actorList.push(this.selectedActorList[index]);
+          }else {
+            this.directorList.push(this.selectedActorList[index]);
+          }
+        }
+      }
+      this.save();
+      this.actorOpen = false;
+    },
+    getActorList(){
+      this.loading = true;
+      listActor(this.queryActorParams).then(response => {
+        this.notSelectedActorList = response.rows;
+        this.actorTotal = response.total;
+        this.loading = false;
+      });
+    },
+    // 添加导演
+    handleAddDirector(){
+      this.selectedActorList = [];
+      this.movieActorType = "director";
+      this.getActorList();
+      this.actorTitle = "添加导演";
+      this.actorOpen = true;
 
     },
-    // 更新演员
-    handleUpdateActor(){
+    // 删除导演
+    handleDeleteDirector(){
+      if (!this.selectedActorList || this.selectedActorList.length == 0){
+        this.msgError("请选择要删除的演员！");
+        return;
+      }
+      for (let index = 0; index < this.selectedActorList.length; index++) {
+        if (this.selectedActorList[index] != null && this.selectedActorList[index] != "") {
+          this.directorList.splice(this.selectedActorList[index].index - 1, 1);
+        }
+      }
+      this.save();
+    },
 
+    // 添加演员
+    handleAddActor(){
+      this.selectedActorList = [];
+      this.movieActorType = "actor";
+      this.getActorList();
+      this.actorTitle = "添加演员";
+      this.actorOpen = true;
     },
     //删除演员
     handleDeleteActor(){
-
+      if (!this.selectedActorList || this.selectedActorList.length == 0){
+        this.msgError("请选择要删除的演员！");
+        return;
+      }
+      for (let index = 0; index < this.selectedActorList.length; index++) {
+        if (this.selectedActorList[index] != null && this.selectedActorList[index] != "") {
+          this.actorList.splice(this.selectedActorList[index].index - 1, 1);
+        }
+      }
+      this.save();
+      /*const actorIds = this.selectedActorList.map(item => item.actorId);
+      this.$confirm('是否确认删除演员编号为"' + actorIds + '"的数据项?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return deleteMovieActor(actorIds);
+      }).then(() => {
+        this.init();
+        this.msgSuccess("删除成功");
+      })*/
     },
     // 状态字典翻译
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
+    },
+    //标签类型字典翻译
+    actorLabelFormat(row, column){
+      if (!row.label) return '';
+      return this.selectDictLabels(this.actorLabelOptions, row.label);
     },
 
     handleImagesSuccess(res, file) {
@@ -674,6 +828,12 @@ export default {
   left: 10px;
   width: 480px;
   height: 270px;
+  display: block;
+}
+
+.actorImages {
+  width: 100px;
+  height: 144px;
   display: block;
 }
 

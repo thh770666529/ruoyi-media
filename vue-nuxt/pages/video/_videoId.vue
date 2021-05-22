@@ -1,15 +1,8 @@
 <template>
 
     <section class="container">
-
-    <script charset="utf-8" type="text/javascript" src="https://fjycjd_admin.gitee.io/cdn/ckplayer/ckplayer.min.js" />
-
-   <!-- <script charset="utf-8" type="text/javascript" src="http://localhost/ckplayer/ckplayer.js" />-->
-
-    <!--<div style="width: 55%; margin:5px auto;">
-    <vueAliplayer ref="player" :style="playStyle"/>
-    </div >-->
-      <vueCkplayer ref="player" :style="playStyle"/>
+   <script charset="utf-8" type="text/javascript" src="https://viptv.gitee.io/cdn/chplayer/chplayer.js" />
+      <vueCkplayer ref="player" :width="`300px`" :source="videoUrl" :style="playStyle" />
 
     <div class="mt20">
       <article class="fl col-12" style="width: 100%" >
@@ -95,18 +88,11 @@
     components: {
       vueCkplayer: vueCkplayer
     },
-    // 异步调用
-    asyncData({ params, error }) {
-      return movieApi.getMovieVideo(params.videoId)
-        .then(response => {
-          return {
-            videoVo: response.data.data.video,
-            movieVo: response.data.data.movie
-          }
-        })
-    },
     data () {
       return {
+        videoVo:{},
+        movieVo:{},
+        videoUrl:"",
         playStyle:{"background":{"backgroundColor":"0x000000","stretched":3,
             "align":"center","vAlign":"middle","spacingLeft": 0,"spacingTop":0,"spacingRight":0,"spacingBottom":0},
           "controlBar":{"align":"left","vAlign":"bottom","width":"100%","height":40,"offsetX":0,"offsetY":-40,
@@ -130,19 +116,35 @@
       }
     },
     created(){
-
+        this.getVideoById();
     },
     mounted(){
-      this.$nextTick(() => {
-        debugger
-        this.player();
-      });
+    },
+    watch:{
+      "$route":{
+        handler(route){
+            this.getVideoById();
+        }
+      }
     },
     methods:{
+      getVideoById(){
+          const videoId = this.$route.params && this.$route.params.videoId;
+          movieApi.getMovieVideo(videoId)
+            .then(response => {
+              this.videoVo=response.data.data.video;
+              this.movieVo=response.data.data.movie;
+              this.videoUrl = this.fileUploadHost+this.videoVo.url;
+              this.player();
+          })
+
+      },
       player() {
-         this.$refs.player.loadPlayer(this.fileUploadHost+this.videoVo.url);
-        this.$refs.player.load(this.fileUploadHost+this.videoVo.url);
-        //this.$refs.player.load('http://ckplayer-video-sample.oss-cn-shanghai.aliyuncs.com/sample-mp4/d30e02a5626c066.mp4');
+          this.$nextTick(() => {
+            console.log("aaaa",this.$refs.player);
+            this.$refs.player.loadPlayer(this.videoUrl);
+          });
+        // this.$refs.player.play();
       },
       setFull() {
         this.$refs.player.setFull()

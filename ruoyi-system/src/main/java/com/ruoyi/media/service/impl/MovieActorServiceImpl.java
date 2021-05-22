@@ -1,6 +1,8 @@
 package com.ruoyi.media.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.media.domain.vo.MovieActorVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.media.mapper.MovieActorMapper;
@@ -9,19 +11,19 @@ import com.ruoyi.media.service.IMovieActorService;
 
 /**
  * 电影演员关联Service业务层处理
- * 
+ *
  * @author thh
  * @date 2021-05-16
  */
 @Service
-public class MovieActorServiceImpl implements IMovieActorService 
+public class MovieActorServiceImpl implements IMovieActorService
 {
     @Autowired
     private MovieActorMapper movieActorMapper;
 
     /**
      * 查询电影演员关联
-     * 
+     *
      * @param actorId 电影演员关联ID
      * @return 电影演员关联
      */
@@ -33,19 +35,19 @@ public class MovieActorServiceImpl implements IMovieActorService
 
     /**
      * 查询电影演员关联列表
-     * 
-     * @param movieActor 电影演员关联
+     *
+     * @param movieActorVO 电影演员关联
      * @return 电影演员关联
      */
     @Override
-    public List<MovieActor> selectMovieActorList(MovieActor movieActor)
+    public List<MovieActorVO> selectMovieActorList(MovieActorVO movieActorVO)
     {
-        return movieActorMapper.selectMovieActorList(movieActor);
+        return movieActorMapper.selectMovieActorList(movieActorVO);
     }
 
     /**
      * 新增电影演员关联
-     * 
+     *
      * @param movieActor 电影演员关联
      * @return 结果
      */
@@ -57,7 +59,7 @@ public class MovieActorServiceImpl implements IMovieActorService
 
     /**
      * 修改电影演员关联
-     * 
+     *
      * @param movieActor 电影演员关联
      * @return 结果
      */
@@ -69,7 +71,7 @@ public class MovieActorServiceImpl implements IMovieActorService
 
     /**
      * 批量删除电影演员关联
-     * 
+     *
      * @param actorIds 需要删除的电影演员关联ID
      * @return 结果
      */
@@ -81,7 +83,7 @@ public class MovieActorServiceImpl implements IMovieActorService
 
     /**
      * 删除电影演员关联信息
-     * 
+     *
      * @param actorId 电影演员关联ID
      * @return 结果
      */

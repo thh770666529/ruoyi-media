@@ -1,18 +1,25 @@
 package com.ruoyi.media.service.impl;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.enums.MovieActorType;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.media.domain.MovieActor;
+import com.ruoyi.media.domain.vo.MovieActorVO;
 import com.ruoyi.media.domain.vo.MovieVO;
+import com.ruoyi.media.mapper.MovieActorMapper;
 import com.ruoyi.media.mapper.VideoMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Map;
+
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.media.domain.Video;
@@ -37,6 +44,9 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private MovieActorMapper movieActorMapper;
     /**
      * 查询电影
      *
@@ -59,6 +69,19 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
             video.setMovieId(movieId);
             List<Video> videoList = videoMapper.selectVideoList(video);
             movieVO.setVideoList(videoList);
+
+            MovieActorVO actorVO = new MovieActorVO();
+            actorVO.setMovieId(movieId);
+            actorVO.setType(MovieActorType.ACTOR.getValue());
+            List<MovieActorVO> movieActorList = movieActorMapper.selectMovieActorList(actorVO);
+            movieVO.setActorList(movieActorList);
+
+            MovieActorVO  directorVO = new MovieActorVO();
+            directorVO.setMovieId(movieId);
+            directorVO.setType(MovieActorType.DIRECTOR.getValue());
+            List<MovieActorVO> directorList = movieActorMapper.selectMovieActorList(directorVO);
+            movieVO.setDirectorList(directorList);
+
         }
         return movieVO;
     }
@@ -87,8 +110,42 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     {
         movieVO.setCreateTime(DateUtils.getNowDate());
         int rows = movieMapper.insert(movieVO);
-        insertVideo(movieVO);
+        this.insertVideo(movieVO);
+        this.insertActor(movieVO,MovieActorType.ACTOR);
+        this.insertActor(movieVO,MovieActorType.DIRECTOR);
         return rows;
+    }
+
+    /**
+     * @Desc 更新演员
+     * @param movieVO
+     */
+    private void insertActor(MovieVO movieVO,MovieActorType movieActorType) {
+        Long movieId = movieVO.getMovieId();
+        List<MovieActorVO> actorList = movieVO.getActorList();
+        List<MovieActorVO> directorList = movieVO.getDirectorList();
+
+        List<MovieActorVO> insertList = null;
+       switch (movieActorType){
+           case ACTOR:
+               insertList = actorList;
+               break;
+           case DIRECTOR:
+               insertList = directorList;
+               break;
+               default:
+                   return;
+       }
+        if (StringUtils.isNotNull(insertList))
+        {
+            for (MovieActorVO movieActorVO : insertList) {
+                MovieActor movieActor = new MovieActor();
+                BeanUtils.copyProperties(movieActorVO,movieActor);
+                movieActor.setMovieId(movieId);
+                movieActor.setType(movieActorType.getValue());
+                movieActorMapper.insertMovieActor(movieActor);
+            }
+        }
     }
 
     /**
@@ -103,7 +160,12 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     {
         movieVO.setUpdateTime(DateUtils.getNowDate());
         videoMapper.deleteByMovieId(movieVO.getMovieId());
-        insertVideo(movieVO);
+        Map movieActorMap  = new HashMap<>();
+        movieActorMap.put("movie_id",movieVO.getMovieId());
+        movieActorMapper.deleteByMap(movieActorMap);
+        this.insertVideo(movieVO);
+        this.insertActor(movieVO,MovieActorType.ACTOR);
+        this.insertActor(movieVO,MovieActorType.DIRECTOR);
         return  movieMapper.updateById(movieVO);
     }
 
@@ -124,6 +186,11 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Override
     public List<Movie> selectHotMovieList(int top) {
         return movieMapper.selectHotMovieList(top);
+    }
+
+    @Override
+    public int removeActorList(Long[] actorIds) {
+        return movieActorMapper.deleteMovieActorByIds(actorIds);
     }
 
     /**

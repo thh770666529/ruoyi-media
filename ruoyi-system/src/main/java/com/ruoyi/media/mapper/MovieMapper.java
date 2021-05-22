@@ -5,6 +5,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.media.domain.Movie;
 import com.ruoyi.media.domain.vo.MovieVO;
+import org.springframework.stereotype.Repository;
 
 /**
  * 电影Mapper接口
@@ -12,6 +13,7 @@ import com.ruoyi.media.domain.vo.MovieVO;
  * @author thh
  * @date 2021-05-16
  */
+@Repository
 public interface MovieMapper extends BaseMapper<Movie>
 {
 

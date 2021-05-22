@@ -3,31 +3,43 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.media.mapper.MovieActorMapper">
-    
+
     <resultMap type="MovieActor" id="MovieActorResult">
         <result property="actorId"    column="actor_id"    />
         <result property="movieId"    column="movie_id"    />
         <result property="type"    column="type"    />
     </resultMap>
 
+    <resultMap type="MovieActorVO" id="MovieActorVOResult">
+        <result property="actorId"    column="actor_id"    />
+        <result property="movieId"    column="movie_id"    />
+        <result property="name"    column="name"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="label"    column="label"    />
+    </resultMap>
+
+
     <sql id="selectMovieActorVo">
         select actor_id, movie_id, type from wm_movie_actor
     </sql>
 
-    <select id="selectMovieActorList" parameterType="MovieActor" resultMap="MovieActorResult">
-        <include refid="selectMovieActorVo"/>
-        <where>  
-            <if test="actorId != null "> and actor_id = #{actorId}</if>
-            <if test="movieId != null "> and movie_id = #{movieId}</if>
-            <if test="type != null  and type != ''"> and type = #{type}</if>
+    <select id="selectMovieActorList" parameterType="MovieActorVO" resultMap="MovieActorVOResult">
+        select ma.actor_id, ma.movie_id, ma.type,a.name, a.avatar, a.label
+        from wm_movie_actor ma,wm_actor a
+        <where>
+            AND 1 = 1
+            AND ma.actor_id = a.actor_id
+            <if test="actorId != null "> AND ma.actor_id = #{actorId}</if>
+            <if test="movieId != null "> AND ma.movie_id = #{movieId}</if>
+            <if test="type != null  and type != ''"> AND ma.type = #{type}</if>
         </where>
     </select>
-    
+
     <select id="selectMovieActorById" parameterType="Long" resultMap="MovieActorResult">
         <include refid="selectMovieActorVo"/>
         where actor_id = #{actorId}
     </select>
-        
+
     <insert id="insertMovieActor" parameterType="MovieActor">
         insert into wm_movie_actor
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -56,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteMovieActorByIds" parameterType="String">
-        delete from wm_movie_actor where actor_id in 
+        delete from wm_movie_actor where actor_id in
         <foreach item="actorId" collection="array" open="(" separator="," close=")">
             #{actorId}
         </foreach>

@@ -49,7 +49,7 @@ export default {
 			// 建议 false : 一些浏览器这样会报错
 			// 播放器是否自动播放
 			type: Boolean,
-			default: true
+			default: false
 		},
 		poster: {
 			// 设置媒体流的预览图
@@ -84,7 +84,9 @@ export default {
 			instance: null
 		};
 	},
-	mounted() {},
+	mounted() {
+    this.loadPlayer(this.source);
+  },
 	methods: {
 		/**
 		 * @param {String} url

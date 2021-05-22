@@ -71,3 +71,12 @@ export function uploadMovieImages(data) {
       data: data
     })
 }
+
+
+// 删除演员关联信息
+export function deleteMovieActor(actorIds) {
+  return request({
+    url: '/media/movie/actor/' + actorIds,
+    method: 'delete'
+  })
+}

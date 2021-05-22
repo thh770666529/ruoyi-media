@@ -124,6 +124,17 @@ public class MovieController extends BaseController
 
 
     /**
+     * 删除演员关联
+     */
+    @Log(title = "删除演员关联", businessType = BusinessType.DELETE)
+    @DeleteMapping("/actor/{actorIds}")
+    public AjaxResult removeActorList(@PathVariable Long[] actorIds)
+    {
+        return toAjax(movieService.removeActorList(actorIds));
+    }
+
+
+    /**
      * 上传电影封面
      * @param file
      * @return

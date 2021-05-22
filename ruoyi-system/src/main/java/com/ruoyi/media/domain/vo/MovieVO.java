@@ -1,5 +1,6 @@
 package com.ruoyi.media.domain.vo;
 import com.ruoyi.media.domain.Movie;
+import com.ruoyi.media.domain.MovieActor;
 import com.ruoyi.media.domain.Video;
 import lombok.Data;
 import java.util.Date;
@@ -18,6 +19,12 @@ public class MovieVO extends Movie
 
     /** 电影视频信息 */
     private List<Video> videoList;
+
+    /** 演员信息 */
+    private List<MovieActorVO> actorList;
+
+    /** 演员信息 */
+    private List<MovieActorVO> directorList;
 
     /**
      * 发布人姓名

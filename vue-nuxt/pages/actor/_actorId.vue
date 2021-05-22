@@ -20,11 +20,10 @@
               </span>
             </h3>
             <section class="mt10">
-              <span class="t-tag-bg">{{actor.description}}</span>
+              <span class="t-tag-bg" v-html="actor.description">{{actor.description}}</span>
             </section>
             <section class="t-infor-txt">
-              <p
-                class="mt20">{{actor.awards}}</p>
+              <p class="mt20" v-html="actor.awards" >{{actor.awards}}</p>
             </section>
             <div class="clear"></div>
           </div>

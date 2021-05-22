@@ -63,4 +63,11 @@ public interface IMovieService extends IService<Movie>
      * @return
      */
     List<Movie> selectHotMovieList(int top);
+
+    /**
+     * 删除演员关联
+     * @param actorIds
+     * @return
+     */
+    int removeActorList(Long[] actorIds);
 }

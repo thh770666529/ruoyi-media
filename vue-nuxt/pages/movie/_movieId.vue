@@ -34,10 +34,22 @@
               </el-rate>
             </section>
             <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fsize14">导演：&nbsp;妹妹</span>
+              <span class="c-fff fsize14"> 导演：&nbsp; </span>
+              <span class="c-fff fsize14" v-if="!directorList||directorList.length==0">
+                  无
+              </span>
+              <span class="c-fff fsize14" v-for="director in directorList" :key="director.actorId">
+                  {{director.name}}&nbsp;
+              </span>
             </section>
             <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fsize14">主演：&nbsp;小美&nbsp;小明&nbsp;小张</span>
+              <span class="c-fff fsize14">主演：&nbsp;</span>
+              <span class="c-fff fsize14" v-if="!actorList||actorList.length==0">
+                  无
+              </span>
+              <span class="c-fff fsize14" v-for="actor in actorList" :key="actor.actorId">
+                 {{actor.name}}&nbsp;
+              </span>
             </section>
             <section class="c-attr-mt10 c-attr-undis">
               <span class="c-fff fsize14">标签：&nbsp;{{labelValue}}</span>
@@ -193,6 +205,8 @@ export default {
      return {
         movieVo: {},
         videoList: [],
+        actorList:[],
+        directorList:[],
         isbuy: false,
        //电影国家字典
        countryOptions:[],
@@ -229,6 +243,8 @@ export default {
           .then(response => {
             this.movieVo=response.data.data;
             this.videoList=this.movieVo.videoList;
+            this.actorList=this.movieVo.actorList;
+            this.directorList=this.movieVo.directorList;
             //this.isbuy=response.data.data.isBuy
             this.labelValue =  this.selectDictLabels(this.labelOptions, this.movieVo.label);
         })
