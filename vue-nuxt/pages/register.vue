@@ -68,7 +68,7 @@
   import '~/assets/css/sign.css'
   import '~/assets/css/iconfont.css'
 
-  import registerApi from '@/api/register'
+  //import registerApi from '@/api/register'
 
   export default {
     layout: 'sign',
@@ -86,10 +86,10 @@
       }
     },
     methods: {
-     
+
        //注册提交的方法
        submitRegister() {
-         registerApi.registerMember(this.params)
+/*         registerApi.registerMember(this.params)
           .then(response => {
             //提示注册成功
               this.$message({
@@ -98,8 +98,8 @@
               })
             //跳转登录页面
             this.$router.push({path:'/login'})
-              
-          })
+
+          })*/
        },
        timeDown() {
         let result = setInterval(() => {
@@ -117,12 +117,12 @@
       },
        //通过输入手机号发送验证码
        getCodeFun() {
-         registerApi.sendCode(this.params.mobile)
+/*         registerApi.sendCode(this.params.mobile)
           .then(response => {
               this.sending = false
               //调用倒计时的方法
               this.timeDown()
-          })
+          })*/
        },
 
       checkPhone (rule, value, callback) {

@@ -1,10 +1,43 @@
 module.exports = {
-  // some nuxt config...
+  mode: 'universal',
+
+  router: {
+    middleware:['checkuser']
+  },
+  server:{
+    port: 3000,
+    host: '0.0.0.0' //默认是localhost
+  },
+  env: {
+    // 访问api接口 process.env.baseApiURL
+    authURL: process.env.NODE_ENV ==='development'?'//localhost:3000/login': '//api.ithhit.cn',
+    baseApiURL: '//localhost:7070',
+    baseURL: '//localhost:3000'
+  },
   plugins: [
     { src: '~/plugins/nuxt-swiper-plugin.js', ssr: false },
-    '@/plugins/common'
+    '@/plugins/prototype',
+    {src:'~/plugins/storeCache',ssr: false},
+    {src:'~/utils/nuxtjsAxios',ssr: true}
   ],
-
+  modules: [
+    '@nuxtjs/axios',
+    '@gauseen/nuxt-proxy',
+  ],
+  axios: {
+    proxy: true, // 开启axios跨域
+   // prefix: '/api',
+    credentials: true
+  },
+  proxy: {
+    '/api': {
+      target: 'http://localhost:7070', //代理地址
+      changeOrigin: true,
+      pathRewrite: {
+        '^/api' : ''
+      }
+    }
+  },
   css: [
     'swiper/dist/css/swiper.css'
   ],

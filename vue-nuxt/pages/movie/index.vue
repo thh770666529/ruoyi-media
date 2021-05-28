@@ -205,10 +205,10 @@ export default {
   methods:{
     //1 查询第一页数据
     getList() {
-
       movieApi.listMovie(this.queryParams).then(response => {
-        this.movieList = response.data.rows;
-        this.total = response.data.total;
+        console.log("listMovie",response)
+        this.movieList = response.rows;
+        this.total = response.total;
         this.getTotalPage();
       })
     },
@@ -231,7 +231,7 @@ export default {
     initSubject() {
       /*courseApi.getAllSubject()
         .then(response => {
-          this.subjectNestedList = response.data.data.list
+          this.subjectNestedList = response.data.list
         })*/
     },
 

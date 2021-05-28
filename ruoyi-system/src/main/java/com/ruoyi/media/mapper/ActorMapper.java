@@ -62,4 +62,11 @@ public interface ActorMapper extends BaseMapper<Actor>
      * @return 结果
      */
     public int deleteActorByIds(Long[] actorIds);
+
+    /**
+     * 查询热门演员
+     * @param top
+     * @return
+     */
+    List<Actor> selectHotActorList(int top);
 }

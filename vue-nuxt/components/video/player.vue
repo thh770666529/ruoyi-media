@@ -38,7 +38,7 @@ export default {
 		live: {
 			// 是否是直播视频
 			type: Boolean,
-			default: true
+			default: false
 		},
 		loop: {
 			// 播放结束后是否循环播放

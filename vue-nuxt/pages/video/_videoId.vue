@@ -1,12 +1,11 @@
 <template>
-
     <section class="container">
-   <script charset="utf-8" type="text/javascript" src="https://viptv.gitee.io/cdn/chplayer/chplayer.js" />
-      <vueCkplayer ref="player" :width="`300px`" :source="videoUrl" :style="playStyle" />
-
+    <div class="mt40">
+      <vue-ckplayer ref="player"  :source="videoUrl" :style="playStyle" />
+    </div>
     <div class="mt20">
-      <article class="fl col-12" style="width: 100%" >
 
+      <article class="fl col-12" style="width: 100%" >
 
         <section class="mr30 mb25">
           <div class="i-box">
@@ -42,12 +41,12 @@
 
                           <ol class="lh-menu-ol" style="display: block;">
                             <li class="lh-menu-second ml30">
-                              <a :href="'/video/'+video.videoId" target="_self">
+                              <router-link :to="'/video/'+video.videoId" tag="a" target="_self" active-class="current">
                                   <span class="fr">
                                     <i class="free-icon vam mr10">免费试听</i>
                                   </span>
                                 <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{video.title}}
-                              </a>
+                              </router-link>
                             </li>
                           </ol>
 
@@ -81,12 +80,12 @@
 </template>
 
 <script>
-  import vueCkplayer from '@/components/player.vue'
+  import vueCkplayer from '@/components/video/player'
   import movieApi from '@/api/movie'
   export default {
     name: 'ckplayerPlugin',
     components: {
-      vueCkplayer: vueCkplayer
+      vueCkplayer
     },
     data () {
       return {
@@ -116,7 +115,7 @@
       }
     },
     created(){
-        this.getVideoById();
+      this.getVideoById();
     },
     mounted(){
     },
@@ -128,20 +127,16 @@
       }
     },
     methods:{
-      getVideoById(){
+      async getVideoById(){
           const videoId = this.$route.params && this.$route.params.videoId;
-          movieApi.getMovieVideo(videoId)
-            .then(response => {
-              this.videoVo=response.data.data.video;
-              this.movieVo=response.data.data.movie;
-              this.videoUrl = this.fileUploadHost+this.videoVo.url;
-              this.player();
-          })
-
+          const response =await movieApi.getMovieVideo(videoId)
+          this.videoVo=response.data.video;
+          this.movieVo=response.data.movie;
+          this.videoUrl = await  this.fileUploadHost+this.videoVo.url;
+          this.player();
       },
       player() {
           this.$nextTick(() => {
-            console.log("aaaa",this.$refs.player);
             this.$refs.player.loadPlayer(this.videoUrl);
           });
         // this.$refs.player.play();

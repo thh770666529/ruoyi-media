@@ -27,4 +27,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="label != null  and label != ''"> and label = #{label}</if>
         </where>
     </select>
+
+
+    <select id="selectHotActorList" parameterType="Actor" resultMap="ActorResult">
+        <include refid="selectActorVo"/>
+        limit  #{top}
+    </select>
+
+
+
 </mapper>

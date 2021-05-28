@@ -35,4 +35,14 @@ public class ActorServiceImpl extends ServiceImpl<ActorMapper, Actor> implements
         return actorMapper.selectActorList(actor);
     }
 
+    /**
+     * 查询热门演员
+     * @param top
+     * @return
+     */
+    @Override
+    public List<Actor> selectHotActorList(int top) {
+        return actorMapper.selectHotActorList(top);
+    }
+
 }

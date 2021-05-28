@@ -3,7 +3,9 @@
     <!-- /电影详情 开始 -->
     <section class="container">
       <section class="path-wrap txtOf hLh30">
-        <a href="#" title class="c-999 fsize14">首页</a>
+        <router-link to="/" tag="a" active-class="c-999 fsize14" title="首页">
+        首页
+      </router-link>
       </section>
       <div>
         <article class="c-v-pic-wrap" style="height: 380px;">
@@ -159,32 +161,6 @@
             </div>
           </section>
         </article>
-       <!-- <aside class="fl col-3">
-          <div class="i-box">
-            <div>
-              <section class="c-infor-tabTitle c-tab-title">
-                <a title href="javascript:void(0)">演员</a>
-              </section>
-              <section class="stud-act-list">
-                <ul style="height: auto;">
-                  <li>
-                    <div class="u-face">
-                      <a href="#">
-                        <img :src="movieVo.avatar" width="50" height="50" alt>
-                      </a>
-                    </div>
-                    <section class="hLh30 txtOf">
-                      <a class="c-333 fsize16 fl" href="#">{{movieVo.teacherName}}</a>
-                    </section>
-                    <section class="hLh20 txtOf">
-                      <span class="c-999">{{movieVo.intro}}</span>
-                    </section>
-                  </li>
-                </ul>
-              </section>
-            </div>
-          </div>
-        </aside>-->
         <div class="clear"></div>
       </div>
     </section>
@@ -194,11 +170,9 @@
 
 <script>
 import movieApi from '@/api/movie'
-import ordersApi from '@/api/orders'
-import { MessageBox, Message } from 'element-ui'
 export default {
   // 异步调用
-   asyncData({ params, error }) {
+  async asyncData({ params, error }) {
      return {movieId: params.movieId}
    },
    data() {
@@ -220,51 +194,36 @@ export default {
        labelValue:''
      }
    },
-  created() {//在页面渲染之前执行
-    this.getDicts("movie_country").then(response => {
-      this.countryOptions = response.data.data;
+  async created() {//在页面渲染之前执行
+    await this.getDicts("movie_country").then(response => {
+      this.countryOptions = response.data;
     });
-    this.getDicts("movie_status").then(response => {
-      this.statusOptions = response.data.data;
+    await this.getDicts("movie_status").then(response => {
+      this.statusOptions = response.data;
     });
-    this.getDicts("movie_type").then(response => {
-      this.typeOptions = response.data.data;
+    await this.getDicts("movie_type").then(response => {
+      this.typeOptions = response.data;
     });
-    this.getDicts("movie_label").then(response => {
-      this.labelOptions = response.data.data;
+    await this.getDicts("movie_label").then(response => {
+      this.labelOptions = response.data;
     });
 
     this.initInfo();
   },
    methods:{
      //查询电影详情信息
-     initInfo() {
-       movieApi.getMovie(this.movieId)
-          .then(response => {
-            this.movieVo=response.data.data;
-            this.videoList=this.movieVo.videoList;
-            this.actorList=this.movieVo.actorList;
-            this.directorList=this.movieVo.directorList;
-            //this.isbuy=response.data.data.isBuy
-            this.labelValue =  this.selectDictLabels(this.labelOptions, this.movieVo.label);
-        })
-     },
-     //生成订单
-     createOrders() {
-      /* ordersApi.createOrders(this.courseId)
-        .then(response => {
-          //获取返回订单号
-          //生成订单之后，跳转订单显示页面
-          this.$router.push({path:'/orders/'+response.data.data.orderId})
-        })*/
+     async initInfo() {
+        const response = await movieApi.getMovie(this.movieId)
+        this.movieVo=response.data
+        this.videoList=this.movieVo.videoList
+        this.actorList=this.movieVo.actorList
+        this.directorList=this.movieVo.directorList
+        this.labelValue =  this.selectDictLabels(this.labelOptions, this.movieVo.label)
      },
      //播放
      play(){
        if (this.videoList.length==0){
-         Message({
-           message: '暂时没有播放的视频！请联系管理员进行上传',
-           type: 'error'
-         })
+         this.msgError("暂时没有播放的视频！请联系管理员进行上传！")
        }else {
          window.open("/video/"+this.videoList[0].videoId);
        }

@@ -2,6 +2,7 @@ package com.ruoyi.web.controller;
 
 
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.media.service.IActorService;
 import com.ruoyi.media.service.IMovieService;
 import com.ruoyi.website.domain.WebsiteBanner;
 import com.ruoyi.website.domain.WebsiteLink;
@@ -20,7 +21,6 @@ import java.util.List;
  * @author thh
  */
 @RestController
-@CrossOrigin
 @RequestMapping("/index")
 public class IndexController {
 
@@ -29,16 +29,24 @@ public class IndexController {
     private IMovieService movieService;
 
     @Autowired
+    private IActorService actorService;
+
+    @Autowired
     private IWebsiteBannerService websiteBannerService;
 
     @Autowired
     private IWebsiteLinkService websiteLinkService;
 
+    @GetMapping("/getHotActorList")
+    public AjaxResult getHotActorList(){
+        //查询前4的热门演员
+        return AjaxResult.success(actorService.selectHotActorList(4));
+    }
 
     @GetMapping("/getHotMovieList")
     public AjaxResult getHotMovieList(){
-        //查询前8的热门电影
-        return AjaxResult.success(movieService.selectHotMovieList(8));
+        //查询前4的热门电影
+        return AjaxResult.success(movieService.selectHotMovieList(4));
     }
 
     @GetMapping("/getAllBannerList")

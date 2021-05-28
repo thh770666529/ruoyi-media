@@ -1,55 +1,94 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
-import cookie from 'js-cookie'
+import { Notification, MessageBox, Message } from 'element-ui'
+import { getToken } from '@/utils/token'
+import errorCode from '@/utils/errorCode'
 
+axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
+axios.defaults.withCredentials = true // 跨域处理 允许携带cookie
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://localhost:7070', // api的base_url
-  timeout: 20000 // 请求超时时间
+  baseURL: 'http://localhost:3000/api', // api的base_url
+  timeout: 3000 // 请求超时时间
 })
 
 //第三步 创建拦截器  http request 拦截器
-service.interceptors.request.use(
-  config => {
-  //debugger
-  //判断cookie里面是否有名称是guli_token数据
-  if (cookie.get('guli_token')) {
-    //把获取cookie值放到header里面
-    config.headers['token'] = cookie.get('guli_token');
+service.interceptors.request.use(config => {
+  // 是否需要设置 token
+  const isToken = (config.headers || {}).isToken === false
+  //判断cookie里面是否有数据
+  if (getToken() && !isToken ) {
+      config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+  }
+  // get请求映射params参数
+  if (config.method === 'get' && config.params) {
+    let url = config.url + '?';
+    for (const propName of Object.keys(config.params)) {
+      const value = config.params[propName];
+      var part = encodeURIComponent(propName) + "=";
+      if (value !== null && typeof(value) !== "undefined") {
+        if (typeof value === 'object') {
+          for (const key of Object.keys(value)) {
+            let params = propName + '[' + key + ']';
+            var subPart = encodeURIComponent(params) + "=";
+            url += subPart + encodeURIComponent(value[key]) + "&";
+          }
+        } else {
+          url += part + encodeURIComponent(value) + "&";
+        }
+      }
+    }
+    url = url.slice(0, -1);
+    config.params = {};
+    config.url = url;
   }
     return config
-  },
-  err => {
-  return Promise.reject(err);
+  },error => {
+  console.log(error);
+  return Promise.reject(error);
 })
 
 // http response 拦截器
-service.interceptors.response.use(
-  response => {
-    //debugger
-    if (response.data.code == 28004) {
-        console.log("response.data.resultCode是28004")
+service.interceptors.response.use(response => {
+
+      const code = response.data.code || 200;
+      const msg = errorCode[code] || response.data.msg || errorCode['default'];
+
+      if (code == 401) {
         // 返回 错误代码-1 清除ticket信息并跳转到登录页面
-        //debugger
-        window.location.href="/login"
-        return
-    }else{
-      if (response.data.code !== 200) {
-        //25000：订单支付中，不做任何提示
-        if(response.data.code != 25000) {
-          Message({
-            message: response.data.message || 'error',
-            type: 'error',
-            duration: 5 * 1000
-          })
-        }
+       // window.location.href = "/login"
+      } else if (code === 500) {
+        Message({
+          message: msg,
+          type: 'error'
+        })
+        return Promise.reject(new Error(msg))
+      } else if (code !== 200) {
+        Notification.error({
+          title: msg
+        })
+        return Promise.reject('error')
       } else {
-        return response;
+        return response.data;
       }
-    }
-  },
-  error => {
-    return Promise.reject(error.response)   // 返回接口返回的错误信息
+
+  }, error => {
+  console.log('err' + error)
+  let { message } = error;
+  if (message == "Network Error") {
+    message = "后端接口连接异常";
+  }
+  else if (message.includes("timeout")) {
+    message = "系统接口请求超时";
+  }
+  else if (message.includes("Request failed with status code")) {
+    message = "系统接口" + message.substr(message.length - 3) + "异常";
+  }
+  Message({
+    message: message,
+    type: 'error',
+    duration: 5 * 1000
+  })
+  return Promise.reject(error)
 });
 
 export default service

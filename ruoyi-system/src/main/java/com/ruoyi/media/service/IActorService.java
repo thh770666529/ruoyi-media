@@ -23,4 +23,10 @@ public interface IActorService extends IService<Actor>
      */
     public List<Actor> selectActorList(Actor actor);
 
+    /**
+     * 查询热门演员
+     * @param top
+     * @return
+     */
+    List<Actor> selectHotActorList(int top);
 }
