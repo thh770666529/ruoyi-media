@@ -7,8 +7,6 @@ import 'element-ui/lib/theme-chalk/index.css'//element-ui的css
 
 
 // 全局方法挂载
-
-import Swiper from 'swiper'
 Vue.use(new JSEncrypt())
 Vue.use(ElementUI) //使用elementUI
 Vue.use(VueQriously)

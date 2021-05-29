@@ -1,75 +1,67 @@
 <template>
+  <div>
+
+    <!-- 左（上下）右-->
     <section class="container">
-    <div class="mt40">
-      <vue-ckplayer ref="player"  :source="videoUrl" :style="playStyle" />
-    </div>
-    <div class="mt20">
-
-      <article class="fl col-12" style="width: 100%" >
-
-        <section class="mr30 mb25">
-          <div class="i-box">
-            <div>
-              <section id="c-i-tabTitle" class="c-infor-tabTitle c-tab-title">
-                <a name="c-i" class="current" title="电影详情">电影详情</a>
-              </section>
-            </div>
-            <article class="ml10 mr10 pt20">
-              <div>
-                <h6 class="c-i-content c-infor-title">
-                  <span>电影介绍</span>
-                </h6>
-                <div class="course-txt-body-wrap">
-                  <section class="course-txt-body">
-                    <p v-html="movieVo.description">{{movieVo.description}}</p>
-                  </section>
-                </div>
-              </div>
-            </article>
-
-            <article class="ml10 mr10  pt20">
-              <div>
-                <h6 class="c-i-content c-infor-title">
-                  <span>剧集列表</span>
-                </h6>
-                <div class="course-txt-body-wrap">
-                  <section class="course-txt-body">
-                    <menu id="lh-menu" class="lh-menu mt10 mr10 ">
-                      <ul>
-                        <!-- 文件目录 -->
-                        <li class="lh-menu-stair" v-for="video in movieVo.videoList" :key="video.videoId">
-
-                          <ol class="lh-menu-ol" style="display: block;">
-                            <li class="lh-menu-second ml30">
-                              <router-link :to="'/video/'+video.videoId" tag="a" target="_self" active-class="current">
-                                  <span class="fr">
-                                    <i class="free-icon vam mr10">免费试听</i>
-                                  </span>
-                                <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{video.title}}
-                              </router-link>
-                            </li>
-                          </ol>
-
-                        </li>
-                      </ul>
-                    </menu>
-                  </section>
-                </div>
-              </div>
-            </article>
-
-
+      <!--左边-->
+      <el-row type="flex">
+        <el-col :md="18" :xs="24" :sm="24">
+          <div class="mt50">
+            <vue-ckplayer ref="player"  :source="videoUrl" :style="playStyle" />
           </div>
-        </section>
 
+          <!--电影描述-->
+          <div class="mt15 mb20">
+            <el-card>
 
-      </article>
+              <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="电影详情" name="description">
+                  <section class="course-txt-body">
+                    <p v-html="movie.description">{{movie.description}}</p>
+                  </section>
+                </el-tab-pane>
+                <el-tab-pane label="用户评论" name="comment">
+                  <section class="course-txt-body">
+                    <p >111111111111111111111</p>
+                  </section>
+                </el-tab-pane>
+              </el-tabs>
+            </el-card>
+          </div>
+        </el-col>
 
+        <!--右边-->
+        <el-col  class="hidden-sm-and-down" :md="6">
+          <!--剧情集数-->
+          <div class="ml15 mt50">
+            <el-menu
+              :default-active="`/video/`+video.videoId"
+              class="el-menu-vertical-demo"
+              background-color="#f4f4f4"
+              text-color="#222"
+              active-text-color="#00a1d6"
+              router
+            >
+              <el-submenu index="0">
+                <template slot="title">
+                  <i class="el-icon-film"></i>
+                  <span>剧集列表</span>
+                </template>
+                <el-menu-item  :index="`/video/`+video.videoId" v-for="video in movie.videoList" :key="video.videoId" >
+                  {{video.title}}
+                  <i class="free-icon vam mr10">免费试听</i>
+                </el-menu-item>
 
-
-    </div>
-
+              </el-submenu>
+            </el-menu>
+          </div>
+        </el-col>
+      </el-row>
     </section>
+  </div>
+
+
+
    <!-- <button @click="setFull">全屏</button>
     <button @click="play">播放</button>
     <button @click="pause">暂停</button>
@@ -89,8 +81,9 @@
     },
     data () {
       return {
-        videoVo:{},
-        movieVo:{},
+        activeName:'description',
+        video:{},
+        movie:{},
         videoUrl:"",
         playStyle:{"background":{"backgroundColor":"0x000000","stretched":3,
             "align":"center","vAlign":"middle","spacingLeft": 0,"spacingTop":0,"spacingRight":0,"spacingBottom":0},
@@ -127,13 +120,14 @@
       }
     },
     methods:{
-      async getVideoById(){
+       getVideoById(){
           const videoId = this.$route.params && this.$route.params.videoId;
-          const response =await movieApi.getMovieVideo(videoId)
-          this.videoVo=response.data.video;
-          this.movieVo=response.data.movie;
-          this.videoUrl = await  this.fileUploadHost+this.videoVo.url;
-          this.player();
+          movieApi.getMovieVideo(videoId).then(response => {
+            this.video=response.data.video;
+            this.movie=response.data.movie;
+            this.videoUrl =this.fileUploadHost+this.video.url;
+            this.player();
+          });
       },
       player() {
           this.$nextTick(() => {
@@ -164,6 +158,11 @@
 
 <style scoped>
 
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    height: 420px;
+    overflow: auto;
+  }
 
+  .container{width:1300px}
 
 </style>

@@ -1,171 +1,144 @@
 <template>
-  <div id="aCoursesList"  class="bg-fa of">
-    <!-- /电影详情 开始 -->
-    <section class="container">
-      <section class="path-wrap txtOf hLh30">
-        <router-link to="/" tag="a" active-class="c-999 fsize14" title="首页">
-        首页
-      </router-link>
-      </section>
-      <div>
-        <article class="c-v-pic-wrap" style="height: 380px;">
-          <section class="p-h-video-box" id="videoPlay">
-            <img height="380px" :src="`http://localhost:7070`+movieVo.images" :alt="movieVo.title" class="dis c-v-pic">
-          </section>
-        </article>
-        <aside class="c-attr-wrap">
-          <section class="ml20 mr15">
-            <h2 class="hLh30 txtOf mt15">
-              <span class="c-fff fsize24">{{movieVo.title}}</span>
-            </h2>
-            <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fsize14">分类：&nbsp;{{selectDictLabel(typeOptions, movieVo.type)}}</span>&nbsp;&nbsp;
-              <span class="c-fff fsize14">地区：&nbsp;{{selectDictLabel(countryOptions, movieVo.country)}}</span>&nbsp;&nbsp;
-              <span class="c-fff fsize14">年份：&nbsp;{{ parseTime(movieVo.publishTime, '{y}') }}</span>
-            </section>
 
-            <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fl">评分：</span>
-              <el-rate
-                v-model="movieVo.rate"
-                disabled
-                style="font-size:20px;"
-                show-score
-                text-color="#ff9900"
-                score-template="{value}">
-              </el-rate>
-            </section>
-            <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fsize14"> 导演：&nbsp; </span>
-              <span class="c-fff fsize14" v-if="!directorList||directorList.length==0">
+  <div>
+    <!-- 左（上下）右-->
+    <section class="container">
+
+    <section class="path-wrap txtOf hLh30">
+        <router-link to="/" tag="a" active-class="c-999 fsize14" title="首页">
+          首页
+        </router-link>
+    </section>
+
+    <!--左边-->
+    <el-row type="flex">
+      <el-col :md="18" :xs="24" :sm="24">
+        <!--电影封面信息-->
+        <div>
+          <el-card>
+            <article class="c-v-pic-wrap" >
+              <section class="p-h-video-box" >
+                <img height="380px" :src="`http://localhost:7070`+movie.images" :alt="movie.title" class="dis c-v-pic">
+              </section>
+            </article>
+            <aside class="c-attr-wrap">
+              <section class="ml20 mr15">
+                <h2 class="hLh30 txtOf mt15">
+                  <span class="c-fff fsize24">{{movie.title}}</span>
+                </h2>
+                <section class="c-attr-mt10 c-attr-undis">
+                  <span class="c-fff fsize14">分类：&nbsp;{{selectDictLabel(typeOptions, movie.type)}}</span>&nbsp;&nbsp;
+                  <span class="c-fff fsize14">地区：&nbsp;{{selectDictLabel(countryOptions, movie.country)}}</span>&nbsp;&nbsp;
+                  <span class="c-fff fsize14">年份：&nbsp;{{ parseTime(movie.publishTime, '{y}') }}</span>
+                </section>
+
+                <section class="c-attr-mt10 c-attr-undis">
+                  <span class="c-fff fl">评分：</span>
+                  <el-rate
+                    v-model="movie.rate"
+                    disabled
+                    style="font-size:20px;"
+                    show-score
+                    text-color="#ff9900"
+                    score-template="{value}">
+                  </el-rate>
+                </section>
+                <section class="c-attr-mt10 c-attr-undis">
+                  <span class="c-fff fsize14"> 导演：&nbsp; </span>
+                  <span class="c-fff fsize14" v-if="!directorList||directorList.length==0">
                   无
               </span>
-              <span class="c-fff fsize14" v-for="director in directorList" :key="director.actorId">
+                  <span class="c-fff fsize14" v-for="director in directorList" :key="director.actorId">
                   {{director.name}}&nbsp;
               </span>
-            </section>
-            <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fsize14">主演：&nbsp;</span>
-              <span class="c-fff fsize14" v-if="!actorList||actorList.length==0">
+                </section>
+                <section class="c-attr-mt10 c-attr-undis">
+                  <span class="c-fff fsize14">主演：&nbsp;</span>
+                  <span class="c-fff fsize14" v-if="!actorList||actorList.length==0">
                   无
               </span>
-              <span class="c-fff fsize14" v-for="actor in actorList" :key="actor.actorId">
+                  <span class="c-fff fsize14" v-for="actor in actorList" :key="actor.actorId">
                  {{actor.name}}&nbsp;
               </span>
-            </section>
-            <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fsize14">标签：&nbsp;{{labelValue}}</span>
-            </section>
-
-            <section class="c-attr-mt10 c-attr-undis">
-              <span class="c-fff fsize14">发布人：&nbsp;{{movieVo.publishUsername}}</span>
-            </section>
-
-            <section class="c-attr-mt of">
-              <span class="ml10 vam">
-                <em class="icon18 scIcon"></em>
-                <a class="c-fff vam" title="收藏" href="#" >收藏</a>
-              </span>
-            </section>
-
-            <section   class="c-attr-mt">
-              <a @click="play()" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
-            </section>
-            <!--<section  class="c-attr-mt">
-              <a  href="#" title="立即购买" class="comm-btn c-btn-3">立即购买</a>
-            </section>-->
-          </section>
-        </aside>
-       <!-- <aside class="thr-attr-box">
-          <ol class="thr-attr-ol">
-            <li>
-              <p>&nbsp;</p>
-              <aside>
-                <span class="c-fff f-fM">购买数</span>
-                <br>
-                <h6 class="c-fff f-fM mt10">0&lt;!&ndash;{{movieVo.buyCount}}&ndash;&gt;</h6>
-              </aside>
-            </li>
-            <li>
-              <p>&nbsp;</p>
-              <aside>
-                <span class="c-fff f-fM">课时数</span>
-                <br>
-                <h6 class="c-fff f-fM mt10">20</h6>
-              </aside>
-            </li>
-            <li>
-              <p>&nbsp;</p>
-              <aside>
-                <span class="c-fff f-fM">浏览数</span>
-                <br>
-                <h6 class="c-fff f-fM mt10">501</h6>
-              </aside>
-            </li>
-          </ol>
-        </aside>-->
-        <div class="clear"></div>
-      </div>
-      <!-- /电影封面介绍 -->
-      <div class="mt20 c-infor-box">
-        <article class="fl col-12" style="width: 100%">
-          <section class="mr5">
-            <div class="i-box">
-              <div>
-                <section id="c-i-tabTitle" class="c-infor-tabTitle c-tab-title">
-                  <a name="c-i" class="current" title="电影详情">电影详情</a>
                 </section>
-              </div>
-              <article class="ml10 mr10 pt20">
-                <div>
-                  <h6 class="c-i-content c-infor-title">
-                    <span>电影介绍</span>
-                  </h6>
-                  <div class="course-txt-body-wrap">
-                    <section class="course-txt-body">
-                      <p v-html="movieVo.description">{{movieVo.description}}</p>
-                    </section>
-                  </div>
-                </div>
-                <!-- /电影介绍 -->
-                <div class="mt50">
-                  <h6 class="c-g-content c-infor-title">
-                    <span>剧集列表</span>
-                  </h6>
-                  <section class="mt20" >
-                    <div class="lh-menu-wrap">
-                      <menu id="lh-menu" class="lh-menu mt10 mr10">
-                        <ul>
-                          <!-- 文件目录 -->
-                          <li class="lh-menu-stair" v-for="video in videoList" :key="video.videoId">
+                <section class="c-attr-mt10 c-attr-undis">
+                  <span class="c-fff fsize14">标签：&nbsp;{{labelValue}}</span>
+                </section>
 
-                            <ol class="lh-menu-ol" style="display: block;">
-                              <li class="lh-menu-second ml30">
-                                <a :href="'/video/'+video.videoId" target="_blank">
-                                  <span class="fr">
-                                    <i class="free-icon vam mr10">免费试听</i>
-                                  </span>
-                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{video.title}}
-                                </a>
-                              </li>
-                            </ol>
+                <section class="c-attr-mt10 c-attr-undis">
+                  <span class="c-fff fsize14">发布人：&nbsp;{{movie.publishUsername}}</span>
+                </section>
 
-                          </li>
-                        </ul>
-                      </menu>
-                    </div>
-                  </section>
-                </div>
-                <!-- /电影大纲 -->
-              </article>
-            </div>
-          </section>
-        </article>
-        <div class="clear"></div>
-      </div>
+                <section class="c-attr-mt of">
+                  <el-button icon="el-icon-thumb" size="mini" type="primary" plain >赞</el-button>
+                  <el-button type="warning" size="mini" icon="el-icon-star-off" plain />
+                </section>
+
+                <section class="c-attr-mt">
+                  <a @click="play()" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
+                </section>
+              </section>
+            </aside>
+            <div class="clear"></div>
+
+          </el-card>
+        </div>
+
+        <!--电影描述-->
+        <div class="mt15 mb20">
+          <el-card>
+
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+              <el-tab-pane label="电影详情" name="description">
+                <section class="course-txt-body">
+                  <p v-html="movie.description">{{movie.description}}</p>
+                </section>
+              </el-tab-pane>
+              <el-tab-pane label="用户评论" name="comment">
+                <section class="course-txt-body">
+                  <p >111111111111111111111</p>
+                </section>
+              </el-tab-pane>
+            </el-tabs>
+          </el-card>
+        </div>
+      </el-col>
+
+      <!--右边-->
+      <el-col  class="hidden-sm-and-down" :md="6">
+        <!--剧情集数-->
+        <div class="ml15">
+          <el-menu
+            :default-active="`/video/`+video.videoId"
+            class="el-menu-vertical-demo"
+            background-color="#f4f4f4"
+            text-color="#222"
+            active-text-color="#00a1d6"
+            router
+            >
+            <el-submenu index="0">
+              <template slot="title">
+                <i class="el-icon-film"></i>
+                <span>剧集列表</span>
+              </template>
+              <el-menu-item  :index="`/video/`+video.videoId" v-for="video in videoList" :key="video.videoId" >
+                {{video.title}}
+                <i class="free-icon vam pr10">免费试听</i>
+              </el-menu-item>
+
+              <el-menu-item    :key="0" >
+                该视频弹幕为空
+              </el-menu-item>
+
+
+            </el-submenu>
+          </el-menu>
+        </div>
+      </el-col>
+    </el-row>
     </section>
-    <!-- /电影详情 结束 -->
   </div>
+
 </template>
 
 <script>
@@ -177,8 +150,9 @@ export default {
    },
    data() {
      return {
-        movieVo: {},
+        movie: {},
         videoList: [],
+        video:{videoId:undefined},
         actorList:[],
         directorList:[],
         isbuy: false,
@@ -191,7 +165,8 @@ export default {
        //标签字典
        labelOptions:[],
        //标签值
-       labelValue:''
+       labelValue:'',
+       activeName:'description'
      }
    },
   async created() {//在页面渲染之前执行
@@ -211,14 +186,22 @@ export default {
     this.initInfo();
   },
    methods:{
+     rowIndex({ row, rowIndex }) {
+       row.index = rowIndex + 1;
+     },
      //查询电影详情信息
      async initInfo() {
         const response = await movieApi.getMovie(this.movieId)
-        this.movieVo=response.data
-        this.videoList=this.movieVo.videoList
-        this.actorList=this.movieVo.actorList
-        this.directorList=this.movieVo.directorList
-        this.labelValue =  this.selectDictLabels(this.labelOptions, this.movieVo.label)
+        this.movie=response.data
+        this.videoList=this.movie.videoList
+        this.actorList=this.movie.actorList
+        this.directorList=this.movie.directorList
+        this.labelValue =  this.selectDictLabels(this.labelOptions, this.movie.label)
+        if (this.videoList.length > 0 ) {
+         this.video = this.videoList[0]
+        }
+
+
      },
      //播放
      play(){
@@ -231,3 +214,15 @@ export default {
    }
 };
 </script>
+<style>
+  .c-v-pic-wrap{width:60%;height:380px}
+  .thr-attr-box{width:120px;height:380px}
+  .c-attr-wrap{width:40%;height:380px}
+
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    height: 420px;
+    overflow: auto;
+  }
+  .container{width:1300px}
+
+</style>

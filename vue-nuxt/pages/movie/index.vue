@@ -1,6 +1,7 @@
 <template>
   <div id="aCoursesList" class="bg-fa of">
     <!-- /电影列表 开始 -->
+
     <section class="container">
       <header class="comm-title">
         <h2 class="fl tac">
@@ -49,22 +50,6 @@
           </section>
           <section class="fl">
             <ol class="js-tap clearfix">
-            <!-- <li :class="{'current bg-orange':buyCountSort!=''}">
-                <a title="销量" href="javascript:void(0);" @click="searchBuyCount()">销量
-                <span :class="{hide:buyCountSort==''}">↓</span>
-                </a>
-              </li>
-              <li :class="{'current bg-orange':gmtCreateSort!=''}">
-                <a title="最新" href="javascript:void(0);" @click="searchGmtCreate()">最新
-                <span :class="{hide:gmtCreateSort==''}">↓</span>
-                </a>
-              </li>
-              <li :class="{'current bg-orange':priceSort!=''}">
-                <a title="价格" href="javascript:void(0);" @click="searchPrice()">价格&nbsp;
-                  <span :class="{hide:priceSort==''}">↓</span>
-                </a>
-              </li>-->
-
               <li class="current bg-orange">
                 <a title="销量" href="javascript:void(0);" >销量
                   <span >↓</span>
