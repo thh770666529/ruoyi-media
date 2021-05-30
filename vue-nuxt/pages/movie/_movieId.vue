@@ -85,7 +85,7 @@
         </div>
 
         <!--电影描述-->
-        <div class="mt15 mb20">
+        <div class="mt15 mb50">
           <el-card>
 
             <el-tabs v-model="activeName" >
@@ -94,10 +94,24 @@
                   <p v-html="movie.description">{{movie.description}}</p>
                 </section>
               </el-tab-pane>
-              <el-tab-pane label="用户评论" name="comment">
-                <section class="course-txt-body">
-                  <p >111111111111111111111</p>
-                </section>
+              <el-tab-pane label="用户评论"  name="comment">
+                <i class="el-icon-chat-dot-round"></i>
+                <div >
+                  <ul>
+                    <CommentBox
+                      :userInfo="userInfo"
+                      :commentInfo="commentInfo"
+                      @submit-box="submitBox"
+                      :showCancel="showCancel"
+                    ></CommentBox>
+                    <!--<div class="message_infos">
+                      <CommentList :comments="comments" :commentInfo="commentInfo"></CommentList>
+                      <div class="noComment" v-if="comments.length ==0">还没有评论，快来抢沙发吧！</div>
+                    </div>-->
+                  </ul>
+                </div>
+
+
               </el-tab-pane>
             </el-tabs>
           </el-card>
@@ -144,11 +158,18 @@
 
 <script>
 import movieApi from '@/api/movie'
+//import CommentList from "@/components/article/CommentList";
+import CommentBox from "@/components/article/CommentBox";
 export default {
   // 异步调用
   async asyncData({ params, error }) {
      return {movieId: params.movieId}
    },
+  components: {
+    //注册组件
+    //CommentList,
+    CommentBox
+  },
    data() {
      return {
         movie: {},
@@ -167,7 +188,18 @@ export default {
        labelOptions:[],
        //标签值
        labelValue:'',
-       activeName:'description'
+       activeName:'description',
+       // 评论
+       showCancel: false,
+       comments: [],
+       commentInfo: {
+         // 评论来源： MESSAGE_BOARD，ABOUT，BLOG_INFO 等 代表来自某些页面的评论
+         source: "movieDetail",
+         objId: this.$route.params.moviedId
+       },
+       userInfo: {},
+       faceList:["https://cdn.jsdelivr.net/gh/volantis-x/cdn-emoji@1.0.0/valine/twemoji/twemoji-124.png",
+         "https://cdn.jsdelivr.net/gh/volantis-x/cdn-emoji@1.0.0/valine/twemoji/twemoji-125.png"]
      }
    },
   async created() {//在页面渲染之前执行
@@ -187,9 +219,6 @@ export default {
     this.initInfo();
   },
    methods:{
-     rowIndex({ row, rowIndex }) {
-       row.index = rowIndex + 1;
-     },
      //查询电影详情信息
      async initInfo() {
         const response = await movieApi.getMovie(this.movieId)
@@ -211,7 +240,11 @@ export default {
        }else {
          window.open("/video/"+this.videoList[0].videoId);
        }
-     }
+     },
+     // 发表评论
+     submitBox(e) {
+       this.msgSuccess("发表成功！")
+     },
    }
 };
 </script>
