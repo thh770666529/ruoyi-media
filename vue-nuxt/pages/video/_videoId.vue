@@ -6,7 +6,10 @@
       <!--左边-->
       <el-row type="flex">
         <el-col :md="18" :xs="24" :sm="24">
-          <div class="mt50">
+          <div class="mt20">
+          <span class="fsize20">{{movie.title}}</span>
+          </div>
+          <div >
             <vue-ckplayer ref="player"  :source="videoUrl" :style="playStyle" />
           </div>
 
@@ -49,7 +52,9 @@
                 </template>
                 <el-menu-item  :index="`/video/`+video.videoId" v-for="video in movie.videoList" :key="video.videoId" >
                   {{video.title}}
-                  <i class="free-icon vam mr10">免费试听</i>
+                  <div class="fr">
+                    <i  class="free-icon vam">免费试听</i>
+                  </div>
                 </el-menu-item>
 
               </el-submenu>
@@ -163,6 +168,6 @@
     overflow: auto;
   }
 
-  .container{width:1300px}
+  .container{width:1400px;}
 
 </style>

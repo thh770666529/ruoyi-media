@@ -1,7 +1,6 @@
 export default function(ctx){
   //离开页面 刷新前 将store中的数据存到session
   window.addEventListener('beforeunload', ()=> {
-    debugger
     if (ctx.store.state.accessToken) {
        // sessionStorage.setItem("storeCache",JSON.stringify(ctx.store.state))
       localStorage.setItem("storeCache",JSON.stringify(ctx.store.state))

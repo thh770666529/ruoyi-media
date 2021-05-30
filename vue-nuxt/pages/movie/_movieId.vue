@@ -88,7 +88,7 @@
         <div class="mt15 mb20">
           <el-card>
 
-            <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tabs v-model="activeName" >
               <el-tab-pane label="电影详情" name="description">
                 <section class="course-txt-body">
                   <p v-html="movie.description">{{movie.description}}</p>
@@ -121,15 +121,16 @@
                 <i class="el-icon-film"></i>
                 <span>剧集列表</span>
               </template>
-              <el-menu-item  :index="`/video/`+video.videoId" v-for="video in videoList" :key="video.videoId" >
-                {{video.title}}
-                <i class="free-icon vam pr10">免费试听</i>
+              <el-menu-item   :index="`/video/`+video.videoId" v-for="video in videoList" :key="video.videoId" >
+               {{video.title}}
+                <div class="fr">
+                  <i  class="free-icon vam">免费试听</i>
+                </div>
               </el-menu-item>
 
-              <el-menu-item    :key="0" >
+              <el-menu-item    v-if="videoList.length==0"  >
                 该视频弹幕为空
               </el-menu-item>
-
 
             </el-submenu>
           </el-menu>
@@ -152,7 +153,7 @@ export default {
      return {
         movie: {},
         videoList: [],
-        video:{videoId:undefined},
+        video:{},
         actorList:[],
         directorList:[],
         isbuy: false,
@@ -223,6 +224,6 @@ export default {
     height: 420px;
     overflow: auto;
   }
-  .container{width:1300px}
+  .container{width:1400px}
 
 </style>
