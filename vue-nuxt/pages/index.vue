@@ -76,7 +76,7 @@
         <section class="container">
           <header class="comm-title">
             <h2 class="tac">
-              <span class="c-333">名师大咖</span>
+              <span class="c-333">热门演员</span>
             </h2>
           </header>
           <div>

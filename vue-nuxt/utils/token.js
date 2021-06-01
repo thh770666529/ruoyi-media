@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-const TokenKey = 'accessToken'
+const TokenKey = 'token'
 
 // 半个小时过期
 let seconds = 1800

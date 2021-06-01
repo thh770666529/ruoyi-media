@@ -53,9 +53,9 @@ service.interceptors.response.use(response => {
       const code = response.data.code || 200;
       const msg = errorCode[code] || response.data.msg || errorCode['default'];
 
-      if (code == 401) {
+      if (code === 401) {
         // 返回 错误代码-1 清除ticket信息并跳转到登录页面
-       // window.location.href = "/login"
+        window.location.href = "/login"
       } else if (code === 500) {
         Message({
           message: msg,

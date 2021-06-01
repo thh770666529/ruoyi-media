@@ -2,7 +2,7 @@ module.exports = {
   mode: 'universal',
 
   router: {
-    middleware:['checkuser']
+    middleware:'checkuser'
   },
   server:{
     port: 3000,
@@ -17,12 +17,13 @@ module.exports = {
   plugins: [
     { src: '~/plugins/nuxt-swiper-plugin.js', ssr: false },
     '@/plugins/prototype',
-    {src:'~/plugins/storeCache',ssr: false},
+    //{src:'~/plugins/storeCache',ssr: false},
     {src:'~/utils/nuxtjsAxios',ssr: true}
   ],
   modules: [
     '@nuxtjs/axios',
     '@gauseen/nuxt-proxy',
+    'cookie-universal-nuxt'
   ],
   axios: {
     proxy: true, // 开启axios跨域

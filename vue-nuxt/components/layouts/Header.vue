@@ -39,25 +39,33 @@
             <span class="vam ml5">注册</span>
           </router-link>
         </li>
-        <li v-if="userInfo" id="is-login-one" class="mr10">
+        <li v-if="userInfo" id="is-login-two" class="h-r-user">
+
+          <el-dropdown trigger="click" @command="handleCommand" >
+           <span class="el-dropdown-link">
+
+            <img
+              :src="`http://localhost:7070`+userInfo.avatar"
+              width="30"
+              height="30"
+              alt
+            >
+           {{ userInfo.nickName }}
+         </span>
+            <el-dropdown-menu  slot="dropdown">
+              <el-dropdown-item command="ucenter" icon="el-icon-user-solid">个人中心</el-dropdown-item>
+              <el-dropdown-item command="logout" icon="el-icon-remove-outline">退出</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
           <a id="headerMsgCountId" href="#" title="消息">
             <em class="icon18 news-icon">&nbsp;</em>
           </a>
           <q class="red-point" style="display: none">&nbsp;</q>
         </li>
-        <li v-if="userInfo" id="is-login-two" class="h-r-user">
-          <a href="/ucenter" title>
-            <img
-              :src="`http://localhost:7070`+userInfo.avatar"
-              width="30"
-              height="30"
-              class="vam picImg"
-              alt
-            >
-            <span id="userName" class="vam disIb">{{ userInfo.nickName }}</span>
-          </a>
-          <a href="javascript:void(0);" title="退出" @click="handleCommand('logout')" class="ml5">退出</a>
-        </li>
+
+
+
         <!-- /未登录显示第1 li；登录后显示第2，3 li -->
       </ul>
       <aside class="h-r-search">
@@ -79,6 +87,7 @@
   </div>
 </template>
 <script>
+  import { mapActions,mapState, mapMutations} from 'vuex'
   export default {
     data() {
       return {
@@ -86,9 +95,7 @@
       }
     },
     computed:{
-      userInfo(){
-        return this.$store.state.userInfo
-      }
+      ...mapState(['userInfo'])
     },
     mounted () {
 
@@ -104,14 +111,20 @@
           return this.$store.dispatch('LoginPage')
         }
         switch (command) {
+          case 'ucenter':
+            window.open('/ucenter', '_blank')
+            break
+          case 'editPassword':
+            window.open("/ucenter/editPassword", '_blank')
+            break
           case 'movie':
             // 以新窗口方式 打开编辑文章窗口
-            let routeData = this.$route.resolve("/movie")
-            window.open(routeData.href, '_blank')
+            //routeData = this.$route.resolve("/movie")
+            //window.open(routeData.href, '_blank')
+            window.open('/movie', '_blank')
             break
           case 'actor':
-            routeData = this.$route.resolve("/actor")
-            window.open(routeData.href, '_blank')
+            window.open('/actor', '_blank')
             break
           case 'logout':
             this.$store.dispatch('LogOut').then(() => {

@@ -1,12 +1,10 @@
 import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken, getCookies } from '@/utils/token'
-import { setStore, getStore, removeStore, setSession, getSession } from '@/utils/storage'
+import { getToken, setToken, removeToken, getCookies,setCookies,removeCookies } from '@/utils/token'
 
 // nuxt 声明状态 一定是function
 const state = () => ({
-    userInfo: null,
-    accessToken: null,
-    refreshToken: null
+    userInfo: '',
+    token: ''
 })
 
 //改变状态值
@@ -15,25 +13,33 @@ const mutations = {
     state.userInfo = userInfo
   },
   SET_TOKEN: (state, token) => {
-    state.accessToken = token
+    state.token = token
   },
+// 服务端获取token
+  GET_TOKEN_SERVER: (state,  req) => {
+    let token = getToken();
+    let userInfo = getCookies('userInfo');
+    state.token = token;
+    state.userInfo = userInfo;
 
+  },
   // 状态置于空
   RESET_USER_STATE(state) {
       state.userInfo = null
-      state.accessToken = null
-      state.refreshToken = null
+      state.token = null
   },
   INIT_WEB: (state) => {
     let token = getToken();
-    if (token) {
-      const userInfoJSON =  getStore('storeCache');
-      if(userInfoJSON){
-        state =  JSON.parse(userInfoJSON)
-      }
+    const userInfoJSON =  getCookies('userInfo');
+    if (token && userInfoJSON) {
+      const userInfo =  JSON.parse(userInfoJSON)
+      store.commit('SET_TOKEN', token)
+      store.commit('SET_USERINFO',userInfo )
     }else {
       state.userInfo = '';
-      removeStore('storeCache')
+      state.token = '';
+      removeCookies('userInfo')
+      removeToken();
     }
   },
 }
@@ -41,20 +47,12 @@ const mutations = {
 
 // 定义行为
 const actions = {
-  // 客户端初始化
-  async nuxtClientInit({ commit }, {req}) {
-   /* const storeCache = getStore("storeCache")
-    if(storeCache){
-      console.log( "客户端初始化",JSON.parse(storeCache))
-      const state =  JSON.parse(storeCache)
-      commit('SET_TOKEN', state.accessToken)
-      commit('SET_USERINFO', state.userInfo)
-    }*/
-  },
   // 服务端初始化
-  async nuxtServerInit({ dispatch }, context) {
-
-
+  async nuxtServerInit(store,{app:{$cookies}}) {
+    const  userInfo =  $cookies.get('userInfo')?$cookies.get('userInfo') : ''
+    const  token =  $cookies.get('token')?$cookies.get('token') : ''
+    store.commit('SET_USERINFO',userInfo)
+    store.commit('SET_TOKEN',token)
   },
     //跳转到登录页面
   LoginPage({commit}){
@@ -71,7 +69,6 @@ const actions = {
     const uuid = loginUser.uuid
     return new Promise((resolve, reject) => {
       login(username, password, code, uuid).then(res => {
-
         setToken(res.token)
         commit('SET_TOKEN', res.token)
         resolve()
@@ -87,6 +84,7 @@ const actions = {
       getInfo().then(res => {
           const userInfo = res.user
           commit('SET_USERINFO', userInfo)
+          setCookies('userInfo',userInfo,1800)
         resolve(res)
       }).catch(error => {
         reject(error)
@@ -100,7 +98,7 @@ const actions = {
       logout(state.token).then(() => {
         commit('RESET_USER_STATE')
         removeToken()
-        removeStore('storeCache')
+        removeCookies('userInfo')
         resolve()
       }).catch(error => {
         reject(error)
@@ -113,7 +111,7 @@ const actions = {
     return new Promise(resolve => {
       commit('RESET_USER_STATE')
       removeToken()
-      removeStore('storeCache')
+      removeCookies('userInfo')
       resolve()
     })
   }

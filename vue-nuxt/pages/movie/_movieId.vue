@@ -90,12 +90,13 @@
 
             <el-tabs v-model="activeName" >
               <el-tab-pane label="电影详情" name="description">
+                <span slot="label"><i class=" el-icon-info"></i> 电影详情</span>
                 <section class="course-txt-body">
                   <p v-html="movie.description">{{movie.description}}</p>
                 </section>
               </el-tab-pane>
               <el-tab-pane label="用户评论"  name="comment">
-                <i class="el-icon-chat-dot-round"></i>
+                <span slot="label"><i class="el-icon-chat-dot-round"></i> 用户评论</span>
                 <div >
                   <ul>
                     <CommentBox
