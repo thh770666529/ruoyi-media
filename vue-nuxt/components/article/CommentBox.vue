@@ -45,7 +45,7 @@
       toInfo: {
         type: Object
       },
-      // 博客信息
+      // 评论主体信息
       commentInfo: {
         type: Object
       },
@@ -59,7 +59,7 @@
     },
     data() {
       return {
-        comments: [],
+        comments: {},
         submitting: false,
         value: '',
         user: {},
@@ -128,32 +128,23 @@
           return;
         }
 
-        let userUid = info.uid;
-        let toUserUid = "";
-        let toCommentUid = "";
-        let blogUid = "";
 
-        // 评论来源： MESSAGE_BOARD，ABOUT，BLOG_INFO 等 代表来自某些页面的评论
-        let source = "";
-        // 替换表情
-        console.log("替换后", this.value.replace(/:.*?:/g, this.emoji))
+        let sid = ""
+        let commentId = ""
+        if (this.commentInfo) {
+          sid = this.commentInfo.sid
+        }
+        if (this.toInfo){
+          sid = this.toInfo.sid
+          commentId = this.toInfo.commentId
+        }
+
+
         let content = this.value.replace(/:.*?:/g, this.emoji);
-        if(this.toInfo) {
-          toUserUid = this.toInfo.uid;
-          toCommentUid = this.toInfo.commentUid;
-        }
-        if(this.commentInfo) {
-          blogUid = this.commentInfo.blogUid;
-          source = this.commentInfo.source;
-        }
         this.comments = {
-          userUid: userUid,
-          toCommentUid: toCommentUid,
-          toUserUid: toUserUid,
+          commentId:commentId,
           content: content,
-          blogUid: blogUid,
-          source: source,
-          reply: [],
+          sid: sid
         }
         this.value = '';
         this.count = 1024;
@@ -171,7 +162,7 @@
         this.count = 1024;
         this.isShowEmojiPanel = false
         if(this.toInfo) {
-          this.$emit("cancel-box", this.toInfo.commentUid)
+          this.$emit("cancel-box", this.toInfo.commentId)
         }
         this.hideEmojiPanel()
       },

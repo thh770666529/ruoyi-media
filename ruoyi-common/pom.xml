@@ -132,6 +132,13 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
 
+
+        <!-- 解析HTML -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

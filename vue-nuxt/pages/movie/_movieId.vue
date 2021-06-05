@@ -159,6 +159,7 @@
 
 <script>
 import movieApi from '@/api/movie'
+import {replyComment} from '@/api/comment'
 //import CommentList from "@/components/article/CommentList";
 import CommentBox from "@/components/article/CommentBox";
 export default {
@@ -194,9 +195,7 @@ export default {
        showCancel: false,
        comments: [],
        commentInfo: {
-         // 评论来源： MESSAGE_BOARD，ABOUT，BLOG_INFO 等 代表来自某些页面的评论
-         source: "movieDetail",
-         objId: this.$route.params.moviedId
+         sid: this.$route.params.movieId
        },
        userInfo: {},
        faceList:["https://cdn.jsdelivr.net/gh/volantis-x/cdn-emoji@1.0.0/valine/twemoji/twemoji-124.png",
@@ -244,7 +243,23 @@ export default {
      },
      // 发表评论
      submitBox(e) {
-       this.msgSuccess("发表成功！")
+       let params = {};
+       params.sid = e.sid;
+       params.content = e.content;
+       params.commentId = e.commentId;
+       params.createTime = e.createTime;
+       params.updateTime = e.createTime;
+       params.tableName = 'wm_movie';
+       params.url = this.$route.path;
+       params.support = 0;
+       params.oppose = 0;
+       replyComment(params).then(response => {
+         if (response.code == 200){
+           this.msgSuccess("发表成功！")
+         }else{
+           this.msgError("发表失败！")
+         }
+       });
      },
    }
 };
