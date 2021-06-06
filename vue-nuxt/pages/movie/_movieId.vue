@@ -105,14 +105,12 @@
                       @submit-box="submitBox"
                       :showCancel="showCancel"
                     ></CommentBox>
-                    <!--<div class="message_infos">
+                    <div class="message_infos">
                       <CommentList :comments="comments" :commentInfo="commentInfo"></CommentList>
                       <div class="noComment" v-if="comments.length ==0">还没有评论，快来抢沙发吧！</div>
-                    </div>-->
+                    </div>
                   </ul>
                 </div>
-
-
               </el-tab-pane>
             </el-tabs>
           </el-card>
@@ -159,9 +157,10 @@
 
 <script>
 import movieApi from '@/api/movie'
-import {replyComment} from '@/api/comment'
-//import CommentList from "@/components/article/CommentList";
-import CommentBox from "@/components/article/CommentBox";
+import {replyComment,treeListComment} from '@/api/comment'
+import { mapActions,mapState, mapMutations} from 'vuex'
+import CommentList from "@/components/website/CommentList";
+import CommentBox from "@/components/website/CommentBox";
 export default {
   // 异步调用
   async asyncData({ params, error }) {
@@ -169,8 +168,11 @@ export default {
    },
   components: {
     //注册组件
-    //CommentList,
+    CommentList,
     CommentBox
+  },
+  computed:{
+    ...mapState(['userInfo'])
   },
    data() {
      return {
@@ -196,10 +198,7 @@ export default {
        comments: [],
        commentInfo: {
          sid: this.$route.params.movieId
-       },
-       userInfo: {},
-       faceList:["https://cdn.jsdelivr.net/gh/volantis-x/cdn-emoji@1.0.0/valine/twemoji/twemoji-124.png",
-         "https://cdn.jsdelivr.net/gh/volantis-x/cdn-emoji@1.0.0/valine/twemoji/twemoji-125.png"]
+       }
      }
    },
   async created() {//在页面渲染之前执行
@@ -215,7 +214,7 @@ export default {
     await this.getDicts("movie_label").then(response => {
       this.labelOptions = response.data;
     });
-
+    this.getCommentList();
     this.initInfo();
   },
    methods:{
@@ -256,11 +255,22 @@ export default {
        replyComment(params).then(response => {
          if (response.code == 200){
            this.msgSuccess("发表成功！")
+           this.getCommentList()
          }else{
            this.msgError("发表失败！")
          }
        });
      },
+     getCommentList: function () {
+       let params = {};
+       params.sid = this.commentInfo.sid
+       treeListComment(params).then(response => {
+         if (response.code == 200) {
+           this.comments = response.rows;
+           console.log(this.comments)
+         }
+       });
+     }
    }
 };
 </script>

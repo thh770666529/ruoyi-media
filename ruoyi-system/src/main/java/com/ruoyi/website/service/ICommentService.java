@@ -55,7 +55,7 @@ public interface ICommentService
      * 回复评论
      * @param comment
      */
-    public void reply(Comment comment);
+    public int reply(Comment comment);
 
     /**
      * 查询文章电影下的评论列表

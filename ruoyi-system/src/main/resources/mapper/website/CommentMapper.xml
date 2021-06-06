@@ -30,6 +30,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="tableName"    column="table_name"    />
+        <association property="user" javaType="SysUser">
+            <result property="userId" jdbcType="BIGINT" column="u_user_id"/>
+            <result property="userName" jdbcType="VARCHAR" column="u_user_name"/>
+            <result property="nickName" jdbcType="VARCHAR" column="u_nick_name"/>
+            <result property="avatar" jdbcType="VARCHAR" column="u_avatar"/>
+        </association>
+
     </resultMap>
 
     <sql id="selectCommentVo">
@@ -37,9 +44,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectCommentList" parameterType="Comment" resultMap="CommentResult">
-        <include refid="selectCommentVo"/>
+        SELECT
+        t.*,
+        u.user_id AS u_user_id,
+        u.user_name AS u_user_name,
+        u.nick_name AS u_nick_name,
+        u.avatar AS u_avatar
+        FROM
+        website_comment t
+        LEFT JOIN sys_user u ON u.user_id = t.user_id
         <where>
             <if test="sid != null "> and sid = #{sid}</if>
+            <if test="commentId != null "> and comment_id = #{commentId}</if>
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="parentCommentId != null "> and parent_comment_id = #{parentCommentId}</if>
             <if test="qq != null  and qq != ''"> and qq = #{qq}</if>

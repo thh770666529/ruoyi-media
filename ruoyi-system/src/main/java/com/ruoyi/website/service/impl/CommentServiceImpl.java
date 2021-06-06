@@ -15,6 +15,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.XssKillerUtil;
 import com.ruoyi.common.utils.ip.AddressUtils;
 import com.ruoyi.common.utils.ip.IpUtils;
+import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.util.TokenUtil;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
@@ -40,6 +41,8 @@ public class CommentServiceImpl implements ICommentService
 
     @Autowired
     private TokenUtil tokenUtil;
+
+
     /**
      * 查询评论
      *
@@ -103,9 +106,11 @@ public class CommentServiceImpl implements ICommentService
     }
 
 
+    @Autowired
+    SysUserMapper sysUserMapper;
 
     @Override
-    public void reply(Comment comment) {
+    public int reply(Comment comment) {
         comment.setStatus(CommentStatusEnum.APPROVED.toString());
         comment.setParentCommentId(comment.getCommentId());
         comment.setCommentId(null);
@@ -116,7 +121,12 @@ public class CommentServiceImpl implements ICommentService
         filterContent(comment);
         // 保存当前评论时的位置信息
         comment.setAddress(AddressUtils.getRealAddressByIP(comment.getIp()));
-        commentMapper.insert(comment);
+        int insert = commentMapper.insert(comment);
+        Long userId = comment.getUserId();
+        // 查询用户数据
+        SysUser sysUser = sysUserMapper.selectUserById(userId);
+        comment.setUser(sysUser);
+        return insert;
     }
 
     @Override

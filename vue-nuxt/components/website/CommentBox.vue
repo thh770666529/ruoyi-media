@@ -2,7 +2,8 @@
   <div>
     <div class="commentBox">
     <span class="left" v-if="isShowAvatar">
-      <img v-if="isShowAvatar" src="../../assets/img/avatar.jpg" onerror="onerror=null;src=defaultAvatar"/>
+      <img v-if="userInfo&&userInfo.avatar" :src="`http://localhost:7070`+userInfo.avatar" onerror="onerror=null;src=defaultAvatar" />
+      <img v-else :src="defaultAvatar" />
     </span>
 
     <span class="right">
@@ -26,14 +27,13 @@
 
       <span class="allow p2" v-if="isShowAvatar">还能输入{{count}}个字符</span>
 
-
     </div>
   </div>
 
 </template>
 
 <script>
-  import {dateFormat} from '../../utils/index'
+  import {dateFormat} from '../../utils'
   import EmojiPanel from "@/components/EmojiPanel/EmojiPanel.vue";
   export default {
     name: 'CommentBox',
@@ -66,7 +66,7 @@
         count: 1024,
         isShowEmojiPanel: false, // 是否显示表情面板
         isShowAvatar: true, // 是否显示头像
-        defaultAvatar: ""
+        defaultAvatar: "http://localhost:7070/profile/avatar/defaul/avatar.jpg"
       }
     },
     computed: {
@@ -222,20 +222,22 @@
   }
   .commentBox .left {
     display: inline-block;
-    width: 4%;
+    width: 5%;
     height: 100%;
     padding-top: 3px;
   }
   .commentBox .left img {
     cursor: pointer;
     margin: 0 auto;
-    width: 90%;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
   }
+
   .commentBox .right {
     display: inline-block;
     margin: 5px 2px 0 0;
-    width: 95%;
+    width: 93%;
     height: 100%;
   }
   textarea::-webkit-input-placeholder {

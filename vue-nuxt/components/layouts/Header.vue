@@ -45,10 +45,10 @@
            <span class="el-dropdown-link">
 
             <img
-              :src="`http://localhost:7070`+userInfo.avatar"
               width="30"
               height="30"
-              alt
+              class="avatar"
+              :src="`http://localhost:7070`+userInfo.avatar"
             >
            {{ userInfo.nickName }}
          </span>
@@ -172,5 +172,10 @@
     max-width:100%;
     height:auto;
     vertical-align:middle
+  }
+
+  .avatar{
+    margin: 0 auto;
+    border-radius: 50%;
   }
 </style>

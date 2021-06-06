@@ -59,8 +59,12 @@ public class CommentController extends BaseController
     @PostMapping(value = "/reply")
     @Log(title = "回复评论", businessType = BusinessType.REPLYCOMMENT)
     public AjaxResult reply(@RequestBody Comment comment) {
-        commentService.reply(comment);
-        return AjaxResult.success();
+        int count = commentService.reply(comment);
+        if (count>0){
+            return AjaxResult.success(comment);
+        }else {
+            return AjaxResult.error();
+        }
     }
 
     /**
