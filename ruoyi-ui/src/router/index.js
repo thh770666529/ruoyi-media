@@ -121,7 +121,7 @@ export const constantRoutes = [
     },
 {
   path: '/media',
-    component: Layout,
+  component: Layout,
   hidden: true,
   children: [
   {
@@ -131,7 +131,22 @@ export const constantRoutes = [
   meta: { title: '电影明细' }
    }
  ]
-}
+},
+  {
+    path: '/resource',
+    component: Layout,
+    redirect: '/resource/file',
+    name: '资源管理',
+    meta: { title: '资源管理', icon: 'resource' },
+    children: [
+      {
+        path: 'file',
+        name: 'File',
+        component: () => import('@/views/file/File'),
+        meta: { title: '网盘管理', icon: 'table' }
+      }
+    ]
+  },
 ]
 
 export default new Router({

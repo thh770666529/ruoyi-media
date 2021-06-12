@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.file.mapper.ShareMapper">
+
+    <resultMap type="com.ruoyi.file.vo.ShareListVO" id="ShareListVO">
+        <result property="userFileId"    column="user_file_id"    />
+        <result property="deleteBatchNum"    column="delete_batch_num"    />
+        <result property="deleteFlag"    column="delete_flag"    />
+        <result property="deleteTime"    column="delete_time"    />
+        <result property="extendName"    column="extend_name"    />
+        <result property="fileId"    column="file_id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="isDir"    column="is_dir"    />
+        <result property="uploadTime"    column="upload_time"    />
+        <result property="userId"    column="user_id"    />
+        <result property="shareFileId"    column="share_file_id"    />
+        <result property="shareBatchNum"    column="share_batch_num"    />
+        <result property="shareFilePath"    column="share_file_path"    />
+        <result property="shareId"    column="share_id"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="extractionCode"    column="extraction_code"    />
+        <result property="shareStatus"    column="share_status"    />
+        <result property="shareTime"    column="share_time"    />
+        <result property="shareType"    column="share_type"    />
+        <result property="fileSize"    column="file_size"    />
+        <result property="fileUrl"    column="file_url"    />
+        <result property="identifier"    column="identifier"    />
+        <result property="pointCount"    column="point_count"    />
+        <result property="storageType"    column="storage_type"    />
+        <result property="timeStampName"    column="time_stamp_name"    />
+    </resultMap>
+
+    <select id="selectShareList" resultMap="ShareListVO">
+        SELECT * FROM qiwen_share a
+        LEFT JOIN qiwen_sharefile b ON b.share_batch_num = a.share_batch_num
+        LEFT JOIN qiwen_user_file c ON c.user_file_id = b.user_file_id
+        LEFT JOIN qiwen_file d ON d.file_id = c.file_id
+        WHERE share_file_path = #{shareFilePath}
+        <if test="shareBatchNum != null">
+            AND a.share_batch_num = #{shareBatchNum}
+        </if>
+        AND c.user_id = #{userId}
+        order BY share_time desc
+        limit #{beginCount}, #{pageCount}
+    </select>
+
+    <select id="selectShareListTotalCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM qiwen_share a
+        LEFT JOIN qiwen_sharefile b ON b.share_batch_num = a.share_batch_num
+        LEFT JOIN qiwen_user_file c ON c.user_file_id = b.user_file_id
+        LEFT JOIN qiwen_file d ON d.file_id = c.file_id
+        WHERE share_file_path = #{shareFilePath}
+        <if test="shareBatchNum != null">
+            AND a.share_batch_num = #{shareBatchNum}
+        </if>
+        AND c.user_id = #{userId}
+    </select>
+
+
+</mapper>

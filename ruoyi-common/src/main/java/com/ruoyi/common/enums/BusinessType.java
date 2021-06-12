@@ -60,6 +60,12 @@ public enum BusinessType
     /**
      * 回复评论
      */
-    REPLYCOMMENT
+    REPLYCOMMENT,
+
+
+    /**
+     * 文件操作
+     */
+    File
 
 }

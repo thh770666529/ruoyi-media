@@ -15,7 +15,7 @@ import com.ruoyi.framework.interceptor.RepeatSubmitInterceptor;
 
 /**
  * 通用配置
- * 
+ *
  * @author ruoyi
  */
 @Configuration
@@ -53,8 +53,10 @@ public class ResourcesConfig implements WebMvcConfigurer
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        // 设置访问源地址
-        config.addAllowedOrigin("*");
+        // 1.设置访问源地址 2.4.0之前的
+        //config.addAllowedOrigin("*");
+        // springboot2.4.0之配置
+        config.addAllowedOriginPattern("*");
         // 设置访问源请求头
         config.addAllowedHeader("*");
         // 设置访问源请求方法

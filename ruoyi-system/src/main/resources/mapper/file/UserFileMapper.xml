@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.file.mapper.UserFileMapper">
+
+    <resultMap type="com.ruoyi.file.vo.FileListVo" id="FileListVoResult">
+        <result property="userFileId"    column="user_file_id"    />
+        <result property="deleteBatchNum"    column="delete_batch_num"    />
+        <result property="deleteFlag"    column="delete_flag"    />
+        <result property="deleteTime"    column="delete_time"    />
+        <result property="extendName"    column="extend_name"    />
+        <result property="fileId"    column="file_id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="isDir"    column="is_dir"    />
+        <result property="uploadTime"    column="upload_time"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <update id="replaceFilePath">
+        UPDATE qiwen_user_file SET filepath=REPLACE(filepath, #{oldFilePath}, #{filePath})
+        WHERE filepath LIKE N'${oldFilePath}%' and userId = #{userId};
+    </update>
+
+    <select id="userFileList" resultMap="FileListVoResult">
+        select * from qiwen_user_file a
+        left join qiwen_file on qiwen_file.file_id = a.file_id
+        <where>
+            <if test="userFile.userId != null">
+                and a.user_id = #{userFile.userId}
+            </if>
+            <if test="userFile.filePath != null">
+                and a.file_path = #{userFile.filePath}
+            </if>
+            <if test="userFile.extendName != null">
+                and a.extend_name = #{userFile.extendName}
+            </if>
+            <if test="userFile.userFileId != null">
+                and a.user_file_id = #{userFile.userFileId}
+            </if>
+            and a.delete_flag = 0
+        </where>
+        ORDER BY  is_dir desc
+        <if test="beginCount != null and pageCount != null">
+            limit #{beginCount}, #{pageCount}
+        </if>
+    </select>
+
+    <sql id="selectByExtendName" >
+        left join qiwen_file on qiwen_file.file_id = qiwen_user_file.file_id
+        where extend_name in
+        <foreach collection="fileNameList" open="(" close=")" separator="," item="fileName" >
+            #{fileName}
+        </foreach>
+        and user_id = #{userId}
+        and delete_flag = 0
+    </sql>
+    <sql id="selectByNotExtendName">
+        left join qiwen_file on qiwen_file.file_id = qiwen_user_file.file_id
+        where extend_name not in
+        <foreach collection="fileNameList" open="(" close=")" separator="," item="fileName" >
+            #{fileName}
+        </foreach>
+        and user_id = #{userId}
+        and delete_flag = 0
+    </sql>
+    <select id="selectFileByExtendName" parameterType="com.ruoyi.file.domain.UserFile" resultMap="FileListVoResult">
+        select * from qiwen_user_file
+        <include refid="selectByExtendName"></include>
+        limit #{beginCount}, #{pageCount}
+    </select>
+
+    <select id="selectCountByExtendName" parameterType="com.ruoyi.file.domain.UserFile" resultType="java.lang.Long">
+        select count(*) from qiwen_user_file
+        <include refid="selectByExtendName"></include>
+    </select>
+
+    <select id="selectFileNotInExtendNames" parameterType="com.ruoyi.file.domain.UserFile" resultMap="FileListVoResult">
+        select * from qiwen_user_file
+        <include refid="selectByNotExtendName"></include>
+        limit #{beginCount}, #{pageCount}
+    </select>
+
+    <select id="selectCountNotInExtendNames" parameterType="com.ruoyi.file.domain.UserFile" resultType="java.lang.Long">
+        select count(*) from qiwen_user_file
+        <include refid="selectByNotExtendName"></include>
+    </select>
+
+
+    <update id="updateFilepathByFilepath">
+        UPDATE qiwen_user_file SET file_path=REPLACE(file_path, #{param1}, #{param2})
+        WHERE file_path like N'${param1}%' and user_id = #{param3}
+    </update>
+
+    <update id="updateFilepathByPathAndName">
+        update qiwen_user_file set file_path = #{param2}
+        where file_path = #{param1} and file_name = #{param3}
+        <if test="param4 != null">
+            and extend_name = #{param4}
+        </if>
+        <if test="param4 == null">
+            and extend_name is null
+        </if>
+        and user_id = #{param5}
+    </update>
+
+    <select id="selectStorageSizeByUserId" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT SUM(file_size) FROM qiwen_user_file
+        LEFT JOIN qiwen_file ON qiwen_file.file_id = qiwen_user_file.file_id
+        WHERE qiwen_user_file.user_id = #{userId}
+    </select>
+
+</mapper>

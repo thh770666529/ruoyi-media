@@ -59,6 +59,17 @@ public class TokenUtil
     {
         // 获取请求携带的令牌
         String token = getToken(request);
+        return getLoginUser(token);
+    }
+
+
+    /**
+     * 通过token获取用户身份信息
+     *
+     * @return 用户信息
+     */
+    public LoginUser getLoginUser(String token)
+    {
         if (StringUtils.isNotEmpty(token))
         {
             Claims claims = parseToken(token);
@@ -70,6 +81,7 @@ public class TokenUtil
         }
         return null;
     }
+
 
     /**
      * 设置用户身份信息

@@ -2,6 +2,7 @@ package com.ruoyi.web.config;
 
 import com.ruoyi.common.config.RuoYiConfig;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -68,11 +69,11 @@ public class SwaggerConfig
     /**
      * 安全模式，这里指定token通过Authorization头请求头传递
      */
-    private List<ApiKey> securitySchemes()
+    private List<SecurityScheme> securitySchemes()
     {
-        List<ApiKey> apiKeyList = new ArrayList<ApiKey>();
-        apiKeyList.add(new ApiKey("Authorization", "Authorization", "header"));
-        return apiKeyList;
+        List<SecurityScheme> securitySchemes = new ArrayList<SecurityScheme>();
+        securitySchemes.add(new ApiKey("Authorization", "Authorization", "header"));
+        return securitySchemes;
     }
 
     /**

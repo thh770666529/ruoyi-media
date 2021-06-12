@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.file.mapper.FileMapper">
+
+    <insert id="batchInsertFile" parameterType="java.util.List">
+        INSERT ignore INTO qiwen_file (user_id, file_name,time_stamp_name, file_url,
+        file_path, extend_name, upload_time, file_size, is_dir)
+        VALUES
+        <foreach collection="list" item="file" index="index" separator=",">
+        (#{file.userId}, #{file.fileName},#{file.timeStampName},
+         #{file.fileUrl}, #{file.filePath}, #{file.extendName}, #{file.uploadTime},
+         #{file.fileSize}, #{file.isDir})
+        </foreach>
+    </insert>
+
+</mapper>

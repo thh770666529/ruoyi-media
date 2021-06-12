@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.file.mapper.RecoveryFileMapper">
+    <resultMap type="com.ruoyi.file.vo.RecoveryFileListVo" id="RecoveryFileResult">
+        <result property="recoveryFileId"    column="recovery_file_id"    />
+        <result property="deleteBatchNum"    column="delete_batch_num"    />
+        <result property="deleteTime"    column="delete_time"    />
+        <result property="userFileId"    column="user_file_id"    />
+        <result property="deleteFlag"    column="delete_flag"    />
+        <result property="extendName"    column="extend_name"    />
+        <result property="fileId"    column="file_id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="isDir"    column="is_dir"    />
+        <result property="uploadTime"    column="upload_time"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <select id="selectRecoveryFileList" resultMap="RecoveryFileResult">
+        SELECT * FROM qiwen_recovery_file a
+        LEFT JOIN qiwen_user_file b ON a.user_file_id = b.user_file_id
+        WHERE user_id = #{userId}
+    </select>
+</mapper>
