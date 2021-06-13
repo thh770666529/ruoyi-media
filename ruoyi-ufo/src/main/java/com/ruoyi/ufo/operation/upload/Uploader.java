@@ -41,7 +41,7 @@ public abstract class Uploader {
 
     /**
      * 取消上传
-     * @param uploadFile
+     * @param uploadFile 分片上传参数
      */
     public abstract void cancelUpload(UploadFile uploadFile);
 
@@ -87,9 +87,7 @@ public abstract class Uploader {
         } catch (NoSuchAlgorithmException e) {
             log.error("生成安全随机数失败");
         }
-        return ""
-                + System.currentTimeMillis();
-
+        return "" + System.currentTimeMillis();
     }
 
     public synchronized boolean checkUploadStatus(UploadFile param, File confFile) throws IOException {
@@ -112,6 +110,11 @@ public abstract class Uploader {
         return true;
     }
 
+    /**
+     * 获取文件名称
+     * @param fileName
+     * @return
+     */
     protected String getFileName(String fileName){
         if (!fileName.contains(".")) {
             return fileName;

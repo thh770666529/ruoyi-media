@@ -1,16 +1,14 @@
 package com.ruoyi.ufo.util;
 
+
 import com.ruoyi.common.utils.file.qiwen.FileUtil;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.io.RandomAccessBuffer;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-//import org.apache.poi.POIXMLTextExtractor;
-//import org.apache.poi.hslf.extractor.PowerPointExtractor;
-//import org.apache.poi.hslf.extractor.PowerPointExtractor;
 import org.apache.poi.hslf.extractor.PowerPointExtractor;
-import org.apache.poi.hslf.extractor.QuickButCruddyTextExtractor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
@@ -19,20 +17,17 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-//import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
-//import org.apache.poi.xslf.extractor.XSLFExtractor;
-//import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
-//import org.apache.poi.xslf.extractor.XSLFExtractor;
 import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
-import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.xmlbeans.XmlException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 /**
  * @author wangshuaijun
@@ -47,34 +42,41 @@ import java.io.InputStream;
  *
  */
 public class ReadFileUtils {
-
+    private static final Logger log = LoggerFactory.getLogger(ReadFileUtils.class);
 
     /**
      * 根据文件类型返回文件内容
      *
-//     * @param filepath
+     * @param fileurl 文件路径
      * @return
      * @throws IOException
      */
     public static String getContentByPath(String fileurl) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(fileurl);
         String fileType = FileUtil.getFileExtendName(fileurl);
-//        String[] fileTypeArr = filepath.split("\\.");
-//        String fileType = fileTypeArr[fileTypeArr.length - 1];
-        if ("doc".equals(fileType) || "docx".equals(fileType)) {
-            return readWord(fileType, fileInputStream);
-        } else if ("xlsx".equals(fileType) || "xls".equals(fileType)) {
-            return readExcel(fileType, fileInputStream);
-        } else if ("txt".equals(fileType)) {
-            return readTxt(fileurl);
-        } else if ("pdf".equals(fileType)) {
-            return readPdf(fileInputStream);
-        } else if ("ppt".equals(fileType) || "pptx".equals(fileType)) {
-            return readPPT(fileType, fileInputStream);
-        } else {
-            System.out.println("不支持的文件类型！");
+        switch (fileType){
+            case "doc":
+                return readWord(fileType, fileInputStream);
+            case "docx":
+                return readWord(fileType, fileInputStream);
+            case "xlsx":
+                return readExcel(fileType, fileInputStream);
+            case "xls":
+                return readExcel(fileType, fileInputStream);
+            case "txt":
+                return readTxt(fileurl);
+            case "pdf":
+                return readPdf(fileInputStream);
+            case "ppt":
+                return readPPT(fileType, fileInputStream);
+            case "pptx":
+                return readPPT(fileType, fileInputStream);
+            default:
+                log.error("不支持的文件类型");
+                return "";
+
         }
-        return "";
+
     }
 
     /**
@@ -85,21 +87,18 @@ public class ReadFileUtils {
      * @throws IOException
      */
     public static String getContentByInputStream(String fileType, InputStream inputStream) throws IOException {
-//        FileInputStream fileInputStream = new FileInputStream(filepath);
-//        String[] fileTypeArr = filepath.split("\\.");
-//        String fileType = fileTypeArr[fileTypeArr.length - 1];
         if ("doc".equals(fileType) || "docx".equals(fileType)) {
             return readWord(fileType, inputStream);
         } else if ("xlsx".equals(fileType) || "xls".equals(fileType)) {
             return readExcel(fileType, inputStream);
         } else if ("txt".equals(fileType)) {
-//            return readTxt(filepath);
+            return readTxt(inputStream);
         } else if ("pdf".equals(fileType)) {
             return readPdf(inputStream);
         } else if ("ppt".equals(fileType) || "pptx".equals(fileType)) {
             return readPPT(fileType, inputStream);
         } else {
-            System.out.println("不支持的文件类型！");
+            log.error("不支持的文件类型！");
         }
         return "";
     }
@@ -144,7 +143,7 @@ public class ReadFileUtils {
     }
 
     /**
-     * 读取Excel中的内容
+     * 读取text中的内容
      *
      * @param filePath
      * @return
@@ -156,20 +155,29 @@ public class ReadFileUtils {
     }
 
     /**
+     * 读取text中的内容
+     *
+     * @param inputStream
+     * @return
+     * @throws IOException
+     */
+    private static String readTxt(InputStream inputStream) throws IOException {
+        return IOUtils.toString(inputStream, Charset.defaultCharset());
+    }
+
+    /**
      * 读取Excel中的内容
      *
-//     * @param filePath
+     * @param fileType
+     * @param inputStream
      * @return
      */
     private static String readExcel(String fileType, InputStream inputStream) {
 
         try {
-//            File excel = new File(filePath);
-//            if (excel.isFile() && excel.exists()) {   //判断文件是否存在
                 Workbook wb;
                 //根据文件后缀（xls/xlsx）进行判断
                 if ("xls".equalsIgnoreCase(fileType)) {
-//                    FileInputStream fis = new FileInputStream(excel);   //文件流对象
                     wb = new HSSFWorkbook(inputStream);
                 } else if ("xlsx".equalsIgnoreCase(fileType)) {
                     wb = new XSSFWorkbook(inputStream);
@@ -199,9 +207,6 @@ public class ReadFileUtils {
                     }
                 }
                 return sb.toString();
-//            } else {
-//                System.out.println("找不到指定的文件");
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -218,14 +223,14 @@ public class ReadFileUtils {
         String buffer = "";
         try {
             if ("doc".equalsIgnoreCase(fileType)) {
-//                InputStream is = new FileInputStream(new File(path));
+               //   InputStream is = new FileInputStream(new File(path));
                 WordExtractor ex = new WordExtractor(inputStream);
                 buffer = ex.getText();
                 ex.close();
             } else if ("docx".equalsIgnoreCase(fileType)) {
-//                OPCPackage opcPackage = POIXMLDocument.openPackage(path);
+                //  OPCPackage opcPackage = POIXMLDocument.openPackage(path);
                 XWPFWordExtractor extractor = new XWPFWordExtractor(OPCPackage.open(inputStream));
-//                POIXMLTextExtractor extractor = new XWPFWordExtractor(OPCPackage.open(inputStream));
+                // POIXMLTextExtractor extractor = new XWPFWordExtractor(OPCPackage.open(inputStream));
                 buffer = extractor.getText();
                 extractor.close();
 

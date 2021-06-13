@@ -49,9 +49,10 @@ public class PathUtil {
      * @return
      */
     public static String getStaticPath() {
-        String localStoragePath = UFOAutoConfiguration.localStoragePath;//PropertiesUtil.getProperty("qiwen-file.local-storage-path")
+        //PropertiesUtil.getProperty("qiwen-file.local-storage-path")
+        String localStoragePath = UFOAutoConfiguration.localStoragePath;
         if (StringUtils.isNotEmpty(localStoragePath)) {
-            return localStoragePath;
+            return new File(localStoragePath).getPath() + File.separator;
         }else {
             String projectRootAbsolutePath = getProjectRootPath();
 
@@ -59,8 +60,7 @@ public class PathUtil {
             if (index != -1) {
                 projectRootAbsolutePath = projectRootAbsolutePath.substring(0, index);
             }
-
-            return projectRootAbsolutePath + "static" + File.separator;
+            return new File(projectRootAbsolutePath + "static").getPath() + File.separator;
         }
 
 

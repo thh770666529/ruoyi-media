@@ -11,9 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
-
 import javax.imageio.ImageIO;
-
 import com.ruoyi.common.utils.file.qiwen.FileUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -30,9 +28,7 @@ import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//
-//import com.maiyue.base.utils.ComUtil;
-//import com.maiyue.base.utils.FileUtils;
+
 
 /**
  * ppt转换为html
@@ -54,7 +50,6 @@ public class PPTUtil {
      * @return
      */
     public static String pptToHtml(String sourceFilePath, String targetFolder, String targetFileName) {
-//        FileUtils.createFileFolder(targetFolder);
         new File(targetFolder).mkdirs();
         File pptFile = new File(sourceFilePath);
         if (pptFile.exists()) {
@@ -92,7 +87,6 @@ public class PPTUtil {
         XMLSlideShow ppt = new XMLSlideShow(is);
         is.close();
         new File(targetDir).mkdirs();
-//        FileUtils.createDir(targetDir);
         Dimension pgsize = ppt.getPageSize();
         String imageFileName = "ppt" + RandomUtils.nextInt(100, 999); //ComUtil.genUUID(3);
         StringBuffer sb = new StringBuffer();
@@ -110,18 +104,18 @@ public class PPTUtil {
                 }
                 BufferedImage img = new BufferedImage(pgsize.width, pgsize.height, BufferedImage.TYPE_INT_RGB);
                 Graphics2D graphics = img.createGraphics();
-// clear the drawing area
+                // clear the drawing area
                 graphics.setPaint(Color.white);
                 graphics.fill(new Rectangle2D.Float(0, 0, pgsize.width, pgsize.height));
-// render
+                // render
                 ppt.getSlides().get(i).draw(graphics);
-// save the output
+                // save the output
                 String imageDir = targetDir + "/" + imageFileName + "/";
-//                FileUtils.createDir(imageDir);// create image dir
+                 //   FileUtils.createDir(imageDir);// create image dir
                 new File(imageDir).mkdirs();
-// 相对路径
+                // 相对路径
                 String relativeImagePath = imageFileName + "/" + imageFileName + "-" + (i + 1) + ".png";
-// 绝对路径
+                 // 绝对路径
                 String imagePath = imageDir + imageFileName + "-" + (i + 1) + ".png";
                 sb.append("<br>");
                 sb.append("<img src=" + "\"" + relativeImagePath + "\"" + "/>");
@@ -130,7 +124,7 @@ public class PPTUtil {
                 out.close();
             } catch (Exception e) {
                 logger.error("ppt转换为html,发生异常,源文件={}", sourcePath, e);
-                System.out.println("第" + i + "张ppt转换出错");
+                logger.error("第" + i + "张ppt转换出错");
                 return null;
             }
         }
@@ -142,7 +136,7 @@ public class PPTUtil {
         String htmlStr = "";
         try {
             HSLFSlideShow ppt = new HSLFSlideShow(new HSLFSlideShowImpl(sourcePath));
-//            FileUtils.createDir(targetDir);
+            // FileUtils.createDir(targetDir);
             new File(targetDir).mkdirs();
             Dimension pgsize = ppt.getPageSize();
             StringBuffer sb = new StringBuffer();
@@ -160,18 +154,18 @@ public class PPTUtil {
                 }
                 BufferedImage img = new BufferedImage(pgsize.width, pgsize.height, BufferedImage.TYPE_INT_RGB);
                 Graphics2D graphics = img.createGraphics();
-// clear the drawing area
+                 // clear the drawing area
                 graphics.setPaint(Color.white);
                 graphics.fill(new Rectangle2D.Float(0, 0, pgsize.width, pgsize.height));
-// render
+                   // render
                 ppt.getSlides().get(i).draw(graphics);
                 String imageDir = targetDir + "/" + imageFileName + "/";
-// create image dir
-//                FileUtils.createDir(imageDir);
+                // create image dir
+                // FileUtils.createDir(imageDir);
                 new File(imageDir).mkdirs();
-// 相对路径
+                // 相对路径
                 String relativeImagePath = imageFileName + "/" + imageFileName + "-" + (i + 1) + ".png";
-// 绝对路径
+                // 绝对路径
                 String imagePath = imageDir + imageFileName + "-" + (i + 1) + ".png";
                 sb.append("<br>");
                 sb.append("<img src=" + "\"" + relativeImagePath + "\"" + "/>");

@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -16,7 +15,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import fr.opensagres.poi.xwpf.converter.core.ImageManager;
 import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLConverter;
 import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLOptions;
@@ -24,12 +22,6 @@ import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.converter.PicturesManager;
 import org.apache.poi.hwpf.converter.WordToHtmlConverter;
 import org.apache.poi.hwpf.usermodel.PictureType;
-//import org.apache.poi.xwpf.converter.core.BasicURIResolver;
-//import org.apache.poi.xwpf.converter.core.FileImageExtractor;
-//import org.apache.poi.xwpf.converter.core.FileURIResolver;
-//import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
-//import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
-//import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.w3c.dom.Document;
 
@@ -62,9 +54,6 @@ public class WordUtil {
 
         // 判断html文件是否存在，每次重新生成
         File htmlFile = new File(htmlPath + htmlName);
-//      if (htmlFile.exists()) {
-//          return htmlFile.getAbsolutePath();
-//      }
 
         // 原word文档
         final String file = wordPath + File.separator + wordName + suffix;
@@ -77,6 +66,7 @@ public class WordUtil {
 
         // 设置图片存放的位置
         wordToHtmlConverter.setPicturesManager(new PicturesManager() {
+            @Override
             public String savePicture(byte[] content, PictureType pictureType,
                     String suggestedName, float widthInches, float heightInches) {
                 File imgPath = new File(imagePath);
@@ -148,10 +138,6 @@ public class WordUtil {
 
         // 判断html文件是否存在
         File htmlFile = new File(htmlPath + htmlName);
-//      if (htmlFile.exists()) {
-//          return htmlFile.getAbsolutePath();
-//      }
-
         // word文件
         File wordFile = new File(wordPath + File.separator + wordName + suffix);
 
@@ -186,8 +172,8 @@ public class WordUtil {
 
     public static void main(String[] args) throws Exception,
             TransformerException, ParserConfigurationException {
-        System.out.println(Word2003ToHtml("e:/poi/", "poi", ".doc"));
-//      System.out.println(Word2007ToHtml("e:/poi/", "poi", ".docx"));
-//        System.out.println(Excel2003ToHtml("e:/poi/", "poi", ".xls"));
+        //System.out.println(Word2003ToHtml("e:/poi/", "poi", ".doc"));
+       // System.out.println(Word2007ToHtml("e:/poi/", "poi", ".docx"));
+      // System.out.println(Excel2003ToHtml("e:/poi/", "poi", ".xls"));
     }
 }
