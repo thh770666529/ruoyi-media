@@ -7,9 +7,25 @@ export default {
     // 文件展示模式 0 列表模式 | 1 网格模式 | 2 时间线模式
     fileModel: globalFunction.getCookies('fileModel'),
     // 网格模式 & 时间线模式下 图标大小 单位px
-    gridSize: 80
+    gridSize: 80,
+    MyShare:{
+      filePath:'',
+      shareBatchNum:''
+    },
+    File:{
+      filePath:'',
+      fileType:''
+    },
+
+
   },
   mutations: {
+    setMyShareData(state,data){
+      state.MyShare = data
+    },
+    setFileData(state,data){
+      state.File = data
+    },
     /**
      * 改变表格显示列
      * @description 表格显示列保存在 Vuex 和 cookie 中

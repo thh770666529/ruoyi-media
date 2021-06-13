@@ -30,14 +30,13 @@
         <result property="fileSize"    column="file_size"    />
         <result property="fileUrl"    column="file_url"    />
         <result property="identifier"    column="identifier"    />
-        <result property="pointCount"    column="point_count"    />
         <result property="storageType"    column="storage_type"    />
         <result property="timeStampName"    column="time_stamp_name"    />
     </resultMap>
 
     <select id="selectShareList" resultMap="ShareListVO">
         SELECT * FROM qiwen_share a
-        LEFT JOIN qiwen_sharefile b ON b.share_batch_num = a.share_batch_num
+        LEFT JOIN qiwen_share_file b ON b.share_batch_num = a.share_batch_num
         LEFT JOIN qiwen_user_file c ON c.user_file_id = b.user_file_id
         LEFT JOIN qiwen_file d ON d.file_id = c.file_id
         WHERE share_file_path = #{shareFilePath}
@@ -51,7 +50,7 @@
 
     <select id="selectShareListTotalCount" resultType="java.lang.Integer">
         SELECT count(*) FROM qiwen_share a
-        LEFT JOIN qiwen_sharefile b ON b.share_batch_num = a.share_batch_num
+        LEFT JOIN qiwen_share_file b ON b.share_batch_num = a.share_batch_num
         LEFT JOIN qiwen_user_file c ON c.user_file_id = b.user_file_id
         LEFT JOIN qiwen_file d ON d.file_id = c.file_id
         WHERE share_file_path = #{shareFilePath}

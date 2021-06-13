@@ -109,44 +109,57 @@ export const constantRoutes = [
    {
   path: '/gen',
     component: Layout,
-  hidden: true,
-  children: [
-  {
+    hidden: true,
+    children: [
+    {
     path: 'edit/:tableId(\\d+)',
     component: (resolve) => require(['@/views/tool/gen/editTable'], resolve),
-  name: 'GenEdit',
-  meta: { title: '修改生成配置' }
-}
-]
-    },
-{
-  path: '/media',
-  component: Layout,
-  hidden: true,
-  children: [
-  {
-    path: 'movie/detail/:movieId?',
-    component: (resolve) => require(['@/views/media/movie/detail'], resolve),
-  name: 'mediaMovieDetail',
-  meta: { title: '电影明细' }
+    name: 'GenEdit',
+    meta: { title: '修改生成配置' }
    }
+    ]
+},
+   {
+    path: '/media',
+    component: Layout,
+    hidden: true,
+    children: [
+    {
+     path: 'movie/detail/:movieId?',
+     component: (resolve) => require(['@/views/media/movie/detail'], resolve),
+     name: 'mediaMovieDetail',
+     meta: { title: '电影明细' }
+    }
  ]
 },
   {
     path: '/resource',
     component: Layout,
-    redirect: '/resource/file',
     name: '资源管理',
-    meta: { title: '资源管理', icon: 'resource' },
+    redirect: '/resource/file',
+    meta: { title: '资源管理', icon: 'documentation' },
     children: [
       {
         path: 'file',
         name: 'File',
-        component: () => import('@/views/file/File'),
+        component: () => import('@/views/resource/file/File'),
         meta: { title: '网盘管理', icon: 'table' }
+      },
+      {
+        hidden: true,
+        path: 'share/:shareBatchNum',
+        name: 'Share',
+        component: (resolve) => require(['@/views/resource/Share/index'], resolve),
+        meta: { title: '分享 - 奇文网盘',breadCrumbName: '分享文件', icon: 'table' }
+      },
+      {
+        path: 'myshare',
+        name: 'MyShare',
+        component: () => import('@/views/resource/MyShare/index'),
+        meta: { title: '我的分享',breadCrumbName: '我的分享', icon: 'table' }
       }
     ]
-  },
+  }
 ]
 
 export default new Router({

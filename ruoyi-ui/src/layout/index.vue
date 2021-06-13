@@ -8,6 +8,12 @@
         <tags-view v-if="needTagsView" />
       </div>
       <app-main />
+      <!-- 将上传组件全局注册 -->
+      <global-uploader ></global-uploader>
+      <!-- 图片预览 -->
+      <img-preview ></img-preview>
+      <!-- 视频预览 -->
+      <video-preview></video-preview>
       <right-panel v-if="showSettings">
         <settings />
       </right-panel>
@@ -21,6 +27,9 @@ import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 import variables from '@/assets/styles/variables.scss'
+import globalUploader from '@/components/common/GlobalUploader'
+import ImgPreview from '@/components/common/ImgPreview'
+import VideoPreview from '@/components/common/VideoPreview'
 
 export default {
   name: 'Layout',
@@ -30,7 +39,10 @@ export default {
     RightPanel,
     Settings,
     Sidebar,
-    TagsView
+    TagsView,
+    globalUploader,
+    ImgPreview,
+    VideoPreview
   },
   mixins: [ResizeMixin],
   computed: {
@@ -53,6 +65,11 @@ export default {
     },
     variables() {
       return variables;
+    },
+    // 网盘页面文件上传/预览相关组件是否显示
+    isFileAboutShow() {
+      let routerNameList = ['Login', 'Register']
+      return routerNameList.includes(this.$route.name) ? false : true
     }
   },
   methods: {

@@ -1,8 +1,17 @@
 <template>
   <div class="breadcrumb-wrapper">
     <div class="title">当前位置：</div>
+    <el-breadcrumb v-if="fileType ===0" separator="/">
+      <el-breadcrumb-item
+        :to="routerIndex(fileType)">
+        {{ fileTypeMap[fileType] }}
+      </el-breadcrumb-item>
+    </el-breadcrumb>
     <el-breadcrumb v-if="fileType && !['Share', 'MyShare'].includes($route.name)" separator="/">
-      <el-breadcrumb-item>{{ fileTypeMap[fileType] }}</el-breadcrumb-item>
+      <el-breadcrumb-item
+        :to="routerIndex(fileType)">
+        {{ fileTypeMap[fileType] }}
+      </el-breadcrumb-item>
     </el-breadcrumb>
     <el-breadcrumb v-else separator="/">
       <el-breadcrumb-item v-for="(item, index) in breadCrumbList" :key="index" :to="getRouteQuery(item)">{{
@@ -11,7 +20,6 @@
     </el-breadcrumb>
   </div>
 </template>
-
 <script>
 export default {
   name: 'BreadCrumb',
@@ -25,6 +33,7 @@ export default {
   data() {
     return {
       fileTypeMap: {
+        0: '全部',
         1: '全部图片',
         2: '全部文档',
         3: '全部视频',
@@ -42,22 +51,24 @@ export default {
       get() {
         let filePath = this.$route.query.filePath
         let filePathList = filePath ? filePath.split('/') : []
+        console.log("filePathList", filePathList,"this.$route",this.$route)
         let res = [] //  返回结果数组
         let _path = [] //  存放祖先路径
         for (let i = 0; i < filePathList.length; i++) {
-          if (filePathList[i]) {
-            _path.push(filePathList[i] + '/')
-            res.push({
-              path: _path.join(''),
-              name: filePathList[i]
-            })
-          } else if (i === 0) {
+           if (i === 0) {
             //  根目录
             filePathList[i] = '/'
             _path.push(filePathList[i])
             res.push({
-              path: '/',
+              //path: '/',
+              path: this.$router.path,
               name: this.$route.meta.breadCrumbName
+            })
+          }else if (filePathList[i]) {
+            _path.push(filePathList[i] + '/')
+            res.push({
+              path: _path.join(''),
+              name: filePathList[i]
             })
           }
         }
@@ -69,6 +80,16 @@ export default {
     }
   },
   methods: {
+    routerIndex(fileType){
+      //路由首页
+      let path = this.$router.path
+      return{
+        query: {
+          filePath: '/', fileType: fileType
+        },
+        path:path
+      }
+    },
     // 获取文件参数
     getRouteQuery(item) {
       let routeName = this.$route.name
@@ -79,13 +100,13 @@ export default {
         // 当前是我的已分享列表页面
         return {
           query: {
-            filePath: item.path,
+            filePath: item.path?item.path:'/',
             shareBatchNum: item.path === '/' ? undefined : this.$route.query.shareBatchNum  //  当查看的是根目录，批次号置空
           }
         }
       } else {
         // 网盘页面
-        return { query: { filePath: item.path, fileType: 0 } }
+        return { query: { filePath: item.path, fileType: this.fileType } }
       }
     }
   }

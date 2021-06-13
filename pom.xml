@@ -40,6 +40,8 @@
         <fastdfs-client.version>1.26.2</fastdfs-client.version>
         <aliyun-sdk-oss.version>3.10.2</aliyun-sdk-oss.version>
         <hutool.version>5.6.7</hutool.version>
+        <xdocreport.version>2.0.2</xdocreport.version>
+        <pdfbox.version>2.0.18</pdfbox.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -168,12 +170,41 @@
                 <version>${commons.fileupload.version}</version>
             </dependency>
 
+            <!--poi core-->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
             <!-- excel工具 -->
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
             </dependency>
+
+            <!--word-->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-scratchpad</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.opensagres.xdocreport</groupId>
+                <artifactId>fr.opensagres.xdocreport.converter.docx.xwpf</artifactId>
+                <version>${xdocreport.version}</version>
+            </dependency>
+
+            <!--pdf-->
+            <dependency>
+                <groupId>org.apache.pdfbox</groupId>
+                <artifactId>pdfbox</artifactId>
+                <version>${pdfbox.version}</version>
+            </dependency>
+
+
 
             <!--velocity代码生成使用模板 -->
             <dependency>
@@ -286,6 +317,7 @@
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 

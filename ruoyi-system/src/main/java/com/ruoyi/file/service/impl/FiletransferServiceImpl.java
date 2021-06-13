@@ -116,7 +116,7 @@ public class FiletransferServiceImpl implements IFiletransferService {
                 throw new UploadException("下载失败");
             }
             DownloadFile downloadFile = new DownloadFile();
-            if (downloadFileDTO.isMin()) {
+            if (downloadFileDTO.getIsMin()!=null && downloadFileDTO.getIsMin()) {
                 downloadFile.setFileUrl(fileBean.getFileUrl().replace("." + userFile.getExtendName(), "_min." + userFile.getExtendName()));
             } else {
                 downloadFile.setFileUrl(fileBean.getFileUrl());

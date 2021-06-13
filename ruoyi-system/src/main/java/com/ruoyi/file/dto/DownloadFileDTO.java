@@ -7,5 +7,5 @@ import lombok.Data;
 //  "下载文件DTO",required = true)
 public class DownloadFileDTO {
     private Long userFileId;
-    private boolean isMin;
+    private Boolean isMin;
 }

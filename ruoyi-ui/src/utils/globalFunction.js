@@ -107,7 +107,7 @@ const globalFunction = {
    * @returns {string} 完整的分享链接
    */
   getShareLink: function (shareBatchNum) {
-    return `${location.protocol}//${location.host}/share/${shareBatchNum}`
+    return `${location.protocol}//${location.host}/resource/share/${shareBatchNum}`
   },
   /**
    * 复制分享链接

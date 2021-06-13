@@ -12,13 +12,6 @@
       </el-container>
     </el-container>
   </div>
-    <!-- 将上传组件全局注册 -->
-    <global-uploader ></global-uploader>
-    <!-- 图片预览 -->
-    <img-preview ></img-preview>
-    <!-- 视频预览 -->
-    <video-preview></video-preview>
-
   </div>
 </template>
 
@@ -30,24 +23,14 @@ import '@/assets/styles/file/css/border.css'
 import '@/assets/styles/file/css/element-cover.css'
 import '@/assets/styles/file/iconfont/iconfont.css'
 import '@/assets/styles/file/css/mediaScreen.styl'
-import globalUploader from '@/components/common/GlobalUploader'
-import ImgPreview from '@/components/common/ImgPreview'
-import VideoPreview from '@/components/common/VideoPreview'
+
 export default {
   name: 'File',
   components: {
     AsideMenu,
-    FileList,
-    globalUploader,
-    ImgPreview,
-    VideoPreview
+    FileList
   },
   computed: {
-    // 网盘页面文件上传/预览相关组件是否显示
-    isFileAboutShow() {
-      let routerNameList = ['Login', 'Register']
-      return routerNameList.includes(this.$route.name) ? false : true
-    }
   }
 }
 </script>

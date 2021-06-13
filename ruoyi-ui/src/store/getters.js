@@ -17,7 +17,7 @@ const getters = {
   defaultRoutes:state => state.permission.defaultRoutes,
   sidebarRouters:state => state.permission.sidebarRouters,
 
-
+  MyShare:state =>state.fileList.MyShare,
 
   // 登录状态
   isLogin: (state) => state.user.token,

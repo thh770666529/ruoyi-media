@@ -149,8 +149,8 @@ public class ShareController extends BaseController {
     }
 
     @Log(title = "查看已分享列表", businessType = BusinessType.File)
-    @GetMapping("/shareList")
-    public AjaxResult shareList(ShareListDTO shareListDTO, @RequestHeader("token") String token) {
+    @GetMapping("/getMyShareList")
+    public AjaxResult getMyShareList(ShareListDTO shareListDTO) {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         List<ShareListVO> shareList = shareService.selectShareList(shareListDTO, loginUser.getUserId());
         int total = shareService.selectShareListTotalCount(shareListDTO, loginUser.getUserId());

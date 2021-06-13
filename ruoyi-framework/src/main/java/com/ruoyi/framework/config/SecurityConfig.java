@@ -114,7 +114,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/*/api-docs").anonymous()
                 .antMatchers("/druid/**").anonymous()
                 .antMatchers("/filetransfer/preview",
-                                         "/filetransfer/downloadfile").permitAll()
+                                         "/filetransfer/downloadfile",
+                                         "/share/sharefileList",
+                                         "/share/sharetype",
+                                         "/share/checkextractioncode",
+                                          "/share/checkendtime").permitAll()
 
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()

@@ -76,7 +76,7 @@
 
 <script>
 import OperationMenu from './components/OperationMenu'
-import BreadCrumb from '@/components/Breadcrumb/index'
+import BreadCrumb from '@/components/File/BreadCrumb'
 import FileTable from '@/components/File/FileTable'
 import FileGrid from './components/FileGrid'
 import FileTimeLine from './components/FileTimeLine'
@@ -269,7 +269,7 @@ export default {
       // 分类型
       if (Number(this.fileType)) {
         if (Number(this.fileType) === 6) {
-          this.shwoFileRecovery() //  回收站
+          this.showFileRecovery() //  回收站
         } else {
           this.showFileListByType()
         }
@@ -289,11 +289,9 @@ export default {
         pageCount: this.pageData.pageCount
       }
       getFileListByPath(data).then((res) => {
-
           this.fileList = res.data.list
           this.pageData.total = res.data.total
           this.loading = false
-        console.log("getFileListByPath",this.fileList)
       })
     },
     /**
@@ -313,9 +311,10 @@ export default {
     /**
      * 表格数据获取相关事件 | 获取回收站文件列表
      */
-    shwoFileRecovery() {
+    showFileRecovery() {
       getRecoveryFile().then((res) => {
-          this.fileList = res.data
+          this.fileList = res.rows
+          this.pageData.total = res.total
           this.loading = false
       })
     },
