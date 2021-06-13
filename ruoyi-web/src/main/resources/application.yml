@@ -38,6 +38,8 @@ logging:
 
 # Spring配置
 spring:
+  application:
+    name: ruoyi-media-web
   # 资源信息
   messages:
     # 国际化资源文件路径
@@ -51,6 +53,13 @@ spring:
        max-file-size:  1GB
        # 设置总上传的文件大小
        max-request-size:  1GB
+  main:
+     allow-bean-definition-overriding: true
+  mvc:
+     static-path-pattern: /**
+  web:
+     resources:
+       static-locations: classpath:/static,file:${ruoyi-media-web.local-storage-path}
   # 服务模块
   devtools:
     restart:
@@ -120,3 +129,22 @@ xss:
   excludes: /system/notice/*
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+
+fdfs:
+  connect-timeout: 601
+  so-timeout: 1501
+  thumb-image:
+    height: 150
+    width: 150
+  tracker-list: 127.0.0.1:22122
+ufo:
+  aliyun:
+    oss:
+      access-key-id:
+      access-key-secret:
+      bucket-name:
+      domain:
+      endpoint:
+  local-storage-path: D://qiwen
+  storage-type: 0

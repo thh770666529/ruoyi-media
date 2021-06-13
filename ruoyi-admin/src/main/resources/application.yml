@@ -38,6 +38,8 @@ logging:
 
 # Spring配置
 spring:
+  application:
+    name: ruoyi-media-admin
   # 资源信息
   messages:
     # 国际化资源文件路径
@@ -57,7 +59,7 @@ spring:
     static-path-pattern: /**
   web:
     resources:
-      static-locations: classpath:/static,file:${qiwen-file.local-storage-path}
+      static-locations: classpath:/static,file:${ruoyi-media-admin.local-storage-path}
   # 服务模块
   devtools:
     restart:
