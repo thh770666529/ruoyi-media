@@ -207,7 +207,7 @@ public class FileOperation {
     /**
      * 文件解压缩
      *
-     * @param sourceFile        需要解压的文件
+     * @param sourceFile   需要解压的文件
      * @param destDirPath 目的路径
      * @return 解压目录列表
      */
@@ -405,5 +405,52 @@ public class FileOperation {
         return res;
     }
 
+
+    /**
+     * 保存数据
+     * @param filePath 文件路径
+     * @param fileName 文件名
+     * @param data 数据
+     */
+    public static void saveDataToFile(String filePath, String fileName, String data){
+        BufferedWriter writer = null;
+
+        File dir = new File(filePath);
+        if (!dir.exists()){
+            dir.mkdirs();
+        }
+        if (!filePath.endsWith(File.separator)) {
+            filePath = filePath + File.separator;
+        }
+
+        File file = new File(filePath+ fileName);
+
+        //如果文件不存在，则新建一个
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //写入
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,false), "UTF-8"));
+            writer.write(data);
+            log.info("文件写入成功！文件路径为{}",file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("文件写入异常！文件路径为{}",file.getAbsolutePath());
+        }finally {
+            try {
+                if(writer != null){
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
 }
