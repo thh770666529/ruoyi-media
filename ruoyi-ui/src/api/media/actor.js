@@ -9,6 +9,15 @@ export function listActor(query) {
   })
 }
 
+// 查询没被选中的演员列表
+export function notSelectedActorList(query,actorIds) {
+  return request({
+    url: '/media/actor/notSelectedList/'+ actorIds,
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询演员详细
 export function getActor(actorId) {
   return request({

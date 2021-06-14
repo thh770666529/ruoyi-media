@@ -45,4 +45,9 @@ public class ActorServiceImpl extends ServiceImpl<ActorMapper, Actor> implements
         return actorMapper.selectHotActorList(top);
     }
 
+    @Override
+    public List<Actor> selectNotSelectedList(Actor actor,Long[] ids) {
+        return actorMapper.selectNotSelectedListByIds(actor,ids);
+    }
+
 }

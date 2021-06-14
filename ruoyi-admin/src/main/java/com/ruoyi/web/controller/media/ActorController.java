@@ -50,6 +50,18 @@ public class ActorController extends BaseController
     }
 
     /**
+     * 查询没有被选择演员列表
+     */
+    @PreAuthorize("@ss.hasPermi('media:actor:list')")
+    @GetMapping("/notSelectedList/{actorIds}")
+    public TableDataInfo notSelectedList(Actor actor,@PathVariable Long[] actorIds)
+    {
+        startPage();
+        List<Actor> list = actorService.selectNotSelectedList(actor,actorIds);
+        return getDataTable(list);
+    }
+
+    /**
      * 导出演员列表
      */
     @PreAuthorize("@ss.hasPermi('media:actor:export')")

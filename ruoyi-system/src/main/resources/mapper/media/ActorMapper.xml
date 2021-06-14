@@ -34,6 +34,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit  #{top}
     </select>
 
+    <select id="selectNotSelectedListByIds"  resultMap="ActorResult">
+        select * from wm_actor
+        <where>
+            <if test="actor.name != null  and actor.name != ''"> and name like concat('%', #{actor.name}, '%')</if>
+            <if test="actor.avatar != null  and actor.avatar != ''"> and avatar = #{actor.avatar}</if>
+            <if test="actor.description != null  and actor.description != ''">and description like concat('%', #{actor.description}, '%')</if>
+            <if test="actor.awards != null  and actor.awards != ''"> and awards  like concat('%', #{actor.awards}, '%')</if>
+            <if test="actor.label != null  and actor.label != ''"> and label = #{actor.label}</if>
+            <if test="actorIds != null  and actorIds.length != 0">
+                and  actor_id not in
+                <foreach item="actorId" collection="actorIds" open="(" separator="," close=")">
+                    #{actorId}
+                </foreach>
+             </if>
+        </where>
+
+    </select>
 
 
 </mapper>

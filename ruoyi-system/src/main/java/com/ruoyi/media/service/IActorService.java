@@ -29,4 +29,11 @@ public interface IActorService extends IService<Actor>
      * @return
      */
     List<Actor> selectHotActorList(int top);
+
+    /**
+     * 查询没有被选择的数据
+     * @param ids
+     * @return
+     */
+    List<Actor> selectNotSelectedList(Actor actor,Long[] ids);
 }

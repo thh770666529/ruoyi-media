@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.media.domain.Actor;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -69,4 +70,13 @@ public interface ActorMapper extends BaseMapper<Actor>
      * @return
      */
     List<Actor> selectHotActorList(int top);
+
+
+    /**
+     * 删除演员
+     *
+     * @param actorIds 演员ID
+     * @return 结果
+     */
+    List<Actor> selectNotSelectedListByIds(@Param("actor") Actor actor,@Param("actorIds") Long[] actorIds);
 }

@@ -275,6 +275,31 @@
 
        <!--添加演员模态框-->
     <el-dialog :title="actorTitle" :visible.sync="actorOpen" width="900px" append-to-body>
+      <el-form :model="queryActorParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="姓名" prop="name">
+          <el-input
+            v-model="queryActorParams.name"
+            placeholder="请输入姓名"
+            clearable
+            size="small"
+            @keyup.enter.native="getActorList"
+          />
+        </el-form-item>
+        <el-form-item label="描述" prop="description">
+          <el-input
+            v-model="queryActorParams.description"
+            placeholder="请输入描述"
+            clearable
+            size="small"
+            @keyup.enter.native="getActorList"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="getActorList">搜索</el-button>
+        </el-form-item>
+      </el-form>
+
+
       <el-table  :data="notSelectedActorList" @selection-change="handleActorSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="主键" align="left" prop="actorId" width="50" />
@@ -308,7 +333,7 @@
 
 <script>
 import { deleteMovieActor,listMovie, getMovie, delMovie, addMovie, updateMovie, exportMovie } from "@/api/media/movie";
-import { listActor, getActor, delActor, addActor, updateActor, exportActor } from "@/api/media/actor";
+import { notSelectedActorList,listActor, getActor, delActor, addActor, updateActor, exportActor } from "@/api/media/actor";
 import { getToken } from "@/utils/auth";
 import Editor from "../../../components/Editor";
 export default {
@@ -672,7 +697,13 @@ export default {
     },
     getActorList(){
       this.loading = true;
-      listActor(this.queryActorParams).then(response => {
+      let ids = '';
+      if (this.movieActorType =='actor'){
+        ids = this.actorList.map(item => item.actorId)
+      }else {
+        ids = this.directorList.map(item => item.actorId)
+      }
+      notSelectedActorList(this.queryActorParams,ids).then(response => {
         this.notSelectedActorList = response.rows;
         this.actorTotal = response.total;
         this.loading = false;
@@ -745,7 +776,7 @@ export default {
 
     handleImagesSuccess(res, file) {
       const code = res.code;
-      if (code == 200) {
+      if (code === 200) {
         this.form.images =  res.url;
         this.msgSuccess("上传成功！");
       } else {
