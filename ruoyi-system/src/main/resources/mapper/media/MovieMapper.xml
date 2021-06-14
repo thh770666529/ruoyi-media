@@ -47,32 +47,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectHotMovieList" parameterType="Integer" resultMap="MovieResult">
         <include refid="selectMovieVo"/>
-        order by create_time desc limit #{top}
+        order by m.create_time desc limit #{top}
     </select>
 
     <select id="selectMovieList" parameterType="MovieVO" resultMap="MovieResult">
         <include refid="selectMovieVo"/>
         <where>
-            <if test="images != null  and images != ''"> and images = #{images}</if>
-            <if test="title != null  and title != ''"> and title = #{title}</if>
-            <if test="type != null  and type != ''"> and type = #{type}</if>
-            <if test="country != null  and country != ''"> and country = #{country}</if>
-            <if test="label != null  and label != ''"> and label = #{label}</if>
-            <if test="description != null  and description != ''"> and description = #{description}</if>
-            <if test="publishBy != null  and publishBy != ''"> and publish_by = #{publishBy}</if>
-            <if test="publishTime != null "> and publish_time = #{publishTime}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="readCount != null "> and read_count = #{readCount}</if>
-            <if test="commentCount != null "> and comment_count = #{commentCount}</if>
-            <if test="followCount != null "> and follow_count = #{followCount}</if>
-            <if test="collectionCount != null "> and collection_count = #{collectionCount}</if>
-            <if test="likesCount != null "> and likes_count = #{likesCount}</if>
-            <if test="unlikesCount != null "> and unlikes_count = #{unlikesCount}</if>
-            <if test="shareCount != null "> and share_count = #{shareCount}</if>
-            <if test="isComment != null  and isComment != ''"> and is_comment = #{isComment}</if>
-            <if test="isDownload != null  and isDownload != ''"> and is_download = #{isDownload}</if>
-            <if test="price != null "> and price = #{price}</if>
-            <if test="rate != null "> and rate = #{rate}</if>
+            <if test="images != null  and images != ''"> and m.images = #{images}</if>
+            <if test="title != null  and title != ''"> and m.title = #{title}</if>
+            <if test="type != null  and type != ''"> and m.type = #{type}</if>
+            <if test="country != null  and country != ''"> and m.country = #{country}</if>
+            <if test="label != null  and label != ''"> and m.label = #{label}</if>
+            <if test="description != null  and description != ''"> and m.description = #{description}</if>
+            <if test="publishBy != null  and publishBy != ''"> and m.publish_by = #{publishBy}</if>
+            <if test="publishTime != null "> and m.publish_time = #{publishTime}</if>
+            <if test="status != null  and status != ''"> and m.status = #{status}</if>
+            <if test="readCount != null "> and m.read_count = #{readCount}</if>
+            <if test="commentCount != null "> and m.comment_count = #{commentCount}</if>
+            <if test="followCount != null "> and m.follow_count = #{followCount}</if>
+            <if test="collectionCount != null "> and m.collection_count = #{collectionCount}</if>
+            <if test="likesCount != null "> and m.likes_count = #{likesCount}</if>
+            <if test="unlikesCount != null "> and m.unlikes_count = #{unlikesCount}</if>
+            <if test="shareCount != null "> and m.share_count = #{shareCount}</if>
+            <if test="isComment != null  and isComment != ''"> and m.is_comment = #{isComment}</if>
+            <if test="isDownload != null  and isDownload != ''"> and m.is_download = #{isDownload}</if>
+            <if test="price != null "> and m.price = #{price}</if>
+            <if test="rate != null "> and m.rate = #{rate}</if>
         </where>
     </select>
 </mapper>

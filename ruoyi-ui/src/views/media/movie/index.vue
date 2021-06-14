@@ -11,7 +11,7 @@
         />
       </el-form-item>
       <el-form-item label="电影类型" prop="movieType">
-        <el-select v-model="queryParams.movieType" placeholder="请选择电影类型" clearable size="small">
+        <el-select v-model="queryParams.type" placeholder="请选择电影类型" clearable size="small">
           <el-option
             v-for="dict in typeOptions"
             :key="dict.dictValue"
