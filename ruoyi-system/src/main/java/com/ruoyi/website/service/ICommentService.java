@@ -1,6 +1,8 @@
 package com.ruoyi.website.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.website.domain.Comment;
 
 /**
@@ -9,7 +11,7 @@ import com.ruoyi.website.domain.Comment;
  * @author thh
  * @date 2021-06-05
  */
-public interface ICommentService
+public interface ICommentService extends IService<Comment>
 {
     /**
      * 查询评论
@@ -63,4 +65,10 @@ public interface ICommentService
      * @return
      */
     public List<Comment> selectTreeComment(Comment comment);
+
+
+    public List<Comment> getCommentListByParentCommentId (Comment commentCondition,Long parentCommentId);
+
+
+    public List<Comment> getAllCommentList(Comment commentCondition,Long parentCommentId);
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.enums.CommentStatusEnum;
@@ -15,6 +16,8 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.XssKillerUtil;
 import com.ruoyi.common.utils.ip.AddressUtils;
 import com.ruoyi.common.utils.ip.IpUtils;
+import com.ruoyi.media.domain.Actor;
+import com.ruoyi.media.mapper.ActorMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.util.TokenUtil;
 import eu.bitwalker.useragentutils.Browser;
@@ -34,7 +37,7 @@ import com.ruoyi.website.service.ICommentService;
  * @date 2021-06-05
  */
 @Service
-public class CommentServiceImpl implements ICommentService
+public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  implements ICommentService
 {
     @Autowired
     private CommentMapper commentMapper;
@@ -131,27 +134,71 @@ public class CommentServiceImpl implements ICommentService
 
     @Override
     public List<Comment> selectTreeComment(Comment commentCondition) {
+        return this.getCommentListByParentCommentId(commentCondition,null);
+    }
+
+    /**
+     * 获取到子节点的评论数据
+     * @param commentCondition
+     * @param parentCommentId
+     * @return
+     */
+    @Override
+    public List<Comment> getCommentListByParentCommentId (Comment commentCondition,Long parentCommentId){
         List<Comment> commentList = commentMapper.selectCommentList(commentCondition);
         // 定义一个空数组，用来存放最终的树结构数据
         List<Comment> result = new ArrayList<>();
         // 第一步遍历获取到的数据，将根节点数据存放 result 里
         for (Comment comment: commentList) {
             // 判断是否是根节点，就是 parentId，这里是从 0 开始，如果 parentId 为 0 ，则表示根节点
-            if (comment.getParentCommentId() == null) {
+            Long parentId = comment.getParentCommentId();
+            if (parentCommentId!=null && parentCommentId.equals(parentId)) {
+                result.add(comment);
+            }else if (parentCommentId==null && parentId ==null){
                 result.add(comment);
             }
         }
         // 根节点添加完就需要添加每个节点的子节点了，这里需要调用 递归方法 getChildren();
         // 遍历根节点数据，为其设置子节点集合
-        for (Comment commen: result) {
+        for (Comment comment: result) {
             // 获取子节点数据，传入 当前节点 id 和 所有 list
-            List<Comment> childList = getChildren(commen.getCommentId(), commentList);
+            List<Comment> childList = getChildren(comment.getCommentId(), commentList);
             // 将获取到的子节点集合添加到根节点里
-            commen.setChildren(childList);
+            comment.setChildren(childList);
         }
         return result;
     }
 
+    @Override
+    public List<Comment> getAllCommentList(Comment commentCondition,Long parentCommentId){
+        List<Comment> commentList = this.getCommentListByParentCommentId(commentCondition, parentCommentId);
+        List<Comment> resultList = new ArrayList<>();
+        resultList.addAll(commentList);
+        for (Comment comment : commentList) {
+            List<Comment> children = getChildren(comment.getChildren());
+            if (children!=null){
+                resultList.addAll(children);
+            }
+        }
+        return resultList;
+    }
+
+
+    private List<Comment> getChildren(List<Comment>  commentList) {
+        List<Comment> resultList = new ArrayList<>();
+        if (commentList==null){
+            return resultList;
+        }
+        // 遍历所有节点数据
+        resultList.addAll(commentList);
+        for (Comment comment : commentList) {
+            resultList.addAll(getChildren(comment.getChildren()));
+        }
+        if (resultList.size() == 0) {
+            return new ArrayList<>();
+        }
+        return resultList;
+    }
 
     /**
      * 获取子节点数据

@@ -39,7 +39,7 @@
   import {mapState} from 'vuex';
   import CommentBox from "@/components/website/CommentBox";
   import {timeAgo} from "../../utils"
-  import {replyComment,treeListComment} from '@/api/comment'
+  import {replyComment,treeListComment,delMyComment} from '@/api/comment'
   export default {
     name: "CommentList",
     props: ['comments', 'userInfos', 'commentInfo'],
@@ -153,8 +153,9 @@
           document.getElementById(item.uid).style.display = 'none';
         }*/
       },
+
       delComment: function (item) {
-        /*if(!this.validLogin()) {
+        if(!this.validLogin()) {
           this.$notify.error({
             title: '错误',
             message: "登录后才能删除评论哦~",
@@ -170,9 +171,9 @@
         })
           .then(() => {
             let params = {};
-            params.uid = item.uid;
-            params.userId = this.$store.state.userInfo.userId
-            deleteComment(params).then(response => {
+            params.commentId = item.commentId;
+            params.sid = item.sid
+            delMyComment(params).then(response => {
               if (response.code == 200) {
                 this.$notify({
                   title: '成功',
@@ -188,10 +189,8 @@
                   offset: 100
                 });
               }
-              let comments = this.$store.state.app.commentList;
-              this.deleteCommentList(comments, params.uid, null)
-              this.$store.commit("setCommentList", comments);
-              this.$emit("deleteComment", "")
+              this.deleteCommentList(this.comments, params.commentId, null)
+              //this.$emit("deleteComment", "")
             });
 
           })
@@ -200,7 +199,7 @@
               type: "info",
               message: "已取消删除"
             });
-          });*/
+          });
 
 
       },
@@ -233,15 +232,15 @@
           }
         }
       },
-      deleteCommentList(commentList, uid, parentList) {
+      deleteCommentList(commentList, commentId, parentList) {
         if (commentList == undefined || commentList.length <= 0) {
           return;
         }
         for (let item of commentList) {
-          if (item.uid === uid) {
+          if (item.commentId === commentId) {
             commentList.splice(commentList.indexOf(item), 1);
           } else {
-            this.deleteCommentList(item.children, uid, item);
+            this.deleteCommentList(item.children, commentId, item);
           }
         }
       },

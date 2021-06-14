@@ -53,3 +53,13 @@ export function delComment(commentId) {
     method: 'delete'
   })
 }
+
+
+// 删除我的评论
+export function delMyComment(data) {
+  return request({
+    url: '/website/comment/delete' ,
+    method: 'post',
+    data: data
+  })
+}
