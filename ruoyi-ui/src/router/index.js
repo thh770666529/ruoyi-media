@@ -133,6 +133,14 @@ export const constantRoutes = [
  ]
 },
   {
+    path: '/share/:shareBatchNum',
+    name: 'Share',
+    component: (resolve) => require(['@/views/resource/Share/index'], resolve),
+    meta: { title: '分享文件',breadCrumbName: '分享文件', icon: 'table' },
+    hidden: true
+  },
+
+  {
     path: '/resource',
     component: Layout,
     name: '资源管理',
@@ -144,13 +152,6 @@ export const constantRoutes = [
         name: 'File',
         component: () => import('@/views/resource/file/File'),
         meta: { title: '网盘管理', icon: 'table' }
-      },
-      {
-        hidden: true,
-        path: 'share/:shareBatchNum',
-        name: 'Share',
-        component: (resolve) => require(['@/views/resource/Share/index'], resolve),
-        meta: { title: '分享 - 奇文网盘',breadCrumbName: '分享文件', icon: 'table' }
       },
       {
         path: 'myshare',
