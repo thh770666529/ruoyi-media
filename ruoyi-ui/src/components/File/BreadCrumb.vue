@@ -1,19 +1,18 @@
 <template>
   <div class="breadcrumb-wrapper">
-    <div class="title">当前位置：</div>
-    <el-breadcrumb v-if="fileType ===0" separator="/">
+    <!--<div class="title">当前位置：</div>-->
+    <el-breadcrumb>
+      <el-breadcrumb-item>
+        当前位置：
+      </el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-breadcrumb separator="/">
       <el-breadcrumb-item
         :to="routerIndex(fileType)">
         {{ fileTypeMap[fileType] }}
       </el-breadcrumb-item>
     </el-breadcrumb>
-    <el-breadcrumb v-if="fileType && !['Share', 'MyShare'].includes($route.name)" separator="/">
-      <el-breadcrumb-item
-        :to="routerIndex(fileType)">
-        {{ fileTypeMap[fileType] }}
-      </el-breadcrumb-item>
-    </el-breadcrumb>
-    <el-breadcrumb v-else separator="/">
+    <el-breadcrumb separator="/">
       <el-breadcrumb-item v-for="(item, index) in breadCrumbList" :key="index" :to="getRouteQuery(item)">{{
         item.name
       }}</el-breadcrumb-item>
@@ -51,7 +50,6 @@ export default {
       get() {
         let filePath = this.$route.query.filePath
         let filePathList = filePath ? filePath.split('/') : []
-        console.log("filePathList", filePathList,"this.$route",this.$route)
         let res = [] //  返回结果数组
         let _path = [] //  存放祖先路径
         for (let i = 0; i < filePathList.length; i++) {
@@ -123,6 +121,7 @@ export default {
   .title, >>> .el-breadcrumb {
     height: 30px;
     line-height: 30px;
+    float:left;
   }
 }
 </style>

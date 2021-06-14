@@ -61,6 +61,11 @@ export default {
         }else {
           filePath = '/'
         }
+        this.$router.replace({
+          query: {
+            filePath: filePath
+          }
+        })
       }
       return filePath
     },
@@ -81,7 +86,8 @@ export default {
     }
   },
   mounted() {
-    if (!this.filePath) {
+    let filePath = this.$route.query.filePath;
+    if (!filePath) {
       this.$router.replace({
         query: {
           filePath: '/'

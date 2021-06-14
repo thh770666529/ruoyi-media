@@ -108,9 +108,14 @@ export default {
       return this.$route.params && this.$route.params.shareBatchNum
     },
     filePath() {
-      let filePath = this.$route.query.filePath;
+      let filePath = this.$route.query.filePath
       if (!filePath) {
         filePath = '/'
+        this.$router.replace({
+          query: {
+            filePath: filePath
+          }
+        })
       }
       return filePath
     },
@@ -124,7 +129,8 @@ export default {
     }
   },
   created() {
-    if (!this.filePath) {
+    const filePath = this.$route.query.filePath
+    if (!filePath) {
       this.$router.replace({
         query: {
           filePath: '/'
