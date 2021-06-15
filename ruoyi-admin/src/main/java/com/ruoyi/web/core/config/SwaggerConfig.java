@@ -3,6 +3,8 @@ package com.ruoyi.web.core.config;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -70,10 +72,9 @@ public class SwaggerConfig
      */
     private List<SecurityScheme> securitySchemes()
     {
-        //List<ApiKey> apiKeys = new ArrayList<>();
-        //apiKeys.add(new ApiKey("Authorization", "Authorization", "header"));
-        ApiKey apiKey = new ApiKey("Authorization", "Authorization", "header");
-        return Collections.singletonList(apiKey);
+        List<SecurityScheme> apiKeyList = new ArrayList<SecurityScheme>();
+        apiKeyList.add(new ApiKey("Authorization", "Authorization", In.HEADER.toValue()));
+        return apiKeyList;
     }
 
     /**
@@ -85,7 +86,7 @@ public class SwaggerConfig
         securityContexts.add(
                 SecurityContext.builder()
                         .securityReferences(defaultAuth())
-                        .forPaths(PathSelectors.regex("^(?!auth).*$"))
+                        .operationSelector(o -> o.requestMappingPattern().matches("/.*"))
                         .build());
         return securityContexts;
     }
