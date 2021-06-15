@@ -132,7 +132,7 @@
                 <version>${jna.version}</version>
             </dependency>
 
-            <!-- swagger2-->
+            <!-- Swagger3依赖 -->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
@@ -149,7 +149,7 @@
                 </exclusions>
             </dependency>
 
-            <!-- swagger2-UI-->
+            <!-- swagger3-UI-->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
