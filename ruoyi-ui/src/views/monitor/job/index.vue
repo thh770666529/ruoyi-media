@@ -407,7 +407,7 @@ export default {
           return runJob(row.jobId, row.jobGroup);
         }).then(() => {
           this.msgSuccess("执行成功");
-        })
+        }).catch(() => {});
     },
     /** 任务详细信息 */
     handleView(row) {
@@ -468,7 +468,7 @@ export default {
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        })
+        }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -478,10 +478,12 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
+         this.exportLoading = true;
           return exportJob(queryParams);
         }).then(response => {
           this.download(response.msg);
-        })
+          this.exportLoading = false;
+        }).catch(() => {});
     }
   }
 };

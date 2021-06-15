@@ -158,7 +158,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -587,7 +587,7 @@ export default {
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        })
+        }).catch(() => {});
     },
 #if($table.sub)
 	/** ${subTable.functionName}序号 */
@@ -631,10 +631,12 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
+          this.exportLoading = true;
           return export${BusinessName}(queryParams);
         }).then(response => {
           this.download(response.msg);
-        })
+          this.exportLoading = false;
+        }).catch(() => {});
     }
   }
 };

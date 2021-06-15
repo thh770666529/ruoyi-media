@@ -335,7 +335,7 @@ export default {
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        })
+        }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -348,7 +348,7 @@ export default {
           return exportConfig(queryParams);
         }).then(response => {
           this.download(response.msg);
-        })
+        }).catch(() => {});
     },
     /** 清理缓存按钮操作 */
     handleClearCache() {

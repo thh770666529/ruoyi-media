@@ -199,7 +199,7 @@ export default {
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        })
+        }).catch(() => {});
     },
     /** 清空按钮操作 */
     handleClean() {
@@ -212,7 +212,7 @@ export default {
         }).then(() => {
           this.getList();
           this.msgSuccess("清空成功");
-        })
+        }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -222,10 +222,12 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
+          this.exportLoading = true;
           return exportLogininfor(queryParams);
         }).then(response => {
           this.download(response.msg);
-        })
+          this.exportLoading = false;
+        }).catch(() => {});
     }
   }
 };
