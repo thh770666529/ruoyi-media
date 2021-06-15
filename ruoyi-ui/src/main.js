@@ -16,11 +16,13 @@ import { getConfigKey } from "@/api/system/config";
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
 
-
 // 自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
 // collapse 展开折叠
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+// 头部标签插件
+import VueMeta from 'vue-meta'
+
 
 Vue.component(CollapseTransition.name, CollapseTransition)
 Vue.use(element);
@@ -45,6 +47,7 @@ Vue.prototype.$EventBus = new Vue()
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
 Vue.use(permission)
+Vue.use(VueMeta)
 
 for(let key in globalFunction) {
   Vue.prototype[key] = globalFunction[key]
