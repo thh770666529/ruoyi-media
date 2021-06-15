@@ -96,6 +96,7 @@ public class ImageUtils
         }
         finally
         {
+            IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(baos);
         }
     }
