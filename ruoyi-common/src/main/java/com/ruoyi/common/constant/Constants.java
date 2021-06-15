@@ -132,4 +132,9 @@ public class Constants
      * 网站站点配置 cache key
      */
     public static final String WEB_CONFIG_KEY = "web_config";
+
+    /**
+     * RMI 远程方法调用
+     */
+    public static final String LOOKUP_RMI = "rmi://";
 }

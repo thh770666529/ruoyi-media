@@ -1,6 +1,9 @@
 package com.ruoyi.quartz.controller;
 
 import java.util.List;
+
+import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.utils.StringUtils;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +29,7 @@ import com.ruoyi.quartz.util.CronUtils;
 
 /**
  * 调度任务信息操作处理
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -81,7 +84,11 @@ public class SysJobController extends BaseController
     {
         if (!CronUtils.isValid(sysJob.getCronExpression()))
         {
-            return AjaxResult.error("cron表达式不正确");
+            return AjaxResult.error("新增任务'" + sysJob.getJobName() + "'失败，Cron表达式不正确");
+        }
+        else if (StringUtils.containsIgnoreCase(sysJob.getInvokeTarget(), Constants.LOOKUP_RMI))
+        {
+            return AjaxResult.error("新增任务'" + sysJob.getJobName() + "'失败，目标字符串不允许'rmi://'调用");
         }
         sysJob.setCreateBy(SecurityUtils.getUsername());
         return toAjax(jobService.insertJob(sysJob));
@@ -97,7 +104,11 @@ public class SysJobController extends BaseController
     {
         if (!CronUtils.isValid(sysJob.getCronExpression()))
         {
-            return AjaxResult.error("cron表达式不正确");
+            return AjaxResult.error("修改任务'" + sysJob.getJobName() + "'失败，Cron表达式不正确");
+        }
+        else if (StringUtils.containsIgnoreCase(sysJob.getInvokeTarget(), Constants.LOOKUP_RMI))
+        {
+            return AjaxResult.error("修改任务'" + sysJob.getJobName() + "'失败，目标字符串不允许'rmi://'调用");
         }
         sysJob.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(jobService.updateJob(sysJob));
