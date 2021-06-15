@@ -1,6 +1,12 @@
 package com.ruoyi.framework.web.service;
 
 import javax.annotation.Resource;
+
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ServletUtils;
+import com.ruoyi.common.utils.ip.IpUtils;
+import com.ruoyi.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,7 +26,7 @@ import com.ruoyi.framework.manager.factory.AsyncFactory;
 
 /**
  * 登录校验方法
- * 
+ *
  * @author ruoyi
  */
 @Component
@@ -28,6 +34,9 @@ public class SysLoginService
 {
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private ISysUserService userService;
 
     @Resource
     private AuthenticationManager authenticationManager;
@@ -37,7 +46,7 @@ public class SysLoginService
 
     /**
      * 登录验证
-     * 
+     *
      * @param username 用户名
      * @param password 密码
      * @param code 验证码
@@ -82,7 +91,18 @@ public class SysLoginService
         }
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        recordLoginInfo(loginUser.getUser());
         // 生成token
         return tokenService.createToken(loginUser);
+    }
+
+    /**
+     * 记录登录信息
+     */
+    public void recordLoginInfo(SysUser user)
+    {
+        user.setLoginIp(IpUtils.getIpAddr(ServletUtils.getRequest()));
+        user.setLoginDate(DateUtils.getNowDate());
+        userService.updateUserProfile(user);
     }
 }
