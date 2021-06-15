@@ -542,6 +542,8 @@ export default {
         price:0,
         rate:0
       };
+      // 导出遮罩层
+      exportLoading: false,
       this.videoList = [];
       this.resetForm("form");
     },
@@ -673,11 +675,13 @@ export default {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(function() {
+        }).then(()=> {
+          this.exportLoading = true;
           return exportMovie(queryParams);
         }).then(response => {
           this.download(response.msg);
-        })
+          this.exportLoading = false;
+        }).catch(() => {});
     },
     submitActorForm(){
       if (!this.selectedActorList || this.selectedActorList.length == 0){

@@ -108,6 +108,7 @@
           plain
           icon="el-icon-download"
           size="mini"
+          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['${moduleName}:${businessName}:export']"
         >导出</el-button>
@@ -354,6 +355,8 @@ export default {
     return {
       // 遮罩层
       loading: true,
+      // 导出遮罩层
+      exportLoading: false,
       // 选中数组
       ids: [],
 #if($table.sub)
@@ -582,7 +585,7 @@ export default {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(function() {
+        }).then(() => {
           return del${BusinessName}(${pkColumn.javaField}s);
         }).then(() => {
           this.getList();
@@ -630,7 +633,7 @@ export default {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(function() {
+        }).then(() => {
           this.exportLoading = true;
           return export${BusinessName}(queryParams);
         }).then(response => {
