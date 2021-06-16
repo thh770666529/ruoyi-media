@@ -25,7 +25,7 @@ import com.ruoyi.system.service.ISysDictTypeService;
 
 /**
  * 数据字典信息
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -104,7 +104,8 @@ public class SysDictTypeController extends BaseController
     @DeleteMapping("/{dictIds}")
     public AjaxResult remove(@PathVariable Long[] dictIds)
     {
-        return toAjax(dictTypeService.deleteDictTypeByIds(dictIds));
+        dictTypeService.deleteDictTypeByIds(dictIds);
+        return success();
     }
 
     /**
@@ -112,10 +113,10 @@ public class SysDictTypeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:dict:remove')")
     @Log(title = "字典类型", businessType = BusinessType.CLEAN)
-    @DeleteMapping("/clearCache")
-    public AjaxResult clearCache()
+    @DeleteMapping("/refreshCache")
+    public AjaxResult refreshCache()
     {
-        dictTypeService.clearCache();
+        dictTypeService.resetDictCache();
         return AjaxResult.success();
     }
 
