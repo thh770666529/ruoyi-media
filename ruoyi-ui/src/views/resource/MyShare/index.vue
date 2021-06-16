@@ -31,7 +31,7 @@
 <script>
 import BreadCrumb from '@/components/File/BreadCrumb'
 import FileTable from '@/components/File/FileTable'
-import { getMyShareFileList } from '@/api/file/file'
+import { getMyShareFileList } from '@/api/file/index'
 
 export default {
   name: 'MyShare',
@@ -53,8 +53,8 @@ export default {
   },
   computed: {
     filePath() {
-      let filePath = this.$route.query.filePath;
-      if (!filePath) {
+      let filePath = this.$route.query.filePath
+      /*if (!filePath) {
         let MyShare = this.$store.getters.MyShare;
         if (MyShare.filePath){
           filePath =MyShare.filePath
@@ -66,18 +66,21 @@ export default {
             filePath: filePath
           }
         })
-      }
-      return filePath
+      }*/
+      return   filePath?filePath:'/'
     },
     shareBatchNum() {
       let shareBatchNum =  this.$route.query.shareBatchNum
-      if (!shareBatchNum){
+      if (this.filePath ==='/'){
+        return null;
+      }
+      /*if (!shareBatchNum){
         let MyShare = this.$store.getters.MyShare;
         if (MyShare.shareBatchNum){
           shareBatchNum =MyShare.shareBatchNum
         }
-      }
-      return shareBatchNum || null
+      }*/
+      return shareBatchNum||null
     }
   },
   watch: {

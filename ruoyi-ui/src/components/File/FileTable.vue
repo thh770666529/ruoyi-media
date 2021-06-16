@@ -237,7 +237,7 @@
 </template>
 
 <script>
-import { imgMinPath,downloadFile,unzipFile, deleteFile, renameFile, deleteRecoveryFile, restoreRecoveryFile } from '@/api/file/file'
+import { imgMinPath,downloadFile,unzipFile, deleteFile, renameFile, deleteRecoveryFile, restoreRecoveryFile } from '@/api/file/index'
 import { mapGetters } from 'vuex'
 import { getToken} from '@/utils/auth'
 export default {

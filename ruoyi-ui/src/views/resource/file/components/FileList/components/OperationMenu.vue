@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { batchDeleteFile, batchDeleteRecoveryFile } from '@/api/file/file'
+import { batchDeleteFile, batchDeleteRecoveryFile } from '@/api/file/index'
 import AddFolderDialog from '@/components/File/AddFolderDialog.vue'
 import SelectColumn from './SelectColumn'
 

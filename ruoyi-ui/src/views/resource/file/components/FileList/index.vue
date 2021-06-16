@@ -91,7 +91,7 @@ import {
   batchMoveFile,
   searchFile,
   shareFile
-} from '@/api/file/file'
+} from '@/api/file/index'
 
 export default {
   name: 'FileList',
@@ -211,7 +211,7 @@ export default {
     },
     // 当前所在路径
     filePath() {
-      return this.$route.query.filePath ? this.$route.query.filePath : '/'
+        return this.$route.query.filePath ? this.$route.query.filePath : '/'
     },
     // 文件查看模式 0列表模式 1网格模式 2 时间线模式
     fileModel() {

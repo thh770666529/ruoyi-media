@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { unzipFile, deleteFile, renameFile, deleteRecoveryFile } from '@/api/file/file'
+import { unzipFile, deleteFile, renameFile, deleteRecoveryFile } from '@/api/file/index'
 import { mapGetters } from 'vuex'
 import 'element-ui/lib/theme-chalk/base.css'
 

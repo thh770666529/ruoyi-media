@@ -42,7 +42,7 @@
 
 <script>
 import AddFolderDialog from '@/components/File/AddFolderDialog.vue'
-import { getFoldTree } from '@/api/file/file'
+import { getFoldTree } from '@/api/file/index'
 
 export default {
   name: 'MoveFileDialog',

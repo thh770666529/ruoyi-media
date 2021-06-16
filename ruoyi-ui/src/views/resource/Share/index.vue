@@ -65,7 +65,7 @@ import {
   checkShareLinkCode,
   getShareFileList,
   saveShareFile
-} from '@/api/file/file.js'
+} from '@/api/file/index.js'
 
 export default {
   name: 'Share',
