@@ -14,7 +14,7 @@ import com.ruoyi.common.utils.html.EscapeUtil;
 
 /**
  * XSS过滤处理
- * 
+ *
  * @author ruoyi
  */
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper
@@ -93,12 +93,10 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper
 
     /**
      * 是否是Json请求
-     * 
-     * @param request
      */
     public boolean isJsonRequest()
     {
         String header = super.getHeader(HttpHeaders.CONTENT_TYPE);
-        return MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(header);
+        return StringUtils.startsWithIgnoreCase(header, MediaType.APPLICATION_JSON_VALUE);
     }
 }
