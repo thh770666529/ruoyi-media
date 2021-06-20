@@ -49,12 +49,12 @@ public class RecoveryFileServiceImpl extends ServiceImpl<RecoveryFileMapper, Rec
 
             UserFile userFileTemp = userFileMapper.selectById(userFile.getUserFileId());
             FileBean fileBean = fileMapper.selectById(userFileTemp.getFileId());
-
-            LambdaUpdateWrapper<FileBean> fileBeanLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-            fileBeanLambdaUpdateWrapper.set(FileBean::getPointCount, fileBean.getPointCount() -1)
-                    .eq(FileBean::getFileId, fileBean.getFileId());
-
-            fileMapper.update(null, fileBeanLambdaUpdateWrapper);
+            if (fileBean!=null){
+                LambdaUpdateWrapper<FileBean> fileBeanLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+                fileBeanLambdaUpdateWrapper.set(FileBean::getPointCount, fileBean.getPointCount() -1)
+                        .eq(FileBean::getFileId, fileBean.getFileId());
+                fileMapper.update(null, fileBeanLambdaUpdateWrapper);
+            }
         }
         LambdaQueryWrapper<UserFile> userFileLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userFileLambdaQueryWrapper.eq(UserFile::getDeleteBatchNum, userFile.getDeleteBatchNum());

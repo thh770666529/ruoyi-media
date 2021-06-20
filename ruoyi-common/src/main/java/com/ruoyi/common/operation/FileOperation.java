@@ -207,7 +207,7 @@ public class FileOperation {
     /**
      * 文件解压缩
      *
-     * @param sourceFile   需要解压的文件
+     * @param sourceFile        需要解压的文件
      * @param destDirPath 目的路径
      * @return 解压目录列表
      */
@@ -305,7 +305,7 @@ public class FileOperation {
                         File file = new File(destDirPath + zipPath);
                         File minFile = new File(destDirPath + FileUtil.getFileNameNotExtend(zipPath) + "_min." + FileUtil.getFileExtendName(zipPath));
                         try {
-                            ImageOperation.thumbnailsImage(file, minFile, 300);
+                            ImageOperation.thumbnailsImage(file, minFile, 300, 300);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -392,7 +392,7 @@ public class FileOperation {
                         File file = new File(destDirPath + zipPath);
                         File minFile = new File(destDirPath + FileUtil.getFileNameNotExtend(zipPath) + "_min." + FileUtil.getFileExtendName(zipPath));
                         try {
-                            ImageOperation.thumbnailsImage(file, minFile, 300);
+                            ImageOperation.thumbnailsImage(file, minFile, 300, 300);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -405,6 +405,17 @@ public class FileOperation {
         return res;
     }
 
+//    public static long deleteFileFromDisk(String fileurl) {
+//        String fileUrl = PathUtil.getStaticPath() + fileurl;
+//        String extendName = FileUtil.getFileExtendName(fileUrl);
+//        String minFileUrl = fileUrl.replace("." + extendName, "_min." + extendName);
+//        long filesize = getFileSize(fileUrl);
+//
+//        FileOperation.deleteFile(fileUrl);
+//        FileOperation.deleteFile(minFileUrl);
+//
+//        return filesize;
+//    }
 
     /**
      * 保存数据
@@ -416,9 +427,7 @@ public class FileOperation {
         BufferedWriter writer = null;
 
         File dir = new File(filePath);
-        if (!dir.exists()){
-            dir.mkdirs();
-        }
+
         if (!filePath.endsWith(File.separator)) {
             filePath = filePath + File.separator;
         }
@@ -437,10 +446,9 @@ public class FileOperation {
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,false), "UTF-8"));
             writer.write(data);
-            log.info("文件写入成功！文件路径为{}",file.getAbsolutePath());
+            log.info("文件写入成功！");
         } catch (IOException e) {
             e.printStackTrace();
-            log.error("文件写入异常！文件路径为{}",file.getAbsolutePath());
         }finally {
             try {
                 if(writer != null){
@@ -450,7 +458,7 @@ public class FileOperation {
                 e.printStackTrace();
             }
         }
-
     }
+
 
 }

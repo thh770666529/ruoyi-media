@@ -131,20 +131,21 @@ xss:
   urlPatterns: /system/*,/monitor/*,/tool/*
 
 
-fdfs:
-  connect-timeout: 601
-  so-timeout: 1501
-  thumb-image:
-    height: 150
-    width: 150
-  tracker-list: 127.0.0.1:22122
 ufo:
-  aliyun:
+  storage-type: 0  #存储类型 0 本地存储
+  local-storage-path: D://qiwen  #本地文件存储路径
+  aliyun:  #阿里云oss基本配置
     oss:
       access-key-id:
       access-key-secret:
       bucket-name:
-      domain:
       endpoint:
-  local-storage-path: D://qiwen
-  storage-type: 0
+  thumb-image:  #图片缩略图
+    width: 150
+    height: 150
+
+#FastDFS配置
+fdfs:
+  connect-timeout: 601
+  so-timeout: 1501
+  tracker-list: 127.0.0.1:22122

@@ -41,7 +41,10 @@
             <if test="userFile.userFileId != null">
                 and a.user_file_id = #{userFile.userFileId}
             </if>
-            and a.delete_flag = 0
+            <if test="userFile.fileName != null">
+                and a.file_name = #{userFile.fileName}
+            </if>
+                and a.delete_flag = 0
         </where>
         ORDER BY  is_dir desc
         <if test="beginCount != null and pageCount != null">

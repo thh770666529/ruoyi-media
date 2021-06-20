@@ -42,17 +42,17 @@ public class ShareFileListVO {
     private String extendName;
     //是否是目录 0-否， 1-是")
     private Integer isDir;
-    //上传时间")
+    //上传时间"
     private String uploadTime;
     //分享文件路径")
     private String shareFilePath;
 
+    private String extractionCode;
 
 //    private Long shareId;
 //
 //    private String shareTime;
 //    private String endTime;
-//    private String extractionCode;
 //    private Integer shareType;//0公共，1私密，2好友
 //    private Integer shareStatus;//0正常，1已失效，2已撤销
 }

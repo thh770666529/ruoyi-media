@@ -3,6 +3,7 @@ package com.ruoyi.ufo.operation.upload.product;
 import com.ruoyi.common.exception.file.NotSameFileExpection;
 import com.ruoyi.common.operation.ImageOperation;
 import com.ruoyi.common.utils.file.qiwen.FileUtil;
+import com.ruoyi.ufo.autoconfiguration.UFOAutoConfiguration;
 import com.ruoyi.ufo.exception.UploadException;
 import com.ruoyi.ufo.operation.upload.Uploader;
 import com.ruoyi.ufo.operation.upload.domain.UploadFile;
@@ -140,7 +141,11 @@ public class LocalStorageUploader extends Uploader {
 //            }
             tempFile.renameTo(file);
             if (FileUtil.isImageFile(uploadFile.getFileType())){
-                ImageOperation.thumbnailsImage(file, minFile, 300);
+                int thumbImageWidth = UFOAutoConfiguration.thumbImageWidth;
+                int thumbImageHeight = UFOAutoConfiguration.thumbImageHeight;
+                int width = thumbImageWidth == 0 ? 150 : thumbImageWidth;
+                int height = thumbImageHeight == 0 ? 150 : thumbImageHeight;
+                ImageOperation.thumbnailsImage(file, minFile, width, height);
             }
 
             uploadFile.setSuccess(1);

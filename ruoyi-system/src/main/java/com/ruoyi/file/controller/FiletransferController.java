@@ -13,18 +13,13 @@ import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.file.MimeTypeUtils;
 import com.ruoyi.common.utils.file.qiwen.FileUtil;
 import com.ruoyi.file.component.FileDealComp;
-import com.ruoyi.file.domain.FileBean;
-import com.ruoyi.file.domain.StorageBean;
-import com.ruoyi.file.domain.UserFile;
+import com.ruoyi.file.domain.*;
 import com.ruoyi.file.dto.DownloadFileDTO;
 import com.ruoyi.file.dto.PreviewDTO;
 import com.ruoyi.file.dto.UploadFileDTO;
-import com.ruoyi.file.service.IFileService;
-import com.ruoyi.file.service.IFiletransferService;
-import com.ruoyi.file.service.IStorageService;
-import com.ruoyi.file.service.IUserFileService;
+import com.ruoyi.file.service.*;
+import com.ruoyi.file.vo.FileListVo;
 import com.ruoyi.file.vo.UploadFileVo;
-import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.CharsetNames;
@@ -40,7 +35,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// 该接口为文件传输接口
+
+/**
+ * @author King
+ * @Desc 该接口为文件传输接口
+ */
 @Slf4j
 @RestController
 @RequestMapping("/filetransfer")
@@ -60,6 +59,12 @@ public class FiletransferController extends BaseController {
 
     @Resource
     IStorageService storageService;
+
+    @Resource
+    IShareService shareService;
+
+    @Resource
+    IShareFileService shareFileService;
 
     @Autowired
     TokenUtil tokenUtil;
@@ -87,19 +92,23 @@ public class FiletransferController extends BaseController {
                 FileBean file = list.get(0);
 
                 UserFile userFile = new UserFile();
-                userFile.setFileId(file.getFileId());
                 userFile.setUserId(loginUser.getUserId());
                 userFile.setFilePath(uploadFileDto.getFilePath());
                 String fileName = uploadFileDto.getFilename();
-                userFile.setFileName(fileName.substring(0, fileName.lastIndexOf(".")));
+                userFile.setFileName(FileUtil.getFileNameNotExtend(fileName));
                 userFile.setExtendName(FileUtil.getFileExtendName(fileName));
-                userFile.setDeleteFlag(0);
-                userFile.setIsDir(0);
-                userFile.setUploadTime(DateUtils.getTime());
-                userFileService.save(userFile);
-                fileService.increaseFilePointCount(file.getFileId());
+                List<FileListVo> userFileList = userFileService.userFileList(userFile, null, null);
+                if (userFileList.size() <= 0) {
+
+                    userFile.setIsDir(0);
+                    userFile.setUploadTime(DateUtils.getTime());
+                    userFile.setFileId(file.getFileId());
+                    //"fileName", "filePath", "extendName", "deleteFlag", "userId"
+                    userFileService.save(userFile);
+                    fileService.increaseFilePointCount(file.getFileId());
+                    fileDealComp.uploadESByUserFileId(userFile.getUserFileId());
+                }
                 uploadFileVo.setSkipUpload(true);
-                fileDealComp.uploadESByUserFileId(userFile.getUserFileId());
             } else {
                 uploadFileVo.setSkipUpload(false);
 
@@ -143,12 +152,39 @@ public class FiletransferController extends BaseController {
 
     @Log(title="预览文件", businessType = BusinessType.File)
     @GetMapping("/preview")
-    public void preview(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,  PreviewDTO previewDTO,  String token){
+    public void preview(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,  PreviewDTO previewDTO){
 
-        LoginUser loginUser = tokenUtil.getLoginUser(token);
         UserFile userFile = userFileService.getById(previewDTO.getUserFileId());
-        if (!userFile.getUserId().equals( loginUser.getUserId()) ) {
-            return;
+        String token = previewDTO.getToken();
+        if ("undefined".equals(previewDTO.getShareBatchNum())  || StringUtils.isEmpty(previewDTO.getShareBatchNum())) {
+            LoginUser loginUser = tokenUtil.getLoginUser(token);
+            if (loginUser == null) {
+                return;
+            }
+            if (!userFile.getUserId().equals(loginUser.getUserId()) ) {
+                return;
+            }
+        } else  {
+            Map<String, Object> param = new HashMap<>();
+            param.put("shareBatchNum", previewDTO.getShareBatchNum());
+            List<Share> shareList = shareService.listByMap(param);
+            //判断批次号
+            if (shareList.size() <= 0) {
+                return;
+            }
+            Integer shareType = shareList.get(0).getShareType();
+            if (1 == shareType) {
+                //判断提取码
+                String extractionCode = shareList.get(0).getExtractionCode();
+                if (!extractionCode.equals(previewDTO.getExtractionCode())) {
+                    return;
+                }
+            }
+            param.put("userFileId", previewDTO.getUserFileId());
+            List<ShareFile> shareFileList = shareFileService.listByMap(param);
+            if (shareFileList.size() <= 0) {
+                return;
+            }
         }
         FileBean fileBean = fileService.getById(userFile.getFileId());
         String mime= MimeTypeUtils.getMime(userFile.getExtendName());
@@ -170,11 +206,8 @@ public class FiletransferController extends BaseController {
         }
 
         httpServletResponse.addHeader("Content-Disposition", "fileName=" + fileName);// 设置文件名
-        DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
-        downloadFileDTO.setUserFileId(previewDTO.getUserFileId());
-        downloadFileDTO.setIsMin(previewDTO.getIsMin());
         try {
-            filetransferService.downloadFile(httpServletResponse, downloadFileDTO);
+            filetransferService.previewFile(httpServletResponse, previewDTO);
         }catch (Exception e){
             //org.apache.catalina.connector.ClientAbortException: java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
             e.printStackTrace();

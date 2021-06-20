@@ -8,6 +8,10 @@ import com.ruoyi.ufo.operation.download.Downloader;
 import com.ruoyi.ufo.operation.download.product.AliyunOSSDownloader;
 import com.ruoyi.ufo.operation.download.product.FastDFSDownloader;
 import com.ruoyi.ufo.operation.download.product.LocalStorageDownloader;
+import com.ruoyi.ufo.operation.preview.Previewer;
+import com.ruoyi.ufo.operation.preview.product.AliyunOSSPreviewer;
+import com.ruoyi.ufo.operation.preview.product.FastDFSPreviewer;
+import com.ruoyi.ufo.operation.preview.product.LocalStoragePreviewer;
 import com.ruoyi.ufo.operation.read.Reader;
 import com.ruoyi.ufo.operation.read.product.AliyunOSSReader;
 import com.ruoyi.ufo.operation.read.product.FastDFSReader;
@@ -28,12 +32,18 @@ public class UFOFactory {
 
     @Resource
     private FastDFSUploader fastDFSUploader;
+
     @Resource
     private FastDFSDownloader fastDFSDownloader;
+
     @Resource
     private FastDFSDeleter fastDFSDeleter;
+
     @Resource
     private FastDFSReader fastDFSReader;
+
+    @Resource
+    private FastDFSPreviewer fastDFSPreviewer;
 
     public UFOFactory() {
     }
@@ -98,6 +108,17 @@ public class UFOFactory {
             return new AliyunOSSReader();
         } else if (StorageTypeEnum.FAST_DFS.getStorageType() == storageType) {
             return fastDFSReader;
+        }
+        return null;
+    }
+
+    public Previewer getPreviewer(int storageType) {
+        if (StorageTypeEnum.LOCAL.getStorageType() == storageType) {
+            return new LocalStoragePreviewer();
+        } else if (StorageTypeEnum.ALIYUN_OSS.getStorageType() == storageType) {
+            return new AliyunOSSPreviewer();
+        } else if (StorageTypeEnum.FAST_DFS.getStorageType() == storageType) {
+            return fastDFSPreviewer;
         }
         return null;
     }

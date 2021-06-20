@@ -1,6 +1,6 @@
 package com.ruoyi.file.component;
 
-import cn.hutool.core.bean.BeanUtil;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.constant.FileConstant;
 import com.ruoyi.common.utils.DateUtils;
@@ -10,7 +10,6 @@ import com.ruoyi.file.mapper.UserFileMapper;
 import com.ruoyi.file.vo.FileListVo;
 import com.ruoyi.ufo.util.PathUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,8 +28,8 @@ public class FileDealComp {
 
     /**
      * 获取重复文件名
-     *
-     * 场景: 文件还原时，在 savefilePath 路径下，保存 测试.txt 文件重名，则会生成 测试(1).txt
+     * 场景1: 文件还原时，在 savefilePath 路径下，保存 测试.txt 文件重名，则会生成 测试(1).txt
+     * 场景2： 上传文件时，在 savefilePath 路径下，保存 测试.txt 文件重名，则会生成 测试(1).txt
      *
      * @param userFile
      * @param savefilePath

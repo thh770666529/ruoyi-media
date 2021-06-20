@@ -1,28 +1,29 @@
 package com.ruoyi.common.utils.http;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
+import java.util.Map;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import com.ruoyi.common.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.ruoyi.common.constant.Constants;
 
+
 /**
  * 通用http发送方法
- * 
+ *
  * @author ruoyi
  */
 public class HttpUtils
@@ -231,6 +232,105 @@ public class HttpUtils
         }
         return result.toString();
     }
+
+
+
+    /**
+     * 将url参数转换成map
+     *
+     * @param param aa=11&bb=22&cc=33
+     * @return
+     */
+    public static Map<String, Object> getUrlParams(String param) {
+        Map<String, Object> map = new HashMap<String, Object>(0);
+        if (StringUtils.isBlank(param)) {
+            return map;
+        }
+        String[] params = param.split("&");
+        for (int i = 0; i < params.length; i++) {
+            String[] p = params[i].split("=");
+            if (p.length == 2) {
+                map.put(p[0], p[1]);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 将map转换成url
+     *
+     * @param map
+     * @return
+     */
+    public static String getUrlParamsByMap(Map<String, Object> map) {
+        if (map == null) {
+            return "";
+        }
+        StringBuffer sb = new StringBuffer();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            sb.append(entry.getKey() + "=" + entry.getValue());
+            sb.append("&");
+        }
+        String s = sb.toString();
+        if (s.endsWith("&")) {
+            s = StringUtils.substringBeforeLast(s, "&");
+        }
+        return s;
+    }
+
+    /**
+     * 发送 GET 请求（HTTP），不带输入数据
+     *
+     * @param url url
+     * @return 返回
+     */
+    public static InputStream doGet(String url) {
+        return doGet(url, new HashMap<String, Object>());
+    }
+
+    /**
+     * 发送 GET 请求（HTTP），K-V形式
+     *
+     * @param url url
+     * @param paramsMap 参数
+     * @return 返回
+     */
+    public static InputStream doGet(String url, Map<String, Object> paramsMap) {
+        String param = getUrlParamsByMap(paramsMap);
+        InputStream inputStream = null;
+        try
+        {
+            String urlNameString = url + "?" + param ;
+            log.info("doGet - {}", urlNameString);
+            URL realUrl = new URL(urlNameString);
+            URLConnection connection = realUrl.openConnection();
+            connection.setRequestProperty("accept", "*/*");
+            connection.setRequestProperty("connection", "Keep-Alive");
+            connection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            connection.connect();
+            inputStream = connection.getInputStream();
+            return  inputStream;
+        }
+        catch (ConnectException e)
+        {
+            log.error("调用HttpUtils.doGet ConnectException, url=" + url + ",param=" + param, e);
+        }
+        catch (SocketTimeoutException e)
+        {
+            log.error("调用HttpUtils.doGet SocketTimeoutException, url=" + url + ",param=" + param, e);
+        }
+        catch (IOException e)
+        {
+            log.error("调用HttpUtils.doGet IOException, url=" + url + ",param=" + param, e);
+        }
+        catch (Exception e)
+        {
+            log.error("调用HttpsUtil.doGet Exception, url=" + url + ",param=" + param, e);
+        }
+        return  inputStream;
+    }
+
+
 
     private static class TrustAnyTrustManager implements X509TrustManager
     {

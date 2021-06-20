@@ -11,19 +11,6 @@ public class UploadFileDTO {
     //  "文件路径")
     private String filePath;
 
-    /**
-     * 上传时间
-     */
-    //  "上传时间")
-    private String uploadTime;
-
-    /**
-     * 扩展名
-     */
-    //  "扩展名")
-    private String extendName;
-
-
     //  "文件名")
     private String filename;
 

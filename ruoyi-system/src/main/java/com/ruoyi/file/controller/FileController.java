@@ -193,7 +193,8 @@ public class FileController extends BaseController {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         String zipFileUrl = PathUtil.getStaticPath() + unzipFileDto.getFileUrl();
         File file = FileOperation.newFile(zipFileUrl);
-        String unzipUrl = file.getParent();
+        String extendName = FileUtil.getFileExtendName(zipFileUrl);
+        String unzipUrl = zipFileUrl.replace("." + extendName, "");
         String[] arr = unzipFileDto.getFileUrl().split("\\.");
         if (arr.length <= 1) {
             return AjaxResult.error("文件名格式错误！");
@@ -216,9 +217,6 @@ public class FileController extends BaseController {
         }
 
         List<FileBean> fileBeanList = new ArrayList<>();
-
-        log.info("解压缩文件数量：" + fileBeanList);
-
         for (int i = 0; i < fileEntryNameList.size(); i++){
             String entryName = fileEntryNameList.get(i);
             log.info("文件名："+ entryName);

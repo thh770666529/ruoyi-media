@@ -32,17 +32,7 @@ const globalFunction = {
    * @returns {string} 图片缩略图路径
    */
   getImgMinPath: function (row) {
-    let fileUrl = ''
-    if (row.fileUrl) {
-      if (row.storageType == 1) {
-        // 阿里云OSS对象存储
-        fileUrl = `https://${Cookies.get('viewDomain')}${row.fileUrl}?x-oss-process=image/resize,m_fill,h_150,w_150/rotate,0`
-      } else {
-        // 本地磁盘存储
-        fileUrl = process.env.VUE_APP_BASE_API+`/filetransfer/preview?userFileId=${row.userFileId}&isMin=true&token=${getToken()}`
-      }
-    }
-    return fileUrl
+    return  process.env.VUE_APP_BASE_API+`/filetransfer/preview?userFileId=${row.userFileId}&isMin=true&shareBatchNum=${row.shareBatchNum}&extractionCode=${row.extractionCode}&token=${getToken()}`
   },
   /**
    * 获取文件查看路径
@@ -50,7 +40,7 @@ const globalFunction = {
    * @returns {string} 文件路径
    */
   getViewFilePath: function (row) {
-    return process.env.VUE_APP_BASE_API+`/filetransfer/preview?userFileId=${row.userFileId}&token=${getToken()}`
+    return process.env.VUE_APP_BASE_API+`/filetransfer/preview?userFileId=${row.userFileId}&isMin=false&shareBatchNum=${row.shareBatchNum}&extractionCode=${row.extractionCode}&token=${getToken()}`
   },
   /**
    * 获取文件下载路径
@@ -66,14 +56,9 @@ const globalFunction = {
    * @returns {string} office 文件在线预览路径
    */
   getFileOnlineViewPathByOffice: function (row) {
-    let fileUrl = ''
-    if (row.storageType == 1) {
-      fileUrl = `https://${Cookies.get('viewDomain')}${row.fileUrl}`  // 阿里云OSS对象存储
-    } else {
-      // 本地磁盘存储 - 在本地开发环境中，本地磁盘存储的文件是无法预览的，因为 office 要求文件可以在 Internet 访问
-      fileUrl = `${location.protocol}//${location.host}/${process.env.VUE_APP_BASE_API+row.fileUrl}`
-    }
-    return `https://view.officeapps.live.com/op/embed.aspx?src=${fileUrl}`
+    let fileUrl = `${location.protocol}//${location.host}${process.env.VUE_APP_BASE_API}/filetransfer/preview?userFileId=${row.userFileId}&isMin=false&shareBatchNum=${row.shareBatchNum}&extractionCode=${row.extractionCode}&token=${getToken()}`
+    //return `https://view.officeapps.live.com/op/embed.aspx?src=${fileUrl}`
+    return `http://ow365.cn/?i=24998&ssl=1&furl=${fileUrl}`
   },
   /**
    * 设置 Cookies
