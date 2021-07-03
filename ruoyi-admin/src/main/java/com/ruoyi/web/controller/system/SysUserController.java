@@ -34,7 +34,7 @@ import com.ruoyi.system.service.ISysUserService;
 
 /**
  * 用户信息
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -201,5 +201,32 @@ public class SysUserController extends BaseController
         userService.checkUserAllowed(user);
         user.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(userService.updateUserStatus(user));
+    }
+
+    /**
+     * 根据用户编号获取授权角色
+     */
+    @PreAuthorize("@ss.hasPermi('system:user:query')")
+    @GetMapping("/authRole/{userId}")
+    public AjaxResult authRole(@PathVariable("userId") Long userId)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        SysUser user = userService.selectUserById(userId);
+        List<SysRole> roles = roleService.selectRolesByUserId(userId);
+        ajax.put("user", user);
+        ajax.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
+        return ajax;
+    }
+
+    /**
+     * 用户授权角色
+     */
+    @PreAuthorize("@ss.hasPermi('system:user:edit')")
+    @Log(title = "用户管理", businessType = BusinessType.GRANT)
+    @PutMapping("/authRole")
+    public AjaxResult insertAuthRole(Long userId, Long[] roleIds)
+    {
+        userService.insertUserAuth(userId, roleIds);
+        return success();
     }
 }
