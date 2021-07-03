@@ -1,7 +1,13 @@
 package com.ruoyi.common.utils.file;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.config.RuoYiConfig;
@@ -123,6 +129,17 @@ public class FileUploadUtils
     {
         String fileName = file.getOriginalFilename();
         String extension = getExtension(file);
+        fileName = DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + extension;
+        return fileName;
+    }
+
+    /**
+     * 编码文件名
+     */
+    public static final String extractFilename(File file)
+    {
+        String fileName = file.getName();
+        String extension = FilenameUtils.getExtension(file.getAbsolutePath());
         fileName = DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + extension;
         return fileName;
     }

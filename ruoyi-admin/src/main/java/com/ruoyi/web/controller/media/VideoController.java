@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.media;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.ruoyi.media.vo.UploadVideoVO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

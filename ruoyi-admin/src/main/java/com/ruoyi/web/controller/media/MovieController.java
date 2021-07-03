@@ -16,6 +16,9 @@ import com.ruoyi.common.utils.file.MimeTypeUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.media.domain.vo.MovieVO;
+import com.ruoyi.media.service.IVideoService;
+import com.ruoyi.media.vo.NetWorkDiskVO;
+import com.ruoyi.media.vo.UploadVideoVO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +33,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 
 /**
  * 电影Controller
@@ -166,17 +170,26 @@ public class MovieController extends BaseController
     public AjaxResult uploadVideo(@RequestParam("file") MultipartFile file) throws IOException, InvalidExtensionException {
         if (!file.isEmpty())
         {
-            String imagesUrl = FileUploadUtils.upload(RuoYiConfig.getMovieVideoPath(), file , MimeTypeUtils.MEDIA_EXTENSION);
+            String url = FileUploadUtils.upload(RuoYiConfig.getMovieVideoPath(), file , MimeTypeUtils.MEDIA_EXTENSION);
             String filename = file.getOriginalFilename();
             filename= filename.substring(0,filename.lastIndexOf("."));
-            Map<String,Object> data = new HashMap<>(10);
-            data.put("url", imagesUrl);
-            data.put("title", filename);
-            data.put("ext", FileUploadUtils.getExtension(file));
-            data.put("filesize",file.getSize());
-            AjaxResult ajax = AjaxResult.success(data);
-            return ajax;
+            UploadVideoVO uploadVideoVO = new UploadVideoVO(url, filename, FileUploadUtils.getExtension(file), file.getSize());
+            return  AjaxResult.success(uploadVideoVO);
         }
         return AjaxResult.error("上传视频异常，请联系管理员");
+    }
+
+    @Autowired
+    private IVideoService videoService;
+
+    /**
+     * 通过网盘上传视频
+     */
+    @Log(title = "通过网盘上传视频", businessType = BusinessType.File)
+    @PostMapping("/uploadVideoByNetWorkDisk")
+    public AjaxResult uploadVideoByNetWorkDisk(@RequestBody NetWorkDiskVO netWorkDiskVO)
+    {
+        UploadVideoVO uploadVideoVO =  videoService.uploadVideoByNetWorkDisk(netWorkDiskVO);
+        return  AjaxResult.success(uploadVideoVO);
     }
 }

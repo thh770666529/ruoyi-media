@@ -228,8 +228,45 @@
       </div>
 
 
+    <el-dialog title="选择网盘视频" :visible.sync="fileTableOpen" width="900px"  append-to-body>
+      <FileTable
+        :fileType="fileType"
+        :filePath="filePath"
+        :fileList="fileList"
+        :loading="fileLoading"
+        @setSelectionFile="setSelectionFile"
+        @getTableDataByType="getTableDataByType"
+      ></FileTable>
+     <!-- <pagination
+        :total="pageData.total"
+        :page.sync="pageData.currentPage"
+        :limit.sync="pageData.pageCount"
+        :pageSizes="[10, 50, 100, 200]"
+        @pagination="getTableDataByType"
+      />-->
+      <div class="pagination-wrapper">
+        <div class="current-page-count">当前页{{ fileList.length }}条</div>
+        <el-pagination
+          :current-page="pageData.currentPage"
+          :page-size="pageData.pageCount"
+          :total="pageData.total"
+          :page-sizes="[10, 50, 100, 200]"
+          layout="sizes, total, prev, pager, next"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        >
+        </el-pagination>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="uploadVideoByNetWorkDisk">确 定</el-button>
+        <el-button @click="fileTableOpen = false">取 消</el-button>
+      </div>
+    </el-dialog>
+
     <!-- 添加或修改电影管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
+
+
       <el-form ref="movieVideoForm" :model="movieVideoForm" :rules="videoRules" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="movieVideoForm.title" placeholder="请输入标题" />
@@ -264,8 +301,8 @@
             <div class="el-upload__tip" slot="tip">只能上传mp4文件，且不超过1G</div>
           </el-upload>
         </el-form-item>
-
-
+        <!--<el-button type="primary" @click="uploadVideoByNetWorkDisk('152','aaa.jpg')">选择网盘上传文件</el-button>-->
+       <el-button type="primary" @click="fileTableOpen = true">选择网盘上传文件</el-button>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitVideoForm">确 定</el-button>
@@ -332,14 +369,25 @@
 </template>
 
 <script>
-import { deleteMovieActor,listMovie, getMovie, delMovie, addMovie, updateMovie, exportMovie } from "@/api/media/movie";
+import { uploadVideoByNetWorkDisk,deleteMovieActor,listMovie, getMovie, delMovie, addMovie, updateMovie, exportMovie } from "@/api/media/movie";
 import { notSelectedActorList,listActor, getActor, delActor, addActor, updateActor, exportActor } from "@/api/media/actor";
 import { getToken } from "@/utils/auth";
 import Editor from "../../../components/Editor";
+import FileTable from '@/components/File/FileTable'
+import {
+  getFileListByPath,
+  getFileListByType,
+  getRecoveryFile,
+  moveFile,
+  batchMoveFile,
+  searchFile,
+  shareFile
+} from '@/api/file/index'
 export default {
   name: "Movie",
   components: {
-    Editor
+    Editor,
+    FileTable
   },
   data() {
     return {
@@ -351,6 +399,7 @@ export default {
       uploadVideoUrl: null,
       // 遮罩层
       loading: true,
+      fileLoading:true,
       // 选中数组
       ids: [],
       // 子表选中数据
@@ -413,6 +462,19 @@ export default {
       photoVisible: false,
       //电影视频信息Form
       movieVideoForm:{},
+      fileList: [], //  表格数据-文件列表
+      //网盘数据
+      pageData: {
+        currentPage: 1,
+        pageCount: 10,
+        total: 0
+      },
+      selectionFile: [], // 勾选的文件
+      selectFilePath: '', //  移动文件路径
+      operationFile: {}, // 当前操作行
+      filePath:'/',
+      batchOperate: false, //  批量操作模式
+      fileTableOpen:false,//网盘视频模态框
       // 表单校验
       rules: {
         title: [
@@ -471,8 +533,52 @@ export default {
       }
     }
   },
+  computed: {
+    fileType() {
+      return Number('3');
+    }
+  },
   methods: {
+    /**
+     * 表格数据获取相关事件 | 根据文件类型展示文件列表
+     */
+    showFileListByType() {
+      this.fileLoading = true
+      //  分类型
+      let data = {
+        fileType: this.fileType,
+        currentPage: this.pageData.currentPage,
+        pageCount: this.pageData.pageCount
+      }
+      getFileListByType(data).then((res) => {
+        this.fileList = res.data.list
+        this.pageData.total = res.data.total
+        this.fileLoading = false
+      })
+    },
+    /**
+     * 表格数据获取相关事件 | 分页组件 | 当前页码改变
+     */
+    handleCurrentChange(currentPage) {
+      this.pageData.currentPage = currentPage
+      this.getTableDataByType()
+    },
+    /**
+     * 表格数据获取相关事件 | 分页组件 | 页大小改变时
+     */
+    handleSizeChange(pageCount) {
+      this.pageData.pageCount = pageCount
+      this.getTableDataByType()
+    },
+    /**
+     * 表格数据获取相关事件 | 获取文件列表数据
+     */
+    getTableDataByType() {
+      this.batchOperate = false
+      this.showFileListByType()
+    },
     init(){
+      this.showFileListByType()
       const movieId = this.$route.params && this.$route.params.movieId;
       this.labelList=[];
       if (movieId ==undefined){
@@ -566,6 +672,7 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      this.title = "修改电影管理";
       this.movieVideoForm = this.selectedMovieVideo[0];
       this.open = true;
     },
@@ -837,6 +944,32 @@ export default {
     previewVideo(url) {
       window.open( process.env.VUE_APP_BASE_API+url);
     },
+    uploadVideoByNetWorkDisk(){
+      if (this.selectionFile.length==0){
+        this.msgError("请选择要上传的视频！")
+        return
+      }
+      if (this.selectionFile.length>1){
+        this.msgError("只能勾选一个视频文件进行上传！")
+        return
+      }
+      const fileId= this.selectionFile[0].fileId
+      const fileName= this.selectionFile[0].fileName
+      let data = {"fileId":fileId,"fileName":fileName}
+      this.loading = true
+      uploadVideoByNetWorkDisk(data).then(response => {
+        this.movieVideoForm = response.data;
+        this.loading = false
+        this.fileTableOpen = false
+      });
+    },
+    /**
+     * 表格勾选框事件 | 保存被勾选的文件
+     * @param {object[]} selection 被勾选的文件数组
+     */
+    setSelectionFile(selection) {
+      this.selectionFile = selection
+    },
  }
 };
 </script>
@@ -872,4 +1005,24 @@ export default {
   display: block;
 }
 
+</style>
+
+<style lang="stylus" scoped>
+  @import '~@/assets/styles/varibles.styl';
+
+  .pagination-wrapper {
+    position: relative;
+    border-top: 1px solid $BorderBase;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    .current-page-count {
+      position: absolute;
+      left: 16px;
+      height: 32px;
+      line-height: 32px;
+      font-size: 13px;
+      color: $RegularText;
+    }
+  }
 </style>

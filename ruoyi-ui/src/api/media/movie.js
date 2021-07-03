@@ -80,3 +80,7 @@ export function deleteMovieActor(actorIds) {
     method: 'delete'
   })
 }
+
+
+// 通过网盘上传视频
+export const uploadVideoByNetWorkDisk = data => request.post('/media/movie/uploadVideoByNetWorkDisk', data);
