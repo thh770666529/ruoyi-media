@@ -20,6 +20,8 @@ import Pagination from "@/components/Pagination";
 import RightToolbar from "@/components/RightToolbar"
 // collapse 展开折叠
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+// 字典标签组件
+import DictTag from '@/components/DictTag'
 // 头部标签插件
 import VueMeta from 'vue-meta'
 
@@ -46,6 +48,7 @@ Vue.prototype.$EventBus = new Vue()
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
+Vue.component('DictTag', DictTag)
 Vue.use(permission)
 Vue.use(VueMeta)
 
