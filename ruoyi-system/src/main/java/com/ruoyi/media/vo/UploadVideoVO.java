@@ -11,18 +11,24 @@ import java.io.Serializable;
 @Data
 public class UploadVideoVO implements Serializable {
 
-    String url;
+    private String url;
 
-    String title;
+    private String title;
 
-    String ext;
+    private String ext;
 
-    Long filesize;
+    private Long filesize;
 
-    public UploadVideoVO(String url, String title, String ext, Long filesize) {
+    private String length;
+
+    private String status;
+
+    public UploadVideoVO(String url, String title, String ext, Long filesize,String length,String status) {
         this.url = url;
         this.title = title;
         this.ext = ext;
         this.filesize = filesize;
+        this.length = length;
+        this.status = status;
     }
 }

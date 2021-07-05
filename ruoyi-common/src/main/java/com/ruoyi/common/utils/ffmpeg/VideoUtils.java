@@ -151,10 +151,11 @@ public class VideoUtils {
      * @return
      */
     public static MultimediaInfo getVideoInfoByFile(String videoPath) {
+        MultimediaInfo m = new MultimediaInfo();
         try {
             File file = new File(videoPath);
             Encoder encoder = new Encoder();
-            MultimediaInfo m = encoder.getInfoByFile(file);
+            m = encoder.getInfoByFile(file);
             if (null != m) {
                 m.setVideoSize(file.length());
             }
@@ -162,7 +163,7 @@ public class VideoUtils {
         } catch (Exception e) {
             log.error("获取播放播放时长异常 videoPath=" + videoPath, e);
         }
-        return null;
+        return m ;
     }
 
     /**

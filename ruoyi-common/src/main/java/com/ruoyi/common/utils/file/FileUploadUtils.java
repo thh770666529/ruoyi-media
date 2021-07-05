@@ -123,6 +123,40 @@ public class FileUploadUtils
     }
 
     /**
+     * 文件上传
+     *
+     * @param baseDir 相对应用的基目录
+     * @param file 上传的文件
+     * @param allowedExtension 上传文件类型
+     * @return 返回上传成功的文件名
+     * @throws FileSizeLimitExceededException 如果超出最大大小
+     * @throws FileNameLengthLimitExceededException 文件名太长
+     * @throws IOException 比如读写文件出错时
+     * @throws InvalidExtensionException 文件校验异常
+     */
+    public static final String upload2(String baseDir, MultipartFile file, String[] allowedExtension)
+            throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException,
+            InvalidExtensionException
+    {
+        int fileNamelength = file.getOriginalFilename().length();
+        if (fileNamelength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH)
+        {
+            throw new FileNameLengthLimitExceededException(FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
+        }
+
+        assertAllowed(file, allowedExtension);
+
+        String fileName = extractFilename2(file);
+
+        File desc = getAbsoluteFile(baseDir, fileName);
+        file.transferTo(desc);
+        int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
+        String currentDir = StringUtils.substring(baseDir, dirLastIndex);
+        String pathFileName =  "/" + currentDir + "/" + fileName;
+        return pathFileName;
+    }
+
+    /**
      * 编码文件名
      */
     public static final String extractFilename(MultipartFile file)
@@ -136,11 +170,35 @@ public class FileUploadUtils
     /**
      * 编码文件名
      */
+    public static final String extractFilename2(MultipartFile file)
+    {
+        String fileName = file.getOriginalFilename();
+        String extension = getExtension(file);
+        String uuid = IdUtils.fastUUID();
+        fileName = DateUtils.datePath() + "/" + uuid + "/" + uuid + "." + extension;
+        return fileName;
+    }
+
+    /**
+     * 编码文件名
+     */
     public static final String extractFilename(File file)
     {
         String fileName = file.getName();
         String extension = FilenameUtils.getExtension(file.getAbsolutePath());
         fileName = DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + extension;
+        return fileName;
+    }
+
+    /**
+     * 编码文件名
+     */
+    public static final String extractFilename2(File file)
+    {
+        String fileName = file.getName();
+        String extension = FilenameUtils.getExtension(file.getAbsolutePath());
+        String uuid = IdUtils.fastUUID();
+        fileName = DateUtils.datePath() + "/" + uuid + "/" + uuid + "." + extension;
         return fileName;
     }
 

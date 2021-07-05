@@ -3,7 +3,6 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.media.mapper.VideoMapper">
-
     <resultMap type="Video" id="VideoResult">
         <result property="videoId"    column="video_id"    />
         <result property="title"    column="title"    />
@@ -20,10 +19,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
         <result property="movieId"    column="movie_id"    />
         <result property="filesize"    column="filesize"    />
+        <result property="status"    column="status"    />
+        <result property="superDefinitionUrl"    column="super_definition_url"    />
+        <result property="highDefinitionUrl"    column="high_definition_url"    />
+        <result property="standardDefinitionUrl"    column="standard_definition_url"    />
+        <result property="errorMsg"    column="error_msg"    />
     </resultMap>
 
     <sql id="selectVideoVo">
-        select video_id, title, url, ext, length, type, storage_type, create_time, create_by, update_time, update_by, del_flag, remark, movie_id, filesize from wm_video
+        select video_id, title, url, ext, length, type, storage_type, create_time,
+        create_by, update_time, update_by, del_flag, remark, movie_id, filesize,
+         status,super_definition_url,high_definition_url,standard_definition_url,error_msg
+        from wm_video
     </sql>
 
     <select id="selectVideoList" parameterType="Video" resultMap="VideoResult">
@@ -37,14 +44,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="storageType != null  and storageType != ''"> and storage_type = #{storageType}</if>
             <if test="movieId != null "> and movie_id = #{movieId}</if>
             <if test="filesize != null "> and filesize = #{filesize}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="superDefinitionUrl != null "> and super_definition_url = #{superDefinitionUrl}</if>
+            <if test="highDefinitionUrl != null "> and high_definition_url = #{highDefinitionUrl}</if>
+            <if test="standardDefinitionUrl != null "> and standard_definition_url = #{standardDefinitionUrl}</if>
+            <if test="errorMsg != null "> and error_msg = #{errorMsg}</if>
         </where>
     </select>
 
 
     <insert id="batchVideo">
-        insert into wm_video( video_id, title, url, ext, length, type, storage_type, create_time, create_by, update_time, update_by, del_flag, remark, movie_id, filesize) values
+        insert into wm_video( video_id, title, url, ext, length, type, storage_type, create_time,create_by,
+         update_time, update_by, del_flag, remark, movie_id, filesize,
+         status,super_definition_url,high_definition_url,standard_definition_url,error_msg) values
         <foreach item="item" index="index" collection="list" separator=",">
-            ( #{item.videoId}, #{item.title}, #{item.url}, #{item.ext}, #{item.length}, #{item.type}, #{item.storageType}, #{item.createTime}, #{item.createBy}, #{item.updateTime}, #{item.updateBy}, #{item.delFlag}, #{item.remark}, #{item.movieId}, #{item.filesize})
+            ( #{item.videoId},
+            #{item.title},
+            #{item.url},
+            #{item.ext},
+            #{item.length},
+            #{item.type},
+            #{item.storageType},
+            #{item.createTime},
+            #{item.createBy},
+            #{item.updateTime},
+            #{item.updateBy},
+            #{item.delFlag},
+            #{item.remark},
+            #{item.movieId},
+            #{item.filesize},
+            #{item.status},
+            #{item.superDefinitionUrl},
+            #{item.highDefinitionUrl},
+            #{item.standardDefinitionUrl},
+            #{item.errorMsg}
+            )
         </foreach>
     </insert>
 

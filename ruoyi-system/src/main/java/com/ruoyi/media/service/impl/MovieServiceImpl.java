@@ -7,6 +7,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.MovieActorType;
+import com.ruoyi.common.enums.VideoStatus;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.media.domain.MovieActor;
 import com.ruoyi.media.domain.vo.MovieActorVO;
@@ -160,10 +161,11 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     {
         movieVO.setUpdateTime(DateUtils.getNowDate());
         videoMapper.deleteByMovieId(movieVO.getMovieId());
+        this.insertVideo(movieVO);
+
         Map movieActorMap  = new HashMap<>();
         movieActorMap.put("movie_id",movieVO.getMovieId());
         movieActorMapper.deleteByMap(movieActorMap);
-        this.insertVideo(movieVO);
         this.insertActor(movieVO,MovieActorType.ACTOR);
         this.insertActor(movieVO,MovieActorType.DIRECTOR);
         return  movieMapper.updateById(movieVO);

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.media.domain.Movie;
 import com.ruoyi.media.domain.MovieActor;
 import com.ruoyi.media.domain.vo.MovieActorVO;
+import org.springframework.stereotype.Repository;
 
 /**
  * 电影演员关联Mapper接口
@@ -13,6 +14,7 @@ import com.ruoyi.media.domain.vo.MovieActorVO;
  * @author thh
  * @date 2021-05-16
  */
+@Repository
 public interface MovieActorMapper extends BaseMapper<MovieActor>
 {
     /**

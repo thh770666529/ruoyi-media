@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.enums.VideoStatus;
 import com.ruoyi.common.exception.file.InvalidExtensionException;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -170,10 +171,10 @@ public class MovieController extends BaseController
     public AjaxResult uploadVideo(@RequestParam("file") MultipartFile file) throws IOException, InvalidExtensionException {
         if (!file.isEmpty())
         {
-            String url = FileUploadUtils.upload(RuoYiConfig.getMovieVideoPath(), file , MimeTypeUtils.MEDIA_EXTENSION);
+            String url = FileUploadUtils.upload2(RuoYiConfig.getMovieVideoPath(), file , MimeTypeUtils.MEDIA_EXTENSION);
             String filename = file.getOriginalFilename();
             filename= filename.substring(0,filename.lastIndexOf("."));
-            UploadVideoVO uploadVideoVO = new UploadVideoVO(url, filename, FileUploadUtils.getExtension(file), file.getSize());
+            UploadVideoVO uploadVideoVO = new UploadVideoVO(url, filename, FileUploadUtils.getExtension(file), file.getSize(),"",VideoStatus.READY_CONVERT.getCode());
             return  AjaxResult.success(uploadVideoVO);
         }
         return AjaxResult.error("上传视频异常，请联系管理员");

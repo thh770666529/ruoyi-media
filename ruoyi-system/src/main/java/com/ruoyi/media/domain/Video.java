@@ -28,7 +28,7 @@ public class Video extends BaseEntity
     private String title;
 
     /** url地址 */
-    @Excel(name = "url地址")
+    @Excel(name = "原文件url地址")
     private String url;
 
     /** 文件后缀 */
@@ -57,4 +57,24 @@ public class Video extends BaseEntity
     /** 文件大小字节数 */
     @Excel(name = "文件大小字节数")
     private Long filesize;
+
+    /** 状态1 待转换  2 正在转换 3转换失败 4 转化成功 */
+    @Excel(name = "状态")
+    private String status;
+
+    /** 超清 */
+    @Excel(name = "超清")
+    private String superDefinitionUrl;
+
+    /** 高清*/
+    @Excel(name = "高清")
+    private String highDefinitionUrl;
+
+    /** 标清*/
+    @Excel(name = "标清")
+    private String standardDefinitionUrl;
+
+    /** 错误信息*/
+    @Excel(name = "错误信息")
+    private String errorMsg;
 }
