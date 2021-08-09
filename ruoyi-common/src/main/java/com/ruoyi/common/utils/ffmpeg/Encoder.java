@@ -19,6 +19,7 @@
 package com.ruoyi.common.utils.ffmpeg;
 
 import com.ruoyi.common.constant.FfmpegConstant;
+import com.ruoyi.common.enums.FfmpegResolutionEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -583,11 +584,11 @@ public class Encoder {
      * 视频编码，生成mp4文件
      * @param videoPath
      * @param output
-     * @param resolution 分辨率
+     * @param ffmpegResolutionEnum
      * @return
      * @throws EncoderException
      */
-    public boolean convertMp4(String videoPath,String output,String resolution) throws EncoderException {
+    public boolean convertMp4(String videoPath, String output, FfmpegResolutionEnum ffmpegResolutionEnum) throws EncoderException {
         FFMPEGExecutor ffmpeg = locator.createExecutor();
         ffmpeg.addArgument("-i");
         ffmpeg.addArgument(videoPath);
@@ -595,15 +596,15 @@ public class Encoder {
         ffmpeg.addArgument("libx264");
         ffmpeg.addArgument("-y");//覆盖输出文件
         ffmpeg.addArgument("-s");
-        ffmpeg.addArgument(resolution);//分辨率
+        ffmpeg.addArgument(ffmpegResolutionEnum.getCode());//分辨率
         ffmpeg.addArgument("-pix_fmt");
         ffmpeg.addArgument("yuv420p");
         ffmpeg.addArgument("-b:a");
-        ffmpeg.addArgument("63k");
+        ffmpeg.addArgument(ffmpegResolutionEnum.getBitRate()+"k");
         ffmpeg.addArgument("-b:v");
-        ffmpeg.addArgument("753k");
+        ffmpeg.addArgument(ffmpegResolutionEnum.getTotalBitRate()+"k");
         ffmpeg.addArgument("-r");
-        ffmpeg.addArgument("18");
+        ffmpeg.addArgument(ffmpegResolutionEnum.getFrameRate()+"");
         ffmpeg.addArgument("-threads");
         ffmpeg.addArgument(THREAD_NUM);
         ffmpeg.addArgument("-preset");
@@ -619,7 +620,6 @@ public class Encoder {
         }
     }
 
-
     /**
      * 视频编码，生成mp4文件
      * @param videoPath
@@ -628,7 +628,7 @@ public class Encoder {
      * @throws EncoderException
      */
     public  boolean convertMp4(String videoPath,String output) throws EncoderException {
-        return convertMp4( videoPath, output,FfmpegConstant.RESOLUTION_1080P);
+        return convertMp4( videoPath, output,FfmpegResolutionEnum.RESOLUTION_1080P);
     }
 
     /**

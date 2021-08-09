@@ -2,6 +2,7 @@ package com.ruoyi.media.task;
 
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.FfmpegConstant;
+import com.ruoyi.common.enums.FfmpegResolutionEnum;
 import com.ruoyi.common.enums.VideoStatus;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.ffmpeg.MultimediaInfo;
@@ -76,6 +77,7 @@ public class MediaTask {
         //源文件可能不是mp4格式 首先需要转成mp4格式
         String rootFolder = sourceFile.getParent();
         String sourceFileName = sourceFile.getName();
+        String m3u8Name = sourceFileName.substring(0, sourceFileName.lastIndexOf("."))+".m3u8";
         String extension = FilenameUtils.getExtension(sourceFilePath);
         String folder1080p = rootFolder + "/" + "1080";
         String folder720p = rootFolder + "/" + "720";
@@ -84,26 +86,26 @@ public class MediaTask {
         String m3u8Url720 = "";
         String m3u8Url360 = "";
         if (width >= 1920) {
-            boolean convert1080pFlag = VideoUtils.convertMp4(sourceFilePath, folder1080p, FfmpegConstant.RESOLUTION_1080P);
+            boolean convert1080pFlag = VideoUtils.convertMp4(sourceFilePath, folder1080p, FfmpegResolutionEnum.RESOLUTION_1080P);
             VideoUtils.generateM3u8(folder1080p + "/" + sourceFileName, folder1080p + "/" + "hls");
-            m3u8Url1080 = folder1080p + "/" + "hls"+"/"+sourceFileName+".m3u8";
-            boolean convert720pFlag = VideoUtils.convertMp4(sourceFilePath, folder720p, FfmpegConstant.RESOLUTION_720P);
+            m3u8Url1080 = folder1080p + "/" + "hls"+"/"+m3u8Name;
+            boolean convert720pFlag = VideoUtils.convertMp4(sourceFilePath, folder720p, FfmpegResolutionEnum.RESOLUTION_720P);
             VideoUtils.generateM3u8(folder720p + "/" + sourceFileName, folder720p + "/" + "hls");
-            m3u8Url720 = folder720p + "/" + "hls"+"/"+sourceFileName+".m3u8";
-            boolean convert360pFlag = VideoUtils.convertMp4(sourceFilePath, folder360p, FfmpegConstant.RESOLUTION_360P);
+            m3u8Url720 = folder720p + "/" + "hls"+"/"+m3u8Name;
+            boolean convert360pFlag = VideoUtils.convertMp4(sourceFilePath, folder360p, FfmpegResolutionEnum.RESOLUTION_360P);
             VideoUtils.generateM3u8(folder360p + "/" + sourceFileName, folder360p + "/" + "hls");
-            m3u8Url360 = folder360p + "/" + "hls"+"/"+sourceFileName+".m3u8";
+            m3u8Url360 = folder360p + "/" + "hls"+"/"+m3u8Name;
         } else if (width < 1920 && width >= 720) {
-            boolean convert720pFlag = VideoUtils.convertMp4(sourceFilePath, folder720p, FfmpegConstant.RESOLUTION_720P);
+            boolean convert720pFlag = VideoUtils.convertMp4(sourceFilePath, folder720p, FfmpegResolutionEnum.RESOLUTION_720P);
             VideoUtils.generateM3u8(folder720p + "/" + sourceFileName, folder720p + "/" + "hls");
-            m3u8Url720 = folder720p + "/" + "hls"+"/"+sourceFileName+".m3u8";
-            boolean convert360pFlag = VideoUtils.convertMp4(sourceFilePath, folder360p, FfmpegConstant.RESOLUTION_360P);
+            m3u8Url720 = folder720p + "/" + "hls"+"/"+m3u8Name;
+            boolean convert360pFlag = VideoUtils.convertMp4(sourceFilePath, folder360p, FfmpegResolutionEnum.RESOLUTION_360P);
             VideoUtils.generateM3u8(folder360p + "/" + sourceFileName, folder360p + "/" + "hls");
-            m3u8Url360 = folder360p + "/" + "hls"+"/"+sourceFileName+".m3u8";
+            m3u8Url360 = folder360p + "/" + "hls"+"/"+m3u8Name;
         } else {
-            boolean convert360pFlag = VideoUtils.convertMp4(sourceFilePath, folder360p, FfmpegConstant.RESOLUTION_360P);
+            boolean convert360pFlag = VideoUtils.convertMp4(sourceFilePath, folder360p, FfmpegResolutionEnum.RESOLUTION_360P);
             VideoUtils.generateM3u8(folder360p + "/" + sourceFileName, folder360p + "/" + "hls");
-            m3u8Url360 = folder360p + "/" + "hls"+"/"+sourceFileName+".m3u8";
+            m3u8Url360 = folder360p + "/" + "hls"+"/"+m3u8Name;
         }
 
         newVideo.setSuperDefinitionUrl(getPath(m3u8Url1080));
@@ -111,12 +113,17 @@ public class MediaTask {
         newVideo.setStandardDefinitionUrl(getPath(m3u8Url360));
     }
 
-    public String getPath(String path){
+    /**
+     * 获取文件路径
+     * @param path
+     * @return
+     */
+    private String getPath(String path){
         if (StringUtils.isEmpty(path)){
             return "";
         }
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
-        String currentPath = StringUtils.substring(path, dirLastIndex);
+        String currentPath = "/"+StringUtils.substring(path, dirLastIndex);
         return currentPath;
     }
 }

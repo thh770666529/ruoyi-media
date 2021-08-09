@@ -12,6 +12,8 @@ import com.ruoyi.common.enums.VideoStatus;
 import com.ruoyi.common.exception.file.InvalidExtensionException;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.ffmpeg.MultimediaInfo;
+import com.ruoyi.common.utils.ffmpeg.VideoUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.MimeTypeUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
@@ -174,7 +176,9 @@ public class MovieController extends BaseController
             String url = FileUploadUtils.upload2(RuoYiConfig.getMovieVideoPath(), file , MimeTypeUtils.MEDIA_EXTENSION);
             String filename = file.getOriginalFilename();
             filename= filename.substring(0,filename.lastIndexOf("."));
-            UploadVideoVO uploadVideoVO = new UploadVideoVO(url, filename, FileUploadUtils.getExtension(file), file.getSize(),"",VideoStatus.READY_CONVERT.getCode());
+            String realVideoPath = RuoYiConfig.getProfile() + url;
+            MultimediaInfo videoInfo = VideoUtils.getVideoInfoByFile(realVideoPath);
+            UploadVideoVO uploadVideoVO = new UploadVideoVO(url, filename, FileUploadUtils.getExtension(file), file.getSize(),videoInfo.getVideoTime(),VideoStatus.READY_CONVERT.getCode());
             return  AjaxResult.success(uploadVideoVO);
         }
         return AjaxResult.error("上传视频异常，请联系管理员");

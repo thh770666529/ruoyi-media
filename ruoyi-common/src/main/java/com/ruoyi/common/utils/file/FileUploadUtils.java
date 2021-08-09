@@ -197,7 +197,7 @@ public class FileUploadUtils
     {
         String fileName = file.getName();
         String extension = FilenameUtils.getExtension(file.getAbsolutePath());
-        String uuid = IdUtils.fastUUID();
+        String uuid = IdUtils.fastUUID().replace("-","");
         fileName = DateUtils.datePath() + "/" + uuid + "/" + uuid + "." + extension;
         return fileName;
     }

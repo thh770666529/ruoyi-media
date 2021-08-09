@@ -1,6 +1,7 @@
 package com.ruoyi.common.utils.ffmpeg;
 
 import com.ruoyi.common.constant.FfmpegConstant;
+import com.ruoyi.common.enums.FfmpegResolutionEnum;
 import com.ruoyi.common.utils.ffmpeg.m3u8.M3u8VideoUtils;
 import org.apache.commons.compress.compressors.FileNameUtil;
 import org.apache.commons.io.FilenameUtils;
@@ -21,13 +22,13 @@ public class VideoUtils {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         //System.out.println(videoScreenshot("http://c7c6ea5c95c6a.cdn.sohucs.com/shortvideo/20d8bbda-0dff-4475-8217-e60d55e04650.mp4", "2.00"));
-        String inputStr = "D:\\ruoyi\\uploadPath\\movie\\video\\2021\\07\\03\\9f597c5e-68b4-4a18-85f1-a9237d574b24.mp4";
-        //String outStr = "C:\\Users\\King\\Desktop\\ruoyi\\compressVideo.mp4";
-        String outStr = "C:\\Users\\King\\Desktop\\ruoyi\\hls\\";
-        //boolean b1 = convertMp4(inputStr, outStr);
+        String inputStr = "D:\\ruoyi\\uploadPath\\movie\\video\\2021\\07\\10\\acebd8a0-9b20-4a72-9c9d-e41c831b77a1\\acebd8a0-9b20-4a72-9c9d-e41c831b77a1.mp4";
+        String outStr = "C:\\Users\\King\\Desktop\\ruoyi\\";
+        //String outStr = "C:\\Users\\King\\Desktop\\ruoyi\\hls\\";
+        boolean b1 = convertMp4(inputStr, outStr, FfmpegResolutionEnum.RESOLUTION_1080P);
         //boolean b1 = generateM3u8(inputStr, outStr);
-        String sourcePath = "C:\\Users\\King\\Desktop\\ruoyi\\5a9eba75-b89d-4772-9208-375c6cb905be\\5a9eba75-b89d-4772-9208-375c6cb905be.mp4";
-        generateAllM3u8(sourcePath);
+       // String sourcePath = "C:\\Users\\King\\Desktop\\ruoyi\\5a9eba75-b89d-4772-9208-375c6cb905be\\5a9eba75-b89d-4772-9208-375c6cb905be.mp4";
+        //generateAllM3u8(sourcePath);
         long end = System.currentTimeMillis();
         log.info("耗时={}", (end - start));
     }
@@ -51,20 +52,20 @@ public class VideoUtils {
         String folder720p = rootFolder + File.separator + "720";
         String folder360p = rootFolder + File.separator + "360";
         if (width >= 1920) {
-            boolean convert1080pFlag = convertMp4(sourceFilePath, folder1080p, FfmpegConstant.RESOLUTION_1080P);
+            boolean convert1080pFlag = convertMp4(sourceFilePath, folder1080p, FfmpegResolutionEnum.RESOLUTION_1080P);
             generateM3u8(folder1080p + File.separator + sourceFileName, folder1080p + File.separator + "hls");
-            boolean convert720pFlag = convertMp4(sourceFilePath, folder720p, FfmpegConstant.RESOLUTION_720P);
+            boolean convert720pFlag = convertMp4(sourceFilePath, folder720p, FfmpegResolutionEnum.RESOLUTION_720P);
             generateM3u8(folder720p + File.separator + sourceFileName, folder720p + File.separator + "hls");
-            boolean convert360pFlag = convertMp4(sourceFilePath, folder360p, FfmpegConstant.RESOLUTION_360P);
+            boolean convert360pFlag = convertMp4(sourceFilePath, folder360p, FfmpegResolutionEnum.RESOLUTION_360P);
             generateM3u8(folder360p + File.separator + sourceFileName, folder360p + File.separator + "hls");
         } else if (width < 1920 && width >= 720) {
-            boolean convert720pFlag = convertMp4(sourceFilePath, folder720p, FfmpegConstant.RESOLUTION_720P);
+            boolean convert720pFlag = convertMp4(sourceFilePath, folder720p, FfmpegResolutionEnum.RESOLUTION_720P);
             generateM3u8(folder720p + File.separator + sourceFileName, folder720p + File.separator + "hls");
-            boolean convert360pFlag = convertMp4(sourceFilePath, folder360p, FfmpegConstant.RESOLUTION_360P);
+            boolean convert360pFlag = convertMp4(sourceFilePath, folder360p, FfmpegResolutionEnum.RESOLUTION_360P);
             generateM3u8(folder360p + File.separator + sourceFileName, folder360p + File.separator + "hls");
 
         } else {
-            boolean convert360pFlag = convertMp4(sourceFilePath, folder360p, FfmpegConstant.RESOLUTION_360P);
+            boolean convert360pFlag = convertMp4(sourceFilePath, folder360p, FfmpegResolutionEnum.RESOLUTION_360P);
             generateM3u8(folder360p + File.separator + sourceFileName, folder360p + File.separator + "hls");
         }
     }
@@ -114,7 +115,7 @@ public class VideoUtils {
      * @param outFolderPath
      * @return
      */
-    public static boolean convertMp4(String videoPath, String outFolderPath, String resolution) {
+    public static boolean convertMp4(String videoPath, String outFolderPath, FfmpegResolutionEnum ffmpegResolutionEnum) {
         File outFolder = new File(outFolderPath);
         if (!outFolder.exists()) {
             outFolder.mkdirs();
@@ -126,7 +127,7 @@ public class VideoUtils {
         }
         try {
             Encoder encoder = new Encoder();
-            return encoder.convertMp4(videoPath, output, resolution);
+            return encoder.convertMp4(videoPath, output, ffmpegResolutionEnum);
         } catch (Exception e) {
             log.error("转化mp4视频失败 videoPath=" + videoPath, e);
         }
@@ -141,7 +142,7 @@ public class VideoUtils {
      * @return
      */
     public static boolean convertMp4(String videoPath, String outFolderPath) {
-        return convertMp4(videoPath, outFolderPath, FfmpegConstant.RESOLUTION_1080P);
+        return convertMp4(videoPath, outFolderPath, FfmpegResolutionEnum.RESOLUTION_1080P);
     }
 
     /**
