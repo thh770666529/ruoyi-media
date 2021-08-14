@@ -54,10 +54,10 @@
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
-   font-family: inherit;
-   font-weight: 500;
-   line-height: 1.1;
-   color: inherit;
+	font-family: inherit;
+	font-weight: 500;
+	line-height: 1.1;
+	color: inherit;
 }
 
 .el-dialog:not(.is-fullscreen){
@@ -112,21 +112,30 @@
 	position: absolute;
 }
 
+@media ( max-width : 768px) {
+  .pagination-container .el-pagination > .el-pagination__jump {
+    display: none !important;
+  }
+  .pagination-container .el-pagination > .el-pagination__sizes {
+    display: none !important;
+  }
+}
+
 .el-table .fixed-width .el-button--mini {
 	padding-left: 0;
 	padding-right: 0;
 	width: inherit;
 }
 
- /** 表格更多操作下拉样式 */
+/** 表格更多操作下拉样式 */
 .el-table .el-dropdown-link {
-   cursor: pointer;
-   color: #1890ff;
-   margin-left: 5px;
+	cursor: pointer;
+	color: #1890ff;
+	margin-left: 5px;
 }
 
 .el-table .el-dropdown, .el-icon-arrow-down {
-   font-size: 12px;
+	font-size: 12px;
 }
 
 .el-tree-node__content > .el-checkbox {

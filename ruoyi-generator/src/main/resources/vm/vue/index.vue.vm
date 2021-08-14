@@ -159,7 +159,7 @@
         </template>
       </el-table-column>
     </el-table>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -310,47 +310,9 @@
 
 <script>
 import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName}, export${BusinessName} } from "@/api/${moduleName}/${businessName}";
-#foreach($column in $columns)
-#if($column.insert && !$column.superColumn && !$column.pk && $column.htmlType == "imageUpload")
-import ImageUpload from '@/components/ImageUpload';
-#break
-#end
-#end
-#foreach($column in $columns)
-#if($column.insert && !$column.superColumn && !$column.pk && $column.htmlType == "fileUpload")
-import FileUpload from '@/components/FileUpload';
-#break
-#end
-#end
-#foreach($column in $columns)
-#if($column.insert && !$column.superColumn && !$column.pk && $column.htmlType == "editor")
-import Editor from '@/components/Editor';
-#break
-#end
-#end
 
 export default {
   name: "${BusinessName}",
-  components: {
-#foreach($column in $columns)
-#if($column.insert && !$column.superColumn && !$column.pk && $column.htmlType == "imageUpload")
-    ImageUpload,
-#break
-#end
-#end
-#foreach($column in $columns)
-#if($column.insert && !$column.superColumn && !$column.pk && $column.htmlType == "fileUpload")
-    FileUpload,
-#break
-#end
-#end
-#foreach($column in $columns)
-#if($column.insert && !$column.superColumn && !$column.pk && $column.htmlType == "editor")
-    Editor,
-#break
-#end
-#end
-  },
   data() {
     return {
       // 遮罩层
@@ -585,7 +547,7 @@ export default {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(() => {
+        }).then(function() {
           return del${BusinessName}(${pkColumn.javaField}s);
         }).then(() => {
           this.getList();
@@ -611,19 +573,18 @@ export default {
     /** ${subTable.functionName}删除按钮操作 */
     handleDelete${subClassName}() {
       if (this.checked${subClassName}.length == 0) {
-        this.$alert("请先选择要删除的${subTable.functionName}数据", "提示", { confirmButtonText: "确定", });
+        this.msgError("请先选择要删除的${subTable.functionName}数据");
       } else {
-        this.${subclassName}List.splice(this.checked${subClassName}[0].index - 1, 1);
+        const ${subclassName}List = this.${subclassName}List;
+        const checked${subClassName} = this.checked${subClassName};
+        this.${subclassName}List = ${subclassName}List.filter(function(item) {
+          return checked${subClassName}.indexOf(item.index) == -1
+        });
       }
     },
-    /** 单选框选中数据 */
+    /** 复选框选中数据 */
     handle${subClassName}SelectionChange(selection) {
-      if (selection.length > 1) {
-        this.$refs.${subclassName}.clearSelection();
-        this.$refs.${subclassName}.toggleRowSelection(selection.pop());
-      } else {
-        this.checked${subClassName} = selection;
-      }
+      this.checked${subClassName} = selection.map(item => item.index)
     },
 #end
     /** 导出按钮操作 */

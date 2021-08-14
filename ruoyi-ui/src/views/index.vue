@@ -120,8 +120,9 @@
             <p>
               <i class="el-icon-user-solid"></i> QQ群：<s>满937441</s>
               <s>满887144332</s> <s>满180251782</s> <s>满104180207</s>
-              <a href="https://jq.qq.com/?_wv=1027&k=VvjN2nvu" target="_blank"
-                > 186866453</a
+              <s>满186866453</s> <s>满201396349</s>
+              <a href="https://jq.qq.com/?_wv=1027&k=TULPgzYe" target="_blank">
+                101456076</a
               >
             </p>
             <p>
@@ -146,6 +147,85 @@
             <span>更新日志</span>
           </div>
           <el-collapse accordion>
+            <el-collapse-item title="v3.6.0 - 2021-07-12">
+              <ol>
+                <li>角色管理新增分配用户功能</li>
+                <li>用户管理新增分配角色功能</li>
+                <li>日志列表支持排序操作</li>
+                <li>优化参数&字典缓存操作</li>
+                <li>系统布局配置支持动态标题开关</li>
+                <li>菜单路由配置支持内链访问</li>
+                <li>默认访问后端首页新增提示语</li>
+                <li>富文本默认上传返回url类型</li>
+                <li>新增自定义弹窗拖拽指令</li>
+                <li>全局注册常用通用组件</li>
+                <li>全局挂载字典标签组件</li>
+                <li>ImageUpload组件支持多图片上传</li>
+                <li>FileUpload组件支持多文件上传</li>
+                <li>文件上传组件添加数量限制属性</li>
+                <li>富文本编辑组件添加类型属性</li>
+                <li>富文本组件工具栏配置视频</li>
+                <li>封装通用iframe组件</li>
+                <li>限制超级管理员不允许操作</li>
+                <li>用户信息长度校验限制</li>
+                <li>分页组件新增pagerCount属性</li>
+                <li>添加bat脚本执行应用</li>
+                <li>升级oshi到最新版本v5.7.4</li>
+                <li>升级element-ui到最新版本2.15.2</li>
+                <li>升级pagehelper到最新版1.3.1</li>
+                <li>升级commons.io到最新版本v2.10.0</li>
+                <li>升级commons.fileupload到最新版本v1.4</li>
+                <li>升级swagger到最新版本v3.0.0</li>
+                <li>修复关闭confirm提示框控制台报错问题</li>
+                <li>修复存在的SQL注入漏洞问题</li>
+                <li>定时任务屏蔽rmi远程调用</li>
+                <li>修复用户搜索分页变量错误</li>
+                <li>修复导出角色数据范围翻译缺少仅本人</li>
+                <li>修复表单构建选择下拉选择控制台报错问题</li>
+                <li>优化图片工具类读取文件</li>
+                <li>其他细节优化</li>
+              </ol>
+            </el-collapse-item>
+            <el-collapse-item title="v3.5.0 - 2021-05-25">
+              <ol>
+                <li>新增菜单导航显示风格TopNav（false为左侧导航菜单，true为顶部导航菜单）</li>
+                <li>布局设置支持保存&重置配置</li>
+                <li>修复树表数据显示不全&加载慢问题</li>
+                <li>新增IE浏览器版本过低提示页面</li>
+                <li>用户登录后记录最后登录IP&时间</li>
+                <li>页面导出按钮点击之后添加遮罩</li>
+                <li>富文本编辑器支持自定义上传地址</li>
+                <li>富文本编辑组件新增readOnly属性</li>
+                <li>页签TagsView新增关闭右侧功能</li>
+                <li>显隐列组件加载初始默认隐藏列</li>
+                <li>关闭头像上传窗口还原默认图片</li>
+                <li>个人信息添加手机&邮箱重复验证</li>
+                <li>代码生成模板导出按钮点击后添加遮罩</li>
+                <li>代码生成模板树表操作列添加新增按钮</li>
+                <li>代码生成模板修复主子表字段重名问题</li>
+                <li>升级fastjson到最新版1.2.76</li>
+                <li>升级druid到最新版本v1.2.6</li>
+                <li>升级mybatis到最新版3.5.6 阻止远程代码执行漏洞</li>
+                <li>升级oshi到最新版本v5.6.0</li>
+                <li>velocity剔除commons-collections版本，防止3.2.1版本的反序列化漏洞</li>
+                <li>数据监控页默认账户密码防止越权访问</li>
+                <li>修复firefox下表单构建拖拽会新打卡一个选项卡</li>
+                <li>修正后端导入表权限标识</li>
+                <li>修正前端操作日志&登录日志权限标识</li>
+                <li>设置Redis配置HashKey序列化</li>
+                <li>删除操作日志记录信息</li>
+                <li>上传媒体类型添加视频格式</li>
+                <li>修复请求形参未传值记录日志异常问题</li>
+                <li>优化xss校验json请求条件</li>
+                <li>树级结构更新子节点使用replaceFirst</li>
+                <li>优化ExcelUtil空值处理</li>
+                <li>日志记录过滤BindingResult对象，防止异常</li>
+                <li>修改主题后mini类型按钮无效问题</li>
+                <li>优化通用下载完成后删除节点</li>
+                <li>通用Controller添加响应返回消息</li>
+                <li>其他细节优化</li>
+              </ol>
+            </el-collapse-item>
             <el-collapse-item title="v3.4.0 - 2021-02-22">
               <ol>
                 <li>代码生成模板支持主子表</li>
@@ -521,11 +601,11 @@
 
 <script>
 export default {
-  name: "index",
+  name: "Index",
   data() {
     return {
       // 版本号
-      version: "3.4.0",
+      version: "3.6.0",
     };
   },
   methods: {

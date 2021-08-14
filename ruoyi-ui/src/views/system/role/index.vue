@@ -124,7 +124,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.roleId !== 1">
           <el-button
             size="mini"
             type="text"
@@ -135,17 +135,21 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-circle-check"
-            @click="handleDataScope(scope.row)"
-            v-hasPermi="['system:role:edit']"
-          >数据权限</el-button>
-          <el-button
-            size="mini"
-            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:role:remove']"
           >删除</el-button>
+          <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:role:edit']">
+            <span class="el-dropdown-link">
+              <i class="el-icon-d-arrow-right el-icon--right"></i>更多
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="handleDataScope" icon="el-icon-circle-check"
+                v-hasPermi="['system:role:edit']">数据权限</el-dropdown-item>
+              <el-dropdown-item command="handleAuthUser" icon="el-icon-user"
+                v-hasPermi="['system:role:edit']">分配用户</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -160,11 +164,17 @@
 
     <!-- 添加或修改角色配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="角色名称" prop="roleName">
           <el-input v-model="form.roleName" placeholder="请输入角色名称" />
         </el-form-item>
-        <el-form-item label="权限字符" prop="roleKey">
+        <el-form-item prop="roleKey">
+          <span slot="label">
+            <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasRole('admin')`)" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+            权限字符
+          </span>
           <el-input v-model="form.roleKey" placeholder="请输入权限字符" />
         </el-form-item>
         <el-form-item label="角色顺序" prop="roleSort">
@@ -469,6 +479,19 @@ export default {
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
+    // 更多操作触发
+    handleCommand(command, row) {
+      switch (command) {
+        case "handleDataScope":
+          this.handleDataScope(row);
+          break;
+        case "handleAuthUser":
+          this.handleAuthUser(row);
+          break;
+        default:
+          break;
+      }
+    },
     // 树权限（展开/折叠）
     handleCheckedTreeExpand(value, type) {
       if (type == 'menu') {
@@ -547,6 +570,11 @@ export default {
         });
         this.title = "分配数据权限";
       });
+    },
+    /** 分配用户操作 */
+    handleAuthUser: function(row) {
+      const roleId = row.roleId;
+      this.$router.push("/system/role-auth/user/" + roleId);
     },
     /** 提交按钮 */
     submitForm: function() {

@@ -7,7 +7,7 @@ import '@/assets/styles/ruoyi.scss' // ruoyi css
 import App from './App'
 import store from './store'
 import router from './router'
-import permission from './directive/permission'
+import directive from './directive' //directive
 import * as filters from '@/filters/index'
 import './assets/icons' // icon
 import './permission' // permission control
@@ -20,9 +20,15 @@ import Pagination from "@/components/Pagination";
 import RightToolbar from "@/components/RightToolbar"
 // collapse 展开折叠
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+// 富文本组件
+import Editor from "@/components/Editor"
+// 文件上传组件
+import FileUpload from "@/components/FileUpload"
+// 图片上传组件
+import ImageUpload from "@/components/ImageUpload"
 // 字典标签组件
 import DictTag from '@/components/DictTag'
-// 头部标签插件
+// 头部标签组件
 import VueMeta from 'vue-meta'
 
 
@@ -46,12 +52,15 @@ Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 Vue.prototype.$EventBus = new Vue()
 // 全局组件挂载
+// 全局组件挂载
+Vue.component('DictTag', DictTag)
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
-Vue.component('DictTag', DictTag)
-Vue.use(permission)
+Vue.component('Editor', Editor)
+Vue.component('FileUpload', FileUpload)
+Vue.component('ImageUpload', ImageUpload)
+Vue.use(directive)
 Vue.use(VueMeta)
-
 for(let key in globalFunction) {
   Vue.prototype[key] = globalFunction[key]
 }

@@ -2,8 +2,10 @@ import variables from '@/assets/styles/element-variables.scss'
 import defaultSettings from '@/settings'
 
 const { sideTheme, showSettings, topNav, tagsView, fixedHeader, sidebarLogo, dynamicTitle } = defaultSettings
+
 const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || ''
 const state = {
+  title: '',
   theme: storageSetting.theme || variables.theme,
   sideTheme: storageSetting.sideTheme || sideTheme,
   showSettings: showSettings,
@@ -22,6 +24,7 @@ const mutations = {
 }
 
 const actions = {
+  // 修改布局设置
   changeSetting({ commit }, data) {
     commit('CHANGE_SETTING', data)
   },

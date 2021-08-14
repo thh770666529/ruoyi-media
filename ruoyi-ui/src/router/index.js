@@ -6,6 +6,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 import ParentView from '@/components/ParentView';
+import InnerLink from '@/layout/components/InnerLink'
 
 /**
  * Note: 路由配置项
@@ -44,6 +45,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/register',
+    component: (resolve) => require(['@/views/register'], resolve),
+    hidden: true
+  },
+  {
     path: '/404',
     component: (resolve) => require(['@/views/error/404'], resolve),
     hidden: true
@@ -61,8 +67,8 @@ export const constantRoutes = [
       {
         path: 'index',
         component: (resolve) => require(['@/views/index'], resolve),
-        name: '首页',
-        meta: { title: '首页', icon: 'dashboard', noCache: true, affix: true }
+        name: 'Index',
+        meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -81,7 +87,7 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/auth',
+    path: '/system/user-auth',
     component: Layout,
     hidden: true,
     children: [
@@ -89,49 +95,62 @@ export const constantRoutes = [
         path: 'role/:userId(\\d+)',
         component: (resolve) => require(['@/views/system/user/authRole'], resolve),
         name: 'AuthRole',
-        meta: { title: '分配角色'}
+        meta: { title: '分配角色', activeMenu: '/system/user'}
       }
     ]
   },
   {
-    path: '/dict',
+    path: '/system/role-auth',
     component: Layout,
     hidden: true,
     children: [
       {
-        path: 'type/data/:dictId(\\d+)',
+        path: 'user/:roleId(\\d+)',
+        component: (resolve) => require(['@/views/system/role/authUser'], resolve),
+        name: 'AuthUser',
+        meta: { title: '分配用户', activeMenu: '/system/role'}
+      }
+    ]
+  },
+  {
+    path: '/system/dict-data',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'index/:dictId(\\d+)',
         component: (resolve) => require(['@/views/system/dict/data'], resolve),
         name: 'Data',
-        meta: { title: '字典数据', icon: '' }
+        meta: { title: '字典数据', activeMenu: '/system/dict'}
       }
     ]
   },
   {
-    path: '/job',
+    path: '/monitor/job-log',
     component: Layout,
     hidden: true,
     children: [
       {
-        path: 'log',
+        path: 'index',
         component: (resolve) => require(['@/views/monitor/job/log'], resolve),
         name: 'JobLog',
-        meta: { title: '调度日志' }
+        meta: { title: '调度日志', activeMenu: '/monitor/job'}
       }
     ]
   },
-   {
-  path: '/gen',
+  {
+    path: '/tool/gen-edit',
     component: Layout,
     hidden: true,
     children: [
-    {
-    path: 'edit/:tableId(\\d+)',
-    component: (resolve) => require(['@/views/tool/gen/editTable'], resolve),
-    name: 'GenEdit',
-    meta: { title: '修改生成配置' }
-   }
+      {
+        path: 'index/:tableId(\\d+)',
+        component: (resolve) => require(['@/views/tool/gen/editTable'], resolve),
+        name: 'GenEdit',
+        meta: { title: '修改生成配置', activeMenu: '/tool/gen'}
+      }
     ]
-},
+  },
    {
     path: '/media',
     component: Layout,

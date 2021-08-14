@@ -18,7 +18,7 @@ target/
 .project
 .settings
 .springBeans
-
+dump.rdb
 ### IntelliJ IDEA ###
 .idea
 *.iws

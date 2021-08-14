@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -34,7 +35,7 @@ import com.ruoyi.system.service.ISysUserService;
 
 /**
  * 用户信息
- *
+ * 
  * @author ruoyi
  */
 @RestController
@@ -137,7 +138,7 @@ public class SysUserController extends BaseController
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
-        user.setCreateBy(SecurityUtils.getUsername());
+        user.setCreateBy(getUsername());
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
         return toAjax(userService.insertUser(user));
     }
@@ -161,7 +162,7 @@ public class SysUserController extends BaseController
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
-        user.setUpdateBy(SecurityUtils.getUsername());
+        user.setUpdateBy(getUsername());
         return toAjax(userService.updateUser(user));
     }
 
@@ -173,6 +174,10 @@ public class SysUserController extends BaseController
     @DeleteMapping("/{userIds}")
     public AjaxResult remove(@PathVariable Long[] userIds)
     {
+        if (ArrayUtils.contains(userIds, getUserId()))
+        {
+            return error("当前用户不能删除");
+        }
         return toAjax(userService.deleteUserByIds(userIds));
     }
 
@@ -186,7 +191,7 @@ public class SysUserController extends BaseController
     {
         userService.checkUserAllowed(user);
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
-        user.setUpdateBy(SecurityUtils.getUsername());
+        user.setUpdateBy(getUsername());
         return toAjax(userService.resetPwd(user));
     }
 
@@ -199,7 +204,7 @@ public class SysUserController extends BaseController
     public AjaxResult changeStatus(@RequestBody SysUser user)
     {
         userService.checkUserAllowed(user);
-        user.setUpdateBy(SecurityUtils.getUsername());
+        user.setUpdateBy(getUsername());
         return toAjax(userService.updateUserStatus(user));
     }
 
