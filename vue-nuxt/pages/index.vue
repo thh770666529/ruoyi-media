@@ -142,8 +142,7 @@
             nextEl: '.swiper-button-next',//下一页dom节点
             prevEl: '.swiper-button-prev'//前一页dom节点
           }
-        },
-        fileUploadHost: 'http://localhost:7070'
+        }
       }
     },
     created() {

@@ -41,6 +41,7 @@ Vue.use(element);
 import uploader from 'vue-simple-uploader'
 
 // 全局方法挂载
+Vue.prototype.fileUploadHost = process.env.VUE_APP_FILE_UOLOAD_HOST
 Vue.prototype.getDicts = getDicts
 Vue.prototype.getConfigKey = getConfigKey
 Vue.prototype.parseTime = parseTime

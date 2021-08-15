@@ -26,6 +26,11 @@ const globalFunction = {
       return (size / GB).toFixed(3) + 'TB'
     }
   },
+  previewVideo(url) {
+    window.open( process.env.VUE_APP_FILE_UOLOAD_HOST + url);
+  },
+
+
   /**
    * 获取图片缩略图路径
    * @param {object} row 文件信息

@@ -13,7 +13,7 @@
       <section class="c-sort-box unBr">
         <div>
           <!-- /无数据提示 开始-->
-          <section class="no-data-wrap" v-if="total==0">
+          <section class="no-data-wrap" v-if="total===0">
             <em class="icon30 no-data-ico">&nbsp;</em>
             <span class="c-666 fsize14 ml10 vam">没有相关数据，小编正在努力整理中...</span>
           </section>
@@ -63,7 +63,7 @@
             <a
               v-for="page in totalPage"
               :key="page"
-              :class="{current: queryParams.pageNum == page, undisable: queryParams.pageNum == page}"
+              :class="{current: queryParams.pageNum === page, undisable: queryParams.pageNum === page}"
               :title="'第'+page+'页'"
               href="#"
               @click.prevent="gotoPage(page)">{{ page }}</a>
@@ -92,7 +92,6 @@
 export default {
   data() {
     return {
-      fileUploadHost:'http://localhost:7070',
       page:1, //当前页
       actorList:[],  //演员列表
       total: 0,
@@ -116,7 +115,7 @@ export default {
         this.total = response.total;
         this.pages = 0;
         this.pages = this.total / this.queryParams.pageSize;
-        if (this.total % this.queryParams.pageSize != 0) {
+        if (this.total % this.queryParams.pageSize !== 0) {
           this.pages++;
         }
         if (this.pages>0){

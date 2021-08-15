@@ -124,11 +124,11 @@ public class ActorController extends BaseController
 
     @Log(title = "上传头像", businessType = BusinessType.UPDATE)
     @PostMapping("/uploadAvatar")
-    public AjaxResult uploadAvatar(@RequestParam("file") MultipartFile file) throws IOException
+    public AjaxResult uploadAvatar(@RequestParam("file") MultipartFile file) throws Exception
     {
         if (!file.isEmpty())
         {
-            String avatarUrl = FileUploadUtils.upload(RuoYiConfig.getActorAvatarPath(), file);
+            String avatarUrl = FileUploadUtils.upload2(RuoYiConfig.getActorAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
             AjaxResult ajax = AjaxResult.success();
             ajax.put("url", avatarUrl);
             return ajax;

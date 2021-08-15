@@ -73,8 +73,7 @@
   export default {
     data() {
       return {
-        movieList: [],
-        fileUploadHost: "http://localhost:7070"
+        movieList: []
       }
     },
     async asyncData({params, $axios, error}) {

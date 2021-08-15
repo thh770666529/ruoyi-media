@@ -76,18 +76,13 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键" align="left" prop="actorId" width="50" />
       <el-table-column label="姓名" align="center" prop="name"  width="150" />
-      <el-table-column prop="avatar" label="头像" align="center" width="200">
+      <el-table-column prop="avatar" label="头像" align="center" width="80">
         <template slot-scope="scope">
-          <el-image class="images" :src="fileUploadHost+scope.row.avatar" lazy />
+          <el-image class="imagesList" :src="fileUploadHost+scope.row.avatar" lazy />
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="简述" align="left"  >
-        <template slot-scope="scope">
-          {{scope.row.description | ellipsis}}
-        </template>
-      </el-table-column>
+      <el-table-column prop="description" label="简述" align="left"  show-overflow-tooltip  ></el-table-column>
 
-     <!-- <el-table-column label="奖项" align="center" prop="awards" />-->
       <el-table-column label="标签 " align="center" prop="label" :formatter="labelFormat" width="200" />
       <el-table-column label="操作" align="center" width="100"  class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -154,7 +149,7 @@
               :on-success="handleImagesSuccess"
               :before-upload="beforeImagesUpload"
               :headers="headers">
-              <img v-if="form.avatar" :src="fileUploadHost+form.avatar" class="images">
+              <img v-if="form.avatar" :src="fileUploadHost+form.avatar" class="imagesDetail">
               <i v-else class="el-icon-plus images-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -183,7 +178,6 @@
         headers: {
           Authorization: "Bearer " + getToken(),
         },
-        fileUploadHost: null,
         uploadImagesUrl:null,
         formLabelWidth: "80px",
         // 遮罩层
@@ -231,22 +225,11 @@
       };
     },
     created() {
-      this.fileUploadHost =process.env.VUE_APP_FILE_UOLOAD_HOST;
       this.uploadImagesUrl =process.env.VUE_APP_BASE_API+"/media/actor/uploadAvatar";
       this.getDicts("actor_label").then(response => {
         this.labelOptions = response.data;
       });
       this.getList();
-    },
-    filters: {
-      // 当标题字数超出时，超出部分显示’...
-      ellipsis (value) {
-        if (!value) return '';
-        if (value.length > 50) {
-          return value.slice(0, 50) + '...'
-        }
-        return value
-      }
     },
     methods: {
       //标签类型字典翻译
@@ -420,8 +403,15 @@
     line-height:288px;
     text-align: center;
   }
-  .images {
-    left: 10px;
+  .imagesList {
+    left: 5px;
+    width: 20px;
+    height: 28.8px;
+    display: block;
+  }
+
+  .imagesDetail {
+    left: 5px;
     width: 200px;
     height: 288px;
     display: block;

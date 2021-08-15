@@ -75,7 +75,7 @@ public class VideoServiceImpl  extends ServiceImpl<VideoMapper, Video> implement
         }
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(RuoYiConfig.getMovieVideoPath(), dirLastIndex);
-        String pathFileName = Constants.RESOURCE_PREFIX + "/" + currentDir + "/" + fileName;
+        String pathFileName = "/" + currentDir + "/" + fileName;
         String status = VideoStatus.READY_CONVERT.getCode();
         UploadVideoVO uploadVideoVO = new UploadVideoVO(pathFileName, netWorkDiskVO.getFileName() , FilenameUtils.getExtension(pathFileName), fileBean.getFileSize(), videoInfoByFile.getVideoTime(),status);
         return uploadVideoVO;

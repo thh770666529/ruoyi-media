@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { getDicts } from "@/api/dict/data";
 import { parseTime, addDateRange, selectDictLabel, selectDictLabels } from "@/utils/ruoyi";
-
+import { fileUploadHost } from "@/config/config";
 // 全局方法挂载
 let method = {
   install(Vue) {
@@ -11,7 +11,7 @@ let method = {
     Vue.prototype.selectDictLabel = selectDictLabel;
     Vue.prototype.selectDictLabels = selectDictLabels;
 
-
+    Vue.prototype.fileUploadHost = fileUploadHost;
     Vue.prototype.msgSuccess = function (msg) {
       this.$message({ showClose: true, message: msg, type: "success" });
     }

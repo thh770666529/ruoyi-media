@@ -102,12 +102,12 @@
 
     <el-table v-loading="loading" :data="movieList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column prop="images" label="封面" align="center" width="200">
+      <el-table-column prop="images" label="封面" align="center" width="100">
         <template slot-scope="scope">
           <el-image :src="fileUploadHost+scope.row.images" lazy />
         </template>
       </el-table-column>
-      <el-table-column label="标题" align="center" prop="title" width="600" />
+      <el-table-column label="标题" align="center" prop="title" width="400" />
       <el-table-column label="电影类型" align="center"  prop="type" :formatter="typeFormat" width="100" />
       <el-table-column label="国家" align="center" prop="country" :formatter="countryFormat" width="100" />
       <el-table-column label="发布人" align="center" prop="publishUsername" width="100" />
@@ -156,7 +156,6 @@ export default {
   },
   data() {
     return {
-      fileUploadHost: null,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -223,7 +222,6 @@ export default {
     }
   },
   created() {
-    this.fileUploadHost =process.env.VUE_APP_FILE_UOLOAD_HOST;
     this.getList();
     this.getDicts("movie_country").then(response => {
       this.countryOptions = response.data;
@@ -341,7 +339,6 @@ export default {
     countryFormat(row, column){
       return this.selectDictLabel(this.countryOptions, row.country);
     }
-
   }
 };
 </script>

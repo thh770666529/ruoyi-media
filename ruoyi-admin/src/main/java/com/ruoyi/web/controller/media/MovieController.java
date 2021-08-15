@@ -149,11 +149,11 @@ public class MovieController extends BaseController
      */
     @Log(title = "电影封面", businessType = BusinessType.UPDATE)
     @PostMapping("/upload/images")
-    public AjaxResult uploadImages(@RequestParam("file") MultipartFile file) throws IOException
+    public AjaxResult uploadImages(@RequestParam("file") MultipartFile file) throws Exception
     {
         if (!file.isEmpty())
         {
-            String imagesUrl = FileUploadUtils.upload(RuoYiConfig.getMovieImagesPath(), file);
+            String imagesUrl = FileUploadUtils.upload2(RuoYiConfig.getMovieImagesPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
             AjaxResult ajax = AjaxResult.success();
             ajax.put("url", imagesUrl);
             return ajax;

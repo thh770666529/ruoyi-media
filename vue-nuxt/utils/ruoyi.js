@@ -2,8 +2,7 @@
  * 通用js方法封装处理
  * Copyright (c) 2021 ruoyi
  */
-
-const baseURL = 'localhost:7070'
+import { baseURL } from "@/config/config";
 
 // 日期格式化
 export function parseTime(time, pattern) {

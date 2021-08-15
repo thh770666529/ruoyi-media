@@ -394,7 +394,6 @@ export default {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
-      fileUploadHost: null,
       uploadImagesUrl: null,
       uploadVideoUrl: null,
       // 遮罩层
@@ -457,7 +456,35 @@ export default {
       // 表单参数
       formLabelWidth: "120px",
       lineLabelWidth: "120px",//一行的间隔数
-      form: {},
+      form: {
+        movieId: null,
+        images: null,
+        title: null,
+        type: null,
+        country: null,
+        label: null,
+        description: null,
+        publishBy: null,
+        publishTime: null,
+        status: "0",
+        createBy: null,
+        createTime: null,
+        updateBy: null,
+        updateTime: null,
+        delFlag: null,
+        remark: null,
+        readCount: 0,
+        commentCount: 0,
+        followCount: 0,
+        collectionCount: 0,
+        likesCount: 0,
+        unlikesCount: 0,
+        shareCount: 0,
+        isComment: 0,
+        isDownload: 0,
+        price:0,
+        rate:0
+      },
       images:[],
       photoVisible: false,
       //电影视频信息Form
@@ -501,7 +528,6 @@ export default {
     this.init();
   },
   created() {
-    this.fileUploadHost = process.env.VUE_APP_FILE_UOLOAD_HOST;
     this.uploadImagesUrl =process.env.VUE_APP_BASE_API+"/media/movie/upload/images";
     this.uploadVideoUrl =process.env.VUE_APP_BASE_API+"/media/movie/upload/video";
 
@@ -581,7 +607,7 @@ export default {
       this.showFileListByType()
       const movieId = this.$route.params && this.$route.params.movieId;
       this.labelList=[];
-      if (movieId ==undefined){
+      if (!movieId){
         this.reset();
       }else {
         getMovie(movieId).then(response => {
@@ -619,37 +645,8 @@ export default {
     },
     // 表单重置
     reset() {
-      this.form = {
-        movieId: null,
-        images: null,
-        title: null,
-        type: null,
-        country: null,
-        label: null,
-        description: null,
-        publishBy: null,
-        publishTime: null,
-        status: "0",
-        createBy: null,
-        createTime: null,
-        updateBy: null,
-        updateTime: null,
-        delFlag: null,
-        remark: null,
-        readCount: 0,
-        commentCount: 0,
-        followCount: 0,
-        collectionCount: 0,
-        likesCount: 0,
-        unlikesCount: 0,
-        shareCount: 0,
-        isComment: 0,
-        isDownload: 0,
-        price:0,
-        rate:0
-      };
       // 导出遮罩层
-      exportLoading: false,
+      this.exportLoading =  false;
       this.videoList = [];
       this.resetForm("form");
     },
@@ -748,11 +745,11 @@ export default {
     /** 电影视频删除按钮操作 */
     handleDeleteMovieVideo(row) {
      // const movieVideoIds = row.videoId || this.ids;
-      if (this.selectedMovieVideo.length == 0) {
+      if (this.selectedMovieVideo.length === 0) {
         this.$alert("请先选择要删除的电影视频数据", "提示", { confirmButtonText: "确定" });
       } else {
         for (let index = 0; index < this.selectedMovieVideo.length; index++) {
-          if (this.selectedMovieVideo[index] != null && this.selectedMovieVideo[index] != "") {
+          if (this.selectedMovieVideo[index] != null && this.selectedMovieVideo[index] !== "") {
             this.videoList.splice(this.selectedMovieVideo[index].index - 1, 1);
           }
         }
@@ -765,15 +762,8 @@ export default {
     },
     /** 单选框选中数据 */
     handleVideoSelectionChange(selection) {
-
-     /* if (selection.length > 1) {
-        this.$refs.movieVideo.clearSelection();
-        this.$refs.movieVideo.toggleRowSelection(selection.pop());
-      } else {
-        this.selectedMovieVideo = selection;
-      }*/
       this.selectedMovieVideo = selection;
-      this.single = selection.length != 1;
+      this.single = selection.length !== 1;
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -791,12 +781,12 @@ export default {
         }).catch(() => {});
     },
     submitActorForm(){
-      if (!this.selectedActorList || this.selectedActorList.length == 0){
+      if (!this.selectedActorList || this.selectedActorList.length === 0){
         this.msgError("请选择要添加的演员！");
       }
       for (let index = 0; index < this.selectedActorList.length; index++) {
-        if (this.selectedActorList[index] != null && this.selectedActorList[index] != "") {
-          if (this.movieActorType =='actor'){
+        if (this.selectedActorList[index] != null && this.selectedActorList[index] !== "") {
+          if (this.movieActorType === 'actor'){
             this.actorList.push(this.selectedActorList[index]);
           }else {
             this.directorList.push(this.selectedActorList[index]);
@@ -809,7 +799,7 @@ export default {
     getActorList(){
       this.loading = true;
       let ids = '';
-      if (this.movieActorType =='actor'){
+      if (this.movieActorType === 'actor'){
         ids = this.actorList.map(item => item.actorId)
       }else {
         ids = this.directorList.map(item => item.actorId)
@@ -831,12 +821,12 @@ export default {
     },
     // 删除导演
     handleDeleteDirector(){
-      if (!this.selectedActorList || this.selectedActorList.length == 0){
+      if (!this.selectedActorList || this.selectedActorList.length === 0){
         this.msgError("请选择要删除的演员！");
         return;
       }
       for (let index = 0; index < this.selectedActorList.length; index++) {
-        if (this.selectedActorList[index] != null && this.selectedActorList[index] != "") {
+        if (this.selectedActorList[index] != null && this.selectedActorList[index] !== "") {
           this.directorList.splice(this.selectedActorList[index].index - 1, 1);
         }
       }
@@ -863,17 +853,6 @@ export default {
         }
       }
       this.save();
-      /*const actorIds = this.selectedActorList.map(item => item.actorId);
-      this.$confirm('是否确认删除演员编号为"' + actorIds + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function() {
-        return deleteMovieActor(actorIds);
-      }).then(() => {
-        this.init();
-        this.msgSuccess("删除成功");
-      })*/
     },
     // 状态字典翻译
     statusFormat(row, column) {
@@ -910,7 +889,7 @@ export default {
 
     handleVideoSuccess(res, file) {
       const code = res.code;
-      if (code == 200) {
+      if (code === 200) {
         this.movieVideoForm = res.data;
         this.msgSuccess("上传成功！");
       } else {
@@ -930,31 +909,19 @@ export default {
       return isVideo && isLt1G;
     },
     filesizeFormat(row, column) {
-      return this.formatBytes(row.filesize,2);
-    },
-    formatBytes(filesize,digits){
-      if (filesize == null || filesize == 0){
-        return '0B';
-      }
-      const e=['B','KB','MB', 'GB', 'TB', 'EB','ZB','YB'];
-      const c = 1024;
-      const f=Math.floor(Math.log(filesize)/Math.log(c));
-      return parseFloat((filesize / Math.pow(c, f)).toFixed(digits))+" "+e[f];
-    },
-    previewVideo(url) {
-      window.open( process.env.VUE_APP_BASE_API+url);
+      return this.calculateFileSize(row.filesize);
     },
     uploadVideoByNetWorkDisk(){
-      if (this.selectionFile.length==0){
+      if (this.selectionFile.length === 0){
         this.msgError("请选择要上传的视频！")
         return
       }
-      if (this.selectionFile.length>1){
+      if (this.selectionFile.length > 1){
         this.msgError("只能勾选一个视频文件进行上传！")
         return
       }
-      const fileId= this.selectionFile[0].fileId
-      const fileName= this.selectionFile[0].fileName
+      const fileId = this.selectionFile[0].fileId
+      const fileName = this.selectionFile[0].fileName
       let data = {"fileId":fileId,"fileName":fileName}
       this.loading = true
       uploadVideoByNetWorkDisk(data).then(response => {

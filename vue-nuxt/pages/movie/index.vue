@@ -97,7 +97,7 @@
                       <i class="c-orange fsize12 f-fA"> ￥0</i>
                     </span>-->
                     <span class="fl jgAttr c-ccc f-fA">
-                      <i class="c-999 f-fA">0人学习</i>
+                      <i class="c-999 f-fA">0人观看</i>
                       |
                       <i class="c-999 f-fA">0人购买</i>
                     </span>
@@ -155,7 +155,6 @@ import movieApi from '@/api/movie'
 export default {
   data() {
     return {
-      fileUploadHost:'http://localhost:7070',
       page:1, //当前页
       movieList:[],  //电影列表
       subjectNestedList: [], // 一级分类列表
