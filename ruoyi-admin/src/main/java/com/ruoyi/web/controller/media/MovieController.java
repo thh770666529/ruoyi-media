@@ -140,28 +140,6 @@ public class MovieController extends BaseController
         return toAjax(movieService.removeActorList(actorIds));
     }
 
-
-    /**
-     * 上传电影封面
-     * @param file
-     * @return
-     * @throws IOException
-     */
-    @Log(title = "电影封面", businessType = BusinessType.UPDATE)
-    @PostMapping("/upload/images")
-    public AjaxResult uploadImages(@RequestParam("file") MultipartFile file) throws Exception
-    {
-        if (!file.isEmpty())
-        {
-            String imagesUrl = FileUploadUtils.upload2(RuoYiConfig.getMovieImagesPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
-            AjaxResult ajax = AjaxResult.success();
-            ajax.put("url", imagesUrl);
-            return ajax;
-        }
-        return AjaxResult.error("上传图片异常，请联系管理员");
-    }
-
-
     /**
      * 上传电影视频
      * @param file

@@ -75,9 +75,9 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="bannerId" />
       <el-table-column label="标题" align="center" prop="title" />
-      <el-table-column prop="imageUrl" label="图片地址" align="center" width="200">
+      <el-table-column prop="imageUrl" label="图片地址" align="center" width="150">
         <template slot-scope="scope">
-          <el-image :src="scope.row.imageUrl" />
+          <el-image :src="fileUploadHost+scope.row.imageUrl" />
         </template>
       </el-table-column>
       <el-table-column label="链接地址" align="center" prop="linkUrl" />
@@ -112,22 +112,20 @@
     />
 
     <!-- 添加或修改首页banner对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入标题" />
         </el-form-item>
         <el-form-item label="图片地址" prop="imageUrl">
-          <el-input v-model="form.imageUrl" type="textarea" placeholder="请输入内容" />
+          <imageUpload :limit="1" v-model="form.imageUrl"/>
         </el-form-item>
         <el-form-item label="链接地址" prop="linkUrl">
           <el-input v-model="form.linkUrl" type="textarea" placeholder="请输入内容" />
         </el-form-item>
+
         <el-form-item label="排序" prop="sort">
           <el-input v-model="form.sort" placeholder="请输入排序" />
-        </el-form-item>
-        <el-form-item label="逻辑删除 1" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入逻辑删除 1" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />

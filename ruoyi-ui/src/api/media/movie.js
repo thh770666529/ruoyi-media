@@ -52,17 +52,6 @@ export function exportMovie(query) {
   })
 }
 
-
-
-// 上传电影封面
-export function uploadMovieImages(data) {
-  return request({
-    url: '/media/movie/upload/images',
-    method: 'post',
-    data: data
-  })
-}
-
 // 上传电影视频
   export function uploadMovieVideo(data) {
     return request({

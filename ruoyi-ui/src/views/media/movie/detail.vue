@@ -81,7 +81,7 @@
             <el-form-item label="" class="images-uploader"  :label-width="formLabelWidth" prop="images">
               <el-upload
                 class="el-upload"
-                :action="uploadImagesUrl"
+                :action="commonUploadImagesUrl"
                 :show-file-list="false"
                 :on-success="handleImagesSuccess"
                 :before-upload="beforeImagesUpload"
@@ -394,7 +394,6 @@ export default {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
-      uploadImagesUrl: null,
       uploadVideoUrl: null,
       // 遮罩层
       loading: true,
@@ -528,7 +527,6 @@ export default {
     this.init();
   },
   created() {
-    this.uploadImagesUrl =process.env.VUE_APP_BASE_API+"/media/movie/upload/images";
     this.uploadVideoUrl =process.env.VUE_APP_BASE_API+"/media/movie/upload/video";
 
     this.getDicts("movie_country").then(response => {
@@ -744,7 +742,6 @@ export default {
     },
     /** 电影视频删除按钮操作 */
     handleDeleteMovieVideo(row) {
-     // const movieVideoIds = row.videoId || this.ids;
       if (this.selectedMovieVideo.length === 0) {
         this.$alert("请先选择要删除的电影视频数据", "提示", { confirmButtonText: "确定" });
       } else {
@@ -874,7 +871,6 @@ export default {
       }
     },
     beforeImagesUpload(file) {
-      console.log(file.type);
       const isImages = (file.type === 'image/jpeg') || (file.type === 'image/png');
       const isLt10M = file.size / 1024 / 1024 < 10;
       if (!isImages) {

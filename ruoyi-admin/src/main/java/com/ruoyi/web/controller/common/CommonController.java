@@ -2,6 +2,10 @@ package com.ruoyi.web.controller.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.file.MimeTypeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +24,7 @@ import com.ruoyi.framework.config.ServerConfig;
 
 /**
  * 通用请求处理
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -33,7 +37,7 @@ public class CommonController
 
     /**
      * 通用下载请求
-     * 
+     *
      * @param fileName 文件名称
      * @param delete 是否删除
      */
@@ -71,13 +75,18 @@ public class CommonController
     {
         try
         {
-            // 上传文件路径
+           /* // 上传文件路径
             String filePath = RuoYiConfig.getUploadPath();
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
             String url = serverConfig.getUrl() + fileName;
             AjaxResult ajax = AjaxResult.success();
             ajax.put("fileName", fileName);
+            ajax.put("url", url);
+            return ajax;*/
+            String url = FileUploadUtils.upload2(RuoYiConfig.getImagePath(), file, MimeTypeUtils.IMAGE_EXTENSION);
+            AjaxResult ajax = AjaxResult.success();
+            ajax.put("fileName", url);
             ajax.put("url", url);
             return ajax;
         }
@@ -86,6 +95,30 @@ public class CommonController
             return AjaxResult.error(e.getMessage());
         }
     }
+
+    /**
+     * 通用上传请求
+     */
+    @Log(title = "上传头像", businessType = BusinessType.UPDATE)
+    @PostMapping("/common/uploadImage")
+    public AjaxResult uploadImage(MultipartFile file){
+        try
+        {
+            if (!file.isEmpty())
+            {
+                String imageUrl = FileUploadUtils.upload2(RuoYiConfig.getImagePath(), file, MimeTypeUtils.IMAGE_EXTENSION);
+                AjaxResult ajax = AjaxResult.success();
+                ajax.put("url", imageUrl);
+                return ajax;
+            }
+        }
+        catch (Exception e)
+        {
+            return AjaxResult.error(e.getMessage());
+        }
+        return AjaxResult.error("上传图片异常，请联系管理员");
+    }
+
 
     /**
      * 本地资源通用下载

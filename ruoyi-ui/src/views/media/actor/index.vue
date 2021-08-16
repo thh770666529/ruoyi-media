@@ -144,7 +144,7 @@
           <el-form-item label="" class="images-uploader"  :label-width="formLabelWidth" prop="avatar">
             <el-upload
               class="el-upload"
-              :action="uploadImagesUrl"
+              :action="commonUploadImagesUrl"
               :show-file-list="false"
               :on-success="handleImagesSuccess"
               :before-upload="beforeImagesUpload"
@@ -178,7 +178,6 @@
         headers: {
           Authorization: "Bearer " + getToken(),
         },
-        uploadImagesUrl:null,
         formLabelWidth: "80px",
         // 遮罩层
         loading: true,
@@ -225,7 +224,6 @@
       };
     },
     created() {
-      this.uploadImagesUrl =process.env.VUE_APP_BASE_API+"/media/actor/uploadAvatar";
       this.getDicts("actor_label").then(response => {
         this.labelOptions = response.data;
       });

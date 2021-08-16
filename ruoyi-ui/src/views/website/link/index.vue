@@ -1,11 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
-        </el-select>
-      </el-form-item>
       <el-form-item label="排序" prop="sort">
         <el-input
           v-model="queryParams.sort"
@@ -33,14 +28,15 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="跳转方式" prop="linkTarget">
-        <el-input
-          v-model="queryParams.linkTarget"
-          placeholder="请输入跳转方式"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="状态" prop="status">
+        <el-select clearable v-model="queryParams.status"  @change="handleQuery" >
+          <el-option
+            v-for="dict in statusOptions"
+            :key="dict.dictValue + ``"
+            :label="dict.dictLabel"
+            :value="dict.dictValue + ``"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -97,11 +93,15 @@
     <el-table v-loading="loading" :data="linkList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键" align="center" prop="linkId" />
-      <el-table-column label="状态" align="center" prop="status" />
-      <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="名称" align="center" prop="linkName" />
       <el-table-column label="链接" align="center" prop="linkUrl" />
       <el-table-column label="跳转方式" align="center" prop="linkTarget" />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <dict-tag :options="statusOptions" :value="scope.row.status + ``"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -145,7 +145,11 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio label="1">请选择字典生成</el-radio>
+            <el-radio
+              v-for="dict in statusOptions"
+              :key="dict.dictValue + ``"
+              :label="dict.dictValue+ ``"
+            >{{dict.dictLabel}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
@@ -172,6 +176,8 @@ export default {
   },
   data() {
     return {
+      // 状态数据字典
+      statusOptions: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -227,6 +233,9 @@ export default {
   },
   created() {
     this.getList();
+    this.getDicts("link_status").then(response => {
+      this.statusOptions = response.data;
+    });
   },
   methods: {
     /** 查询站点友情链接列表 */

@@ -121,18 +121,4 @@ public class ActorController extends BaseController
             return toAjax(actorService.removeByIds(ids));
         }
     }
-
-    @Log(title = "上传头像", businessType = BusinessType.UPDATE)
-    @PostMapping("/uploadAvatar")
-    public AjaxResult uploadAvatar(@RequestParam("file") MultipartFile file) throws Exception
-    {
-        if (!file.isEmpty())
-        {
-            String avatarUrl = FileUploadUtils.upload2(RuoYiConfig.getActorAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
-            AjaxResult ajax = AjaxResult.success();
-            ajax.put("url", avatarUrl);
-            return ajax;
-        }
-        return AjaxResult.error("上传图片异常，请联系管理员");
-    }
 }
