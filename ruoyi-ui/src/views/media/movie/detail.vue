@@ -31,7 +31,7 @@
             </el-form-item>
 
             <el-form-item label="发布人" :label-width="formLabelWidth" prop="publishBy">
-              {{form.publishBy}}
+              {{form.publishUsername}}
             </el-form-item>
 
             <el-form-item label="发布时间" :label-width="formLabelWidth" prop="publishTime">
@@ -154,10 +154,15 @@
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
           <el-table-column label="标题" prop="title"/>
-          <el-table-column label="url" width="200" prop="url" align="center"/>
+          <el-table-column label="url"  show-overflow-tooltip width="200" prop="url" align="center"/>
           <el-table-column label="文件后缀" prop="ext"/>
           <el-table-column label="播放长度" prop="length"/>
-          <el-table-column label="文件大小" :formatter="filesizeFormat" prop="length" align="center" />
+          <el-table-column label="视频大小" :formatter="filesizeFormat" prop="length" align="center" />
+          <el-table-column label="视频状态" highlight-current-row  align="center">
+            <template slot-scope="scope">
+              <dict-tag :options="videoStatusOptions" :value="scope.row.status"/>
+            </template>
+          </el-table-column>
           <el-table-column label="备注" prop="remark" width="200"/>
          <!-- <el-table-column label="类型" prop="type">
             <template slot-scope="scope">
@@ -194,9 +199,13 @@
         <el-table  :data="directorList" :row-class-name="rowIndex" @selection-change="handleActorSelectionChange" ref="movieDirector">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
-          <el-table-column label="姓名" prop="name"/>
-          <el-table-column label="头像" prop="avatar"/>
-          <el-table-column label="标签" prop="label" :formatter="actorLabelFormat" width="200"/>
+          <el-table-column label="姓名" prop="name" width="400" />
+          <el-table-column prop="avatar" label="头像" align="center" width="60">
+            <template slot-scope="scope">
+              <el-image class="imagesList" :src="fileUploadHost+scope.row.avatar" lazy />
+            </template>
+          </el-table-column>
+          <el-table-column label="标签" prop="label" :formatter="actorLabelFormat" width="250"/>
         </el-table>
 
 
@@ -212,9 +221,13 @@
         <el-table  :data="actorList" :row-class-name="rowIndex" @selection-change="handleActorSelectionChange" ref="movieActor">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
-          <el-table-column label="姓名" prop="name"/>
-          <el-table-column label="头像" prop="avatar"/>
-          <el-table-column label="标签" prop="label" :formatter="actorLabelFormat" width="200"/>
+          <el-table-column label="姓名" width="400" prop="name"/>
+          <el-table-column prop="avatar" label="头像" align="center" width="60">
+            <template slot-scope="scope">
+              <el-image class="imagesList" :src="fileUploadHost+scope.row.avatar" lazy />
+            </template>
+          </el-table-column>
+          <el-table-column label="标签" prop="label" :formatter="actorLabelFormat" width="250"/>
         </el-table>
 
       </el-form>
@@ -438,11 +451,12 @@ export default {
       open: false,
       //电影国家字典
       countryOptions:[],
-      //状态字典
+      // 状态字典
       statusOptions:[],
-      //电影类型
+      // 电影类型
       typeOptions:[],
-
+      // 视频状态字典
+      videoStatusOptions:[],
       //字典是否
       sysYesNoOptions: [],
       //标签字典
@@ -547,7 +561,9 @@ export default {
     this.getDicts("actor_label").then(response => {
       this.actorLabelOptions = response.data;
     });
-
+    this.getDicts("video_status").then(response => {
+      this.videoStatusOptions = response.data;
+    });
   },
   watch:{
     "$route":{

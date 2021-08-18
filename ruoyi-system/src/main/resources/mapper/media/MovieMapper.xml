@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
         m.is_comment, m.is_download, m.price, m.rate,u.nick_name as publishUsername
         from wm_movie m
-        left join sys_user u on m.publish_by = u.user_id
+        left join sys_user u on m.publish_by = u.user_name
     </sql>
 
 

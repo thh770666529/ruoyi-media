@@ -7,14 +7,13 @@ import java.util.List;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.MovieActorType;
-import com.ruoyi.common.enums.VideoStatus;
-import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.media.domain.MovieActor;
 import com.ruoyi.media.domain.vo.MovieActorVO;
 import com.ruoyi.media.domain.vo.MovieVO;
 import com.ruoyi.media.mapper.MovieActorMapper;
 import com.ruoyi.media.mapper.VideoMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
+import com.ruoyi.system.util.TokenUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +47,9 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
 
     @Autowired
     private MovieActorMapper movieActorMapper;
+
+    @Autowired
+    TokenUtil tokenUtil;
     /**
      * 查询电影
      *
@@ -63,8 +65,8 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
             BeanUtils.copyProperties(movie,movieVO);
             String publishBy = movieVO.getPublishBy();
             if (StringUtils.isNotEmpty(publishBy)){
-                SysUser sysUser = sysUserMapper.selectUserById(Long.valueOf(publishBy));
-                movieVO.setPublishUsername(sysUser.getUserName());
+                SysUser sysUser = sysUserMapper.selectUserByUserName(publishBy);
+                movieVO.setPublishUsername(sysUser!=null?sysUser.getNickName():null);
             }
             Video video = new Video();
             video.setMovieId(movieId);
@@ -109,7 +111,6 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Override
     public int insertMovie(MovieVO movieVO)
     {
-        movieVO.setCreateTime(DateUtils.getNowDate());
         int rows = movieMapper.insert(movieVO);
         this.insertVideo(movieVO);
         this.insertActor(movieVO,MovieActorType.ACTOR);
@@ -159,10 +160,8 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Override
     public int updateMovie(MovieVO movieVO)
     {
-        movieVO.setUpdateTime(DateUtils.getNowDate());
         videoMapper.deleteByMovieId(movieVO.getMovieId());
         this.insertVideo(movieVO);
-
         Map movieActorMap  = new HashMap<>();
         movieActorMap.put("movie_id",movieVO.getMovieId());
         movieActorMapper.deleteByMap(movieActorMap);

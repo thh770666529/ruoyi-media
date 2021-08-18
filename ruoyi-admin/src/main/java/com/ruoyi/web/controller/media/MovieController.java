@@ -2,22 +2,14 @@ package com.ruoyi.web.controller.media;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import com.ruoyi.common.config.RuoYiConfig;
-import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.enums.VideoStatus;
 import com.ruoyi.common.exception.file.InvalidExtensionException;
-import com.ruoyi.common.utils.ServletUtils;
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.ffmpeg.MultimediaInfo;
 import com.ruoyi.common.utils.ffmpeg.VideoUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.MimeTypeUtils;
-import com.ruoyi.common.utils.spring.SpringUtils;
-import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.media.domain.vo.MovieVO;
 import com.ruoyi.media.service.IVideoService;
 import com.ruoyi.media.vo.NetWorkDiskVO;
@@ -35,9 +27,6 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
-
 /**
  * 电影Controller
  *
@@ -51,8 +40,6 @@ public class MovieController extends BaseController
     @Autowired
     private IMovieService movieService;
 
-    @Autowired
-    private TokenService tokenService;
     /**
      * 查询电影列表
      */
@@ -96,8 +83,6 @@ public class MovieController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody MovieVO movieVO)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        movieVO.setCreateBy(loginUser.getUser().getUserId()+"");
         int row = movieService.insertMovie(movieVO);
         if(row>0){
             return AjaxResult.success(movieService.selectMovieById(movieVO.getMovieId()));
