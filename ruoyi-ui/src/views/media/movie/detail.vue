@@ -196,7 +196,7 @@
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteDirector">删除</el-button>
           </el-col>
         </el-row>
-        <el-table  :data="directorList" :row-class-name="rowIndex" @selection-change="handleActorSelectionChange" ref="movieDirector">
+        <el-table :data="directorList" :row-class-name="rowIndex" @selection-change="handleActorSelectionChange" ref="movieDirector">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
           <el-table-column label="姓名" prop="name" width="400" />
@@ -763,7 +763,7 @@ export default {
       } else {
         for (let index = 0; index < this.selectedMovieVideo.length; index++) {
           if (this.selectedMovieVideo[index] != null && this.selectedMovieVideo[index] !== "") {
-            this.videoList.splice(this.selectedMovieVideo[index].index - 1, 1);
+            this.videoList.splice(this.videoList.findIndex(item => item === this.selectedMovieVideo[index]), 1);
           }
         }
         this.save();
@@ -811,13 +811,13 @@ export default {
     },
     getActorList(){
       this.loading = true;
-      let ids = '';
-      if (this.movieActorType === 'actor'){
-        ids = this.actorList.map(item => item.actorId)
-      }else {
-        ids = this.directorList.map(item => item.actorId)
-      }
-      notSelectedActorList(this.queryActorParams,ids).then(response => {
+      let ids = '0';
+        if (this.actorList.length > 0 && this.movieActorType === 'actor'){
+          ids = this.actorList.map(item => item.actorId)
+        }else if(this.directorList.length > 0) {
+          ids = this.directorList.map(item => item.actorId)
+        }
+      notSelectedActorList(this.queryActorParams, ids).then(response => {
         this.notSelectedActorList = response.rows;
         this.actorTotal = response.total;
         this.loading = false;
@@ -835,12 +835,13 @@ export default {
     // 删除导演
     handleDeleteDirector(){
       if (!this.selectedActorList || this.selectedActorList.length === 0){
-        this.msgError("请选择要删除的演员！");
+        this.msgError("请选择要删除的导演！");
         return;
       }
       for (let index = 0; index < this.selectedActorList.length; index++) {
+        console.log(this.selectedActorList, this.directorList)
         if (this.selectedActorList[index] != null && this.selectedActorList[index] !== "") {
-          this.directorList.splice(this.selectedActorList[index].index - 1, 1);
+          this.directorList.splice(this.directorList.findIndex(item => item === this.selectedActorList[index]), 1);
         }
       }
       this.save();
@@ -862,7 +863,7 @@ export default {
       }
       for (let index = 0; index < this.selectedActorList.length; index++) {
         if (this.selectedActorList[index] != null && this.selectedActorList[index] != "") {
-          this.actorList.splice(this.selectedActorList[index].index - 1, 1);
+          this.actorList.splice(this.actorList.findIndex(item => item === this.selectedActorList[index]), 1);
         }
       }
       this.save();
