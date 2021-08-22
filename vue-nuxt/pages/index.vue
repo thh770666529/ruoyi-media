@@ -7,7 +7,7 @@
 
         <div v-for="banner in bannerList" :key="banner.bannerId" class="swiper-slide" style="background: #040B1B;">
           <a target="_blank" :href="banner.linkUrl">
-            <img :src="banner.imageUrl" :alt="banner.title">
+            <img :src="fileUploadHost+banner.imageUrl" :alt="banner.title">
           </a>
         </div>
       </div>
@@ -95,10 +95,10 @@
                       </router-link>
                     </div>
                     <div class="hLh30 txtOf tac">
-                      <span class="fsize14 c-999">{{actor.description}}</span>
+                      <span class="fsize14 c-999" v-html="actor.description"></span>
                     </div>
                     <div class="mt15 i-q-txt">
-                      <p class="c-999 f-fA" >{{actor.awards}}</p>
+                      <span class="c-999 f-fA" v-html="actor.awards"></span>
                     </div>
                   </section>
                 </li>

@@ -1,9 +1,7 @@
 <template>
 
-  <div>
+  <div class="container">
     <!-- 左（上下）右-->
-    <section class="container">
-
     <section class="path-wrap txtOf hLh30">
         <router-link to="/" tag="a" active-class="c-999 fsize14" title="首页">
           首页
@@ -45,28 +43,28 @@
                 </section>
                 <section class="c-attr-mt10 c-attr-undis">
                   <span class="c-fff fsize14"> 导演：&nbsp; </span>
-                  <span class="c-fff fsize14" v-if="!directorList||directorList.length==0">
+                  <span class="c-fff fsize14" v-if="!directorList || directorList.length === 0">
                   无
               </span>
                   <span class="c-fff fsize14" v-for="director in directorList" :key="director.actorId">
-                  {{director.name}}&nbsp;
+                  {{ director.name }}&nbsp;
               </span>
                 </section>
                 <section class="c-attr-mt10 c-attr-undis">
                   <span class="c-fff fsize14">主演：&nbsp;</span>
-                  <span class="c-fff fsize14" v-if="!actorList||actorList.length==0">
+                  <span class="c-fff fsize14" v-if="!actorList||actorList.length === 0">
                   无
               </span>
                   <span class="c-fff fsize14" v-for="actor in actorList" :key="actor.actorId">
-                 {{actor.name}}&nbsp;
+                 {{ actor.name }}&nbsp;
               </span>
                 </section>
                 <section class="c-attr-mt10 c-attr-undis">
-                  <span class="c-fff fsize14">标签：&nbsp;{{labelValue}}</span>
+                  <span class="c-fff fsize14">标签：&nbsp;{{ labelValue }}</span>
                 </section>
 
                 <section class="c-attr-mt10 c-attr-undis">
-                  <span class="c-fff fsize14">发布人：&nbsp;{{movie.publishUsername}}</span>
+                  <span class="c-fff fsize14">发布人：&nbsp;{{ movie.publishUsername }}</span>
                 </section>
 
                 <section class="c-attr-mt of">
@@ -92,7 +90,7 @@
               <el-tab-pane label="电影详情" name="description">
                 <span slot="label"><i class=" el-icon-info"></i> 电影详情</span>
                 <section class="course-txt-body">
-                  <p v-html="movie.description">{{movie.description}}</p>
+                  <div>{{ movie.description }}</div>
                 </section>
               </el-tab-pane>
               <el-tab-pane label="用户评论"  name="comment">
@@ -107,7 +105,7 @@
                     ></CommentBox>
                     <div class="message_infos">
                       <CommentList :comments="comments" :commentInfo="commentInfo"></CommentList>
-                      <div class="noComment" v-if="comments.length ==0">还没有评论，快来抢沙发吧！</div>
+                      <div class="noComment" v-if="comments.length ===0">还没有评论，快来抢沙发吧！</div>
                     </div>
                   </ul>
                 </div>
@@ -122,7 +120,7 @@
         <!--剧情集数-->
         <div class="ml15">
           <el-menu
-            :default-active="`/video/`+video.videoId"
+            :default-active="`/video/`+ video.videoId"
             class="el-menu-vertical-demo"
             background-color="#f4f4f4"
             text-color="#222"
@@ -134,14 +132,14 @@
                 <i class="el-icon-film"></i>
                 <span>剧集列表</span>
               </template>
-              <el-menu-item   :index="`/video/`+video.videoId" v-for="video in videoList" :key="video.videoId" >
-               {{video.title}}
+              <el-menu-item   :index="`/video/` + video.videoId" v-for="video in videoList" :key="video.videoId" >
+                <p>{{ video.title }}</p>
                 <div class="fr">
                   <i  class="free-icon vam">免费试听</i>
                 </div>
               </el-menu-item>
 
-              <el-menu-item    v-if="videoList.length==0"  >
+              <el-menu-item    v-if="videoList.length === 0"  >
                 该视频弹幕为空
               </el-menu-item>
 
@@ -150,7 +148,6 @@
         </div>
       </el-col>
     </el-row>
-    </section>
   </div>
 
 </template>
@@ -192,7 +189,7 @@ export default {
        labelOptions:[],
        //标签值
        labelValue:'',
-       activeName:'description',
+       activeName: 'description',
        // 评论
        showCancel: false,
        comments: [],
@@ -234,10 +231,10 @@ export default {
      },
      //播放
      play(){
-       if (this.videoList.length==0){
+       if (this.videoList.length === 0){
          this.msgError("暂时没有播放的视频！请联系管理员进行上传！")
        }else {
-         window.open("/video/"+this.videoList[0].videoId);
+         window.open('/video/' + this.videoList[0].videoId);
        }
      },
      // 发表评论
@@ -253,7 +250,7 @@ export default {
        params.support = 0;
        params.oppose = 0;
        replyComment(params).then(response => {
-         if (response.code == 200){
+         if (response.code === 200){
            this.msgSuccess("发表成功！")
            this.getCommentList()
          }else{
@@ -265,9 +262,8 @@ export default {
        let params = {};
        params.sid = this.commentInfo.sid
        treeListComment(params).then(response => {
-         if (response.code == 200) {
-           this.comments = response.rows;
-           console.log(this.comments)
+         if (response.code === 200) {
+           this.comments = response.rows
          }
        });
      }
@@ -275,9 +271,9 @@ export default {
 };
 </script>
 <style>
-  .c-v-pic-wrap{width:60%;height:380px}
-  .thr-attr-box{width:120px;height:380px}
-  .c-attr-wrap{width:40%;height:380px}
+  .c-v-pic-wrap{width:60%;height:385px}
+  .thr-attr-box{width:120px;height:385px}
+  .c-attr-wrap{width:40%;height:410px}
 
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     height: 420px;

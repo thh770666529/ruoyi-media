@@ -190,7 +190,6 @@ export default {
     //1 查询第一页数据
     getList() {
       movieApi.listMovie(this.queryParams).then(response => {
-        console.log("listMovie",response)
         this.movieList = response.rows;
         this.total = response.total;
         this.getTotalPage();

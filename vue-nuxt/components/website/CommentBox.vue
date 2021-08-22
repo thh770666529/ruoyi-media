@@ -2,7 +2,7 @@
   <div>
     <div class="commentBox">
     <span class="left" v-if="isShowAvatar">
-      <img v-if="userInfo&&userInfo.avatar" :src="`http://localhost:7070`+userInfo.avatar" onerror="onerror=null;src=defaultAvatar" />
+      <img v-if="userInfo && userInfo.avatar" :src="`http://localhost:7070` + userInfo.avatar" onerror="onerror=null;src=defaultAvatar" />
       <img v-else :src="defaultAvatar" />
     </span>
 
@@ -39,7 +39,7 @@
     name: 'CommentBox',
     props: {
       userInfo: {
-        type: Object
+        type: Object|String
       },
       // 回复的对象
       toInfo: {
@@ -119,7 +119,7 @@
         }
 
 
-        if(this.value =="") {
+        if(this.value === '') {
           this.$notify.error({
             title: '警告',
             message: '评论内容不能为空哦~',
@@ -129,8 +129,8 @@
         }
 
 
-        let sid = ""
-        let commentId = ""
+        let sid = ''
+        let commentId = ''
         if (this.commentInfo) {
           sid = this.commentInfo.sid
         }

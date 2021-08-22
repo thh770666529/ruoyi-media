@@ -1,3 +1,3 @@
-export const fileUploadHost = 'http://localhost:8600'
-export const baseURL = 'http://localhost:7070'
+export const fileUploadHost = 'http://127.0.0.1:8600'
+export const baseURL = 'http://127.0.0.1:7070'
 

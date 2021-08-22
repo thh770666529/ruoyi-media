@@ -151,11 +151,11 @@ export default {
 				variable: this.variable,
 				autoplay: this.autoplay,
 				video: sourceUrl,
+        withCredentials: false,
 				live: this.live,
 				loop: this.loop,
 				poster: this.poster,
 				volume: this.volume,
-
 				// preview: this.preview,
 				loaded: this.loaded
 			};
@@ -168,8 +168,10 @@ export default {
 		 */
 		loadByUrl: function(url) {
 			if(!this.instance){
+			  this.msgInfo(url)
 				this.loadPlayer(url);
 			} else {
+        this.msgInfo(url)
 				this.load(url)
 			}
 		},

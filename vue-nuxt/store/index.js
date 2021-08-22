@@ -1,14 +1,19 @@
 import { login, logout, getInfo } from '@/api/login'
+import { getWebConfig } from '@/api/webConfig'
 import { getToken, setToken, removeToken, getCookies,setCookies,removeCookies } from '@/utils/token'
 
 // nuxt 声明状态 一定是function
 const state = () => ({
     userInfo: '',
-    token: ''
+    token: '',
+    webConfig: ''
 })
 
 //改变状态值
 const mutations = {
+  SET_WEBCONFIG: (state, webConfig) => {
+    state.webConfig = webConfig
+  },
   SET_USERINFO: (state, userInfo) => {
     state.userInfo = userInfo
   },
@@ -49,10 +54,28 @@ const mutations = {
 const actions = {
   // 服务端初始化
   async nuxtServerInit(store,{app:{$cookies}}) {
-    const  userInfo =  $cookies.get('userInfo')?$cookies.get('userInfo') : ''
-    const  token =  $cookies.get('token')?$cookies.get('token') : ''
-    store.commit('SET_USERINFO',userInfo)
-    store.commit('SET_TOKEN',token)
+    const  userInfo =  $cookies.get('userInfo') ? $cookies.get('userInfo') : ''
+    const  token =  $cookies.get('token') ? $cookies.get('token') : ''
+    store.commit('SET_USERINFO', userInfo)
+    store.commit('SET_TOKEN', token)
+  },
+  getWebConfig: ({ commit, state }) => {
+    let webConfig = getCookies('webConfig');
+    if(!webConfig){
+      getWebConfig().then(response => {
+        const data = response.data
+        if (data.showList) {
+          let showList = JSON.parse(data.showList)
+          let loginTypeList = JSON.parse(data.loginTypeList)
+          data.showList = showList;
+          data.loginTypeList = loginTypeList;
+        } else {
+          data.showList = []
+        }
+        setCookies('webConfig', data)
+        commit('SET_WEBCONFIG', JSON.parse(data))
+      });
+    }
   },
     //跳转到登录页面
   LoginPage({commit}){

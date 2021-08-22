@@ -155,7 +155,6 @@
 
           <el-form-item label="本地文件域名" prop="localPictureBaseUrl">
             <el-input v-model="webConfig.localFileBaseUrl" auto-complete="new-password" style="width: 400px"></el-input>
-
           </el-form-item>
 
           <el-form-item label="存储类型">
@@ -303,6 +302,24 @@
         </el-form>
       </el-tab-pane>
 
+      <el-tab-pane name="seven" v-permission="'website:webConfig:query'">
+        <span slot="label"><i class="el-icon-edit"></i> 媒资配置</span>
+        <el-form style="margin-left: 20px;" label-position="left"   label-width="100px" >
+
+          <aside>
+            媒资配置置主要用于配置媒资视频的相关配置<br/>
+            例如：是否开启流媒体功能<br/>
+          </aside>
+
+          <el-form-item label="流媒体开关" prop="openSteamMedia">
+            <el-radio v-for="dict in switchOptions" :key="dict.dictValue" v-model="webConfig.openSteamMedia"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" @click="submitForm()" v-permission="'website:webConfig:edit'">保 存</el-button>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
 
 
     </el-tabs>
@@ -326,6 +343,7 @@ export default {
       //字典是否
       storageTypeOptions: [],
       qiNiuAreaOptions: [],
+      switchOptions: []
     };
   },
   created() {
@@ -337,6 +355,10 @@ export default {
     this.getDicts("qi_niu_area").then(response => {
       this.qiNiuAreaOptions = response.data;
     });
+    this.getDicts("common_switch").then(response => {
+      this.switchOptions = response.data;
+    });
+
     let data = {
       filePath: '/',
       currentPage: 1,
