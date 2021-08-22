@@ -18,6 +18,13 @@
  */
 package com.ruoyi.common.utils.ffmpeg;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.resource.ClassPathResource;
+import cn.hutool.core.util.ZipUtil;
+import com.ruoyi.common.exception.CustomException;
+import com.ruoyi.common.exception.file.FileException;
+import org.springframework.util.FileCopyUtils;
+
 import java.io.*;
 
 /**
@@ -57,17 +64,19 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         // Temp dir?
         File temp = new File(System.getProperty("user.dir"), "conf");
         if (isWindows) {
-            temp = new File(System.getProperty("java.io.tmpdir"), "java-" + myEXEversion);
+            temp = new File(System.getProperty("java.io.tmpdir"), "ruoyi-media" + myEXEversion);
         }
         if (!temp.exists()) {
             temp.mkdirs();
             temp.deleteOnExit();
         }
-        // ffmpeg executable export on disk.
+        //String suffix = isWindows ? ".exe" : "";
+        File zip = new File(temp, "ffmpeg.zip");
         String suffix = isWindows ? ".exe" : "";
-        File exe = new File(temp, "ffmpeg" + suffix);
-        if (!exe.exists()) {
-            copyFile("ffmpeg/ffmpeg" + suffix, exe);
+        File exe = new File(temp.getAbsolutePath() + File.separator + "ffmpeg"+ File.separator +"ffmpeg" + suffix);
+        if (!zip.exists()) {
+            copyFile("ffmpeg/ffmpeg.zip", zip);
+            ZipUtil.unzip(new File(temp.getAbsolutePath(), "ffmpeg.zip"));
             if (!isWindows) {
                 Runtime runtime = Runtime.getRuntime();
                 try {
@@ -86,6 +95,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
     protected String getFFMPEGExecutablePath() {
         return path;
     }
+
 
     /**
      * Copies a file bundled in the package to the supplied destination.
