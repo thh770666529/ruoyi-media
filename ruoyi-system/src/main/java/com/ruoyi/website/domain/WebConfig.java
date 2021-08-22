@@ -192,4 +192,8 @@ public class WebConfig extends BaseEntity
     @Excel(name = "仪表盘通知【用于首次登录弹框】")
     private String dashboardNotification;
 
+    /** 流媒体开关 */
+    @Excel(name = "流媒体开关")
+    private String openSteamMedia;
+
 }

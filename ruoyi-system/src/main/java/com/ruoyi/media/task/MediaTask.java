@@ -51,9 +51,9 @@ public class MediaTask {
             String url = video.getUrl();
             Video newVideo = new Video();
             BeanUtils.copyProperties(video,newVideo);
-            url = RuoYiConfig.getProfile() + "/" +url;
+            url = RuoYiConfig.getProfile() + url;
             try {
-                generateAllM3u8(url,newVideo);
+                generateAllM3u8(url, newVideo);
             }catch (Exception e){
                 newVideo.setErrorMsg(e.getMessage());
             }
@@ -107,7 +107,6 @@ public class MediaTask {
             VideoUtils.generateM3u8(folder360p + "/" + sourceFileName, folder360p + "/" + "hls");
             m3u8Url360 = folder360p + "/" + "hls"+"/"+m3u8Name;
         }
-
         newVideo.setSuperDefinitionUrl(getPath(m3u8Url1080));
         newVideo.setHighDefinitionUrl(getPath(m3u8Url720));
         newVideo.setStandardDefinitionUrl(getPath(m3u8Url360));

@@ -1,13 +1,16 @@
 package com.ruoyi.framework.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
+
+import static com.ruoyi.common.utils.SecurityUtils.getAuthentication;
 
 @Slf4j
 @Component
@@ -15,19 +18,41 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        LoginUser loginUser = SecurityUtils.getLoginUser();
+        LoginUser loginUser = this.getLoginUser();
         log.info("start insert fill ....");
         this.strictInsertFill(metaObject, "createTime", () -> LocalDateTime.now(), LocalDateTime.class);
         this.strictInsertFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
-        this.strictInsertFill(metaObject, "createBy", () -> loginUser!=null?loginUser.getUsername():null, String.class);
-        this.strictInsertFill(metaObject, "updateBy", () -> loginUser!=null?loginUser.getUsername():null, String.class);
+        if(loginUser != null){
+            this.strictInsertFill(metaObject, "createBy", () -> loginUser.getUsername(), String.class);
+            this.strictInsertFill(metaObject, "updateBy", () -> loginUser.getUsername(), String.class);
+        }
+        log.info("end insert fill ....");
+    }
+
+    private LoginUser getLoginUser() {
+        LoginUser loginUser = null;
+        Authentication authentication = getAuthentication();
+        if (authentication != null){
+            try
+            {
+                loginUser = (LoginUser) authentication.getPrincipal();
+            }
+            catch (Exception e)
+            {
+                throw new CustomException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
+            }
+        }
+        return loginUser;
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         log.info("start update fill ....");
-        LoginUser loginUser = SecurityUtils.getLoginUser();
+        LoginUser loginUser = this.getLoginUser();
         this.strictUpdateFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
-        this.strictUpdateFill(metaObject, "updateBy", () -> loginUser!=null?loginUser.getUsername():null, String.class);
+        if(loginUser != null){
+            this.strictInsertFill(metaObject, "updateBy", () -> loginUser.getUsername(), String.class);
+        }
+        log.info("end update fill ....");
     }
 }
