@@ -274,7 +274,7 @@ export default {
     handleUpdate(row) {
       const movieId = row.movieId || this.ids;
        this.$router.push({
-         path: "/media/movie/detail/"+movieId
+         path: "/media/movie/detail/" + movieId
        });
     },
     /** 提交按钮 */

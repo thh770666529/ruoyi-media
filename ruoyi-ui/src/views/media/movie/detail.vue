@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-
+    <el-divider content-position="center">{{this.$route.params && this.$route.params.movieId ? '修改' : '新增'}}电影信息</el-divider>
       <el-form ref="form" :model="form" :rules="rules" >
         <el-row>
           <el-col :span="12">
@@ -493,8 +493,8 @@ export default {
         likesCount: 0,
         unlikesCount: 0,
         shareCount: 0,
-        isComment: 0,
-        isDownload: 0,
+        isComment: 'Y',
+        isDownload: 'Y',
         price:0,
         rate:0
       },
@@ -619,26 +619,29 @@ export default {
     },
     init(){
       this.showFileListByType()
-      const movieId = this.$route.params && this.$route.params.movieId;
+      const movieId =  this.$route.params && this.$route.params.movieId;
       this.labelList=[];
       if (!movieId){
-        this.reset();
+         this.reset();
       }else {
-        getMovie(movieId).then(response => {
-          this.form = response.data;
-          this.videoList = response.data.videoList;
-          this.actorList = response.data.actorList;
-          this.directorList = response.data.directorList;
-          let that = this;
-          that.labelList = [];
-          const dbLabelList = that.form.label.split(",");
-          for (let index = 0; index < dbLabelList.length; index++) {
-            if (dbLabelList[index] != null && dbLabelList[index] != "") {
-              that.labelList.push(dbLabelList[index]);
-            }
-          }
-        });
+        this.getDetail(movieId);
       }
+    },
+    getDetail(movieId) {
+      getMovie(movieId).then(response => {
+        this.form = response.data;
+        this.videoList = response.data.videoList;
+        this.actorList = response.data.actorList;
+        this.directorList = response.data.directorList;
+        let that = this;
+        that.labelList = [];
+        const dbLabelList = that.form.label.split(",");
+        for (let index = 0; index < dbLabelList.length; index++) {
+          if (dbLabelList[index] != null && dbLabelList[index] !== "") {
+            that.labelList.push(dbLabelList[index]);
+          }
+        }
+      });
     },
 
     /** 查询电影管理列表 */
@@ -662,7 +665,39 @@ export default {
       // 导出遮罩层
       this.exportLoading =  false;
       this.videoList = [];
+      this.actorList = []
+      this.directorList = []
+      this.labelList = []
       this.resetForm("form");
+      this.form = {
+        movieId: null,
+          images: null,
+          title: null,
+          type: null,
+          country: null,
+          label: null,
+          description: null,
+          publishBy: null,
+          publishTime: null,
+          status: "0",
+          createBy: null,
+          createTime: null,
+          updateBy: null,
+          updateTime: null,
+          delFlag: null,
+          remark: null,
+          readCount: 0,
+          commentCount: 0,
+          followCount: 0,
+          collectionCount: 0,
+          likesCount: 0,
+          unlikesCount: 0,
+          shareCount: 0,
+          isComment: 'Y',
+          isDownload: 'Y',
+          price:0,
+          rate:0
+      }
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -695,8 +730,8 @@ export default {
     /** 保存按钮 */
     save() {
       if(this.labelList.length <= 0) {
-      this.msgError("标签不能为空!");
-        return;
+        this.msgError("标签不能为空!");
+        return false;
       }
       var that = this;
       that.form.label = that.labelList.join(",");
@@ -709,12 +744,15 @@ export default {
           if (this.form.movieId != null) {
             updateMovie(this.form).then(response => {
               this.msgSuccess("修改成功");
-              this.init();
+              this.getDetail(this.form.movieId)
             });
           } else {
             addMovie(this.form).then(response => {
               this.form = response.data;
               this.msgSuccess("新增成功");
+              this.$router.replace({
+                path: "/media/movie/detail/" + this.form.movieId
+              });
             });
           }
         }
