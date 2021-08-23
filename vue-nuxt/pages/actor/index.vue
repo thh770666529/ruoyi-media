@@ -24,11 +24,11 @@
                 <section class="i-teach-wrap">
                   <div class="i-teach-pic">
                     <router-link :to="'/actor/'+actor.actorId" tag="a" target="_blank" exact>
-                      <img :src="fileUploadHost+actor.avatar" :alt="actor.name">
+                      <img :src="fileUploadHost + actor.avatar" :alt="actor.name">
                     </router-link>
                   </div>
                   <div class="mt10 hLh30 txtOf tac">
-                    <router-link :to="'/actor/'+actor.actorId" tag="a" title="actor.name" target="_blank" active-class="fsize18 c-666" exact>
+                    <router-link :to="'/actor/' + actor.actorId" tag="a" title="actor.name" target="_blank" active-class="fsize18 c-666" exact>
                       {{actor.name}}
                     </router-link>
                   </div>

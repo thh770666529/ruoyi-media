@@ -10,7 +10,7 @@
         <section class="fl t-infor-box c-desc-content">
           <div class="mt20 ml20">
             <section class="t-infor-pic">
-              <img :src="fileUploadHost+actor.avatar" :alt="actor.name">
+              <img :src="fileUploadHost + actor.avatar" :alt="actor.name">
             </section>
             <h3 class="hLh30">
               <span class="fsize24 c-333">{{actor.name}}&nbsp;

@@ -16,7 +16,7 @@
           <el-card>
             <article class="c-v-pic-wrap" >
               <section class="p-h-video-box" >
-                <img height="380px" :src="`http://localhost:7070`+movie.images" :alt="movie.title" class="dis c-v-pic">
+                <img height="380px" :src="fileUploadHost + movie.images" :alt="movie.title" class="dis c-v-pic">
               </section>
             </article>
             <aside class="c-attr-wrap">
@@ -52,7 +52,7 @@
                 </section>
                 <section class="c-attr-mt10 c-attr-undis">
                   <span class="c-fff fsize14">主演：&nbsp;</span>
-                  <span class="c-fff fsize14" v-if="!actorList||actorList.length === 0">
+                  <span class="c-fff fsize14" v-if="!actorList || actorList.length === 0">
                   无
               </span>
                   <span class="c-fff fsize14" v-for="actor in actorList" :key="actor.actorId">
@@ -105,7 +105,7 @@
                     ></CommentBox>
                     <div class="message_infos">
                       <CommentList :comments="comments" :commentInfo="commentInfo"></CommentList>
-                      <div class="noComment" v-if="comments.length ===0">还没有评论，快来抢沙发吧！</div>
+                      <div class="noComment" v-if="comments.length === 0">还没有评论，快来抢沙发吧！</div>
                     </div>
                   </ul>
                 </div>

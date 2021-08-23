@@ -81,13 +81,13 @@
               <li v-for="movie in movieList" :key="movie.movieId">
                 <div class="cc-l-wrap">
                   <section class="course-img">
-                    <img :src="fileUploadHost+movie.images" :alt="movie.title" class="img-responsive">
+                    <img :src="fileUploadHost + movie.images" :alt="movie.title" class="img-responsive">
                     <div class="cc-mask">
-                      <a :href="'/movie/'+movie.movieId" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
+                      <a :href="'/movie/' + movie.movieId" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
                     </div>
                   </section>
                   <h3 class="hLh30 txtOf mt10">
-                    <a :href="'/movie/'+movie.movieId" :title="movie.title" class="course-title fsize18 c-333">{{ movie.title }}</a>
+                    <a :href="'/movie/' + movie.movieId" :title="movie.title" class="course-title fsize18 c-333">{{ movie.title }}</a>
                   </h3>
                   <section class="mt10 hLh20 of">
                     <span  class="fr jgTag bg-green">

@@ -114,11 +114,11 @@
       videoPreviewVisible(newValue) {
         if (newValue) {
           this.activeIndex = this.defaultActiveIndex
-          this.$nextTick(() => {
+          /*this.$nextTick(() => {
             // 将 清晰度 切换按钮添加到底部栏
             let controlBarEl = document.querySelector('.vjs-control-bar')
             controlBarEl.appendChild(this.$refs.clarityRef)
-          })
+          })*/
         }
       }
     },

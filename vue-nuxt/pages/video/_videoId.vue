@@ -7,7 +7,6 @@
           <span class="fsize20">{{movie.title}}</span>
           </div>
           <div style="min-height: 529px">
-            <!--<vue-ckplayer ref="player" :source="videoUrl" :style="playStyle" />-->
            <video-preview ref="player"></video-preview>
           </div>
           <!--电影描述-->
@@ -31,7 +30,7 @@
                       ></CommentBox>
                       <div class="message_infos">
                         <CommentList :comments="comments" :commentInfo="commentInfo"></CommentList>
-                        <div class="noComment" v-if="comments.length ==0">还没有评论，快来抢沙发吧！</div>
+                        <div class="noComment" v-if="comments.length === 0">还没有评论，快来抢沙发吧！</div>
                       </div>
                     </ul>
                   </div>
@@ -74,7 +73,6 @@
 </template>
 
 <script>
-  import vueCkplayer from '@/components/video/player'
   import VideoPreview from '@/components/video/VideoPreview'
   import movieApi from '@/api/movie'
   import { mapActions,mapState, mapMutations} from 'vuex'
@@ -86,7 +84,6 @@
   export default {
     name: 'ckplayerPlugin',
     components: {
-      vueCkplayer,
       CommentList,
       CommentBox,
       VideoPreview
@@ -147,6 +144,7 @@
             this.video=response.data.video;
             this.movie=response.data.movie;
             const openSteamMedia = webConfig.openSteamMedia
+            console.log(webConfig)
             if(openSteamMedia === '1'){
               if(this.video.superDefinitionUrl){
                 this.addVideoPreview('超清', this.fileUploadHost + this.video.superDefinitionUrl, 'application/x-mpegURL')
@@ -160,7 +158,7 @@
             }else {
               this.addVideoPreview('原文件', this.fileUploadHost + this.video.url, 'video/mp4')
             }
-
+            console.log("this.videoPreviewList", this.videoPreviewList)
             let data = {
               videoPreviewVisible: true,
               videoPreviewList: this.videoPreviewList,
