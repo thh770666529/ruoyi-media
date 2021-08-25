@@ -149,12 +149,12 @@ var scrollLoad = (function (options) {
         return value == 'auto' ? '' : value;
     };
     var _init = function () {
-    	 if(document.getElementById("aCoursesList")==null){
+    	 if(document.getElementById("aMovieList")==null){
          	return;
          }
         var offsetPage = window.pageYOffset ? window.pageYOffset : window.document.documentElement.scrollTop,	//滚动条滚动高度
             offsetWindow = offsetPage + Number(window.innerHeight ? window.innerHeight : document.documentElement.clientHeight),
-            docImg = document.getElementById("aCoursesList").getElementsByTagName("img"),			//通过ID查找获取图片节点
+            docImg = document.getElementById("aMovieList").getElementsByTagName("img"),			//通过ID查找获取图片节点
             _len = docImg.length;
         if (!_len) return false;
         for (var i = 0; i < _len; i++) {
@@ -162,7 +162,7 @@ var scrollLoad = (function (options) {
                 o = docImg[i], tag = o.nodeName.toLowerCase();
             if (o) {
                 postPage = o.getBoundingClientRect().top + window.document.documentElement.scrollTop + window.document.body.scrollTop;
-                postWindow = postPage + Number(this.getStyle(o, 'height').replace('px', ''));	
+                postWindow = postPage + Number(this.getStyle(o, 'height').replace('px', ''));
                 if ((postPage > offsetPage && postPage < offsetWindow) || (postWindow > offsetPage && postWindow < offsetWindow)) {	//判断元素始终在可见区域内
                     if (tag === "img" && attrSrc !== null) {
                         o.setAttribute("src", attrSrc);
@@ -182,10 +182,10 @@ var scrollLoad = (function (options) {
 //公共弹框
 /*******
  *** @param dTitle : 弹框标题名称;
- *** @param index : 调用弹框的类型; 
+ *** @param index : 调用弹框的类型;
  *** index == 0 : 支付结果反馈弹出框;
  *** index == 1 : 正确提示弹出框;
- *** index == 2 : 错误提示弹出框;  
+ *** index == 2 : 错误提示弹出框;
  *** index == 3 : 确认提示弹出框；
 */
 function dialog(dTitle,msg,index,url) {
@@ -193,11 +193,11 @@ function dialog(dTitle,msg,index,url) {
     var oBg = $('<div class="bMask"></div>').appendTo($("body")),
         dialogEle = $('<div class="dialogWrap"><div class="dialog-ele"><h4 class="d-s-head pr"><a href="javascript:void(0)" title="关闭" class="dClose icon16 pa">&nbsp;</a><span class="d-s-head-txt">'+dTitle+'</span></h4><div class="of"><div id="dcWrap" class="mt20 mb20 ml20 mr20 "></div></div></div></div>').appendTo($("body"));
     var dCont = [
-            "<div class='d-tips-1'><em class='pa d-t-icon-3'></em><p class='fsize14 c-666'>"+msg+"</p><div class='tac mt30'><a href='javascript:void(0)' title='' class='order-submit dClose'>确定</a></div></div>",
-            "<div class='d-tips-2'><em class='pa d-t-icon-2'></em><p class='fsize14 c-666'>"+msg+"</p><div class='tac mt30'><a href='javascript:void(0)' title='' class='order-submit dClose'>确定</a></div></div>",
-            "<div class='d-tips-3'><em class='pa d-t-icon-3'></em><p class='fsize14 c-666'>"+msg+"</p><div class='tac mt30'><a href='"+url+"' title='' class='order-submit'>确定</a><a href='javascript:void(0)' title='' class='goBack-btn ml10 dClose'>取消</a></div></div>",
-            "<div class='d-tips-4><em class='pa d-t-icon-1'></em><p class='fsize14 c-666'>你选择使用工商银行网银进行在线支付，在你支付成功后我们将尽快发送给你购买的课程。祝你学习愉快！</p><div class='tac mt20'><a href='' title='' class='blue-btn mr10'>支付过程发生问题</a><a href='' title='' class='blue-btn ml10'>已成功完成支付</a></div><p class='tar mt20 c-666'>如有疑问请询问客服：400-6587-777</p></div>",
-            "<div class='d-tips-5'><em class='pa d-t-icon-4'></em><p class='fsize14 c-666 disIb ml5'>恭喜，你已成功激活。现在你可以：</p><div class='tac mt20 mb10'><a href='' title='' class='blue-btn mr10'>登录网页</a><a href='' title='' class='blue-btn'>查看课程</a></div></div>",
+            "<div class='d-tips-1'><em class='pa d-t-icon-3'></em><p class='fsize14 c-666'>"+msg+"</p><div class='actor mt30'><a href='javascript:void(0)' title='' class='order-submit dClose'>确定</a></div></div>",
+            "<div class='d-tips-2'><em class='pa d-t-icon-2'></em><p class='fsize14 c-666'>"+msg+"</p><div class='actor mt30'><a href='javascript:void(0)' title='' class='order-submit dClose'>确定</a></div></div>",
+            "<div class='d-tips-3'><em class='pa d-t-icon-3'></em><p class='fsize14 c-666'>"+msg+"</p><div class='actor mt30'><a href='"+url+"' title='' class='order-submit'>确定</a><a href='javascript:void(0)' title='' class='goBack-btn ml10 dClose'>取消</a></div></div>",
+            "<div class='d-tips-4><em class='pa d-t-icon-1'></em><p class='fsize14 c-666'>你选择使用工商银行网银进行在线支付，在你支付成功后我们将尽快发送给你购买的课程。祝你学习愉快！</p><div class='actor mt20'><a href='' title='' class='blue-btn mr10'>支付过程发生问题</a><a href='' title='' class='blue-btn ml10'>已成功完成支付</a></div><p class='tar mt20 c-666'>如有疑问请询问客服：400-6587-777</p></div>",
+            "<div class='d-tips-5'><em class='pa d-t-icon-4'></em><p class='fsize14 c-666 disIb ml5'>恭喜，你已成功激活。现在你可以：</p><div class='actor mt20 mb10'><a href='' title='' class='blue-btn mr10'>登录网页</a><a href='' title='' class='blue-btn'>查看课程</a></div></div>",
             "<div class='d-tips-6'>"+msg+"</div>"
         ];
     $("#dcWrap").html(dCont[index]);
@@ -208,8 +208,8 @@ function dialog(dTitle,msg,index,url) {
     dialogEle.css({"top" : (dTop-(dH/2)) , "margin-left" : -(dW/2)});
     dHead.css({"width" : (dW-"12")}); //ie7下兼容性;
     $("#tisbutt,.dClose,#qujiao").bind("click", function() {dialogEle.remove();oBg.remove();});
-    
-    
+
+
 }
 
 
@@ -262,7 +262,7 @@ function addPraise(targetId,type,obj){
 					//点赞数加一
 					var praiseNum = $(".addPraise"+targetId+"_"+type).html();
 					$(".addPraise"+targetId+"_"+type).html(praiseNum*1+1);
-					
+
 					//修改点赞数
 					var priaseCount=parseInt($(obj).children("span").html());
 					$(obj).children("span").html(priaseCount+1);
@@ -300,7 +300,7 @@ function queryUnReadNum(){
 			var systemNum = letter.SMNum;
 			//未读站内信数
 			var letterNum = letter.mNum;
-			
+
 			//总未读消息数
 			unReadNum = letter.unReadNum;
 			if(unReadNum!=0){
@@ -339,10 +339,10 @@ function lrFun(type) {
                         /*'<section class="hLh30 of pl10"><span class="fr"><a href="/uc/register" class="c-master fsize12">没有账号？去注册→</a></span>'+*/
                         '<section class="hLh30 of pl10">'+
                         '<span class="fl"><label class="hand c-999 vam"><input type="checkbox" style="vertical-align: -2px;" id="autoThirty">自动登录</label><a class="vam ml10 c-blue" title="" href="/front/passwordRecovery">忘记密码?</a></span></section>'+
-                        '<section class="mt20 tac">'+
+                        '<section class="mt20 actor">'+
                             '<a href="javascript:void(0)" title="登 录" class="e-login-btn" onclick="dialogLogin('+type+')">登 录</a>'+
                         '</section>'+
-                      /*  '<section class="mt20 sf-lr-wrap tac">'+
+                      /*  '<section class="mt20 sf-lr-wrap actor">'+
                             '<h6 class="hLh20 mb15"><span class="c-666 fsize14">第三方快捷登录</span></h6>'+
                             '<a href="" title="QQ登录" class="qq-sf">&nbsp;</a>'+
                             '<a href="" title="微信登录" class="wx-sf">&nbsp;</a>'+
@@ -380,10 +380,10 @@ function lrFun(type) {
                                 '<p class="clear"></p>'+
                             '</li>'+
                         '</ol>'+
-                        '<section class="mt20 tac">'+
+                        '<section class="mt20 actor">'+
                             '<a href="javascript: void(0)" onclick="dialogRegister()" title="注 册" class="e-login-btn">注 册</a>'+
                         '</section>'+
-                    /*    '<section class="mt20 sf-lr-wrap tac">'+
+                    /*    '<section class="mt20 sf-lr-wrap actor">'+
                             '<h6 class="hLh20 mb15"><span class="c-666 fsize14">第三方快捷登录</span></h6>'+
                             '<a href="" title="QQ登录" class="qq-sf">&nbsp;</a>'+
                             '<a href="" title="微信登录" class="wx-sf">&nbsp;</a>'+
@@ -417,18 +417,18 @@ function placeholderFun() {
 
   //当浏览器不支持placeholder属性时，调用placeholder函数
   if(!supportPlaceholder){
-  	$("input").not("input[type='password']").each(//把input绑定事件 排除password框  
-          function(){  
-              if($(this).val()=="" && $(this).attr("placeholder")!=""){  
-                  $(this).val($(this).attr("placeholder"));  
-                  $(this).focus(function(){  
-                      if($(this).val()==$(this).attr("placeholder")) $(this).val("");  
-                  });  
-                  $(this).blur(function(){  
-                      if($(this).val()=="") $(this).val($(this).attr("placeholder"));  
-                  });  
-              }  
-      });  
+  	$("input").not("input[type='password']").each(//把input绑定事件 排除password框
+          function(){
+              if($(this).val()=="" && $(this).attr("placeholder")!=""){
+                  $(this).val($(this).attr("placeholder"));
+                  $(this).focus(function(){
+                      if($(this).val()==$(this).attr("placeholder")) $(this).val("");
+                  });
+                  $(this).blur(function(){
+                      if($(this).val()=="") $(this).val($(this).attr("placeholder"));
+                  });
+              }
+      });
       //对password框的特殊处理
       var pwdField    = $("input[type=password]");
       pwdField.each(function() {
@@ -436,21 +436,21 @@ function placeholderFun() {
     	   	  index = _this.index(),
     	      pwdVal = _this.attr('placeholder');
     	  _this.after('<input id="pwdPlaceholder'+index+'" type="text" value='+pwdVal+' autocomplete="off" />');
-    	  var pwdFieldColn = _this.next();  
-    	  pwdFieldColn.show();  
+    	  var pwdFieldColn = _this.next();
+    	  pwdFieldColn.show();
           _this.hide();
-            
-          pwdFieldColn.focus(function(){  
-        	  pwdFieldColn.hide();  
-              _this.show();  
-              _this.focus();  
-          });  
-            
-          _this.blur(function(){  
-              if(_this.val() == '') {  
-            	  pwdFieldColn.show();  
-                  _this.hide();  
-              }  
+
+          pwdFieldColn.focus(function(){
+        	  pwdFieldColn.hide();
+              _this.show();
+              _this.focus();
+          });
+
+          _this.blur(function(){
+              if(_this.val() == '') {
+            	  pwdFieldColn.show();
+                  _this.hide();
+              }
           });
       });
   }
@@ -513,7 +513,7 @@ function dialogLogin(type){
 }
 
 /**
- * 注册新用户 
+ * 注册新用户
  */
 function dialogRegister() {
 	$(".e-l-jy").html('');
@@ -527,7 +527,7 @@ function dialogRegister() {
 		$("#u-email-reg").next().html('<span class="c-orange"><em class="icon16 u-a-cw">&nbsp;</em>请输入正确的邮箱！</span>');
 		return;
 	};
-	
+
 	var mobileVal=$("#u-mobile-reg").val();
 	if(mobileVal==""){//验证手机是否为空
 		$("#u-mobile-reg").next().html('<span class="c-orange"><em class="icon16 u-a-cw">&nbsp;</em>请输入用户手机号！</span>');
@@ -538,7 +538,7 @@ function dialogRegister() {
 		$("#u-mobile-reg").next().html('<span class="c-orange"><em class="icon16 u-a-cw">&nbsp;</em>请输入正确的手机！</span>');
 		return;
 	};
-	
+
 	if($("#u-password-reg").val().trim()==""){//验证密码是否为空
 		$("#u-password-reg").next().html('<span class="c-orange"><em class="icon16 u-a-cw">&nbsp;</em>请输入密码！</span>');
 		return;
@@ -555,7 +555,7 @@ function dialogRegister() {
 		$("#u-passwordre-reg").next().html('<span class="c-orange"><em class="icon16 u-a-cw">&nbsp;</em>请输入确认密码！</span>');
 		return;
 	}
-	
+
 	if($("#u-randomcode-reg").val().trim()==""){//验证 验证码是否为空
 		$("#u-randomcode-reg").next().next().next().html('<span class="c-orange"><em class="icon16 u-a-cw">&nbsp;</em>请输入验证码！</span>');
 		return;

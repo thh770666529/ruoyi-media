@@ -39,14 +39,14 @@ public class IndexController {
 
     @GetMapping("/getHotActorList")
     public AjaxResult getHotActorList(){
-        //查询前4的热门演员
+        //查询前12的热门演员
         return AjaxResult.success(actorService.selectHotActorList(4));
     }
 
     @GetMapping("/getHotMovieList")
     public AjaxResult getHotMovieList(){
         //查询前4的热门电影
-        return AjaxResult.success(movieService.selectHotMovieList(4));
+        return AjaxResult.success(movieService.selectHotMovieList(12));
     }
 
     @GetMapping("/getAllBannerList")

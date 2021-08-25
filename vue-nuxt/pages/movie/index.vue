@@ -1,10 +1,10 @@
 <template>
-  <div id="aCoursesList" class="bg-fa of">
+  <div id="aMovieList" class="bg-fa of">
     <!-- /电影列表 开始 -->
 
     <section class="container">
       <header class="comm-title">
-        <h2 class="fl tac">
+        <h2 class="fl actor">
           <span class="c-333">全部电影</span>
         </h2>
       </header>
@@ -76,32 +76,22 @@
           </section>
 
 
-          <article v-if="total>0" class="comm-course-list">
+          <article v-if="total>0" class="comm-movie-list">
             <ul id="bna" class="of">
               <li v-for="movie in movieList" :key="movie.movieId">
                 <div class="cc-l-wrap">
-                  <section class="course-img">
-                    <img :src="fileUploadHost + movie.images" :alt="movie.title" class="img-responsive">
+                  <section class="movie-img">
+                    <img :src="fileUploadHost+movie.images" class="img-responsive" :alt="movie.title">
                     <div class="cc-mask">
-                      <a :href="'/movie/' + movie.movieId" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
+                      <a :href="'/movie/'+movie.movieId" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
                     </div>
                   </section>
-                  <h3 class="hLh30 txtOf mt10">
-                    <a :href="'/movie/' + movie.movieId" :title="movie.title" class="course-title fsize18 c-333">{{ movie.title }}</a>
-                  </h3>
-                  <section class="mt10 hLh20 of">
-                    <span  class="fr jgTag bg-green">
-                      <i class="c-fff fsize12 f-fA">免费</i>
-                    </span>
-                    <!--<span v-else class="fr jgTag ">
-                      <i class="c-orange fsize12 f-fA"> ￥0</i>
-                    </span>-->
-                    <span class="fl jgAttr c-ccc f-fA">
-                      <i class="c-999 f-fA">0人观看</i>
-                      |
-                      <i class="c-999 f-fA">0人购买</i>
-                    </span>
-                  </section>
+                  <h4 class="title">
+                    <a :href="'/movie/'+movie.movieId" :title="movie.title">{{movie.title}}</a>
+                  </h4>
+                  <p class="text text-overflow text-muted hidden-xs">主演：.........
+                    <br>标签 :  {{selectDictLabels(labelOptions, movie.label) | ellipsis(10)}}
+                  </p>
                 </div>
               </li>
             </ul>
@@ -180,10 +170,14 @@ export default {
       twoIndex:-1,
       buyCountSort:"",
       gmtCreateSort:"",
-      priceSort:""
+      priceSort:"",
+      labelOptions: []
     }
   },
   created() {
+    this.getDicts("movie_label").then(response => {
+      this.labelOptions= response.data;
+    })
     this.getList()
   },
   methods:{

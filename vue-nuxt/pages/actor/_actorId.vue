@@ -1,8 +1,8 @@
 <template>
-  <div id="aCoursesList" class="bg-fa of">
+  <div id="aMovieList" class="bg-fa of">
     <section class="container">
       <header class="comm-title">
-        <h2 class="fl tac">
+        <h2 class="fl actor">
           <span class="c-333">演员介绍</span>
         </h2>
       </header>
@@ -31,7 +31,7 @@
 
       <section class="mt30">
         <header class="comm-title all-teacher-title c-course-content">
-          <h2 class="fl tac">
+          <h2 class="fl actor">
             <span class="c-333">主演电影</span>
           </h2>
           <section class="c-tab-title">
@@ -43,11 +43,11 @@
           <em class="icon30 no-data-ico">&nbsp;</em>
           <span class="c-666 fsize14 ml10 vam">没有相关数据，小编正在努力整理中...</span>
         </section>
-        <article class="comm-course-list">
+        <article class="comm-movie-list">
           <ul class="of">
             <li v-for="movie in movieList" :key="movie.movieId">
               <div class="cc-l-wrap">
-                <section class="course-img">
+                <section class="movie-img">
                   <img :src="movie.images" class="img-responsive">
                   <div class="cc-mask">
                     <a href="#" title="开始观看" target="_blank" class="comm-btn c-btn-1">开始观看</a>

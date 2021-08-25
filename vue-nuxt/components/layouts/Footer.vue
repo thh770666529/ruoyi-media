@@ -28,7 +28,7 @@
           </section>
         </section>
       </section>
-      <aside class="fl col-3 tac mt15">
+      <aside class="fl col-3 actor mt15">
         <section class="gf-tx">
               <span>
                 <img src="~/assets/img/wx-icon.png" alt>

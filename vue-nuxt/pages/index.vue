@@ -17,50 +17,39 @@
     </div>
     <!-- 幻灯片 结束 -->
 
-    <div id="aCoursesList">
+    <div id="aMovieList">
       <!-- 热门电影 开始 -->
       <div>
         <section class="container">
           <header class="comm-title">
-            <h2 class="tac">
+            <h2 class="actor">
               <span class="c-333">热门电影</span>
             </h2>
           </header>
           <div>
-            <article class="comm-course-list">
+            <article class="comm-movie-list">
               <ul class="of" id="bna">
                 <li v-for="movie in movieList" :key="movie.movieId">
                   <div class="cc-l-wrap">
-                    <section class="course-img">
-                      <img
-                        :src="fileUploadHost+movie.images"
-                        class="img-responsive"
-                        :alt="movie.title"
-                      >
+                    <section class="movie-img">
+                      <img :src="fileUploadHost+movie.images" class="img-responsive" :alt="movie.title">
                       <div class="cc-mask">
                         <a :href="'/movie/'+movie.movieId" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
                       </div>
                     </section>
-                    <h3 class="hLh30 txtOf mt10">
-                      <a :href="'/movie/'+movie.movieId" :title="movie.title" class="course-title fsize18 c-333">{{movie.title}}</a>
-                    </h3>
-                    <section class="mt10 hLh20 of">
-                     <span class="fr jgTag bg-green" v-if="Number(movie.price) === 0">
-                        <i class="c-fff fsize12 f-fA">免费</i>
-                      </span>
-                      <span class="fl jgAttr c-ccc f-fA">
-                        <i class="c-999 f-fA">9634人观看</i>
-                        |
-                        <i class="c-999 f-fA">456评论</i>
-                      </span>
-                    </section>
+                    <h4 class="title">
+                      <a :href="'/movie/'+movie.movieId" :title="movie.title">{{movie.title}}</a>
+                    </h4>
+                    <p class="text text-overflow text-muted hidden-xs">主演：主演：.........
+                      <br>标签 :  {{selectDictLabels(labelOptions, movie.label) | ellipsis(10)}}
+                    </p>
                   </div>
                 </li>
 
               </ul>
               <div class="clear"></div>
             </article>
-            <section class="tac pt20">
+            <section class="actor pt20">
               <a href="/movie" title="全部电影" class="comm-btn c-btn-2">全部电影</a>
             </section>
           </div>
@@ -75,26 +64,26 @@
       <div>
         <section class="container">
           <header class="comm-title">
-            <h2 class="tac">
+            <h2 class="actor">
               <span class="c-333">热门演员</span>
             </h2>
           </header>
           <div>
-            <article class="i-teacher-list">
+            <article class="i-actor-list">
               <ul class="of">
                 <li v-for="actor in actorList" :key="actor.actorId">
-                  <section class="i-teach-wrap">
-                    <div class="i-teach-pic">
+                  <section class="i-actor-wrap">
+                    <div class="i-actor-pic">
                       <router-link :to="'/actor/'+actor.actorId" tag="a" target="_blank" exact>
                         <img :src="fileUploadHost+actor.avatar" :alt="actor.name">
                       </router-link>
                     </div>
-                    <div class="mt10 hLh30 txtOf tac">
+                    <div class="mt10 hLh30 txtOf actor">
                       <router-link :to="'/actor/'+actor.actorId" tag="a" title="actor.name" target="_blank" active-class="fsize18 c-666" exact>
                         {{actor.name}}
                       </router-link>
                     </div>
-                    <div class="hLh30 txtOf tac">
+                    <div class="hLh30 txtOf actor">
                       <span class="fsize14 c-999" v-html="actor.description"></span>
                     </div>
                     <div class="mt15 i-q-txt">
@@ -106,7 +95,7 @@
               </ul>
               <div class="clear"></div>
             </article>
-            <section class="tac pt20">
+            <section class="actor pt20">
               <a href="/actor" title="全部演员"  class="comm-btn c-btn-2">全部演员</a>
             </section>
           </div>
@@ -120,15 +109,16 @@
 
 <script>
   import index from '@/api/index'
-
+  import { getDicts } from '@/api/dict/data'
   export default {
     async asyncData({$axios}) {
+      const labelOptions =  await getDicts("movie_label");
       //const movieList = await $axios.$get('/index/getHotMovieList')
       //const bannerList = await $axios.$get('/index/getAllBannerList')
       const movieList = await index.getHotMovieList();
       const actorList = await index.getHotActorList();
       const bannerList = await index.getAllBannerList();
-      return {movieList: movieList.data, bannerList: bannerList.data, actorList: actorList.data}
+      return {movieList: movieList.data, bannerList: bannerList.data, actorList: actorList.data, labelOptions: labelOptions.data}
     },
     data() {
       return {
@@ -151,3 +141,5 @@
     methods: {}
   }
 </script>
+<style>
+</style>

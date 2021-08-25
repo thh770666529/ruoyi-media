@@ -32,9 +32,9 @@
         <el-select clearable v-model="queryParams.status"  @change="handleQuery" >
           <el-option
             v-for="dict in statusOptions"
-            :key="dict.dictValue + ``"
+            :key="dict.dictValue "
             :label="dict.dictLabel"
-            :value="dict.dictValue + ``"
+            :value="dict.dictValue"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -146,9 +146,10 @@
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
+              v-model="form.status"
               v-for="dict in statusOptions"
-              :key="dict.dictValue + ``"
-              :label="dict.dictValue+ ``"
+              :key="dict.dictValue"
+              :label="dict.dictValue"
             >{{dict.dictLabel}}</el-radio>
           </el-radio-group>
         </el-form-item>
@@ -207,7 +208,20 @@ export default {
         linkTarget: null,
       },
       // 表单参数
-      form: {},
+      // 表单参数
+      form: {
+        linkId: null,
+        createTime: null,
+        updateTime: null,
+        status: '0',
+        sort: null,
+        linkName: null,
+        linkUrl: null,
+        linkTarget: null,
+        createBy: null,
+        updateBy: null,
+        remark: null
+      },
       // 表单校验
       rules: {
         createTime: [
@@ -258,7 +272,7 @@ export default {
         linkId: null,
         createTime: null,
         updateTime: null,
-        status: 0,
+        status: '0',
         sort: null,
         linkName: null,
         linkUrl: null,
@@ -296,8 +310,8 @@ export default {
       this.reset();
       const linkId = row.linkId || this.ids
       getLink(linkId).then(response => {
-        console.log(response.data);
         this.form = response.data;
+        this.form.status = this.form.status + ''
         this.open = true;
         this.title = "修改站点友情链接";
       });

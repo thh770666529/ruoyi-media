@@ -1,9 +1,9 @@
 <template>
-  <div id="aCoursesList" class="bg-fa of">
+  <div id="aMovieList" class="bg-fa of">
     <!-- 演员列表 开始 -->
     <section class="container">
       <header class="comm-title all-teacher-title">
-        <h2 class="fl tac">
+        <h2 class="fl actor">
           <span class="c-333">全部演员</span>
         </h2>
         <section class="c-tab-title">
@@ -18,21 +18,21 @@
             <span class="c-666 fsize14 ml10 vam">没有相关数据，小编正在努力整理中...</span>
           </section>
           <!-- /无数据提示 结束-->
-          <article v-if="total>0" class="i-teacher-list">
+          <article v-if="total>0" class="i-actor-list">
             <ul class="of">
               <li v-for="actor in actorList" :key="actor.actorId">
-                <section class="i-teach-wrap">
-                  <div class="i-teach-pic">
+                <section class="i-actor-wrap">
+                  <div class="i-actor-pic">
                     <router-link :to="'/actor/'+actor.actorId" tag="a" target="_blank" exact>
                       <img :src="fileUploadHost + actor.avatar" :alt="actor.name">
                     </router-link>
                   </div>
-                  <div class="mt10 hLh30 txtOf tac">
+                  <div class="mt10 hLh30 txtOf actor">
                     <router-link :to="'/actor/' + actor.actorId" tag="a" title="actor.name" target="_blank" active-class="fsize18 c-666" exact>
                       {{actor.name}}
                     </router-link>
                   </div>
-                  <div class="hLh30 txtOf tac">
+                  <div class="hLh30 txtOf actor">
                     <span class="fsize14 c-999" v-html="actor.description"></span>
                   </div>
                   <div class="mt15 i-q-txt">

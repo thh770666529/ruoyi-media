@@ -16,7 +16,7 @@
           <el-card>
             <article class="c-v-pic-wrap" >
               <section class="p-h-video-box" >
-                <img height="380px" :src="fileUploadHost + movie.images" :alt="movie.title" class="dis c-v-pic">
+                <img height="410px" :src="fileUploadHost + movie.images" :alt="movie.title" class="dis c-v-pic">
               </section>
             </article>
             <aside class="c-attr-wrap">
@@ -60,7 +60,7 @@
               </span>
                 </section>
                 <section class="c-attr-mt10 c-attr-undis">
-                  <span class="c-fff fsize14">标签：&nbsp;{{ labelValue }}</span>
+                  <span class="c-fff fsize14">标签：&nbsp;{{selectDictLabels(labelOptions, movie.label)}}</span>
                 </section>
 
                 <section class="c-attr-mt10 c-attr-undis">
@@ -90,7 +90,7 @@
               <el-tab-pane label="电影详情" name="description">
                 <span slot="label"><i class=" el-icon-info"></i> 电影详情</span>
                 <section class="course-txt-body">
-                  <div>{{ movie.description }}</div>
+                  <div v-html="movie.description"></div>
                 </section>
               </el-tab-pane>
               <el-tab-pane label="用户评论"  name="comment">
@@ -154,14 +154,38 @@
 
 <script>
 import movieApi from '@/api/movie'
+import { getDicts } from '@/api/dict/data'
+import { selectDictLabels } from '@/utils/ruoyi'
 import {replyComment,treeListComment} from '@/api/comment'
 import { mapActions,mapState, mapMutations} from 'vuex'
 import CommentList from "@/components/website/CommentList";
-import CommentBox from "@/components/website/CommentBox";
+import CommentBox from "@/components/website/CommentBox"
+
 export default {
   // 异步调用
   async asyncData({ params, error }) {
-     return {movieId: params.movieId}
+    const movieId = params.movieId
+    const countryOptions = await getDicts("movie_country")
+    const statusOptions = await getDicts("movie_status")
+    const typeOptions = await getDicts("movie_type")
+    const labelOptions = await getDicts("movie_label")
+    const response = await movieApi.getMovie(movieId)
+    const movie = response.data
+    let video = {}
+    if (movie.videoList.length > 0 ) {
+      video = this.videoList[0]
+    }
+    return { movieId: movieId,
+              countryOptions: countryOptions.data,
+              statusOptions: statusOptions.data,
+              typeOptions: typeOptions.data,
+              labelOptions: labelOptions.data,
+              movie: movie,
+              videoList: movie.videoList,
+              actorList: movie.actorList,
+              directorList: movie.directorList,
+              video: video
+            }
    },
   components: {
     //注册组件
@@ -173,22 +197,7 @@ export default {
   },
    data() {
      return {
-        movie: {},
-        videoList: [],
-        video:{},
-        actorList:[],
-        directorList:[],
-        isbuy: false,
-       //电影国家字典
-       countryOptions:[],
-       //状态字典
-       statusOptions:[],
-       //电影类型
-       typeOptions:[],
-       //标签字典
-       labelOptions:[],
-       //标签值
-       labelValue:'',
+       isbuy: false,
        activeName: 'description',
        // 评论
        showCancel: false,
@@ -199,35 +208,21 @@ export default {
      }
    },
   async created() {//在页面渲染之前执行
-    await this.getDicts("movie_country").then(response => {
-      this.countryOptions = response.data;
-    });
-    await this.getDicts("movie_status").then(response => {
-      this.statusOptions = response.data;
-    });
-    await this.getDicts("movie_type").then(response => {
-      this.typeOptions = response.data;
-    });
-    await this.getDicts("movie_label").then(response => {
-      this.labelOptions = response.data;
-    });
     this.getCommentList();
-    this.initInfo();
+    //this.initInfo();
   },
    methods:{
      //查询电影详情信息
      async initInfo() {
         const response = await movieApi.getMovie(this.movieId)
-        this.movie=response.data
-        this.videoList=this.movie.videoList
-        this.actorList=this.movie.actorList
+        this.movie = response.data
+        this.videoList = this.movie.videoList
+        this.actorList = this.movie.actorList
         this.directorList=this.movie.directorList
         this.labelValue =  this.selectDictLabels(this.labelOptions, this.movie.label)
         if (this.videoList.length > 0 ) {
          this.video = this.videoList[0]
         }
-
-
      },
      //播放
      play(){
@@ -271,14 +266,14 @@ export default {
 };
 </script>
 <style>
-  .c-v-pic-wrap{width:60%;height:385px}
+  .c-v-pic-wrap{width:28%;height:385px}
   .thr-attr-box{width:120px;height:385px}
-  .c-attr-wrap{width:40%;height:410px}
+  .c-attr-wrap{width:72%;height:410px}
 
   .el-menu-vertical-demo:not(.el-menu--collapse) {
-    height: 420px;
+    height: 440px;
     overflow: auto;
   }
-  .container{width:1400px}
+  .container{width:1440px}
 
 </style>

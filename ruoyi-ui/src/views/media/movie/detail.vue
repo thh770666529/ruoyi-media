@@ -8,7 +8,7 @@
               <el-input v-model="form.title" placeholder="请输入标题"  auto-complete="off" ></el-input>
             </el-form-item>
 
-            <el-form-item label="电影类型" :label-width="formLabelWidth" prop="type">
+            <el-form-item label="类型" :label-width="formLabelWidth" prop="type">
               <el-select v-model="form.type" placeholder="请选择电影类型">
                 <el-option
                   v-for="dict in typeOptions"
@@ -102,7 +102,7 @@
         </el-form-item>
 
         <el-form-item label="备注" prop="remark" :label-width="formLabelWidth" >
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.remark" rows="6" type="textarea" placeholder="请输入内容" show-word-limit="1000" />
         </el-form-item>
 
 
@@ -1005,15 +1005,15 @@ export default {
 .images-uploader-icon {
   font-size: 28px;
   color: #8c939d;
-  width: 460px;
-  height: 270px;
-  line-height:270px;
+  width: 330px;
+  height: 462px;
+  line-height:462px;
   text-align: center;
 }
 .images {
   left: 10px;
-  width: 480px;
-  height: 270px;
+  width: 330px;
+  height: 462px;
   display: block;
 }
 

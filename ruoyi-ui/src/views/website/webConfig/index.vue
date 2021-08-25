@@ -11,11 +11,10 @@
           label-position="left"
           :model="webConfig"
           label-width="80px"
-          ref="from"
-        >
-          <el-form-item label="LOGO">
-
-          </el-form-item>
+          ref="from">
+        <el-form-item label="LOGO" prop="logo">
+          <imageUpload :limit="1" v-model="webConfig.logo"/>
+        </el-form-item>
 
           <el-row :gutter="24">
             <el-col :span="10">
