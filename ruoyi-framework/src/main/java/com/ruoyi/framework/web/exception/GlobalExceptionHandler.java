@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.exception.BaseException;
-import com.ruoyi.common.exception.CustomException;
+import com.ruoyi.common.exception.base.BaseException;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.exception.DemoModeException;
 import com.ruoyi.common.utils.StringUtils;
 
 /**
  * 全局异常处理器
- * 
+ *
  * @author ruoyi
  */
 @RestControllerAdvice
@@ -39,8 +39,8 @@ public class GlobalExceptionHandler
     /**
      * 业务异常
      */
-    @ExceptionHandler(CustomException.class)
-    public AjaxResult businessException(CustomException e)
+    @ExceptionHandler(ServiceException.class)
+    public AjaxResult businessException(ServiceException e)
     {
         if (StringUtils.isNull(e.getCode()))
         {

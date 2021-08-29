@@ -1,7 +1,11 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +30,7 @@ import com.ruoyi.system.service.ISysDictTypeService;
 
 /**
  * 数据字典信息
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -116,5 +120,22 @@ public class SysDictDataController extends BaseController
     {
         dictDataService.deleteDictDataByIds(dictCodes);
         return success();
+    }
+
+    /**
+     * 根据字典类型数组获取字典数据
+     */
+    @PostMapping("/listByDictTypeList")
+    public AjaxResult getListByDictTypeList(@RequestBody List<String> dictTypeList)
+    {
+        if (dictTypeList.size() <= 0) {
+            error();
+        }
+        Map<String, List<SysDictData>> data = new HashMap<>();
+        for (String dictType : dictTypeList) {
+            List<SysDictData> sysDictData = dictTypeService.selectDictDataByType(dictType);
+            data.put(dictType, sysDictData);
+        }
+        return AjaxResult.success(data);
     }
 }

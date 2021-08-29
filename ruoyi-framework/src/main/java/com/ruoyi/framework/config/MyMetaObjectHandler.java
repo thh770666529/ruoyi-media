@@ -3,7 +3,7 @@ package com.ruoyi.framework.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.exception.CustomException;
+import com.ruoyi.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.security.core.Authentication;
@@ -39,7 +39,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
             }
             catch (Exception e)
             {
-                throw new CustomException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
+                throw new ServiceException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
             }
         }
         return loginUser;

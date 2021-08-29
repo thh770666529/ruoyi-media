@@ -21,7 +21,7 @@ package com.ruoyi.common.utils.ffmpeg;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.ZipUtil;
-import com.ruoyi.common.exception.CustomException;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.exception.file.FileException;
 import org.springframework.util.FileCopyUtils;
 

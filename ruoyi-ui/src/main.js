@@ -11,7 +11,7 @@ import directive from './directive' //directive
 import * as filters from '@/filters/index'
 import './assets/icons' // icon
 import './permission' // permission control
-import { getDicts } from "@/api/system/dict/data";
+import { getDicts, getDictsByTypeList } from "@/api/system/dict/data";
 import { getConfigKey } from "@/api/system/config";
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
@@ -44,6 +44,7 @@ import uploader from 'vue-simple-uploader'
 Vue.prototype.fileUploadHost = process.env.VUE_APP_FILE_UOLOAD_HOST
 Vue.prototype.commonUploadImagesUrl = process.env.VUE_APP_BASE_API+"/common/uploadImage"
 Vue.prototype.getDicts = getDicts
+Vue.prototype.getDictsByTypeList = getDictsByTypeList
 Vue.prototype.getConfigKey = getConfigKey
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
