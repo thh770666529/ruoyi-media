@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.enums.CommentStatusEnum;
-import com.ruoyi.common.exception.CustomException;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.XssKillerUtil;
@@ -240,15 +240,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
     private void filterContent(Comment comment) {
         String content = comment.getContent();
         if (StringUtils.isEmpty(content) || "\n".equals(content)) {
-            throw new CustomException("说点什么吧");
+            throw new ServiceException("说点什么吧");
         }
         // 过滤非法属性和无用的空标签
         if (!XssKillerUtil.isValid(content) || !XssKillerUtil.isValid(comment.getAvatar())) {
-            throw new CustomException("请不要使用特殊标签");
+            throw new ServiceException("请不要使用特殊标签");
         }
         content = XssKillerUtil.clean(content.trim()).replaceAll("(<p><br></p>)|(<p></p>)", "");
         if (StringUtils.isEmpty(content) || "\n".equals(content)) {
-            throw new CustomException("说点什么吧");
+            throw new ServiceException("说点什么吧");
         }
         comment.setContent(content);
     }

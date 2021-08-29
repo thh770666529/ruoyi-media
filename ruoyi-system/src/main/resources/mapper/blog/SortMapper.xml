@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.blog.mapper.SortMapper">
+
+    <resultMap type="Sort" id="SortResult">
+        <result property="sortId"    column="sort_id"    />
+        <result property="name"    column="name"    />
+        <result property="content"    column="content"    />
+        <result property="status"    column="status"    />
+        <result property="sort"    column="sort"    />
+        <result property="clickCount"    column="click_count"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSortVo">
+        select sort_id, name, content, status, sort, click_count, create_by, create_time, update_by, update_time, remark from blog_sort
+    </sql>
+
+    <select id="selectSortList" parameterType="Sort" resultMap="SortResult">
+        <include refid="selectSortVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="clickCount != null "> and click_count = #{clickCount}</if>
+        </where>
+    </select>
+
+    <select id="selectSortBySortId" parameterType="Long" resultMap="SortResult">
+        <include refid="selectSortVo"/>
+        where sort_id = #{sortId}
+    </select>
+
+    <delete id="deleteSortBySortIds" parameterType="String">
+        delete from blog_sort where sort_id in
+        <foreach item="sortId" collection="array" open="(" separator="," close=")">
+            #{sortId}
+        </foreach>
+    </delete>
+</mapper>

@@ -104,7 +104,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="images" label="封面" align="center" width="100">
         <template slot-scope="scope">
-          <el-image :src="fileUploadHost+scope.row.images" lazy />
+          <el-image :src="fileUploadHost + scope.row.images" lazy />
         </template>
       </el-table-column>
       <el-table-column label="标题" align="center" prop="title" width="400" />
@@ -223,15 +223,8 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("movie_country").then(response => {
-      this.countryOptions = response.data;
-    });
-    this.getDicts("movie_status").then(response => {
-      this.statusOptions = response.data;
-    });
-    this.getDicts("movie_type").then(response => {
-      this.typeOptions = response.data;
-    });
+    // 获取字典
+    this.getDictList();
   },
   methods: {
     /** 查询电影管理列表 */
@@ -241,6 +234,17 @@ export default {
         this.movieList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    /**
+     * 字典查询
+     */
+    getDictList() {
+      const dictTypeList =  ['movie_country', 'movie_status', 'movie_type'];
+      this.getDictsByTypeList(dictTypeList).then(response => {
+        this.countryOptions = response.data.movie_country;
+        this.statusOptions = response.data.movie_status;
+        this.typeOptions = response.data.movie_type;
       });
     },
     // 取消按钮

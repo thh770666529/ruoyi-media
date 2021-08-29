@@ -17,7 +17,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 用户对象 sys_user
- * 
+ *
  * @author ruoyi
  */
 public class SysUser extends BaseEntity
@@ -53,6 +53,7 @@ public class SysUser extends BaseEntity
     private String sex;
 
     /** 用户头像 */
+    @Excel(name = "用户头像", cellType = ColumnType.IMAGE)
     private String avatar;
 
     /** 密码 */

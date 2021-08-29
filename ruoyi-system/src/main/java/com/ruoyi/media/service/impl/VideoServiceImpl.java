@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.enums.VideoStatus;
-import com.ruoyi.common.exception.CustomException;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.operation.FileOperation;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.ffmpeg.MultimediaInfo;
@@ -71,7 +71,7 @@ public class VideoServiceImpl  extends ServiceImpl<VideoMapper, Video> implement
             FileCopyUtils.copy(file,newVideoFile);
         }catch (IOException e){
             log.error(" 上传视频失败,请联系管理员{}",e.getMessage(), e);
-            throw new CustomException("上传视频失败,请联系管理员！");
+            throw new ServiceException("上传视频失败,请联系管理员！");
         }
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(RuoYiConfig.getMovieVideoPath(), dirLastIndex);

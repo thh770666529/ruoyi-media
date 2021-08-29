@@ -237,7 +237,7 @@
       },
       handleImagesSuccess(res, file) {
         const code = res.code;
-        if (code == 200) {
+        if (code === 200) {
           this.form.avatar =  res.url;
           this.msgSuccess("上传成功！");
         } else {

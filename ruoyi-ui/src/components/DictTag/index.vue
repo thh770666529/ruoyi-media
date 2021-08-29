@@ -31,12 +31,17 @@ export default {
       type: Array,
       default: null,
     },
-    value: [String, Array],
+    value: [String, Array, Number],
   },
   computed: {
     values() {
-      if (this.value) {
-        return Array.isArray(this.value) ? this.value : [this.value];
+      let value = this.value
+      // value为number类型时 变成字符串 0 --> '0'
+      if (typeof value === 'number') {
+        value = value + ''
+      }
+      if (value) {
+        return Array.isArray(value) ? value : [ value ];
       } else {
         return [];
       }

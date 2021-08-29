@@ -542,28 +542,8 @@ export default {
   },
   created() {
     this.uploadVideoUrl =process.env.VUE_APP_BASE_API+"/media/movie/upload/video";
-
-    this.getDicts("movie_country").then(response => {
-      this.countryOptions = response.data;
-    });
-    this.getDicts("movie_status").then(response => {
-      this.statusOptions = response.data;
-    });
-    this.getDicts("movie_type").then(response => {
-      this.typeOptions = response.data;
-    });
-    this.getDicts("sys_yes_no").then(response => {
-      this.sysYesNoOptions = response.data;
-    });
-    this.getDicts("movie_label").then(response => {
-      this.labelOptions = response.data;
-    });
-    this.getDicts("actor_label").then(response => {
-      this.actorLabelOptions = response.data;
-    });
-    this.getDicts("video_status").then(response => {
-      this.videoStatusOptions = response.data;
-    });
+    // 查询字典
+    this.getDictList();
   },
   watch:{
     "$route":{
@@ -579,6 +559,21 @@ export default {
     }
   },
   methods: {
+    /**
+     * 字典查询
+     */
+    getDictList() {
+      const dictTypeList =  ['movie_country', 'movie_status', 'movie_type', 'sys_yes_no', 'movie_label', 'actor_label', 'video_status'];
+      this.getDictsByTypeList(dictTypeList).then(response => {
+        this.countryOptions = response.data.movie_country;
+        this.statusOptions = response.data.movie_status;
+        this.typeOptions = response.data.movie_type;
+        this.sysYesNoOptions = response.data.sys_yes_no;
+        this.labelOptions = response.data.movie_label;
+        this.actorLabelOptions = response.data.actor_label;
+        this.videoStatusOptions = response.data.video_status;
+      });
+    },
     /**
      * 表格数据获取相关事件 | 根据文件类型展示文件列表
      */
@@ -733,7 +728,7 @@ export default {
         this.msgError("标签不能为空!");
         return false;
       }
-      var that = this;
+      let that = this;
       that.form.label = that.labelList.join(",");
       this.$refs["form"].validate(valid => {
         this.form.description = this.$refs.descriptionEditor.currentValue;

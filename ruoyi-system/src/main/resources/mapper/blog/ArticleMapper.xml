@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.blog.mapper.ArticleMapper">
+
+    <resultMap type="Article" id="ArticleResult">
+        <result property="articleId"    column="article_id"    />
+        <result property="title"    column="title"    />
+        <result property="summary"    column="summary"    />
+        <result property="content"    column="content"    />
+        <result property="tagId"    column="tag_id"    />
+        <result property="clickCount"    column="click_count"    />
+        <result property="collectCount"    column="collect_count"    />
+        <result property="images"    column="images"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="adminUserId"    column="admin_user_id"    />
+        <result property="isOriginal"    column="is_original"    />
+        <result property="author"    column="author"    />
+        <result property="articlesPart"    column="articles_part"    />
+        <result property="sortId"    column="sort_id"    />
+        <result property="level"    column="level"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="isPublish"    column="is_publish"    />
+        <result property="sort"    column="sort"    />
+        <result property="openComment"    column="open_comment"    />
+        <result property="type"    column="type"    />
+        <result property="outsideLink"    column="outside_link"    />
+        <result property="userId"    column="user_id"    />
+        <result property="articleSource"    column="article_source"    />
+        <result property="qrcodePath"    column="qrcode_path"    />
+        <result property="openPassword"    column="open_password"    />
+        <result property="password"    column="password"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectArticleVo">
+        select article_id, title, summary, content, tag_id, click_count, collect_count, images, status, create_time, create_by, update_time, update_by, admin_user_id, is_original, author, articles_part, sort_id, level, del_flag, is_publish, sort, open_comment, type, outside_link, user_id, article_source, qrcode_path, open_password, password, remark from blog_article
+    </sql>
+
+    <select id="selectArticleList" parameterType="Article" resultMap="ArticleResult">
+        <include refid="selectArticleVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="summary != null  and summary != ''"> and summary like concat('%', #{summary}, '%')</if>
+            <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
+            <if test="tagId != null  and tagId != ''"> and tag_id = #{tagId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="isOriginal != null  and isOriginal != ''"> and is_original = #{isOriginal}</if>
+            <if test="sortId != null  and sortId != ''"> and sort_id = #{sortId}</if>
+            <if test="level != null "> and level = #{level}</if>
+            <if test="isPublish != null  and isPublish != ''"> and is_publish = #{isPublish}</if>
+            <if test="type != null "> and type = #{type}</if>
+        </where>
+    </select>
+
+    <select id="selectArticleByArticleId" parameterType="Long" resultMap="ArticleResult">
+        <include refid="selectArticleVo"/>
+        where article_id = #{articleId}
+    </select>
+
+    <delete id="deleteArticleByArticleIds" parameterType="String">
+        delete from blog_article where article_id in
+        <foreach item="articleId" collection="array" open="(" separator="," close=")">
+            #{articleId}
+        </foreach>
+    </delete>
+</mapper>

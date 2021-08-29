@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function getDictsByTypeList(dictTypeList) {
+  return request({
+    url: '/system/dict/data/listByDictTypeList',
+    method: 'post',
+    data: dictTypeList
+  })
+}
+
 // 查询字典数据列表
 export function listData(query) {
   return request({

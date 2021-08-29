@@ -190,7 +190,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="cron表达式" prop="cronExpression">
-              <el-input v-model="form.cronExpression" placeholder="请输入cron执行表达式" />
+              <el-input v-model="form.cronExpression" @click.native="openCronUi" placeholder="请输入cron执行表达式" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -276,13 +276,17 @@
         <el-button @click="openView = false">关 闭</el-button>
       </div>
     </el-dialog>
+    <CronUi ref="CronUi" @cronResult="updateCron"></CronUi>
   </div>
 </template>
 
 <script>
 import { listJob, getJob, delJob, addJob, updateJob, exportJob, runJob, changeJobStatus } from "@/api/monitor/job";
-
+import CronUi from "@/components/Cron/cron-ui/index";
 export default {
+  components: {
+    CronUi
+  },
   name: "Job",
   data() {
     return {
@@ -346,6 +350,12 @@ export default {
     });
   },
   methods: {
+    openCronUi() {
+      this.$refs["CronUi"].dialogVisible = true;
+    },
+    updateCron(data) {
+      this.form.cronExpression = data;
+    },
     /** 查询定时任务列表 */
     getList() {
       this.loading = true;
