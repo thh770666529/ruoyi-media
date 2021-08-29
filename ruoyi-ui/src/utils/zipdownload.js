@@ -25,12 +25,12 @@ export function downLoadZip(str, filename) {
  */
 export function resolveBlob(res, mimeType) {
   const aLink = document.createElement('a')
-  var blob = new Blob([res.data], { type: mimeType })
+  const blob = new Blob([res.data], { type: mimeType })
   // //从response的headers中获取filename, 后端response.setHeader("Content-disposition", "attachment; filename=xxxx.docx") 设置的文件名;
-  var patt = new RegExp('filename=([^;]+\\.[^\\.;]+);*')
-  var contentDisposition = decodeURI(res.headers['content-disposition'])
-  var result = patt.exec(contentDisposition)
-  var fileName = result[1]
+  const patt = new RegExp('filename=([^;]+\\.[^\\.;]+);*')
+  const contentDisposition = decodeURI(res.headers['content-disposition'])
+  const result = patt.exec(contentDisposition)
+  let fileName = result[1]
   fileName = fileName.replace(/\"/g, '')
   aLink.style.display = 'none'
   aLink.href = URL.createObjectURL(blob)
@@ -40,3 +40,4 @@ export function resolveBlob(res, mimeType) {
   URL.revokeObjectURL(aLink.href);//清除引用
   document.body.removeChild(aLink);
 }
+

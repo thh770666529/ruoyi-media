@@ -132,7 +132,19 @@
           :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['blog:article:export']"
-        >导出</el-button>
+        >导出Excel</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          :disabled="multiple"
+          :loading="exportLoading"
+          @click="handleExportMarkdown"
+          v-hasPermi="['blog:article:export']"
+        >导出markdown</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -398,6 +410,7 @@ export default {
   name: "Article",
   data() {
     return {
+      multipleSelection: [], //多选，用于批量下载markDown
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -606,6 +619,7 @@ export default {
       this.ids = selection.map(item => item.articleId)
       this.single = selection.length!==1
       this.multiple = !selection.length
+      this.multipleSelection = selection
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -682,6 +696,24 @@ export default {
           this.download(response.msg);
           this.exportLoading = false;
         }).catch(() => {});
+    },
+    /** 导出markDown */
+    handleExportMarkdown() {
+      const queryParams = this.queryParams;
+      this.$confirm('是否确认导出选中的博客文章数据项?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.exportLoading = true;
+      }).then(() => {
+        const blogList = this.multipleSelection
+        for(let index = 0; index < blogList.length; index++) {
+          this.htmlToMarkdownFile(blogList[index].title, blogList[index].content)
+        }
+        this.msgSuccess("导出成功");
+        this.exportLoading = false;
+      }).catch(() => {});
     },
     /**
      * 字典查询
