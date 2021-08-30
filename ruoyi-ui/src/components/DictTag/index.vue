@@ -38,7 +38,7 @@ export default {
       let value = this.value
       // value为number类型时 变成字符串 0 --> '0'
       if (typeof value === 'number') {
-        value = value + ''
+        value = String(value)
       }
       if (value) {
         return Array.isArray(value) ? value : [ value ];
