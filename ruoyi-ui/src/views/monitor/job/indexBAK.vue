@@ -190,7 +190,14 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="cron表达式" prop="cronExpression">
-              <el-input v-model="form.cronExpression" @click.native="openCronUi" placeholder="请输入cron执行表达式" />
+              <el-input v-model="form.cronExpression" placeholder="请输入cron执行表达式">
+                <template slot="append">
+                  <el-button type="primary" @click="openCronUi">
+                    生成表达式
+                    <i class="el-icon-time el-icon--right"></i>
+                  </el-button>
+                </template>
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">

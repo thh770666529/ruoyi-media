@@ -1,55 +1,47 @@
 <template>
-  <div class="test">
-    <h2>一次生成一个表达式</h2>
-    <div>
-      <el-button @click="open">打开第一种cron表达式选择</el-button>
-      <!-- 2.注册并且使用 @cronResult="xx" 事件可以接收到最终的表达式-->
-      <CronUi ref="CronUi" @cronResult="resultValue"></CronUi>
-    </div>
-    <p>最终生成的表达式为：{{ result }}</p>
-    <h2>一次生成两个表达式</h2>
-    <div>
-      <el-button @click="open2">打开第二种cron表达式选择</el-button>
-      <CronUiSecond ref="CronUiSecond" @cronResult="confirmCron"></CronUiSecond>
-      <p>最终生成的开始时间表达式为：{{ resultForm.cpmEveryStartCron }}</p>
-      <p>最终生成的结束时间表达式为：{{ resultForm.cpmEveryEndCron }}</p>
-    </div>
+  <div style="margin-left: 50px">
+    <h2>生成Cron表达式</h2>
+    <el-row>
+      <el-col :span="12">
+        <el-input v-model="cronExpression" placeholder="请输入cron执行表达式">
+          <template slot="append">
+            <el-button type="primary" @click="handleShowCron">
+              生成表达式
+              <i class="el-icon-time el-icon--right"></i>
+            </el-button>
+          </template>
+        </el-input>
+      </el-col>
+    </el-row>
+    <el-dialog title="Cron表达式生成器" :visible.sync="openCron" append-to-body class="scrollbar">
+      <crontab @hide="openCron=false" @fill="crontabFill" :expression="expression"></crontab>
+    </el-dialog>
   </div>
 </template>
 <script>
-// 1.需要./cron/cron-ui/index这个文件
-import CronUi from "@/components/Cron/cron-ui/index";
-import CronUiSecond from "@/components/CronSecond/cron-ui/index";
+import Crontab from '@/components/Crontab'
 export default {
   components: {
-    CronUi,
-    CronUiSecond
+    Crontab
   },
   data() {
     return {
-      result: "",
-      resultForm: {
-        cpmEveryStartCron: "",
-        cpmEveryEndCron: ""
-      }
-    };
+      // 传入的表达式
+      expression: '',
+      // 是否显示Cron表达式弹出层
+      openCron: false
+    }
   },
   methods: {
-    open() {
-      this.$refs["CronUi"].dialogVisible = true;
+    /** cron表达式按钮操作 */
+    handleShowCron() {
+      this.expression = this.cronExpression;
+      this.openCron = true;
     },
-    open2() {
-      this.$refs["CronUiSecond"].dialogVisible = true;
+    /** 确定后回传值 */
+    crontabFill(value) {
+      this.cronExpression = value;
     },
-    // 一次一个表达式---最终产生出来的cron表达式
-    resultValue(data) {
-      this.result = data;
-    },
-    // 一次两个表达式---规则配置-确定
-    confirmCron(data) {
-      this.resultForm.cpmEveryStartCron = data.result;
-      this.resultForm.cpmEveryEndCron = data.resultEnd;
-    }
   }
 };
 </script>
