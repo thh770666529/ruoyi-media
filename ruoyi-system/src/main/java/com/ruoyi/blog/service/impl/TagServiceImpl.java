@@ -1,6 +1,13 @@
 package com.ruoyi.blog.service.impl;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import cn.hutool.core.collection.CollectionUtil;
+import com.ruoyi.blog.domain.Article;
+import com.ruoyi.common.constant.BaseRedisKeyConstants;
+import com.ruoyi.common.constant.BlogConstants;
+import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +26,9 @@ public class TagServiceImpl implements ITagService
 {
     @Autowired
     private TagMapper tagMapper;
+
+    @Autowired
+    private RedisCache redisCache;
 
     /**
      * 查询文章标签
@@ -92,5 +102,23 @@ public class TagServiceImpl implements ITagService
     public int deleteTagByTagId(Long tagId)
     {
         return tagMapper.deleteById(tagId);
+    }
+
+    @Override
+    public List<Tag> selectHotTagList(int top) {
+        List<Tag> tagList = redisCache.getCacheObject(BaseRedisKeyConstants.HOT_BLOG_TAG);
+        if (CollectionUtil.isEmpty(tagList)) {
+            tagList = tagMapper.selectHotTagList(1, top);
+            if (CollectionUtil.isNotEmpty(tagList)){
+                redisCache.setCacheObject(BaseRedisKeyConstants.HOT_BLOG_TAG, tagList, BlogConstants.BLOG_TAG_EXPIRATION, TimeUnit.DAYS);
+            }
+        }
+        return tagList;
+    }
+
+    @Override
+    public List<Tag> selectTagListByIds(List<String> tagIdList) {
+        List<Tag> tagList = tagMapper.selectBatchIds(tagIdList);
+        return tagList;
     }
 }

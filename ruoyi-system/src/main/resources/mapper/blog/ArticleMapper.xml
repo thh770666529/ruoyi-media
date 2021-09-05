@@ -36,11 +36,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="openPassword"    column="open_password"    />
         <result property="password"    column="password"    />
         <result property="remark"    column="remark"    />
+        <result property="praiseClickCount"    column="praise_click_count"    />
     </resultMap>
 
     <sql id="selectArticleVo">
-        select article_id, title, summary, content, tag_id, click_count, collect_count, images, status, create_time, create_by, update_time, update_by, admin_user_id, is_original, author, articles_part, sort_id, level, del_flag, is_publish, sort, open_comment, type, outside_link, user_id, article_source, qrcode_path, open_password, password, remark from blog_article
+        select article_id, title, summary, content, tag_id, click_count, collect_count, images, status, create_time, create_by, update_time, update_by, admin_user_id, is_original, author, articles_part, sort_id, level, del_flag, is_publish, sort, open_comment, type, outside_link, user_id, article_source, qrcode_path, open_password, password, remark, praise_click_count from blog_article
     </sql>
+
+
+    <!--查询最热门的文章信息-->
+    <select id="selectHotArticleList"  resultMap="ArticleResult">
+        select article_id, title, summary, tag_id, click_count, collect_count, images, status, create_time, create_by, update_time, update_by,
+        admin_user_id, is_original, author, articles_part, sort_id, level, del_flag, is_publish, sort, open_comment, type,
+        outside_link, user_id, article_source, qrcode_path, open_password, password, remark, praise_click_count
+        from blog_article
+        WHERE status = #{status} and is_publish = #{publishStatus}
+        order by sort asc,click_count desc limit #{top}
+    </select>
+
+
+    <select id="selectSearchArticleList" parameterType="Article" resultMap="ArticleResult">
+        select article_id, title, summary, tag_id, click_count, collect_count, images, status, create_time, create_by, update_time, update_by, admin_user_id, is_original, author, articles_part, sort_id, level, del_flag, is_publish, sort, open_comment, type, outside_link, user_id, article_source, qrcode_path, open_password, password, remark,praise_click_count from blog_article
+        <where>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="summary != null  and summary != ''"> and summary like concat('%', #{summary}, '%')</if>
+            <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
+            <if test="tagId != null  and tagId != ''"> and tag_id = #{tagId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="isOriginal != null  and isOriginal != ''"> and is_original = #{isOriginal}</if>
+            <if test="sortId != null  and sortId != ''"> and sort_id = #{sortId}</if>
+            <if test="level != null "> and level = #{level}</if>
+            <if test="isPublish != null  and isPublish != ''"> and is_publish = #{isPublish}</if>
+            <if test="type != null "> and type = #{type}</if>
+        </where>
+    </select>
+
 
     <select id="selectArticleList" parameterType="Article" resultMap="ArticleResult">
         <include refid="selectArticleVo"/>

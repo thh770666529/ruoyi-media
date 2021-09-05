@@ -69,7 +69,7 @@ export function addDateRange(params, dateRange, propName) {
 
 // 回显数据字典
 export function selectDictLabel(datas, value) {
-  var actions = [];
+  const actions = [];
   Object.keys(datas).some((key) => {
     if (datas[key].dictValue == ('' + value)) {
       actions.push(datas[key].dictLabel);
@@ -81,9 +81,12 @@ export function selectDictLabel(datas, value) {
 
 // 回显数据字典（字符串数组）
 export function selectDictLabels(datas, value, separator) {
-  var actions = [];
-  var currentSeparator = undefined === separator ? "," : separator;
-  var temp = value.split(currentSeparator);
+  if ((typeof value === 'undefined') || (value === null)){
+    return ''
+  }
+  const actions = [];
+  const currentSeparator = undefined === separator ? "," : separator;
+  const temp = value.split(currentSeparator);
   Object.keys(value.split(currentSeparator)).some((val) => {
     Object.keys(datas).some((key) => {
       if (datas[key].dictValue == ('' + temp[val])) {

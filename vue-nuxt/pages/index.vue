@@ -75,23 +75,19 @@
                   <section class="i-actor-wrap">
                     <div class="i-actor-pic">
                       <router-link :to="'/actor/'+actor.actorId" tag="a" target="_blank" exact>
-                        <img :src="fileUploadHost+actor.avatar" :alt="actor.name">
+                        <img :src="fileUploadHost + actor.avatar" :alt="actor.name">
                       </router-link>
                     </div>
                     <div class="mt10 hLh30 txtOf actor">
-                      <router-link :to="'/actor/'+actor.actorId" tag="a" title="actor.name" target="_blank" active-class="fsize18 c-666" exact>
-                        {{actor.name}}
+                      <router-link :to="'/actor/' + actor.actorId" tag="a" :title="actor.name" target="_blank" active-class="fsize20 #333" exact>
+                        <b>{{actor.name}}</b>
                       </router-link>
                     </div>
                     <div class="hLh30 txtOf actor">
-                      <span class="fsize14 c-999" v-html="actor.description"></span>
-                    </div>
-                    <div class="mt15 i-q-txt">
-                      <span class="c-999 f-fA" v-html="actor.awards"></span>
+                      <span class="fsize12 c-999" v-html="actor.description"></span>
                     </div>
                   </section>
                 </li>
-
               </ul>
               <div class="clear"></div>
             </article>

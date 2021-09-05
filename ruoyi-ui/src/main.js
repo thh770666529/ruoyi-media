@@ -55,7 +55,6 @@ Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 Vue.prototype.$EventBus = new Vue()
 // 全局组件挂载
-// 全局组件挂载
 Vue.component('DictTag', DictTag)
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)

@@ -70,7 +70,7 @@
         </div>
         <div class="mt40">
           <!-- /无数据提示 开始-->
-          <section v-if="total==0" class="no-data-wrap" >
+          <section v-if="total === 0" class="no-data-wrap" >
             <em class="icon30 no-data-ico">&nbsp;</em>
             <span class="c-666 fsize14 ml10 vam">没有相关数据，小编正在努力整理中...</span>
           </section>
@@ -81,13 +81,13 @@
               <li v-for="movie in movieList" :key="movie.movieId">
                 <div class="cc-l-wrap">
                   <section class="movie-img">
-                    <img :src="fileUploadHost+movie.images" class="img-responsive" :alt="movie.title">
+                    <img :src="fileUploadHost + movie.images" class="img-responsive" :alt="movie.title">
                     <div class="cc-mask">
-                      <a :href="'/movie/'+movie.movieId" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
+                      <a :href="'/movie/' + movie.movieId" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
                     </div>
                   </section>
                   <h4 class="title">
-                    <a :href="'/movie/'+movie.movieId" :title="movie.title">{{movie.title}}</a>
+                    <a :href="'/movie/' + movie.movieId" :title="movie.title">{{movie.title}}</a>
                   </h4>
                   <p class="text text-overflow text-muted hidden-xs">主演：.........
                     <br>标签 :  {{selectDictLabels(labelOptions, movie.label) | ellipsis(10)}}
@@ -97,44 +97,19 @@
             </ul>
             <div class="clear"/>
           </article>
-
-
-
         </div>
         <!-- 公共分页 开始 -->
         <div>
-      <div class="paging">
-       <a
-          :class="{undisable: true}"
-          href="#"
-          title="首页"
-          @click.prevent="gotoPage(1)">首</a>
-        <a
-          :class="{undisable: true}"
-          href="#"
-          title="前一页"
-          @click.prevent="gotoPage(queryParams.pageNum-1)">&lt;</a>
-
-
-        <a
-          v-for="page in totalPage"
-          :key="page"
-          :class="{current: queryParams.pageNum == page, undisable: queryParams.pageNum == page}"
-          :title="'第'+page+'页'"
-          href="#"
-          @click.prevent="gotoPage(page)">{{ page }}</a>
-        <a
-          href="#"
-          title="后一页"
-          @click.prevent="queryParams.pageNum<pages?gotoPage(queryParams.pageNum+1):gotoPage(queryParams.pageNum)">&gt;</a>
-        <a
-          href="#"
-          title="末页"
-          @click.prevent="gotoPage(pages)">末</a>
-
-        <div class="clear"/>
-      </div>
-    </div>
+          <div class="block">
+            <pagination
+              v-show="total>0"
+              :total="total"
+              :page.sync="queryParams.pageNum"
+              :limit.sync="queryParams.pageSize"
+              @pagination="getList"
+            />
+          </div>
+        </div>
       </section>
     </section>
     <!-- /电影列表 结束 -->
@@ -145,14 +120,12 @@ import movieApi from '@/api/movie'
 export default {
   data() {
     return {
-      page:1, //当前页
-      movieList:[],  //电影列表
+      page: 1, //当前页
+      movieList: [],  //电影列表
       subjectNestedList: [], // 一级分类列表
       subSubjectList: [], // 二级分类列表
       total: 0,
       searchObj: {}, // 查询表单对象
-      totalPage:[],
-      pages:0,
       queryParams: {
         pageNum: 1,
         pageSize: 12,
@@ -166,11 +139,11 @@ export default {
         publishTime: null,
         status: null
       },
-      oneIndex:-1,
-      twoIndex:-1,
-      buyCountSort:"",
-      gmtCreateSort:"",
-      priceSort:"",
+      oneIndex: -1,
+      twoIndex: -1,
+      buyCountSort: "",
+      gmtCreateSort: "",
+      priceSort: "",
       labelOptions: []
     }
   },
@@ -186,36 +159,9 @@ export default {
       movieApi.listMovie(this.queryParams).then(response => {
         this.movieList = response.rows;
         this.total = response.total;
-        this.getTotalPage();
       })
     },
 
-    getTotalPage(){
-      this.pages = 0;
-      this.pages = this.total / this.queryParams.pageSize;
-      if (this.total % this.queryParams.pageSize != 0) {
-        this.pages++;
-      }
-      if (this.pages>0){
-        this.totalPage = [];
-        for (let i = 1; i < this.pages; i++) {
-          this.totalPage.push(i);
-        }
-      }
-    },
-
-    //2 查询所有一级分类
-    initSubject() {
-      /*courseApi.getAllSubject()
-        .then(response => {
-          this.subjectNestedList = response.data.list
-        })*/
-    },
-
-    gotoPage(page) {
-      this.queryParams.pageNum = page;
-      this.getList();
-    },
 
     //4 点击某个一级分类，查询对应二级分类
     searchOne(subjectParentId,index) {
@@ -229,7 +175,6 @@ export default {
       //把一级分类点击id值，赋值给searchObj
       this.searchObj.subjectParentId = subjectParentId
       //点击某个一级分类进行条件查询
-      this.gotoPage(1)
 
       //拿着点击一级分类id 和 所有一级分类id进行比较，
       //如果id相同，从一级分类里面获取对应的二级分类
@@ -251,7 +196,6 @@ export default {
       //把二级分类点击id值，赋值给searchObj
       this.searchObj.subjectId = subjectId
       //点击某个二级分类进行条件查询
-      this.gotoPage(1)
     },
 
     //6 根据销量排序
@@ -267,7 +211,6 @@ export default {
       this.searchObj.priceSort = this.priceSort;*/
 
       //调用方法查询
-      this.gotoPage(1)
     },
 
     //7 最新排序
@@ -281,9 +224,7 @@ export default {
       this.searchObj.buyCountSort = this.buyCountSort
       this.searchObj.gmtCreateSort = this.gmtCreateSort;
       this.searchObj.priceSort = this.priceSort;*/
-
       //调用方法查询
-      this.gotoPage(1)
     },
 
     //8 价格排序
@@ -299,7 +240,6 @@ export default {
       this.searchObj.priceSort = this.priceSort;*/
 
       //调用方法查询
-      this.gotoPage(1)
     }
 
   }

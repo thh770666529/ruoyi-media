@@ -17,8 +17,8 @@ module.exports = {
   plugins: [
     { src: '~/plugins/nuxt-swiper-plugin.js', ssr: false },
     '@/plugins/prototype',
-    //{src:'~/plugins/storeCache',ssr: false},
-    {src:'~/utils/nuxtjsAxios',ssr: true}
+    {src:'~/utils/nuxtjsAxios',ssr: true},
+    { src: '~/plugins/highlight.js', ssr: false }
   ],
   modules: [
     '@nuxtjs/axios',
@@ -40,7 +40,8 @@ module.exports = {
     }
   },
   css: [
-    'swiper/dist/css/swiper.css'
+    'swiper/dist/css/swiper.css',
+    'element-ui/lib/theme-chalk/index.css'
   ],
   /*
   ** Headers of the page

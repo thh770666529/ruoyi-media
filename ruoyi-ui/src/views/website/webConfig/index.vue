@@ -80,6 +80,63 @@
           <i class="el-icon-date"></i> 评论&打赏
         </span>
 
+        <el-form
+          style="margin-left: 20px;"
+          label-position="left"
+          :model="form"
+          label-width="90px"
+          ref="from"
+        >
+
+          <el-row :gutter="24">
+            <el-col :span="4">
+              <el-form-item label="阿里支付">
+                <imageUpload :limit="1" v-model="webConfig.aliPay"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="微信支付">
+                <imageUpload :limit="1" v-model="webConfig.weixinPay"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="24">
+            <el-col :span="6">
+              <el-form-item label="网站评论">
+                <el-radio v-for="dict in switchOptions" :key="dict.dictValue" v-model="webConfig.openComment"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="24">
+            <el-col :span="6">
+              <el-form-item label="网站打赏">
+                <el-radio v-for="dict in switchOptions" :key="dict.dictValue" v-model="webConfig.openAdmiration"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="24">
+            <el-col :span="6">
+              <el-form-item label="移动端评论">
+                <el-radio v-for="dict in switchOptions" :key="dict.dictValue" v-model="webConfig.openMobileComment"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="24">
+            <el-col :span="6">
+              <el-form-item label="移动端打赏">
+                <el-radio v-for="dict in switchOptions" :key="dict.dictValue" v-model="webConfig.openMobileAdmiration"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-form-item>
+            <el-button type="primary" @click="submitForm()" v-permission="'website:webConfig:edit'">保 存</el-button>
+          </el-form-item>
+        </el-form>
 
       </el-tab-pane>
 
@@ -380,6 +437,10 @@ export default {
           data.showList = []
           this.webConfig = data;
         }
+        this.webConfig.openComment = this.webConfig.openComment + ``
+        this.webConfig.openAdmiration = this.webConfig.openAdmiration + ``
+        this.webConfig.openMobileComment = this.webConfig.openMobileComment + ``
+        this.webConfig.openMobileAdmiration = this.webConfig.openMobileAdmiration + ``
         this.loading = false
       });
     },

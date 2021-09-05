@@ -135,17 +135,27 @@
         >导出Excel</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
+      <el-button
+        type="warning"
+        plain
+        icon="el-icon-download"
+        size="mini"
+        :disabled="multiple"
+        :loading="exportLoading"
+        @click="handleExportMarkdown"
+        v-hasPermi="['blog:article:export']"
+      >导出markdown</el-button>
+    </el-col>
+    <el-col :span="1.5">
+       <el-button
           type="warning"
           plain
           icon="el-icon-download"
           size="mini"
-          :disabled="multiple"
-          :loading="exportLoading"
-          @click="handleExportMarkdown"
+          @click="handleLocalUpload"
           v-hasPermi="['blog:article:export']"
-        >导出markdown</el-button>
-      </el-col>
+        >本地上传</el-button>
+    </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -398,6 +408,19 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!--本地markdown上传-->
+    <el-dialog
+      title="本地博客上传"
+      :visible.sync="localUploadVisible"
+    >
+      <div class="tipBox">
+        <div class="tip">导入须知</div>
+        <div class="tipItem">1）如果你的Markdown文档里面的图片是本地，需要选择本地图片，然后提交到图片服务器</div>
+      </div>
+      <fileUpload :fileType="['doc', 'xls', 'ppt', 'txt', 'pdf', 'png', 'jpg', 'jpeg']" v-model="localUploadFileUrl"/>
+
+    </el-dialog>
   </div>
 </template>
 
@@ -410,6 +433,8 @@ export default {
   name: "Article",
   data() {
     return {
+      localUploadFileUrl: '',
+      localUploadVisible: false, // 是否显示本地上传弹出层
       multipleSelection: [], //多选，用于批量下载markDown
       // 遮罩层
       loading: true,
@@ -492,7 +517,9 @@ export default {
     };
   },
   created() {
+    // 查询列表
     this.getList();
+    // 查询字典
     this.getDictList();
   },
   methods: {
@@ -600,7 +627,8 @@ export default {
         qrcodePath: null,
         openPassword: 1,
         password: null,
-        remark: null
+        remark: null,
+        praiseClickCount: 0
       };
       this.resetForm("form");
     },
@@ -735,6 +763,9 @@ export default {
       listTag({status: '1'}).then(response => {
         this.tagOptions = response.rows;
       });
+    },
+    handleLocalUpload() {
+      this.localUploadVisible = true;
     }
   }
 };

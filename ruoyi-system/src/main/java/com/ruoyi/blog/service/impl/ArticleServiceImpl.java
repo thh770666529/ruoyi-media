@@ -1,7 +1,17 @@
 package com.ruoyi.blog.service.impl;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ruoyi.common.constant.BaseRedisKeyConstants;
+import com.ruoyi.common.constant.BlogConstants;
+import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.core.redis.RedisCache;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.blog.mapper.ArticleMapper;
@@ -19,6 +29,9 @@ public class ArticleServiceImpl implements IArticleService
 {
     @Autowired
     private ArticleMapper articleMapper;
+
+    @Autowired
+    private RedisCache redisCache;
 
     /**
      * 查询博客文章
@@ -41,6 +54,13 @@ public class ArticleServiceImpl implements IArticleService
     @Override
     public List<Article> selectArticleList(Article article)
     {
+        return articleMapper.selectArticleList(article);
+    }
+
+    @Override
+    public List<Article> selectWebArticleList(Article article) {
+        article.setIsPublish("1");
+        article.setStatus(1);
         return articleMapper.selectArticleList(article);
     }
 
@@ -92,5 +112,62 @@ public class ArticleServiceImpl implements IArticleService
     public int deleteArticleByArticleId(Long articleId)
     {
         return articleMapper.deleteById(articleId);
+    }
+
+    @Override
+    public List<Article> selectHotArticleList(int top) {
+        List<Article> articleList = redisCache.getCacheObject(BaseRedisKeyConstants.HOT_BLOG_ARTICLE);
+        if (CollectionUtil.isEmpty(articleList)) {
+            articleList = articleMapper.selectHotArticleList(1, 1, top);
+            if (CollectionUtil.isNotEmpty(articleList)){
+                redisCache.setCacheObject(BaseRedisKeyConstants.HOT_BLOG_ARTICLE, articleList, BlogConstants.BLOG_ARTICLE_EXPIRATION, TimeUnit.DAYS);
+            }
+        }
+        return articleList;
+    }
+
+    @Override
+    public List<Article> selectNewArticleList() {
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status", 1);
+        queryWrapper.eq("is_publish", "1");
+        queryWrapper.orderByDesc("create_time");
+        //因为首页并不需要显示内容，所以需要排除掉内容字段
+        queryWrapper.select(Article.class, i -> !i.getProperty().equals("content"));
+        return articleMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<Article> selectSearchArticleList(Article article) {
+        article.setIsPublish("1");
+        article.setStatus(1);
+        return articleMapper.selectSearchArticleList(article);
+    }
+
+    @Override
+    public Article selectWebArticleByArticleId(Long articleId) {
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("article_id", articleId);
+        queryWrapper.eq("status", 1);
+        queryWrapper.eq("is_publish", "1");
+        return  articleMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public void praiseArticleById(Long articleId) {
+        Long userId = SecurityUtils.getUserId();
+        Integer redisJson = redisCache.getCacheObject(BaseRedisKeyConstants.CIICK_BLOG_LOVE + ":" + articleId + "#" + userId);
+        if (redisJson != null){
+            throw new ServiceException("24小时内无法重复点赞同一篇文章");
+        } else {
+            Article article = articleMapper.selectById(articleId);
+            Long praiseClickCount = article.getPraiseClickCount();
+            if (praiseClickCount == null){
+                praiseClickCount = 0L;
+            }
+            article.setPraiseClickCount(praiseClickCount + 1);
+            articleMapper.insert(article);
+            redisCache.setCacheObject(BaseRedisKeyConstants.CIICK_BLOG_LOVE + ":" + articleId + "#" + userId, 1);
+        }
     }
 }

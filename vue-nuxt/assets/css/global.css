@@ -436,7 +436,7 @@ a.current-2 .lh-p-icon{background-position:0 -254px}
 .flink-list li{float:left;margin:15px 30px 0 0}
 .flink-list li a{color:#666;font-size:12px}
 .b-f-link a:hover,.flink-list li a:hover{color:#888;text-decoration:none;transition:.3s;-webkit-transition:.3s}
-.b-foot{border-top:1px solid #393939;padding:20px 0 40px 0;margin-top:30px}
+.b-foot{border-top:1px solid #393939;padding:20px 0 30px 0;margin-top:20px}
 .b-f-link{color:#444;line-height:12px;margin-left:-10px;line-height:20px}
 .b-f-link a,.b-f-link span{color:#666;display:block;margin:0 10px 5px;display:inline-block;vertical-align:middle}
 .gf-tx{display:inline-block;margin:0 10px;position:relative}

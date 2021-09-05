@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.blog.domain.Tag;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -38,4 +39,12 @@ public interface TagMapper extends BaseMapper<Tag>
      * @return 结果
      */
     public int deleteTagByTagIds(Long[] tagIds);
+
+    /**
+     * 获取最热标签
+     * @param status
+     * @param top
+     * @return
+     */
+    List<Tag> selectHotTagList(@Param("status") int status, @Param("top") int top);
 }

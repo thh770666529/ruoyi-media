@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { getDicts } from "@/api/dict/data";
 import { parseTime, addDateRange, selectDictLabel, selectDictLabels } from "@/utils/ruoyi";
 import { fileUploadHost } from "@/config/config";
+import Pagination from "@/components/Pagination";
 // 全局方法挂载
 let method = {
   install(Vue) {
@@ -25,9 +26,11 @@ let method = {
       this.$message.info(msg);
     }
 
+    // 全局组件挂载
+    Vue.component('Pagination', Pagination)
     // 全局过滤器设置
     Vue.filter('ellipsis', function (msg, num) {
-      var currentNum = num || 5
+      const currentNum = num || 5
       if(!msg) {
         return ''
     }

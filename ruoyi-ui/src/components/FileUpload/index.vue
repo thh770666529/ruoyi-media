@@ -10,6 +10,7 @@
       :on-success="handleUploadSuccess"
       :show-file-list="false"
       :headers="headers"
+      multiple
       class="upload-file-uploader"
       ref="upload"
     >

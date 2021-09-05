@@ -112,4 +112,7 @@ public class Article extends BaseEntity
 
     /** 文章私密访问时的密钥 */
     private String password;
+
+    /** 点赞数 */
+    private Long praiseClickCount;
 }

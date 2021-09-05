@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.blog.domain.Article;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -39,4 +40,20 @@ public interface ArticleMapper extends BaseMapper<Article>
      * @return 结果
      */
     public int deleteArticleByArticleIds(Long[] articleIds);
+
+    /**
+     * 搜索最热文章列表
+     * @param status
+     * @param publishStatus
+     * @param top
+     * @return
+     */
+    List<Article> selectHotArticleList(@Param("status") int status,@Param("publishStatus") int publishStatus,@Param("top") int top);
+
+    /**
+     * 通过门户获取文章列表
+     * @param article
+     * @return
+     */
+    List<Article> selectSearchArticleList(Article article);
 }

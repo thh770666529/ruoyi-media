@@ -22,6 +22,11 @@ import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.framework.config.ServerConfig;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 通用请求处理
  *
@@ -84,7 +89,7 @@ public class CommonController
             ajax.put("fileName", fileName);
             ajax.put("url", url);
             return ajax;*/
-            String url = FileUploadUtils.upload2(RuoYiConfig.getImagePath(), file, MimeTypeUtils.IMAGE_EXTENSION);
+            String url = FileUploadUtils.upload2(RuoYiConfig.getImagePath(), file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
             AjaxResult ajax = AjaxResult.success();
             ajax.put("fileName", url);
             ajax.put("url", url);

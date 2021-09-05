@@ -28,59 +28,31 @@
                     </router-link>
                   </div>
                   <div class="mt10 hLh30 txtOf actor">
-                    <router-link :to="'/actor/' + actor.actorId" tag="a" title="actor.name" target="_blank" active-class="fsize18 c-666" exact>
-                      {{actor.name}}
+                    <router-link :to="'/actor/' + actor.actorId" tag="a" :title="actor.name" target="_blank" active-class="fsize20 #333" exact>
+                      <b>{{actor.name}}</b>
                     </router-link>
                   </div>
                   <div class="hLh30 txtOf actor">
-                    <span class="fsize14 c-999" v-html="actor.description"></span>
-                  </div>
-                  <div class="mt15 i-q-txt">
-                    <span class="c-999 f-fA" v-html="actor.awards"></span>
+                    <span class="fsize12 c-999" v-html="actor.description"></span>
                   </div>
                 </section>
               </li>
-
             </ul>
             <div class="clear"></div>
           </article>
         </div>
-        <!-- 公共分页 开始 -->
+        <!-- 公共分页 -->
         <div>
-          <div class="paging">
-            <a
-              :class="{undisable: true}"
-              href="#"
-              title="首页"
-              @click.prevent="gotoPage(1)">首</a>
-            <a
-              :class="{undisable: true}"
-              href="#"
-              title="前一页"
-              @click.prevent="gotoPage(queryParams.pageNum-1)">&lt;</a>
-
-
-            <a
-              v-for="page in totalPage"
-              :key="page"
-              :class="{current: queryParams.pageNum === page, undisable: queryParams.pageNum === page}"
-              :title="'第'+page+'页'"
-              href="#"
-              @click.prevent="gotoPage(page)">{{ page }}</a>
-            <a
-              href="#"
-              title="后一页"
-              @click.prevent="queryParams.pageNum<pages?gotoPage(queryParams.pageNum+1):gotoPage(queryParams.pageNum)">&gt;</a>
-            <a
-              href="#"
-              title="末页"
-              @click.prevent="gotoPage(pages)">末</a>
-
-            <div class="clear"/>
+          <div class="block">
+            <pagination
+              v-show="total>0"
+              :total="total"
+              :page.sync="queryParams.pageNum"
+              :limit.sync="queryParams.pageSize"
+              @pagination="getList"
+            />
           </div>
         </div>
-      <!-- 公共分页 结束 -->
-        <!-- 公共分页 结束 -->
       </section>
     </section>
     <!-- /演员列表 结束 -->
@@ -95,11 +67,9 @@ export default {
       page:1, //当前页
       actorList:[],  //演员列表
       total: 0,
-      totalPage:[],
-      pages:0,
       queryParams: {
         pageNum: 1,
-        pageSize: 8,
+        pageSize: 10,
         name: null,
         avatar: null,
         description: null,
@@ -113,30 +83,13 @@ export default {
         listActor(this.queryParams).then(response => {
         this.actorList = response.rows;
         this.total = response.total;
-        this.pages = 0;
-        this.pages = this.total / this.queryParams.pageSize;
-        if (this.total % this.queryParams.pageSize !== 0) {
-          this.pages++;
-        }
-        if (this.pages>0){
-          this.totalPage = [];
-          for (let i = 1; i < this.pages; i++) {
-            this.totalPage.push(i);
-          }
-        }
       });
-    },
-    gotoPage(page) {
-      this.queryParams.pageNum = page;
-      this.getList();
-    },
-    getTotalPage(){
-
-    },
+    }
   },
   async created() {
     this.getList();
   }
-
 };
 </script>
+<style scoped>
+</style>
