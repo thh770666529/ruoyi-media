@@ -718,8 +718,8 @@ export default {
       this.open = true;
     },
 
-    submitForm(){
-      this.save();
+    async submitForm(){
+      await this.save();
       this.cancel();
     },
     /** 保存按钮 */
