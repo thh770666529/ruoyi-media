@@ -70,11 +70,11 @@
             </el-form-item>
 
             <el-form-item label="价格" prop="price" style="width: 200px" :label-width="formLabelWidth" >
-              <el-input v-model="form.price" type="text" placeholder="请输入内容" />
+              <el-input-number v-model="form.price" :precision="1" placeholder="请输入价格" :step="0.1" :max="10"></el-input-number>
             </el-form-item>
 
             <el-form-item label="评分" prop="rate" style="width: 200px" :label-width="formLabelWidth" >
-              <el-input v-model="form.rate" type="text" placeholder="评分" />
+              <el-input-number v-model="form.rate" :precision="1" placeholder="评分" :step="0.1" :max="10"></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -102,7 +102,7 @@
         </el-form-item>
 
         <el-form-item label="备注" prop="remark" :label-width="formLabelWidth" >
-          <el-input v-model="form.remark" rows="6" type="textarea" placeholder="请输入内容" show-word-limit="1000" />
+          <el-input v-model="form.remark" rows="6" type="textarea" placeholder="请输入内容" maxlength="1000" show-word-limit />
         </el-form-item>
 
 
@@ -548,8 +548,10 @@ export default {
   watch:{
     "$route":{
       handler(route){
-        const that = this;
-        that.init();
+        if (route.path !== '/media/movie'){
+          const that = this;
+          that.init();
+        }
       }
     }
   },
