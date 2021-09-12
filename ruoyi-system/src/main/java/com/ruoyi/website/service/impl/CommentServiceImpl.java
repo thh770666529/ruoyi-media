@@ -11,6 +11,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.enums.CommentStatusEnum;
 import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.XssKillerUtil;
@@ -124,6 +125,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
         filterContent(comment);
         // 保存当前评论时的位置信息
         comment.setAddress(AddressUtils.getRealAddressByIP(comment.getIp()));
+        //保存默认数据
+        comment.setCreateTime(DateUtils.getNowDate());
+        comment.setUpdateTime(DateUtils.getNowDate());
+        comment.setSupport(0);
+        comment.setOppose(0);
         int insert = commentMapper.insert(comment);
         Long userId = comment.getUserId();
         // 查询用户数据

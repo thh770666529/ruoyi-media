@@ -62,7 +62,7 @@ public interface IMovieService extends IService<Movie>
      * @param top
      * @return
      */
-    List<Movie> selectHotMovieList(int top);
+    List<MovieVO> selectHotMovieList(int top);
 
     /**
      * 删除演员关联

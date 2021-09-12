@@ -87,7 +87,16 @@ public interface IArticleService
      */
     List<Article> selectSearchArticleList(Article article);
 
+    /**
+     * 门户查询文章
+     * @param articleId
+     * @return
+     */
     Article selectWebArticleByArticleId(Long articleId);
 
-    void praiseArticleById(Long articleId);
+    /**
+     *  支持文章
+     * @param articleId
+     */
+    void supportArticleById(Long articleId);
 }

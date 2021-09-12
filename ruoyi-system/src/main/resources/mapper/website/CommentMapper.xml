@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="Comment" id="CommentResult">
         <result property="commentId"    column="comment_id"    />
-        <result property="sid"    column="sid"    />
+        <result property="targetId"    column="target_id"    />
         <result property="userId"    column="user_id"    />
         <result property="parentCommentId"    column="parent_comment_id"    />
         <result property="qq"    column="qq"    />
@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCommentVo">
-        select comment_id, sid, user_id, parent_comment_id, qq, nickname, avatar, email, url, status, ip, lng, lat, address, os, os_short_name, browser, browser_short_name, content, remark, support, oppose, create_time, update_time, table_name from website_comment
+        select comment_id, target_id, user_id, parent_comment_id, qq, nickname, avatar, email, url, status, ip, lng, lat, address, os, os_short_name, browser, browser_short_name, content, remark, support, oppose, create_time, update_time, table_name from website_comment
     </sql>
 
     <select id="selectCommentList" parameterType="Comment" resultMap="CommentResult">
@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         website_comment t
         LEFT JOIN sys_user u ON u.user_id = t.user_id
         <where>
-            <if test="sid != null "> and sid = #{sid}</if>
+            <if test="targetId != null "> and target_id = #{targetId}</if>
             <if test="commentId != null "> and comment_id = #{commentId}</if>
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="parentCommentId != null "> and parent_comment_id = #{parentCommentId}</if>

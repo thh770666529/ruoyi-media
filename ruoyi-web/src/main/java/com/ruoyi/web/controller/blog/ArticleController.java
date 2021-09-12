@@ -1,13 +1,12 @@
 package com.ruoyi.web.controller.blog;
 
 import com.ruoyi.blog.domain.Article;
-import com.ruoyi.blog.domain.Sort;
+import com.ruoyi.blog.domain.Category;
 import com.ruoyi.blog.domain.Tag;
 import com.ruoyi.blog.domain.vo.ArticleVO;
 import com.ruoyi.blog.service.IArticleService;
-import com.ruoyi.blog.service.ISortService;
+import com.ruoyi.blog.service.ICategoryService;
 import com.ruoyi.blog.service.ITagService;
-import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.BaseRedisKeyConstants;
 import com.ruoyi.common.constant.BlogConstants;
 import com.ruoyi.common.core.controller.BaseController;
@@ -15,16 +14,12 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.redis.RedisCache;
-import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.ip.IpUtils;
-import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.service.ISysUserService;
-import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +45,7 @@ public class ArticleController extends BaseController
     private ITagService tagService;
 
     @Autowired
-    private ISortService sortService;
+    private ICategoryService categoryService;
 
     @Autowired
     private RedisCache redisCache;
@@ -117,10 +112,10 @@ public class ArticleController extends BaseController
             articleVO.setTagList(tagList);
         }
         //设置博客分类
-        String sortId = articleVO.getSortId();
-        if (StringUtils.isNotBlank(tagId)){
-            Sort sort = sortService.selectSortBySortId(Long.valueOf(sortId));
-            articleVO.setSortData(sort);
+        String categoryId = articleVO.getCategoryId();
+        if (StringUtils.isNotBlank(categoryId)){
+            Category category = categoryService.selectCategoryByCategoryId(Long.valueOf(categoryId));
+            articleVO.setCategoryData(category);
         }
         //设置作者
         String createBy = articleVO.getCreateBy();
@@ -148,10 +143,10 @@ public class ArticleController extends BaseController
         }
     }
 
-    @GetMapping("/praiseArticle/{articleId}")
-    public AjaxResult praiseArticleById(@PathVariable("articleId") Long articleId) {
+    @GetMapping("/supportArticle/{articleId}")
+    public AjaxResult supportArticle(@PathVariable("articleId") Long articleId) {
         log.info("门户点赞博客文章id={}", articleId);
-        articleService.praiseArticleById(articleId);
+        articleService.supportArticleById(articleId);
         return AjaxResult.success();
     }
 }

@@ -48,7 +48,7 @@ public class Movie extends BaseEntity
 
     /** 标签 */
     @Excel(name = "标签")
-    private String label;
+    private String tagId;
 
     /** 描述 */
     @Excel(name = "描述")
@@ -70,9 +70,9 @@ public class Movie extends BaseEntity
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
-    /** 阅读数 */
-    @Excel(name = "阅读数")
-    private Long readCount;
+    /** 点击数 */
+    @Excel(name = "点击数")
+    private Long clickCount;
 
     /** 评论数 */
     @Excel(name = "评论数")
@@ -86,13 +86,13 @@ public class Movie extends BaseEntity
     @Excel(name = "收藏数")
     private Long collectionCount;
 
-    /** 喜欢数 */
+    /** 支持数 */
     @Excel(name = "喜欢数")
-    private Long likesCount;
+    private Long supportCount;
 
-    /** 不喜欢数 */
-    @Excel(name = "不喜欢数")
-    private Long unlikesCount;
+    /** 反对数 */
+    @Excel(name = "反对数")
+    private Long opposeCount;
 
     /** 分享数 */
     @Excel(name = "分享数")
@@ -100,11 +100,11 @@ public class Movie extends BaseEntity
 
     /** 是否可以评论 */
     @Excel(name = "是否可以评论")
-    private String isComment;
+    private Integer openComment;
 
     /** 是否可以下载 */
     @Excel(name = "是否可以下载")
-    private String isDownload;
+    private Integer openDownload;
 
     /** 价格 */
     @Excel(name = "价格")
@@ -113,5 +113,23 @@ public class Movie extends BaseEntity
     /** 评分 */
     @Excel(name = "评分")
     private BigDecimal rate;
+
+    /** 分类Id */
+    @Excel(name = "分类Id")
+    private Integer categoryId;
+
+    /** 分类名称 */
+    @Excel(name = "分类Id")
+    private String categoryName;
+
+    /** 专属二维码 */
+    @Excel(name = "专属二维码")
+    private String qrcodePath;
+
+    /** 是否开启密钥模式 */
+    private Integer openPassword;
+
+    /** 私密访问时的密钥 */
+    private String password;
 
 }

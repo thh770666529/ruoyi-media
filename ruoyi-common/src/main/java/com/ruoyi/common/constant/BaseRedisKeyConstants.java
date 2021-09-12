@@ -30,9 +30,9 @@ public class BaseRedisKeyConstants {
     public final static String HOT_BLOG_ARTICLE = "HOT_BLOG_ARTICLE";
 
     /**
-     * 最热博客文章
+     * 支持博客文章
      */
-    public final static String CIICK_BLOG_LOVE = "CIICK_BLOG_LOVE";
+    public final static String CIICK_BLOG_SUPPORT = "CIICK_BLOG_SUPPORT";
 
     /**
      * 最热博客标签

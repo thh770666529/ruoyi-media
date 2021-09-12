@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.question.mapper.QuestionCategoryMapper">
+    
+    <resultMap type="QuestionCategory" id="QuestionCategoryResult">
+        <result property="categoryId"    column="category_id"    />
+        <result property="name"    column="name"    />
+        <result property="content"    column="content"    />
+        <result property="status"    column="status"    />
+        <result property="sort"    column="sort"    />
+        <result property="clickCount"    column="click_count"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectQuestionCategoryVo">
+        select category_id, name, content, status, sort, click_count, create_by, create_time, update_by, update_time, remark from qa_question_category
+    </sql>
+
+    <select id="selectQuestionCategoryList" parameterType="QuestionCategory" resultMap="QuestionCategoryResult">
+        <include refid="selectQuestionCategoryVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectQuestionCategoryByCategoryId" parameterType="Integer" resultMap="QuestionCategoryResult">
+        <include refid="selectQuestionCategoryVo"/>
+        where category_id = #{categoryId}
+    </select>
+        
+    <insert id="insertQuestionCategory" parameterType="QuestionCategory" useGeneratedKeys="true" keyProperty="categoryId">
+        insert into qa_question_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="content != null">content,</if>
+            <if test="status != null">status,</if>
+            <if test="sort != null">sort,</if>
+            <if test="clickCount != null">click_count,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="content != null">#{content},</if>
+            <if test="status != null">#{status},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="clickCount != null">#{clickCount},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateQuestionCategory" parameterType="QuestionCategory">
+        update qa_question_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="clickCount != null">click_count = #{clickCount},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where category_id = #{categoryId}
+    </update>
+
+    <delete id="deleteQuestionCategoryByCategoryId" parameterType="Integer">
+        delete from qa_question_category where category_id = #{categoryId}
+    </delete>
+
+    <delete id="deleteQuestionCategoryByCategoryIds" parameterType="String">
+        delete from qa_question_category where category_id in 
+        <foreach item="categoryId" collection="array" open="(" separator="," close=")">
+            #{categoryId}
+        </foreach>
+    </delete>
+</mapper>

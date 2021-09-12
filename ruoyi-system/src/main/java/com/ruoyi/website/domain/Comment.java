@@ -33,7 +33,7 @@ public class Comment
 
     /** 被评论的文章电影或者页面的ID */
     @Excel(name = "被评论的文章电影或者页面的ID")
-    private Long sid;
+    private Long targetId;
 
     /** 评论人的ID */
     @Excel(name = "评论人的ID")
@@ -118,7 +118,7 @@ public class Comment
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
 
@@ -128,13 +128,11 @@ public class Comment
     private Date updateTime;
 
 
-
     /**
      * 本条评论下的回复
      */
     @TableField(exist = false)
     private List<Comment> children  = new ArrayList<Comment>();
-
 
 
     /**

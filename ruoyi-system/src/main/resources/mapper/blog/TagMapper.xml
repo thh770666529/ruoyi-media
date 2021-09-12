@@ -15,10 +15,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createBy"    column="create_by"    />
         <result property="updateBy"    column="update_by"    />
         <result property="remark"    column="remark"    />
+        <result property="isDefault"    column="is_default"    />
+        <result property="cssClass"    column="css_class"    />
+        <result property="listClass"    column="list_class"    />
     </resultMap>
 
     <sql id="selectTagVo">
-        select tag_id, content, status, click_count, sort, create_time, update_time, create_by, update_by, remark from blog_tag
+        select tag_id, content, status, click_count, sort,
+        create_time, update_time, create_by, update_by, remark,
+        is_default,css_class,list_class
+        from blog_tag
     </sql>
 
     <select id="selectHotTagList" resultMap="TagResult">

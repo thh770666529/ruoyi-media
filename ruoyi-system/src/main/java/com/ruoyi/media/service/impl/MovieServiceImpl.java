@@ -4,6 +4,7 @@ package com.ruoyi.media.service.impl;
 import java.util.HashMap;
 import java.util.List;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.MovieActorType;
@@ -72,21 +73,34 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
             video.setMovieId(movieId);
             List<Video> videoList = videoMapper.selectVideoList(video);
             movieVO.setVideoList(videoList);
-
-            MovieActorVO actorVO = new MovieActorVO();
-            actorVO.setMovieId(movieId);
-            actorVO.setType(MovieActorType.ACTOR.getValue());
-            List<MovieActorVO> movieActorList = movieActorMapper.selectMovieActorList(actorVO);
-            movieVO.setActorList(movieActorList);
-
-            MovieActorVO  directorVO = new MovieActorVO();
-            directorVO.setMovieId(movieId);
-            directorVO.setType(MovieActorType.DIRECTOR.getValue());
-            List<MovieActorVO> directorList = movieActorMapper.selectMovieActorList(directorVO);
-            movieVO.setDirectorList(directorList);
+            setMovieActor(MovieActorType.ACTOR, movieVO);
+            setMovieActor(MovieActorType.DIRECTOR, movieVO);
 
         }
         return movieVO;
+    }
+
+    /**
+     * 设置导演或者主演数据
+     * @param movieActorType
+     * @param movieVO
+     */
+    private void setMovieActor(MovieActorType movieActorType,MovieVO movieVO){
+        if (movieVO == null && movieVO.getMovieId() == null){
+            return;
+        }
+        MovieActorVO actorVO = new MovieActorVO();
+        actorVO.setMovieId(movieVO.getMovieId());
+        if (movieActorType.getValue() == MovieActorType.ACTOR.getValue()){
+            actorVO.setType(MovieActorType.ACTOR.getValue());
+            List<MovieActorVO> movieActorList = movieActorMapper.selectMovieActorList(actorVO);
+            movieVO.setActorList(movieActorList);
+        }else {
+            actorVO.setType(MovieActorType.DIRECTOR.getValue());
+            List<MovieActorVO> directorList = movieActorMapper.selectMovieActorList(actorVO);
+            movieVO.setDirectorList(directorList);
+        }
+
     }
 
     /**
@@ -185,8 +199,16 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     }
 
     @Override
-    public List<Movie> selectHotMovieList(int top) {
-        return movieMapper.selectHotMovieList(top);
+    public List<MovieVO> selectHotMovieList(int top) {
+        List<Movie> movieList = movieMapper.selectHotMovieList(top);
+        List<MovieVO> newMovieList = new ArrayList<>();
+        for (Movie movie : movieList) {
+            MovieVO movieVO = new MovieVO();
+            BeanUtils.copyProperties(movie,movieVO);
+            setMovieActor(MovieActorType.ACTOR, movieVO);
+            newMovieList.add(movieVO);
+        }
+        return newMovieList;
     }
 
     @Override

@@ -87,7 +87,7 @@ public class CommentController extends BaseController
         }
 
         Comment commentCondition = new Comment();
-        commentCondition.setSid(dbComment.getSid());
+        commentCondition.setCommentId(dbComment.getCommentId());
         //List<Comment> commentList = commentService.getCommentListByParentCommentId(commentCondition, dbComment.getCommentId());
         List<Comment> commentList = commentService.getAllCommentList(commentCondition, dbComment.getCommentId());
         commentList.add(dbComment);
@@ -103,7 +103,6 @@ public class CommentController extends BaseController
     /**
      * 删除评论
      */
-    @PreAuthorize("@ss.hasPermi('website:comment:remove')")
     @Log(title = "评论", businessType = BusinessType.DELETE)
     @DeleteMapping("/{commentIds}")
     public AjaxResult remove(@PathVariable Long[] commentIds)

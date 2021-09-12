@@ -27,8 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select ma.actor_id, ma.movie_id, ma.type,a.name, a.avatar, a.label
         from wm_movie_actor ma,wm_actor a
         <where>
-            AND 1 = 1
-            AND ma.actor_id = a.actor_id
+            ma.actor_id = a.actor_id
             <if test="actorId != null "> AND ma.actor_id = #{actorId}</if>
             <if test="movieId != null "> AND ma.movie_id = #{movieId}</if>
             <if test="type != null  and type != ''"> AND ma.type = #{type}</if>

@@ -41,8 +41,7 @@ public class WebConfigServiceImpl implements IWebConfigService
     public WebConfig getWebConfig() {
         String webConfigResult = redisCache.getCacheObject(WEB_CONFIG_KEY);
         if (StringUtils.isNotEmpty(webConfigResult)) {
-            WebConfig webConfig = JSONObject.parseObject(webConfigResult, WebConfig.class);
-            return webConfig;
+            return JSONObject.parseObject(webConfigResult, WebConfig.class);
         }
         WebConfig webConfig = webConfigMapper.selectById(WebConfigConstants.WEB_CONFIG_ID);
         redisCache.setCacheObject(WEB_CONFIG_KEY,JSONObject.toJSONString(webConfig));

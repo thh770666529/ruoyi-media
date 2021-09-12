@@ -38,7 +38,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import static com.ruoyi.common.utils.file.qiwen.FileUtil.getFileExtendsByType;
 
@@ -60,6 +61,9 @@ public class FileController extends BaseController {
     ISysUserService sysUserService;
 
     @Autowired
+    TokenUtil tokenUtil;
+
+    @Autowired
     IUserFileService userFileService;
 
     @Resource
@@ -70,21 +74,20 @@ public class FileController extends BaseController {
 
 
 
-    public static Executor executor = new ThreadPoolExecutor(20, 20,
-            0L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<Runnable>());
+    public static Executor executor = Executors.newFixedThreadPool(20);
 
     @Log(title = "创建文件", businessType = BusinessType.File)
     @PostMapping("/createfile")
     public AjaxResult createFile(@RequestBody CreateFileDTO createFileDto) {
-        Long userId = getUserId();
-        List<UserFile> userFiles = userFileService.selectUserFileByNameAndPath(createFileDto.getFileName(), createFileDto.getFilePath(), userId);
+
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+        List<UserFile> userFiles = userFileService.selectUserFileByNameAndPath(createFileDto.getFileName(), createFileDto.getFilePath(), loginUser.getUserId());
         if (userFiles != null && !userFiles.isEmpty()) {
             return AjaxResult.error(("同名文件已存在"));
         }
 
         UserFile userFile = new UserFile();
-        userFile.setUserId(userId);
+        userFile.setUserId(loginUser.getUserId());
         userFile.setFileName(createFileDto.getFileName());
         userFile.setFilePath(createFileDto.getFilePath());
         userFile.setDeleteFlag(0);
@@ -96,12 +99,15 @@ public class FileController extends BaseController {
         return AjaxResult.success();
     }
 
+
     @Log(title = "文件重命名" , businessType = BusinessType.File)
     @PostMapping("/renamefile")
     public AjaxResult renameFile(@RequestBody RenameFileDTO renameFileDto) {
+
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         UserFile userFile = userFileService.getById(renameFileDto.getUserFileId());
 
-        List<UserFile> userFiles = userFileService.selectUserFileByNameAndPath(renameFileDto.getFileName(), renameFileDto.getFilePath(), getUserId());
+        List<UserFile> userFiles = userFileService.selectUserFileByNameAndPath(renameFileDto.getFileName(), renameFileDto.getFilePath(), loginUser.getUserId());
         if (userFiles != null && !userFiles.isEmpty()) {
             return AjaxResult.error("同名文件已存在");
         }
@@ -113,7 +119,7 @@ public class FileController extends BaseController {
                     .eq(UserFile::getUserFileId, renameFileDto.getUserFileId());
             userFileService.update(lambdaUpdateWrapper);
             userFileService.replaceUserFilePath(userFile.getFilePath() + renameFileDto.getFileName() + "/",
-                    userFile.getFilePath() + userFile.getFileName() + "/", getUserId());
+                    userFile.getFilePath() + userFile.getFileName() + "/", loginUser.getUserId());
         } else {
             FileBean file = fileService.getById(userFile.getFileId());
             if (file.getStorageType() == 1) {
@@ -155,12 +161,14 @@ public class FileController extends BaseController {
     @PostMapping("/batchdeletefile")
     public AjaxResult deleteImageByIds(@RequestBody BatchDeleteFileDTO batchDeleteFileDto) {
 
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+
         List<UserFile> userFiles = JSON.parseArray(batchDeleteFileDto.getFiles(), UserFile.class);
         // DigestUtils.md5Hex("data");
         for (UserFile userFile : userFiles) {
             //userFile.setDeleteBatchNum(uuid);
-            userFileService.deleteUserFile(userFile.getUserFileId(),getUserId());
-           fileDealComp.deleteESByUserFileId(userFile.getUserFileId());
+            userFileService.deleteUserFile(userFile.getUserFileId(),loginUser.getUserId());
+            fileDealComp.deleteESByUserFileId(userFile.getUserFileId());
         }
         return AjaxResult.success("批量删除文件成功");
     }
@@ -169,7 +177,9 @@ public class FileController extends BaseController {
     @Log(title = "可以删除文件或者目录" , businessType = BusinessType.File)
     @PostMapping("/deletefile")
     public AjaxResult deleteFile(@RequestBody DeleteFileDTO deleteFileDto) {
-        userFileService.deleteUserFile(deleteFileDto.getUserFileId(), getUserId());
+
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+        userFileService.deleteUserFile(deleteFileDto.getUserFileId(), loginUser.getUserId());
         fileDealComp.deleteESByUserFileId(deleteFileDto.getUserFileId());
         return AjaxResult.success();
 
@@ -179,6 +189,8 @@ public class FileController extends BaseController {
     @Log(title = "解压文件" , businessType = BusinessType.File)
     @PostMapping("/unzipfile")
     public AjaxResult unzipFile(@RequestBody UnzipFileDTO unzipFileDto) {
+
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         String zipFileUrl = PathUtil.getStaticPath() + unzipFileDto.getFileUrl();
         File file = FileOperation.newFile(zipFileUrl);
         String extendName = FileUtil.getFileExtendName(zipFileUrl);
@@ -216,7 +228,7 @@ public class FileController extends BaseController {
                 UserFile userFile = new UserFile();
 
                 userFile.setUploadTime(DateUtils.getTime());
-                userFile.setUserId(getUserId());
+                userFile.setUserId(loginUser.getUserId());
                 userFile.setFilePath(FileUtil.pathSplitFormat(unzipFileDto.getFilePath() + entryName.replace(currentFile.getName(), "")).replace("\\", "/"));
 
                 if (currentFile.isDirectory()){
@@ -252,11 +264,13 @@ public class FileController extends BaseController {
     @Log(title = "文件或者目录移动" , businessType = BusinessType.File)
     @PostMapping("/movefile")
     public AjaxResult moveFile(@RequestBody MoveFileDTO moveFileDto) {
+
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         String oldfilePath = moveFileDto.getOldFilePath();
         String newfilePath = moveFileDto.getFilePath();
         String fileName = moveFileDto.getFileName();
         String extendName = moveFileDto.getExtendName();
-        userFileService.updateFilepathByFilepath(oldfilePath, newfilePath, fileName, extendName, getUserId());
+        userFileService.updateFilepathByFilepath(oldfilePath, newfilePath, fileName, extendName, loginUser.getUserId());
         return AjaxResult.success();
 
     }
@@ -266,11 +280,13 @@ public class FileController extends BaseController {
     @Log(title = "批量移动文件" , businessType = BusinessType.File)
     @PostMapping("/batchmovefile")
     public AjaxResult batchMoveFile(@RequestBody BatchMoveFileDTO batchMoveFileDto) {
+
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         String files = batchMoveFileDto.getFiles();
         String newfilePath = batchMoveFileDto.getFilePath();
         List<UserFile> fileList = JSON.parseArray(files, UserFile.class);
         for (UserFile userFile : fileList) {
-            userFileService.updateFilepathByFilepath(userFile.getFilePath(), newfilePath, userFile.getFileName(), userFile.getExtendName(), getUserId());
+            userFileService.updateFilepathByFilepath(userFile.getFilePath(), newfilePath, userFile.getFileName(), userFile.getExtendName(), loginUser.getUserId());
         }
         return AjaxResult.success("批量移动文件成功");
 
@@ -280,7 +296,9 @@ public class FileController extends BaseController {
     @Log(title = "通过文件类型选择文件" , businessType = BusinessType.File)
     @GetMapping("/selectfilebyfiletype")
     public AjaxResult selectFileByFileType(int fileType, Long currentPage, Long pageCount) {
-        Long userId = getUserId();
+
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+        long userId = loginUser.getUserId();
         //startPage();
         List<FileListVo> fileList = new ArrayList<>();
         Long beginCount = 0L;
@@ -316,8 +334,10 @@ public class FileController extends BaseController {
     @Log(title = "获取文件树" , businessType = BusinessType.File)
     @GetMapping("/getfiletree")
     public AjaxResult getFileTree() {
-        long userId = getUserId();
-        List<UserFile> userFileList = userFileService.selectFilePathTreeByUserId(userId);
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+        long userId = loginUser.getUserId();
+
+        List<UserFile> userFileList = userFileService.selectFilePathTreeByUserId(loginUser.getUserId());
         TreeNode resultTreeNode = new TreeNode();
         resultTreeNode.setLabel("/");
         resultTreeNode.setId(0L);
@@ -359,15 +379,18 @@ public class FileController extends BaseController {
     @Log(title = "获取文件列表", businessType = BusinessType.File)
     @GetMapping("/getfilelist")
     public AjaxResult getFileList(FileListDTO fileListDto){
+
         UserFile userFile = new UserFile();
-        userFile.setUserId(getUserId());
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+        userFile.setUserId(loginUser.getUserId());
         List<FileListVo> fileList = null;
         userFile.setFilePath(PathUtil.urlDecode(fileListDto.getFilePath()));
         if (fileListDto.getCurrentPage() == null || fileListDto.getPageCount() == null) {
             fileList = userFileService.userFileList(userFile, 0L, 10L);
         } else {
             Long beginCount = (fileListDto.getCurrentPage() - 1) * fileListDto.getPageCount();
-            fileList = userFileService.userFileList(userFile, beginCount, fileListDto.getPageCount());
+            fileList = userFileService.userFileList(userFile, beginCount, fileListDto.getPageCount()); //fileService.selectFileListByPath(fileBean);
+
         }
         LambdaQueryWrapper<UserFile> userFileLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userFileLambdaQueryWrapper.eq(UserFile::getUserId, userFile.getUserId())

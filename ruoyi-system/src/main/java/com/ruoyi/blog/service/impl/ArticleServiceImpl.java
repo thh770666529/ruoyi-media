@@ -73,7 +73,12 @@ public class ArticleServiceImpl implements IArticleService
     @Override
     public int insertArticle(Article article)
     {
+        // 初始化数据
         article.setCreateTime(DateUtils.getNowDate());
+        article.setSupportCount(0L);
+        article.setOpposeCount(0L);
+        article.setClickCount(0L);
+        article.setCollectCount(0L);
         return articleMapper.insert(article);
     }
 
@@ -154,20 +159,20 @@ public class ArticleServiceImpl implements IArticleService
     }
 
     @Override
-    public void praiseArticleById(Long articleId) {
+    public void supportArticleById(Long articleId) {
         Long userId = SecurityUtils.getUserId();
-        Integer redisJson = redisCache.getCacheObject(BaseRedisKeyConstants.CIICK_BLOG_LOVE + ":" + articleId + "#" + userId);
+        Integer redisJson = redisCache.getCacheObject(BaseRedisKeyConstants.CIICK_BLOG_SUPPORT + ":" + articleId + "#" + userId);
         if (redisJson != null){
             throw new ServiceException("24小时内无法重复点赞同一篇文章");
         } else {
             Article article = articleMapper.selectById(articleId);
-            Long praiseClickCount = article.getPraiseClickCount();
-            if (praiseClickCount == null){
-                praiseClickCount = 0L;
+            Long supportClickCount = article.getOpposeCount();
+            if (supportClickCount == null){
+                supportClickCount = 0L;
             }
-            article.setPraiseClickCount(praiseClickCount + 1);
+            article.setOpposeCount(supportClickCount + 1);
             articleMapper.insert(article);
-            redisCache.setCacheObject(BaseRedisKeyConstants.CIICK_BLOG_LOVE + ":" + articleId + "#" + userId, 1);
+            redisCache.setCacheObject(BaseRedisKeyConstants.CIICK_BLOG_SUPPORT + ":" + articleId + "#" + userId, 1);
         }
     }
 }

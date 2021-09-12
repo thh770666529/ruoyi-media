@@ -113,8 +113,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/*/api-docs").anonymous()
                 .antMatchers("/druid/**").anonymous()
-                .antMatchers("/filetransfer/preview",
-                                         "/filetransfer/downloadfile",
+                .antMatchers("/filetransfer/preview**",
+                                         "/filetransfer/downloadfile**",
                                          "/share/sharefileList",
                                          "/share/sharetype",
                                          "/share/checkextractioncode",

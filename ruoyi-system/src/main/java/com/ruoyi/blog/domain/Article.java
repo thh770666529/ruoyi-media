@@ -70,7 +70,11 @@ public class Article extends BaseEntity
 
     /** 博客分类 */
     @Excel(name = "博客分类")
-    private String sortId;
+    private String categoryId;
+
+    /** 博客分类 */
+    @Excel(name = "博客分类名称")
+    private String categoryName;
 
     /** 推荐等级 */
     @Excel(name = "推荐等级")
@@ -113,6 +117,10 @@ public class Article extends BaseEntity
     /** 文章私密访问时的密钥 */
     private String password;
 
-    /** 点赞数 */
-    private Long praiseClickCount;
+    /** 支持数 */
+    private Long supportCount;
+
+    /** 反对数 */
+    private Long opposeCount;
+
 }

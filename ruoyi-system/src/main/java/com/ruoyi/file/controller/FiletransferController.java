@@ -66,13 +66,19 @@ public class FiletransferController extends BaseController {
     @Resource
     IShareFileService shareFileService;
 
+    @Autowired
+    TokenUtil tokenUtil;
+
     /**
      * 校验文件MD5判断文件是否存在，如果存在直接上传成功并返回skipUpload=true，如果不存在返回skipUpload=false需要再次调用该接口的POST方法
      */
     @GetMapping("/uploadfile")
     @Log(title = "极速上传,校验文件MD5判断文件是否存在", businessType = BusinessType.File)
     public AjaxResult uploadFileSpeed(UploadFileDTO uploadFileDto) {
-        boolean isCheckSuccess = storageService.checkStorage(getUserId(), uploadFileDto.getTotalSize());
+
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+
+        boolean isCheckSuccess = storageService.checkStorage(loginUser.getUserId(), uploadFileDto.getTotalSize());
         if (!isCheckSuccess) {
             return AjaxResult.error("存储空间不足");
         }
@@ -86,7 +92,7 @@ public class FiletransferController extends BaseController {
                 FileBean file = list.get(0);
 
                 UserFile userFile = new UserFile();
-                userFile.setUserId(getUserId());
+                userFile.setUserId(loginUser.getUserId());
                 userFile.setFilePath(uploadFileDto.getFilePath());
                 String fileName = uploadFileDto.getFilename();
                 userFile.setFileName(FileUtil.getFileNameNotExtend(fileName));
@@ -115,7 +121,8 @@ public class FiletransferController extends BaseController {
     @PostMapping("/uploadfile")
     @Log(title = "上传文件", businessType = BusinessType.File)
     public AjaxResult uploadFile(HttpServletRequest request, UploadFileDTO uploadFileDto) {
-        filetransferService.uploadFile(request, uploadFileDto, getUserId());
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+        filetransferService.uploadFile(request, uploadFileDto, loginUser.getUserId());
         UploadFileVo uploadFileVo = new UploadFileVo();
         return AjaxResult.success(uploadFileVo);
 
@@ -150,7 +157,7 @@ public class FiletransferController extends BaseController {
         UserFile userFile = userFileService.getById(previewDTO.getUserFileId());
         String token = previewDTO.getToken();
         if ("undefined".equals(previewDTO.getShareBatchNum())  || StringUtils.isEmpty(previewDTO.getShareBatchNum())) {
-            LoginUser loginUser = getLoginUser();
+            LoginUser loginUser = tokenUtil.getLoginUser(token);
             if (loginUser == null) {
                 return;
             }
@@ -213,7 +220,7 @@ public class FiletransferController extends BaseController {
     @Log(title="获取存储信息", businessType = BusinessType.File)
     @GetMapping("/getstorage")
     public AjaxResult getStorage() {
-        LoginUser loginUser = getLoginUser();
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         StorageBean storageBean = new StorageBean();
         storageBean.setUserId(loginUser.getUserId());
         Long storageSize = filetransferService.selectStorageSizeByUserId(loginUser.getUserId());
@@ -223,6 +230,7 @@ public class FiletransferController extends BaseController {
         Long totalStorageSize = storageService.getTotalStorageSize(loginUser.getUserId());
         storage.setTotalStorageSize(totalStorageSize);
         return AjaxResult.success(storage);
+
     }
 
 

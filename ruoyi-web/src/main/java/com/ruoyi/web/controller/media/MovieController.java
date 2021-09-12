@@ -60,7 +60,7 @@ public class MovieController extends BaseController
         Video video = videoService.getById(videoId);
         Long movieId = video.getMovieId();
         MovieVO movieVO = movieService.selectMovieById(movieId);
-        Map data = new HashMap();
+        Map<String, Object> data = new HashMap<>(10);
         data.put("video",video);
         data.put("movie",movieVO);
         return AjaxResult.success(data);
