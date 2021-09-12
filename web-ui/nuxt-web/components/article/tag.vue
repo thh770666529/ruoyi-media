@@ -6,19 +6,27 @@
 				<span>标签</span>
 			</div>
 			<div class="text item">
+        <el-tag
+          style="margin: 0 0 5px 3px"
+          :index="index"
+          @click="getListByTag('')">
+          全部
+        </el-tag>
         <template v-for="(item, index) in tagList">
           <span
-            style="margin-left: 3px"
+            style="margin: 0 0 5px 3px"
             v-if="item.listClass == 'default' || item.listClass == ''"
             :key="item.dictValue"
             :index="index"
+            @click="getListByTag(item.tagId)"
             :class="item.cssClass">{{ item.content }}
               </span>
           <el-tag
             v-else
-            style="margin-left: 3px"
+            style="margin: 0 0 5px 3px"
             :key="item.dictValue"
             :index="index"
+            @click="getListByTag(item.tagId)"
             :type="item.listClass == 'primary' ? '' : item.listClass"
             :class="item.cssClass">
             {{ item.content }}
@@ -33,6 +41,7 @@
   import { listTag } from "@/api/blog/tag";
 	export default {
 		name: 'tag',
+    props: ["tagId"],
     data() {
       return {
         tagList: []
@@ -44,13 +53,8 @@
       });
     },
 		methods: {
-			tag(name) {
-				this.$router.push({
-					name: 'tag',
-					params: {
-						'name': name
-					}
-				});
+			getListByTag(tagId) {
+        this.$emit("change", tagId);
 			}
 		}
 	}

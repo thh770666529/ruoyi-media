@@ -132,4 +132,8 @@ public class Movie extends BaseEntity
     /** 私密访问时的密钥 */
     private String password;
 
+    /** 查询标签数组 */
+    @TableField(exist = false)
+    private List<String> tagIdList;
+
 }

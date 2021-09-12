@@ -80,13 +80,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
             <if test="summary != null  and summary != ''"> and summary like concat('%', #{summary}, '%')</if>
             <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
-            <if test="tagId != null  and tagId != ''"> and tag_id = #{tagId}</if>
+            <if test="tagId != null  and tagId != ''">
+                and FIND_IN_SET(#{tagId},tag_id)
+            </if>
             <if test="status != null "> and status = #{status}</if>
             <if test="isOriginal != null  and isOriginal != ''"> and is_original = #{isOriginal}</if>
             <if test="categoryId != null  and categoryId != ''"> and category_id = #{categoryId}</if>
             <if test="level != null "> and level = #{level}</if>
             <if test="isPublish != null  and isPublish != ''"> and is_publish = #{isPublish}</if>
             <if test="type != null "> and type = #{type}</if>
+            <if test="tagIdList != null and tagIdList.size() > 0 ">
+                <foreach item="tagId" collection="tagIdList" open="and (" separator="or" close=")">
+                    FIND_IN_SET(#{tagId},tag_id)
+                </foreach>
+             </if>
         </where>
     </select>
 

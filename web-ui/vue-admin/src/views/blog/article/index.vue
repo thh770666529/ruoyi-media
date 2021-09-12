@@ -21,7 +21,7 @@
       </el-form-item>
       <el-form-item label="标签" prop="tagId">
         <el-select
-          v-model="queryParams.tagId"
+          v-model="queryParams.tagIdList"
           placeholder="请选择标签"
           clearable
           @change="handleQuery"
@@ -185,24 +185,24 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="标签" align="center" prop="tagId" width="300">
+      <el-table-column label="标签" align="left" prop="tagId" width="300">
         <template slot-scope="scope">
           <template v-for="(item, index) in tagOptions">
-            <template v-if="tagArrayFormat(scope.row).includes(item.content)">
+            <template v-if="getTagArray(scope.row.tagId).includes(String(item.tagId))">
               <span
                 style="margin-left: 3px"
                 v-if="item.listClass == 'default' || item.listClass == ''"
-                :key="item.dictValue"
+                :key="item.tagId"
                 :index="index"
                 :class="item.cssClass">{{ item.content }}
               </span>
               <el-tag
                 v-else
                 style="margin-left: 3px"
-                :key="item.dictValue"
+                :key="item.tagId"
                 :index="index"
-                :type="item.listClass == 'primary' ? '' : item.listClass"
-                :class="item.cssClass">
+                :type="item.listClass === 'primary' ? '' : item.listClass"
+                :class="item.cssClass? item.cssClass: ''">
                 {{ item.content }}
               </el-tag>
             </template>
@@ -503,7 +503,7 @@ export default {
         title: null,
         summary: null,
         content: null,
-        tagId: null,
+        tagIdList: null,
         status: null,
         isOriginal: null,
         categoryId: null,
@@ -553,23 +553,11 @@ export default {
       });
     },
     //标签翻译
-    tagArrayFormat(row) {
-      const value = row.tagId
-      if(!value) {
-        return ''
+    getTagArray(tagId) {
+      if (!tagId) {
+        return []
       }
-      const datas =  this.tagOptions;
-      let actions = [];
-      const currentSeparator = '';
-      let temp = value.split(currentSeparator);
-      Object.keys(value.split(currentSeparator)).some((val) => {
-        Object.keys(datas).some((key) => {
-          if (datas[key].tagId == ('' + temp[val])) {
-            actions.push(datas[key].content + currentSeparator);
-          }
-        })
-      })
-      return actions;
+      return tagId.split(',');
     },
     //分类翻译
     categoryFormat(categoryId) {
@@ -648,8 +636,7 @@ export default {
         qrcodePath: null,
         openPassword: 1,
         password: null,
-        remark: null,
-        praiseClickCount: 0
+        remark: null
       };
       this.resetForm("form");
     },

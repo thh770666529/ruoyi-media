@@ -1,6 +1,7 @@
 package com.ruoyi.blog.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -8,6 +9,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.util.List;
 
 /**
  * 博客文章对象 blog_article
@@ -40,6 +43,10 @@ public class Article extends BaseEntity
     /** 标签 */
     @Excel(name = "标签")
     private String tagId;
+
+    /** 查询标签数组 */
+    @TableField(exist = false)
+    private List<String> tagIdList;
 
     /** 博客点击数 */
     private Long clickCount;

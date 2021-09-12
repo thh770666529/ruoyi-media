@@ -31,6 +31,22 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item label="标签" prop="tagId">
+        <el-select
+          v-model="queryParams.tagIdList"
+          placeholder="请选择标签"
+          clearable
+          @change="handleQuery"
+          multiple size="small">
+          <el-option
+            v-for="tag in tagOptions"
+            :key="tag.tagId"
+            :label="tag.content"
+            :value="tag.tagId  + ``"
+          />
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="国家" prop="country">
         <el-select v-model="queryParams.country" clearable  placeholder="请输入国家">
           <el-option
@@ -44,7 +60,6 @@
 
 
       <el-form-item label="状态" prop="status">
-
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
           <el-option
             v-for="dict in statusOptions"
@@ -53,10 +68,7 @@
             :value="dict.dictValue"
           ></el-option>
         </el-select>
-
       </el-form-item>
-
-
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -130,24 +142,24 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="标签" align="center" prop="tagId" width="300">
+      <el-table-column label="标签" align="left" prop="tagId" width="300">
         <template slot-scope="scope">
           <template v-for="(item, index) in tagOptions">
-            <template v-if="tagArrayFormat(scope.row).includes(item.content)">
+            <template v-if="getTagArray(scope.row.tagId).includes(String(item.tagId))">
               <span
                 style="margin-left: 3px"
                 v-if="item.listClass == 'default' || item.listClass == ''"
-                :key="item.dictValue"
+                :key="item.tagId"
                 :index="index"
                 :class="item.cssClass">{{ item.content }}
               </span>
               <el-tag
                 v-else
                 style="margin-left: 3px"
-                :key="item.dictValue"
+                :key="item.tagId"
                 :index="index"
-                :type="item.listClass == 'primary' ? '' : item.listClass"
-                :class="item.cssClass">
+                :type="item.listClass === 'primary' ? '' : item.listClass"
+                :class="item.cssClass? item.cssClass: ''">
                 {{ item.content }}
               </el-tag>
             </template>
@@ -243,7 +255,8 @@ export default {
         publishTime: null,
         status: null,
         openComment: null,
-        openDownload: null
+        openDownload: null,
+        tagIdList: null
       },
       //电影国家字典
       countryOptions:[],
@@ -387,24 +400,12 @@ export default {
           this.download(response.msg);
         })
     },
-    /** 标签翻译 */
-    tagArrayFormat(row) {
-      const value = row.tagId;
-      if(!value) {
-        return ''
+    //标签翻译
+    getTagArray(tagId) {
+      if (!tagId) {
+        return []
       }
-      const datas =  this.tagOptions;
-      let actions = [];
-      const currentSeparator = '';
-      let temp = value.split(currentSeparator);
-      Object.keys(value.split(currentSeparator)).some((val) => {
-        Object.keys(datas).some((key) => {
-          if (datas[key].tagId == ('' + temp[val])) {
-            actions.push(datas[key].content + currentSeparator);
-          }
-        })
-      })
-      return actions;
+      return tagId.split(',');
     }
   }
 };

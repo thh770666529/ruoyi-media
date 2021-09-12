@@ -63,7 +63,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="title != null  and title != ''"> and m.title like concat('%', #{title}, '%')</if>
             <if test="type != null  and type != ''"> and m.type = #{type}</if>
             <if test="country != null  and country != ''"> and m.country = #{country}</if>
-            <if test="tagId != null  and tagId != ''"> and m.tag_id = #{tagId}</if>
+            <if test="tagId != null  and tagId != ''">
+               and FIND_IN_SET(#{tagId},tag_id)
+            </if>
             <if test="description != null  and description != ''"> and m.description like concat('%', #{description}, '%')</if>
             <if test="publishBy != null  and publishBy != ''"> and m.publish_by = #{publishBy}</if>
             <if test="publishTime != null "> and m.publish_time = #{publishTime}</if>
@@ -77,6 +79,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="qrcodePath != null "> and m.qrcode_path = #{qrcodePath}</if>
             <if test="openPassword != null "> and m.open_password = #{openPassword}</if>
             <if test="password != null "> and m.password = #{password}</if>
+            <if test="tagIdList != null and tagIdList.size() > 0 ">
+                <foreach item="tagId" collection="tagIdList" open="and (" separator="or" close=")">
+                    FIND_IN_SET(#{tagId},tag_id)
+                </foreach>
+            </if>
         </where>
     </select>
 </mapper>
