@@ -5,13 +5,18 @@ import java.util.concurrent.TimeUnit;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.constant.BaseRedisKeyConstants;
 import com.ruoyi.common.constant.BlogConstants;
 import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.utils.ServletUtils;
+import com.ruoyi.system.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.blog.mapper.ArticleMapper;
@@ -32,6 +37,9 @@ public class ArticleServiceImpl implements IArticleService
 
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private TokenUtil tokenUtil;
 
     /**
      * 查询博客文章
@@ -79,6 +87,8 @@ public class ArticleServiceImpl implements IArticleService
         article.setOpposeCount(0L);
         article.setClickCount(0L);
         article.setCollectCount(0L);
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+        article.setAuthor(loginUser.getUser().getNickName());
         return articleMapper.insert(article);
     }
 
@@ -174,5 +184,22 @@ public class ArticleServiceImpl implements IArticleService
             articleMapper.insert(article);
             redisCache.setCacheObject(BaseRedisKeyConstants.CIICK_BLOG_SUPPORT + ":" + articleId + "#" + userId, 1);
         }
+    }
+
+    @Override
+    public List<Article> getSameArticleList(Long articleId) {
+        Article article = this.selectWebArticleByArticleId(articleId);
+        String categoryId = article.getCategoryId();
+        article.setCategoryId(categoryId);
+        article.setStatus(1);
+        article.setIsPublish("1");
+        Page<Article> page = new Page<>(1, 10);
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status", 1);
+        queryWrapper.eq("category_id", categoryId);
+        queryWrapper.eq("is_publish", "1");
+        queryWrapper.notIn("article_id", articleId);
+        queryWrapper.orderByDesc("create_time");
+        return articleMapper.selectPage(page, queryWrapper).getRecords();
     }
 }

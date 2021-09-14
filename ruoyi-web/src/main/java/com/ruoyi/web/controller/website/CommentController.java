@@ -69,7 +69,7 @@ public class CommentController extends BaseController
 
 
     /**
-     * 通过UID删除评论
+     * 通过主键删除评论
      *
      * @param comment
      * @return

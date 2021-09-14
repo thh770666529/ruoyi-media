@@ -99,4 +99,10 @@ public interface IArticleService
      * @param articleId
      */
     void supportArticleById(Long articleId);
+
+    /**
+     * 获取相同类型的文章列表
+     * @param articleId
+     */
+    List<Article> getSameArticleList(Long articleId);
 }

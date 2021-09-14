@@ -216,6 +216,19 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         return movieActorMapper.deleteMovieActorByIds(actorIds);
     }
 
+    @Override
+    public List<MovieVO> getListByActorId(Long actorId) {
+        List<Movie> movieList = movieMapper.getListByActorId(actorId);
+        List<MovieVO> newMovieList = new ArrayList<>();
+        for (Movie movie : movieList) {
+            MovieVO movieVO = new MovieVO();
+            BeanUtils.copyProperties(movie,movieVO);
+            setMovieActor(MovieActorType.ACTOR, movieVO);
+            newMovieList.add(movieVO);
+        }
+        return newMovieList;
+    }
+
     /**
      * 新增电影视频信息
      *

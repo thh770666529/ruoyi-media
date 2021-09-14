@@ -79,7 +79,7 @@ public class IndexController extends BaseController {
     @GetMapping("/getHotArticleList")
     public AjaxResult getHotArticleList(){
         log.info("门户获取首页排行博客");
-        List<Article> list = articleService.selectHotArticleList(10);
+        List<Article> list = articleService.selectHotArticleList(5);
         return AjaxResult.success(list);
     }
 

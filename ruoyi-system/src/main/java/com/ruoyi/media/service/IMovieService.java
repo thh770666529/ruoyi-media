@@ -70,4 +70,6 @@ public interface IMovieService extends IService<Movie>
      * @return
      */
     int removeActorList(Long[] actorIds);
+
+    List<MovieVO> getListByActorId(Long actorId);
 }

@@ -2,6 +2,7 @@
   <div class="container">
     <el-row type="flex">
       <el-col :md="18" :xs="24" :sm="24">
+      <el-card class="box-card">
       <div class="newsview">
         <h3 class="news_title" v-if="article.title">{{article.title}}</h3>
         <div class="bloginfo">
@@ -49,8 +50,21 @@
           v-highlight
         ></div>
       </div>
+      </el-card>
         <!--付款码和点赞-->
         <PayCode  :articleId="articleId" :praiseCount.sync="article.collectCount"></PayCode>
+        <el-card class="box-card">
+          <div class="otherlink" v-if="sameBlogData.length > 0">
+            <h2>相关文章</h2>
+            <ul>
+              <li v-for="item in sameBlogData" :key="item.articleId">
+              <a href="javascript:void(0);"
+                @click="goToInfo(item)"
+                :title="item.title">{{item.title | ellipsis(18)}}</a>
+            </li>
+          </ul>
+        </div>
+        </el-card>
       </el-col>
       <el-col  class="hidden-sm-and-down" :md="6">
           <side-catalog
@@ -63,15 +77,15 @@
   </div>
 </template>
 <script>
-  import { getArticle } from '@/api/blog/article';
+  import { getArticle, getSameArticleList } from '@/api/blog/article';
   import SideCatalog from '@/components/VueSideCatalog';
-  import PayCode from "@/components/PayCode";
   export default {
     name: "articleDetail",
     async asyncData({ params, error }) {
-      const articleId = params.articleId
-      const articleData = await getArticle(articleId)
-      return { article: articleData.data, articleId: articleId }
+      const articleId = params.articleId;
+      const articleData = await getArticle(articleId);
+      const sameBlogData = await getSameArticleList(articleId);
+      return { article: articleData.data, articleId: articleId, sameBlogData: sameBlogData.data }
     },
     data() {
       return {
@@ -79,15 +93,14 @@
           // 内容容器selector(必需)
           container: '.ck-content',
           watch: true,
-          levelList: ["h2", "h3"],
+          levelList: ["h2", "h3"]
         }
       }
     },
     computed: {
     },
     components: {
-      SideCatalog,
-      PayCode
+      SideCatalog
     },
     watch: {
       $route(to, from) {
@@ -103,6 +116,20 @@
       async initInfo() {
         const articleData = await getArticle(this.articleId)
         this.article = articleData.data
+      },
+
+      //跳转到文章详情【或推广链接】
+      goToInfo(article) {
+        if(article.type == "0") {
+          let routeData = this.$router.resolve({
+            path: "/article/" + article.articleId
+          });
+          window.open(routeData.href, '_blank');
+        } else if(article.type == "1") {
+          const params = new URLSearchParams();
+          params.append("articleId", article.articleId);
+          window.open(article.outsideLink, '_blank');
+        }
       }
     }
   };
@@ -346,5 +373,45 @@
 
   .bloginfo .like {
     background: url(../../assets/img/blog/auicon.jpg) no-repeat top -85px left;
+  }
+
+
+
+
+  .otherlink, .xzsm, .ffsm {
+    width: 100%;
+    background: #FFF;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0
+  }
+
+  .otherlink h2 {
+    border-bottom: #000 2px solid;
+    line-height: 40px;
+    font-size: 14px;
+    background: url(../../assets/img/blog/5794.png) left 10px center no-repeat;
+    padding-left: 40px;
+    color: #000
+  }
+
+  .otherlink ul {
+    margin: 10px 0
+  }
+
+  .otherlink li {
+    line-height: 24px;
+    height: 24px;
+    display: block;
+    width: 290px;
+    float: left;
+    overflow: hidden;
+    margin-right: 30px;
+    padding-left: 10px;
+  }
+
+  .otherlink li a:hover {
+    text-decoration: underline;
+    color: #000
   }
 </style>

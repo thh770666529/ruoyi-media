@@ -34,3 +34,13 @@ export function getArticleList(queryParam) {
   })
 }
 
+// 查询相关文章列表
+export function getSameArticleList(articleId) {
+  return request({
+    url: '/blog/article/getSameArticleList/' + articleId,
+    method: 'get'
+  })
+}
+
+
+

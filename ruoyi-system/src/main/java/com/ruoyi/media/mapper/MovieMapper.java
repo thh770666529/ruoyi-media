@@ -34,4 +34,10 @@ public interface MovieMapper extends BaseMapper<Movie>
      */
     List<Movie> selectHotMovieList(int top);
 
+    /**
+     * 查询演员相关电影
+     * @param actorId
+     * @return
+     */
+    List<Movie> getListByActorId(Long actorId);
 }

@@ -25,7 +25,6 @@ public class WebConfigController extends BaseController
     /**
      * 获取站点配置
      */
-    @Log(title = "getWebConfig", businessType = BusinessType.OTHER)
 	@PostMapping("/getWebConfig")
     public AjaxResult getWebConfig()
     {

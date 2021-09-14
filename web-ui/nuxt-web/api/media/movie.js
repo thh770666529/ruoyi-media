@@ -23,9 +23,15 @@ export default {
       url: '/media/movie/video/' + videoId,
       method: 'get'
     })
+  },
+
+  // 查询演员相关电影
+  getListByActorId(actorId) {
+    return request({
+      url: '/media/movie/getListByActorId/' + actorId,
+      method: 'get'
+    })
   }
-
-
 
 }
 

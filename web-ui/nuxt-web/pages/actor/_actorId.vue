@@ -1,33 +1,27 @@
 <template>
-  <div id="aMovieList" class="bg-fa of">
+  <div id="aMovieList">
     <section class="container">
       <header class="comm-title">
         <h2 class="fl actor">
           <span class="c-333">演员介绍</span>
         </h2>
       </header>
-      <div class="t-infor-wrap">
-        <section class="fl t-infor-box c-desc-content">
-          <div class="mt20 ml20">
-            <section class="t-infor-pic">
-              <img :src="fileUploadHost + actor.avatar" :alt="actor.name">
-            </section>
-            <h3 class="hLh30">
-              <span class="fsize24 c-333">{{actor.name}}&nbsp;
-               高级演员
-              </span>
-            </h3>
-            <section class="mt10">
-              <span class="t-tag-bg" v-html="actor.description">{{actor.description}}</span>
-            </section>
-            <section class="t-infor-txt">
-              <p class="mt20" v-html="actor.awards">{{actor.awards}}</p>
-            </section>
-            <div class="clear"></div>
-          </div>
-        </section>
-        <div class="clear"></div>
-      </div>
+
+      <el-card>
+        <div class="mt20 ml20">
+          <el-row>
+            <el-col :span="8">
+              <el-image  class="actorImages" :src="fileUploadHost + actor.avatar" :alt="actor.name" />
+            </el-col>
+            <el-col :span="14">
+              <span class="actorTitle">{{actor.name}}</span>
+              <span class="actorDescription" v-html="actor.description"></span>
+              <p class="mt20" v-html="actor.awards"></p>
+            </el-col>
+          </el-row>
+        </div>
+      </el-card>
+
 
       <section class="mt30">
         <header class="comm-title all-teacher-title c-course-content">
@@ -39,29 +33,27 @@
           </section>
         </header>
 
-        <section class="no-data-wrap" v-if="movieList.length==0">
-          <em class="icon30 no-data-ico">&nbsp;</em>
-          <span class="c-666 fsize14 ml10 vam">没有相关数据，小编正在努力整理中...</span>
-        </section>
-        <article class="comm-movie-list">
-          <ul class="of">
+        <article  class="comm-movie-list">
+          <ul id="bna" class="of">
             <li v-for="movie in movieList" :key="movie.movieId">
               <div class="cc-l-wrap">
                 <section class="movie-img">
-                  <img :src="movie.images" class="img-responsive">
+                  <img :src="fileUploadHost + movie.images" class="img-responsive" :alt="movie.title">
                   <div class="cc-mask">
-                    <a href="#" title="开始观看" target="_blank" class="comm-btn c-btn-1">开始观看</a>
+                    <a :href="'/movie/' + movie.movieId" title="开始观看" class="comm-btn c-btn-1">开始观看</a>
                   </div>
                 </section>
-                <h3 class="hLh30 txtOf mt10">
-                  <a href="#" :title="movie.title" target="_blank"
-                     class="course-title fsize18 c-333">{{movie.title}}</a>
-                </h3>
+                <h4 class="title">
+                  <a :href="'/movie/' + movie.movieId" :title="movie.title">{{movie.title}}</a>
+                </h4>
+                <p class="text text-overflow text-muted hidden-xs">
+                  主演：{{actorFormatter(movie.actorList) | ellipsis(10)}}
+                  <br>标签 :{{ tagFormat(tagOptions , movie.tagId) | ellipsis(10)}}
+                </p>
               </div>
             </li>
-
           </ul>
-          <div class="clear"></div>
+          <div class="clear"/>
         </article>
       </section>
     </section>
@@ -69,16 +61,79 @@
 </template>
 <script>
   import {listActor, getActor} from '@/api/media/actor';
-
+  import movieApi from '@/api/media/movie';
+  import { listTag } from "@/api/media/tag";
+  import { listCategory } from "@/api/media/category";
+  import { getDictsByTypeList } from "@/api/system/dict/data";
   export default {
     data() {
       return {
       }
     },
     async asyncData({params, $axios, error}) {
+      const tagOptions = await listTag({status: '1'});
+      const categoryOptions = await listCategory({status: '1'});
+      const dictTypeList =  ['movie_country', 'movie_status', 'movie_type'];
+      const dictDataList = await getDictsByTypeList(dictTypeList);
       const response = await getActor(params.actorId);
-      return {actor: response.data}
+      const movieList = await movieApi.getListByActorId(params.actorId);
+      return {
+        actor: response.data,
+        movieList: movieList.rows,
+        countryOptions: dictDataList.data.movie_country,
+        tagOptions: tagOptions.rows,
+        categoryOptions: categoryOptions.rows
+      }
+    },
+    methods: {
+      actorFormatter(actorList) {
+        if (!actorList||actorList.length === 0){
+          return '无';
+        }
+        const currentSeparator = ",";
+        let actions = [];
+        for (let index = 0; index < actorList.length; index++) {
+          actions.push(actorList[index].name + currentSeparator);
+        }
+        return actions.join('').substring(0, actions.join('').length - 1);
+      },
+      /** 标签翻译 */
+      tagFormat(tagOptions,tagId) {
+        if(!tagId || !tagOptions) {
+          return ''
+        }
+        const currentSeparator = ",";
+        let actions = [];
+        let tempArr = tagId.split(currentSeparator);
+        for (let i = 0; i < tempArr.length; i++) {
+          for (let j = 0; j < tagOptions.length ; j++) {
+            if (tagOptions[j].tagId == ('' + tempArr[i])) {
+              actions.push(tagOptions[j].content + currentSeparator);
+              break;
+            }
+          }
+        }
+        return actions.join('').substring(0, actions.join('').length - 1);
+      },
     }
-
   };
 </script>
+<style scoped>
+  .actorImages {
+    width: 250px;
+    height: 360px;
+    display: block;
+  }
+  .actorTitle {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .actorDescription {
+    display: inline-block;
+    padding: 10px 8px;
+    overflow: hidden;
+    font-size: 15px;
+    color: #888;
+  }
+</style>

@@ -2,7 +2,7 @@
   <div class="mt50">
     <section class="container">
       <el-row id="artList" type="flex" justify="space-around">
-        <el-col :span="16">
+        <el-col :span="15">
           <span class="ml20 mb20 fsize14" v-if="queryParams.tagId">
             搜索标签值:
           </span>
@@ -12,14 +12,12 @@
           </el-tag>
           <el-row class="art-item" v-for="article in articleList" :key="article.articleId">
             <el-card shadow="hover">
-              <h3>
                 <router-link :to="`/article/` + article.articleId" tag="a" target="_blank" class="art-title">
                   {{article.title}}
                 </router-link>
-              </h3>
               <el-row class="art-info d-flex align-items-center justify-content-start">
-                <div class="art-time"><i class="el-icon-time"></i> {{ parseTime(article.updateTime, '{y}-{m}-{d}') }}
-                </div>
+                <div class="art-time"><i class="el-icon-user-solid"></i> {{article.author}}</div>
+                <div class="art-time"><i class="el-icon-time"></i> {{ parseTime(article.updateTime, '{y}-{m}-{d}') }}</div>
                 <div class="d-flex align-items-center">
                   <img class="tag" src="../../assets/img/article/tag.png"/>
                   <template v-for="(item, index) in tagOptions">
@@ -46,7 +44,8 @@
                 </div>
               </el-row>
               <el-row class="art-body">
-                <div class="side-img hidden-sm-and-down"><img class="art-banner" :src="fileUploadHost + article.images">
+                <div class="side-img hidden-sm-and-down">
+                  <img class="art-banner" :src="fileUploadHost + article.images">
                 </div>
                 <div class="side-abstract">
                   <div class="art-abstract">
@@ -56,7 +55,9 @@
                     <router-link :to="`/article/` + article.articleId" tag="a" target="_blank">
                       <el-button plain>阅读全文</el-button>
                     </router-link>
-                    <div class="view"><i class="el-icon-view"></i> {{article.clickCount}}</div>
+                    <div class="view">
+                      <i class="el-icon-view"></i> {{article.clickCount}}
+                    </div>
                   </div>
                 </div>
               </el-row>
@@ -73,12 +74,26 @@
             />
           </div>
         </el-col>
-        <el-col :span="5" class="hidden-sm-and-down" id="side">
+        <el-col :span="6" class="hidden-sm-and-down" id="side">
+          <!-- 标签 -->
           <div class="item">
             <tag @change="changeTagId" :tagId="queryParams.tagId"></tag>
           </div>
-          <div class="item">
+          <!-- 友情链接 -->
+          <!--<div class="item">
             <friend></friend>
+          </div>-->
+          <!--热门文章-->
+          <div class="item">
+            <HotArticle></HotArticle>
+          </div>
+          <!--四级推荐-->
+          <div class="item">
+            <FourthRecommend></FourthRecommend>
+          </div>
+          <!--关注我们-->
+          <div class="item">
+            <About></About>
           </div>
         </el-col>
       </el-row>
@@ -160,7 +175,7 @@
 
   #side .item {
     margin-bottom: 30px;
-    margin-top: 30px;
+    margin-top: 8px;
   }
 
   /*  #side .item .friend{
@@ -177,13 +192,13 @@
       width: 18%;
     }*/
   .art-item {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     position: relative;
   }
 
   .art-item .star {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     position: absolute;
     top: 0;
     right: 0;
@@ -217,10 +232,10 @@
   }
 
   .side-img {
-    height: 150px;
-    width: 270px;
+    height: 135px;
+    width: 243px;
     overflow: hidden;
-    margin-right: 10px;
+    margin-right: 8px;
   }
 
   img.art-banner {
@@ -245,7 +260,7 @@
   }
 
   .art-more {
-    height: 40px;
+    height: 30px;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;

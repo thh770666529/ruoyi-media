@@ -1,9 +1,9 @@
 <template>
-  <div id="aMovieList" class="container bg-fa of mt40">
+  <div id="aMovieList" class="container mt40">
     <!-- /电影列表 开始 -->
       <el-form :model="queryParams" label-width="70px" ref="queryForm">
       <el-collapse v-model="activeNames">
-        <el-collapse-item name="1">
+        <el-collapse-item name="1" class="movieSearch" >
           <template slot="title">
               <span class="ml20 mb10 fsize24">最新电影-电影在线观看</span><span class="ml0 mb10 c-999 fsize14">筛选（辉皇影视提供服务）</span>
           </template>
@@ -33,8 +33,7 @@
         </el-collapse-item>
       </el-collapse>
       </el-form>
-
-      <section class="c-sort-box">
+      <section>
         <div class="mt40">
           <!-- /无数据提示 开始-->
           <section v-if="total === 0" class="no-data-wrap" >
@@ -177,5 +176,11 @@ export default {
   .show {
     display: block;
   }
-  .container{width:1300px}
+
+  .movieSearch >>>.el-collapse-item__wrap {
+    background-color: #eeeeee !important;
+  }
+  .movieSearch >>>.el-collapse-item__header {
+    background-color: #eeeeee !important;
+  }
 </style>

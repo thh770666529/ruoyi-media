@@ -121,6 +121,8 @@
               </el-tab-pane>
             </el-tabs>
           </el-card>
+          <!--付款码和点赞-->
+          <PayCode  :articleId="movieId" :praiseCount.sync="movie.supportCount"></PayCode>
         </div>
       </el-col>
 

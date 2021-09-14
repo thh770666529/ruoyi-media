@@ -57,6 +57,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by m.create_time desc limit #{top}
     </select>
 
+    <select id="getListByActorId" parameterType="Long" resultMap="MovieResult">
+       select m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
+        m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
+        m.open_comment, m.open_download, m.price, m.rate,
+        m.category_id,m.category_name,m.qrcode_path,m.open_password,m.password
+        from wm_movie m, wm_movie_actor ma
+        where m.movie_id = ma.movie_id and ma.actor_id = #{actorId}
+        order by m.create_time desc
+    </select>
+
+
+
     <select id="selectMovieList" parameterType="MovieVO" resultMap="MovieResult">
         <include refid="selectMovieVo"/>
         <where>

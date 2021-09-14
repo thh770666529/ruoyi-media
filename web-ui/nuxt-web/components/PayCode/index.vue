@@ -24,11 +24,10 @@
           class="pay_item"
           :class="[payMethod == 1?'checked':'']"
           data-id="alipay"
-          @click="choosePay(1)"
-        >
+          @click="choosePay(1)">
           <span class="radiobox"></span>
           <span class="pay_logo">
-            <img src="~/assets/img/blog/alipay.jpg" alt="支付宝">
+            <img src="../../assets/img/blog/alipay.jpg" alt="支付宝">
           </span>
         </div>
         <div
@@ -39,7 +38,7 @@
         >
           <span class="radiobox"></span>
           <span class="pay_logo">
-            <img src="~/assets/img/blog/wechat.jpg" alt="微信">
+            <img src="../../assets/img/blog/wechat.jpg" alt="微信">
           </span>
         </div>
       </div>
@@ -66,13 +65,13 @@ export default {
       webConfig: undefined,
       showPay: false, //是否显示支付
       payMethod: 1, // 1: 支付宝  2：微信
-      payCode: "", //支付码图片
+      payCode: '', //支付码图片
     };
   },
   async created() {
       if(!this.webConfig) {
         await getWebConfig().then(response => {
-          this.webConfig = response.data
+          this.webConfig = response.data;
           this.payCode = this.webConfig.aliPay;
         });
       }
@@ -94,7 +93,7 @@ export default {
     //博客点赞
     praiseBlog: function(articleId) {
       // 判断用户是否登录
-      let userInfo = this.$store.state.userInfo
+      let userInfo = this.$store.state.userInfo;
       if (!userInfo){
         this.$notify.error({
           title: '警告',
@@ -233,7 +232,7 @@ export default {
     float: left;
     margin-left: 40px;
     background: url( ../../assets/img/blog/dsbz.jpg) no-repeat left 20px center #E2523A;
-    box-shadow: 1px 2px 6px 0px rgba(0, 0, 0, .2);
+    box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, .2);
     border-radius: 3px;
     line-height: 40px;
     padding-left: 10px;

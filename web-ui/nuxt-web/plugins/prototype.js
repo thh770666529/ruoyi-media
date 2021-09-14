@@ -3,6 +3,10 @@ import { getDicts } from "@/api/system/dict/data";
 import { parseTime, addDateRange, selectDictLabel, selectDictLabels } from "@/utils/ruoyi";
 import { fileUploadHost } from "@/config/config";
 import Pagination from "@/components/Pagination";
+import PayCode from "@/components/PayCode";
+import About from "@/components/About";
+import FourthRecommend from "../components/FourthRecommend";
+import HotArticle from "../components/HotArticle";
 // 全局方法挂载
 let method = {
   install(Vue) {
@@ -27,7 +31,11 @@ let method = {
     }
 
     // 全局组件挂载
-    Vue.component('Pagination', Pagination)
+    Vue.component('Pagination', Pagination);
+    Vue.component('PayCode', PayCode);
+    Vue.component('About', About);
+    Vue.component('FourthRecommend', FourthRecommend);
+    Vue.component('HotArticle', HotArticle);
     // 全局过滤器设置
     Vue.filter('ellipsis', function (msg, num) {
       const currentNum = num || 5

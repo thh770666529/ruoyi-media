@@ -77,12 +77,17 @@ public class ArticleController extends BaseController
         return getDataTable(list);
     }
 
+    @GetMapping("/getSameArticleList/{articleId}")
+    public AjaxResult getSameArticleList(@PathVariable("articleId") Long articleId){
+        log.info("门户获取相关文章");
+        return AjaxResult.success(articleService.getSameArticleList(articleId));
+    }
+
     /**
      * 获取博客文章详细信息
      */
     @GetMapping(value = "/{articleId}")
-    public AjaxResult getInfo(HttpServletRequest request, @PathVariable("articleId") Long articleId)
-    {
+    public AjaxResult getInfo(HttpServletRequest request, @PathVariable("articleId") Long articleId){
         log.info("门户获取博客文章详细信息id={}", articleId);
         String ip = IpUtils.getIpAddr(request);
         Article article = articleService.selectWebArticleByArticleId(articleId);

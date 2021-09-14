@@ -50,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectHotArticleList"  resultMap="ArticleResult">
         select article_id, title, summary, tag_id, click_count, collect_count, images, status, create_time, create_by, update_time, update_by,
         admin_user_id, is_original, author, articles_part, category_id, level, del_flag, is_publish, sort, open_comment, type,
-        outside_link, user_id, article_source, qrcode_path, open_password, password, remark, praise_click_count
+        outside_link, user_id, article_source, qrcode_path, open_password, password, remark, support_count, oppose_count, click_count, collect_count
         from blog_article
         WHERE status = #{status} and is_publish = #{publishStatus}
         order by sort asc,click_count desc limit #{top}

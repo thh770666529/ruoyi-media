@@ -42,6 +42,17 @@ public class MovieController extends BaseController
     }
 
     /**
+     * 通过演员相关电影列表
+     */
+    @GetMapping("/getListByActorId/{actorId}")
+    public TableDataInfo getListByActorId(@PathVariable("actorId") Long actorId)
+    {
+        startPage();
+        List<MovieVO> list = movieService.getListByActorId(actorId);
+        return getDataTable(list);
+    }
+
+    /**
      * 获取电影管理详细信息
      */
     @GetMapping(value = "/{movieId}")
