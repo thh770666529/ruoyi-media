@@ -1,0 +1,43 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "chrome: 已启动的项目", // 参考：https://cn.vuejs.org/v2/cookbook/debugging-in-vscode.html
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/src",
+      "breakOnLoad": true,
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "node: npm run serve",
+      "program": "${workspaceFolder}/node_modules/@vue/cli-service/bin/vue-cli-service.js",
+      "args": ["serve"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "node: npm run build:prod",
+      "program": "${workspaceFolder}/node_modules/@vue/cli-service/bin/vue-cli-service.js",
+      "args": ["build", "--modern"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "node: npm run test:unit",
+      "program": "${workspaceFolder}/node_modules/@vue/cli-service/bin/vue-cli-service.js",
+      "args": ["test:unit"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "node: 当前文件",
+      "program": "${file}"
+    }
+  ]
+}

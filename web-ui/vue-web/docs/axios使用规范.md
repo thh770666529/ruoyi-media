@@ -1,0 +1,260 @@
+axios 中文文档：<a href="http://www.axios-js.com/zh-cn/docs/" target="_blank">http://www.axios-js.com/zh-cn/docs/</a>
+
+### 请求入参用法
+
+#### Query String Parameters
+
+```ts
+import http from '@/scripts/http'
+import { qsStringify } from '@/scripts/utils'
+
+const params = {
+  pageNum: 1,
+  pageSize: 10,
+  status: [1, 2],
+  // ...
+}
+
+/**
+ * Parameters<qsStringify>[1]['arrayFormat'] 对应的输出
+ * comma ----------> pageNum=1&pageSize=10&status=1,2
+ * repeat（默认）----> pageNum=1&pageSize=10&status=1&status=2
+ * brackets --------> pageNum=1&pageSize=10&status[]=1&status[]=2
+ * indices ---------> pageNum=1&pageSize=10&status[0]=1&status[1]=2
+ */
+const paramsSerializer = params => qsStringify(params, { arrayFormat: 'comma' })
+
+const config = {
+  params,
+  paramsSerializer, // 在拦截器中已配置该默认值，在业务中通常不需要重写
+}
+
+http.get('/xxx', config)
+http.delete('/xxx', config)
+http.post('/xxx', null, config)
+http.put('/xxx', null, config)
+http.patch('/xxx', null, config)
+```
+
+#### Request Payload：application/json
+
+```ts
+import http from '@/scripts/http'
+
+const data: object /* json 对象 */ = {
+  //...
+}
+const config = { data }
+
+http.delete('/xxx', config)
+http.post('/xxx', data)
+http.put('/xxx', data)
+http.patch('/xxx', data)
+```
+
+#### Form Data：application/x-www-form-urlencoded
+
+```ts
+import http from '@/scripts/http'
+import { qsStringify } from '@/scripts/utils'
+
+const data: string = qsStringify({
+  // ...
+})
+const config = { data }
+
+http.delete('/xxx', config)
+http.post('/xxx', data)
+http.put('/xxx', data)
+http.patch('/xxx', data)
+```
+
+#### Form Data：multipart/form-data
+
+```ts
+import http from '@/scripts/http'
+import { toFormData } from '@/scripts/utils'
+
+const data: FormData = toFormData({
+  // ...
+})
+const config = { data }
+
+http.delete('/xxx', config)
+http.post('/xxx', data)
+http.put('/xxx', data)
+http.patch('/xxx', data)
+```
+
+#### Request Headers
+
+```ts
+// 通常在请求拦截器中添加（记得进行相关编码）
+config.headers.token = localStorage.token
+config.headers.curUrl = encodeURI(location.href)
+```
+
+---
+
+### 响应行为处理
+
+#### 在拦截器或相关钩子中
+
+在拦截器或相关钩子中`做好数据及状态的传递、异常处理等`，在业务中不需要有多余的判断或行为，让业务更专注
+
+- 在业务中，then 不需要进行 `res.data.code == 'xxx'` 等多余的操作（让拦截器全局处理）
+- 在业务中，catch 不需要处理弹出消息层（让拦截器全局处理）
+- 在业务中，请求过程中不需要处理全局 loading（让相关钩子全局处理）
+- ...
+
+#### 在请求方法中
+
+```js
+import http from '@/scripts/http'
+
+export const getXxx = function(params, opts) {
+  params = { ...params }
+  opts = { ...opts }
+  return http.get('/xxx', {
+    params,
+
+    exNoErrorMassage: true, // 响应异常时不要弹出消息层
+    exShowLoading: true, // 请求过程中显示全局 loading
+
+    exCancel: true, // 请求前先取消未完成的请求（通常用于幂等性请求，如列表查询等）
+
+    // 对于 `/xxx/${id}` 这种形式的 path，参考如下：
+    // exCancel: '/xxx/*',
+    // exCancelName: '/xxx/*',
+
+    // 对于 `/xxx/${id}/yyy` 这种形式的 path，参考如下：
+    // exCancel: '/xxx/*/yyy',
+    // exCancelName: '/xxx/*/yyy',
+
+    // 严格匹配，参考如下（使用动态名称）：
+    // exCancel: `/xxx?${params.id}`,
+    // exCancelName: `/xxx?${params.id}`,
+
+    // 匹配一类，参考如下（类名不能以斜杠开头）：
+    // exCancel: 'xxx',
+    // exCancelName: 'xxx',
+
+    // 调用时传入，使其具备较高灵活度，以实现不同的应用场景（比如锁定作用范围等）：
+    // exCancel: opts.cancelName,
+    // exCancelName: opts.cancelName,
+  })
+}
+```
+
+#### 在业务中 --- 使用 .then .catch .finally
+
+```js
+import { getXxx } from '@/scripts/api/common'
+
+export default {
+  methods: {
+    /* 成功 & 失败 & 完成 */
+    getData1() {
+      this.loading = true
+      return getXxx()
+        .then(({ exData: data }) => {
+          // ...
+          this.isError = false
+        })
+        .catch(error => {
+          this.isError = true
+          throw error // 一定要抛出异常，让全局统一处理
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+
+    /* 成功 & 失败（不推荐的写法） */
+    getData2() {
+      this.loading = true
+      return getXxx().then(
+        ({ exData: data }) => {
+          // ...
+          this.loading = false
+          this.isError = false
+        },
+        error => {
+          this.loading = false
+          this.isError = true
+          throw error // 一定要抛出异常，让全局统一处理
+        },
+      )
+    },
+  },
+}
+```
+
+#### 在业务中 --- 使用 async await（推荐）
+
+```js
+import { getXxx } from '@/scripts/api/common'
+
+export default {
+  methods: {
+    /* 成功 */
+    async getData1() {
+      const { exData: data } = await getXxx()
+      // ...
+    },
+
+    /* 成功 & 完成 */
+    async getData2() {
+      try {
+        this.loading = true
+        const { exData: data } = await getXxx()
+        // ...
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /* 成功 & 失败 */
+    async getData3() {
+      try {
+        this.loading = true
+        const { exData: data } = await getXxx()
+        // ...
+        this.loading = false
+        this.isError = false
+      } catch (error) {
+        if (!this.$isCancel(error) /* 结合 exCancel */) {
+          this.loading = false
+          this.isError = true
+        }
+        throw error // 一定要抛出异常，让全局统一处理
+      }
+    },
+
+    /* 成功 & 失败 & 完成 */
+    async getData4() {
+      try {
+        this.loading = true
+        const { exData: data } = await getXxx()
+        // ...
+        this.isError = false
+      } catch (error) {
+        this.isError = true
+        throw error // 一定要抛出异常，让全局统一处理
+      } finally {
+        this.loading = false
+      }
+    },
+  },
+}
+```
+
+#### 文件流下载
+
+```js
+import { download } from '@/scripts/utils'
+export const downloadXxx = async function(data) {
+  const res = await http.post('/xxx', data, { responseType: 'blob' })
+  return download(res)
+}
+```
