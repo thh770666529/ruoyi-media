@@ -1,39 +1,16 @@
 <template>
   <div class="mt60">
     <!-- 轮播图 -->
-    <el-carousel :interval="4000" type="card" height="520px">
+    <el-carousel :interval="4000" type="card">
       <el-carousel-item v-for="banner in bannerList" :key="banner.bannerId">
         <a target="_blank" :href="banner.linkUrl">
           <el-image :src="fileUploadHost + banner.imageUrl" :alt="banner.title">
+            <div slot="error" class="image-slot">
+              <img src="../assets/styles/images/2.jpg" alt="" style="width: 100%;height: 520px" >
+            </div>
           </el-image>
         </a>
       </el-carousel-item>
-
-     <!-- <el-carousel-item>
-        <a target="_blank" href="#">
-          <img src="../assets/styles/images/1.jpg" alt="" style="width: 100%;height: 520px" >
-        </a>
-      </el-carousel-item>
-      <el-carousel-item>
-        <a target="_blank" href="#">
-          <img src="../assets/styles/images/2.jpg" alt="" style="width: 100%;height: 520px" >
-        </a>
-      </el-carousel-item>
-      <el-carousel-item>
-        <a target="_blank" href="#">
-          <img src="../assets/styles/images/3.jpg" alt="" style="width: 100%;height: 520px">
-        </a>
-      </el-carousel-item>
-      <el-carousel-item>
-        <a target="_blank" href="#">
-          <img src="../assets/styles/images/4.jpg" alt="" style="width: 100%;height: 520px">
-        </a>
-      </el-carousel-item>
-      <el-carousel-item>
-        <a target="_blank" href="#">
-          <img src="../assets/styles/images/5.jpg" alt="" style="width: 100%;height: 465px" >
-        </a>
-      </el-carousel-item>-->
     </el-carousel>
 
     <!-- 页面主体 -->
@@ -41,44 +18,53 @@
       <div class="main">
         <!-- 正在热映 -->
         <div class="hot-movie">
-          <h2>正在热映（4部）</h2>
-          <div class="movies" id="hotmovies">
-            <div class="movies-model">
+          <h2>正在热映（{{hotMovieList.length}}部）</h2>
+          <div class="movie-list">
+            <div class="movie-item" v-for="movie in hotMovieList" :key="movie.movieId">
               <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
+                <div class="movie-poster">
+                  <img :src="fileUploadHost + movie.images" />
+                  <div class="movie-overlay movie-overlay-bg">
+                    <div class="movie-info">
+                      <div class="movie-score"><i class="integer">8.</i><i class="fraction">7</i></div>
+                      <div class="movie-title" :title="movie.title">{{ movie.title }}</div>
+                    </div>
+                  </div>
+                </div>
+                <button onclick="alert('123')">抢购</button>
               </a>
-              <button onclick="alert('123')">抢购</button>
-            </div>
-            <div class="movies-model">
-            <a href="">
-              <img src="../assets/styles/images/hotmovie2.png" alt="" srcset="">
-            </a>
-            <button onclick="alert('123')">抢购</button>
-          </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie3.png" alt="" srcset="">
-              </a>
-              <button onclick="alert('123')">抢购</button>
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie4.png" alt="" srcset="">
-              </a>
-              <button onclick="alert('123')">抢购</button>
             </div>
           </div>
         </div>
+
         <!-- 即将上映 -->
         <div class="movie-box">
           <div class="movie-header">
-            <h2>即将上映（115部）</h2>
+            <h2>即将上映（{{hotMovieList.length}}部）</h2>
             <a href="#">
               <span>全部></span>
             </a>
           </div>
           <div class="movies">
-            <div class="movies-model">
+
+            <div class="movies-model" v-for="movie in hotMovieList" :key="movie.movieId">
+              <a href="">
+                <div class="movie-poster">
+                  <img :src="fileUploadHost + movie.images" />
+                  <div class="movie-overlay movie-overlay-bg">
+                    <div class="movie-info">
+                      <div class="movie-title" :title="movie.title">{{ movie.title }}</div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+              <p>46461661人想看</p>
+              <button onclick="alert('123')">预告片</button>
+              <button onclick="alert('123')">预售</button>
+              <p>{{parseTime(movie.publishTime, '{m}月{d}日')}}上映</p>
+            </div>
+
+            <!--<div class="movies-model">
               <a href="">
                 <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
               </a>
@@ -86,72 +72,10 @@
               <button onclick="alert('123')">预告片</button>
               <button onclick="alert('123')">预售</button>
               <p>9月31日上映</p>
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie2.png" alt="" srcset="">
-              </a>
-              <p>46461661人想看</p>
-              <button onclick="alert('123')">预告片</button>
-              <button onclick="alert('123')">预售</button>
-              <p>10月2日上映</p>
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie3.png" alt="" srcset="">
-              </a>
-              <p>46461661人想看</p>
-              <button onclick="alert('123')">预告片</button>
-              <button onclick="alert('123')">预售</button>
-              <p>11月1日上映</p>
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie4.png" alt="" srcset="">
-              </a>
-              <p>46461661人想看</p>
-              <button onclick="alert('123')">预告片</button>
-              <button onclick="alert('123')">预售</button>
-              <p>9月23日上映</p>
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>46461661人想看</p>
-              <button onclick="alert('123')">预告片</button>
-              <button onclick="alert('123')">预售</button>
-              <p>9月31日上映</p>
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>46461661人想看</p>
-              <button onclick="alert('123')">预告片</button>
-              <button onclick="alert('123')">预售</button>
-              <p>9月31日上映</p>
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>46461661人想看</p>
-              <button onclick="alert('123')">预告片</button>
-              <button onclick="alert('123')">预售</button>
-              <p>9月31日上映</p>
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>46461661人想看</p>
-              <button onclick="alert('123')">预告片</button>
-              <button onclick="alert('123')">预售</button>
-              <p>9月31日上映</p>
-            </div>
+            </div>-->
           </div>
         </div>
+
         <!-- 热播电影 -->
         <div class="movie-box">
           <div class="movie-header c hotmovie ">
@@ -724,84 +648,20 @@
           <h2>热门影人</h2>
           <div class="peoplelist">
             <ul class="peoples">
-              <li class=" people-item-first clearfix">
+              <li class=" people-item-first clearfix" v-if="hotActorList.length > 0">
                 <a href="#">
                   <div class="first-item clearfix">
-                    <img src="../assets/styles/images/people.png" alt="" srcset="">
+                    <img :src="fileUploadHost + hotActorList[0].avatar" alt="" srcset="">
                   </div>
-                  <p class="name">大张伟</p>
+                  <p class="name">{{hotActorList[0].name}}</p>
                 </a>
               </li>
-              <li class="people-item">
+              <li class="people-item" :key="actor.actorId" v-for="(actor,index) in hotActorList">
                 <a href="#">
                   <div class="index-box">
-                    <i class="index index-hot">2</i>
-                    <span>蔡国庆</span>
-                  </div>
-                </a>
-              </li>
-              <li class="people-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">3</i>
-                    <span>黄一山</span>
-                  </div>
-
-                </a>
-              </li>
-              <li class="people-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">4</i>
-                    <span>蔡轩正</span>
-                  </div>
-                </a>
-              </li>
-              <li class="people-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">5</i>
-                    <span>平安</span>
-                  </div>
-                </a>
-              </li>
-              <li class="people-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">6</i>
-                    <span>王源</span>
-                  </div>
-                </a>
-              </li>
-              <li class="people-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">7</i>
-                    <span>小黑</span>
-                  </div>
-                </a>
-              </li>
-              <li class="people-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">8</i>
-                    <span>郁可唯</span>
-                  </div>
-                </a>
-              </li>
-              <li class="people-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">9</i>
-                    <span>许魏洲</span>
-                  </div>
-                </a>
-              </li>
-              <li class="people-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">10</i>
-                    <span>王力宏</span>
+                    <i v-if="index < 2" class="index index-hot">{{index + 2}}</i>
+                    <i v-else class="index">{{index + 2}}</i>
+                    <span>{{actor.name}}</span>
                   </div>
                 </a>
               </li>
@@ -902,6 +762,7 @@
   </div>
 </template>
 <script>
+  import '@/assets/styles/less/index.less'
   import index from '@/api/index'
   import { getDicts } from '@/api/system/dict/data'
   import { listTag } from "@/api/media/tag";
@@ -910,20 +771,20 @@
     data() {
       return {
         tagOptions: [],
-        movieList: [],
+        hotMovieList: [],
         bannerList: [],
-        actorList: []
+        hotActorList: []
       }
     },
     async created() {
       const tagOptions = await listTag({status: '1'});
       const movieList = await index.getHotMovieList();
-      const actorList = await index.getHotActorList();
+      const actorList  = await index.getHotActorList();
       const bannerList = await index.getAllBannerList();
       this.tagOptions =  tagOptions.rows
-      this.movieList =  movieList.data
+      this.hotMovieList =  movieList.data
       this.bannerList = bannerList.data
-      this.actorList = actorList.data
+      this.hotActorList = actorList.data
     },
     methods: {
       actorFormatter(actorList) {
@@ -958,3 +819,6 @@
     }
   }
 </script>
+<style>
+
+</style>
