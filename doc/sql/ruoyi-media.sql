@@ -48,8 +48,8 @@ CREATE TABLE `blog_article`  (
   `open_password` tinyint(1) NULL DEFAULT NULL COMMENT '是否开启密钥模式 0 关闭 1开启',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章私密访问时的密钥',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` timestamp(0) NOT NULL COMMENT '创建时间',
-  `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+  `create_time` timestamp(0) NULL COMMENT '创建时间',
+  `update_time` timestamp(0) NULL COMMENT '更新时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   `support_count` bigint(11) NULL DEFAULT NULL COMMENT '支持数',
@@ -71,8 +71,8 @@ CREATE TABLE `blog_article_subject`  (
   `article_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '博客id',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `sort` int(11) NOT NULL DEFAULT 0 COMMENT '排序字段',
-  `create_time` timestamp(0) NOT NULL COMMENT '创建时间',
-  `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+  `create_time` timestamp(0) NULL COMMENT '创建时间',
+  `update_time` timestamp(0) NULL COMMENT '更新时间',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'remark',
@@ -91,9 +91,9 @@ CREATE TABLE `blog_category`  (
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
   `click_count` int(11) NULL DEFAULT 0 COMMENT '点击数',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` timestamp(0) NOT NULL COMMENT '创建时间',
+  `create_time` timestamp(0) NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
-  `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+  `update_time` timestamp(0) NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`category_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '博客分类表' ROW_FORMAT = Dynamic;
@@ -116,9 +116,9 @@ CREATE TABLE `blog_sort`  (
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
   `click_count` int(11) NULL DEFAULT 0 COMMENT '点击数',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` timestamp(0) NOT NULL COMMENT '创建时间',
+  `create_time` timestamp(0) NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
-  `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+  `update_time` timestamp(0) NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`sort_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '博客分类表' ROW_FORMAT = Dynamic;
@@ -144,8 +144,8 @@ CREATE TABLE `blog_subject`  (
   `collect_count` int(11) NOT NULL DEFAULT 0 COMMENT '专题收藏数',
   `sort` int(11) NOT NULL DEFAULT 0 COMMENT '排序字段',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
-  `create_time` timestamp(0) NOT NULL COMMENT '创建时间',
-  `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+  `create_time` timestamp(0) NULL COMMENT '创建时间',
+  `update_time` timestamp(0) NULL COMMENT '更新时间',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
@@ -169,8 +169,8 @@ CREATE TABLE `blog_tag`  (
   `click_count` int(11) NULL DEFAULT 0 COMMENT '标签点击数',
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
-  `create_time` timestamp(0) NOT NULL COMMENT '创建时间',
-  `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+  `create_time` timestamp(0) NULL COMMENT '创建时间',
+  `update_time` timestamp(0) NULL COMMENT '更新时间',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
@@ -469,9 +469,9 @@ CREATE TABLE `qa_question_category`  (
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
   `click_count` int(11) NULL DEFAULT 0 COMMENT '点击数',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` timestamp(0) NOT NULL COMMENT '创建时间',
+  `create_time` timestamp(0) NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
-  `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+  `update_time` timestamp(0) NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`category_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '问答分类表' ROW_FORMAT = Dynamic;
@@ -479,7 +479,7 @@ CREATE TABLE `qa_question_category`  (
 -- ----------------------------
 -- Records of qa_question_category
 -- ----------------------------
-INSERT INTO `qa_question_category` VALUES (8, '问答分类1', '问答分类1', 1, 0, 0, NULL, '2021-09-12 16:25:11', NULL, '0000-00-00 00:00:00', '问答分类1');
+INSERT INTO `qa_question_category` VALUES (8, '问答分类1', '问答分类1', 1, 0, 0, NULL, '2021-09-12 16:25:11', NULL, now(), '问答分类1');
 
 -- ----------------------------
 -- Table structure for qiwen_file
@@ -2487,8 +2487,8 @@ CREATE TABLE `website_web_config`  (
   `author` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '作者',
   `record_num` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '备案号',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
-  `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
-  `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+  `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` timestamp(0) NULL COMMENT '更新时间',
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标题',
   `ali_pay` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付宝收款码FileId',
   `weixin_pay` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信收款码FileId',
@@ -2671,9 +2671,9 @@ CREATE TABLE `wm_media_category`  (
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` timestamp(0) NOT NULL COMMENT '创建时间',
+  `create_time` timestamp(0) NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
-  `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+  `update_time` timestamp(0) NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`category_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '电影分类表' ROW_FORMAT = Dynamic;
@@ -2694,8 +2694,8 @@ CREATE TABLE `wm_media_tag`  (
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
   `click_count` int(11) NULL DEFAULT 0 COMMENT '标签点击数',
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
-  `create_time` timestamp(0) NOT NULL COMMENT '创建时间',
-  `update_time` timestamp(0) NOT NULL COMMENT '更新时间',
+  `create_time` timestamp(0) NULL COMMENT '创建时间',
+  `update_time` timestamp(0) NULL COMMENT '更新时间',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
