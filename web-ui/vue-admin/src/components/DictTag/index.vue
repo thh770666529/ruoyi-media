@@ -11,6 +11,7 @@
         >
         <el-tag
           v-else
+          :disable-transitions="true"
           :key="item.dictValue"
           :index="index"
           :type="item.listClass == 'primary' ? '' : item.listClass"
@@ -31,17 +32,12 @@ export default {
       type: Array,
       default: null,
     },
-    value: [String, Array, Number],
+    value: [Number, String, Array],
   },
   computed: {
     values() {
-      let value = this.value
-      // value为number类型时 变成字符串 0 --> '0'
-      if (typeof value === 'number') {
-        value = String(value)
-      }
-      if (value) {
-        return Array.isArray(value) ? value : [ value ];
+      if (this.value !== null && typeof this.value !== 'undefined') {
+        return Array.isArray(this.value) ? this.value : [String(this.value)];
       } else {
         return [];
       }
