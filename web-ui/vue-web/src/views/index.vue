@@ -21,7 +21,7 @@
           <h2>正在热映（{{hotMovieList.length}}部）</h2>
           <div class="movie-list">
             <div class="movie-item" v-for="movie in hotMovieList" :key="movie.movieId">
-              <a href="">
+              <a :href="`/movie/` + movie.movieId">
                 <div class="movie-poster">
                   <img :src="fileUploadHost + movie.images" />
                   <div class="movie-overlay movie-overlay-bg">

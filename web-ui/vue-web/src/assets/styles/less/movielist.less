@@ -68,11 +68,11 @@
                 margin-top: -24px;
                 width: 1080px;
                 .tag-click{
-                    border-radius: 14px;
+                    border-radius: 14px !important;
                     padding: 3px 9px;
                     display: inline-block;
                     margin-left: 12px;
-                    border-radius: 14px;
+                    border-radius: 14px !important;
                     margin: 0 10px;
                     a{
                        height: 30px;
@@ -88,7 +88,7 @@
                     a{
                         color:#fff;
                         &:hover{
-                            color:#fff; 
+                            color:#fff;
                         }
                     }
                 }
@@ -127,15 +127,59 @@
         .othermovie-model{
             width: 166px;
             text-align: center;
-            margin: 20px 10px 0 0px;
+            margin: 20px 10px 0 0;
             position: relative;
-            a{
-                p{
-                    height: 30px;
-                    line-height: 30px;
-                    font-size: 16px;
-                }
+
+           img {
+            width: 100%;
+           }
+
+           .movie-poster {
+            background-color: #fcfcfc;
+            width: 160px;
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+
+
+            .movie-overlay-bg {
+              background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAABQCAMAAACpg44GAAAAbFBMVEUiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiK2HsfSAAAAJHRSTlPMxr63q6OahzclHRULBgHCsZOOf3p1cGtmYVxXUk1IQz4wLBAszz8hAAAAhklEQVRo3u3OxY0DAAADsBxDmZn337FTVPIjnsAZ4/zgCOcHhzg/+MBlgPOD/zg/+Ifzg3dcbrj84vzgFZcLLmdcTrgccTngssdlh8sWlw0ua1xWuCxxWeDyg/ODc1xmuHzj/OAXzg9+4vzgFJcPnB98x/nBCS5vOD9YVVVVVVVVVVVVr/IEUdzLcLhtP2AAAAAASUVORK5CYII=) repeat-x bottom;
             }
+
+            .movie-overlay {
+              width: 100%;
+              height: 100%;
+              position: absolute;
+              top: 0;
+              left: 0;
+
+              .movie-info {
+                color: #fff;
+                position: absolute;
+                bottom: 7px;
+                width: 100%;
+
+                .movie-title {
+                  font-size: 16px;
+                  line-height: 22px;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  margin: 0 10px
+                }
+
+                .movie-score {
+                  color: #ffb400;
+                  float: right;
+                  margin-right: 10px;
+
+                  .integer {
+                    font-size: 18px
+                  }
+                }
+              }
+            }
+          }
             i{
                 color: #ffb400;
             }

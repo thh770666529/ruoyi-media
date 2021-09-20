@@ -11,6 +11,14 @@ const routes = [
             {
                 path: '',
                 component: () => import("@/views/index")
+            },
+            {
+              path: '/movie',
+              component: () => import("@/views/movie/index")
+            },
+            {
+              path: '/movie/:movieId?',
+              component: () => import("@/views/movie/detail")
             }
         ]
     }
