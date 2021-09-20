@@ -112,7 +112,13 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Override
     public List<MovieVO> selectMovieList(Movie movie)
     {
-        return movieMapper.selectMovieList(movie);
+        List<MovieVO> movieList = movieMapper.selectMovieList(movie);
+        List<MovieVO> newMovieList = new ArrayList<>();
+        for (MovieVO movieVO : movieList) {
+            setMovieActor(MovieActorType.ACTOR, movieVO);
+            newMovieList.add(movieVO);
+        }
+        return newMovieList;
     }
 
     /**
@@ -192,6 +198,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
      * @return 结果
      */
     @Override
+    @Transactional
     public int deleteMovieById(Long movieId)
     {
         videoMapper.deleteByMovieId(movieId);
