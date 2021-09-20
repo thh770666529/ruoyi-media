@@ -4,23 +4,47 @@
     <div class="movie-top">
       <div class="movie-banner">
         <div class="movie-img">
-          <img src="https://p0.meituan.net/movie/ecca4f0b95340b2c57006a1bace4c3f91386100.jpg@464w_644h_1e_1c" alt="" id="movie-img">
+          <el-image :src="fileUploadHost + movie.images" :alt="movie.title">
+            <div slot="error" class="image-slot">
+              <img src="@/assets/styles/images/hotmovie1.png" alt="" style="width: 100%" >
+            </div>
+          </el-image>
         </div>
         <div class="movie-data">
           <div class="movie-name">
-            <h2 class="name" id="moviename">天气之子</h2>
-            <h2 class="othername" id="englishname">天気の子</h2>
-            <p class="kind" id="kind">爱情 动画 奇幻</p>
-            <p class="area" id="adress">日本 / 113分钟</p>
-            <p class="time" id="time"> 2019-11-01中国大陆上映</p>
+            <h2 class="name" id="moviename">{{movie.title}}</h2>
+            <!-- <h2 class="othername" id="englishname">天気の子</h2>-->
+            <p class="kind" id="kind">{{selectDictLabel(typeOptions, movie.type)}}</p>
+            <p class="kind" id="category">{{ movie.categoryName ? movie.categoryName: '无' }}</p>
+            <p class="area" id="adress">{{selectDictLabel(countryOptions, movie.country)}} / 113分钟</p>
+            <p class="time" id="time"> {{ parseTime(movie.publishTime, '{y}-{m}-{d}') }}上映</p>
+            <p class="time">
+              <el-tag
+                size="mini"
+                style="margin-left: 3px"
+                :key="index"
+                v-for="(item, index) in tagFormat(tagOptions , movie.tagId)"
+              >{{ item }}
+              </el-tag>
+            </p>
           </div>
           <div class="movie-btn">
             <a href="#"><i></i> <span>想看</span></a>
             <a href="#"><i></i> <span>评分</span></a>
           </div>
           <div class="watching">
-            <p class="name">想看数</p>
-            <p class="wantnum">12421424524</p>
+            <p class="name">评分</p>
+            <el-rate
+              v-model="movie.rate"
+              disabled
+              style="font-size:24px;"
+              show-score
+              text-color="#ff9900"
+              score-template="{value}">
+            </el-rate>
+<!--            <p class="wantnum">
+              111
+            </p>-->
             <p class="money">累计票房</p>
             <p class="num">3000 <span>万</span></p>
           </div>
@@ -44,128 +68,165 @@
           </a>
         </div>
         <!-- 标签页切换控制 -->
-        <div class="tab-contral">
-          <div class="tab active" id="referral">介绍</div>
-          <div class="tab" id="actor">演职人员</div>
-          <div class="tab" id="awards">奖项</div>
-          <div class="tab" id="imgs">图集</div>
-        </div>
-        <div class="border"></div>
-        <!-- 剧情简介 -->
-        <div class="referral">
-          <div class="intro">
-            剧情简介
-          </div>
-          <p>在高一的夏天，少年帆高（醒弱虎汰朗配音）离家出走，一个人来到东京。帆高好不容易找到一份工作，为一本古怪的“神秘学杂志”写稿，生活孤单贫苦。连日的湾泡大雨，像是来映衬他的失落。在纷纭杂省的大都会一角，帆高遇上了一个可爱少女阳莱（森七菜配音）。阳莱和弟弟相依为命，个性坚强、开朗，但她心中隐藏着一个重大秘密—每当她说：“现在开始天晴了！”雨便渐渐停下来，美丽的阳光洒落街上。原来，她拥有一股不可思议的能量，一股能让天空放睛的异力</p>
-        </div>
-        <!-- 演职人员 -->
-        <div class="actor">
-          <div class="intro">
-            <div class="intro-text">
-              <span>演职人员</span>
-              <span>
+        <el-tabs v-model="activeName">
+          <el-tab-pane label="介绍" name="description">
+<!--            <div class="border"></div>-->
+            <!-- 剧情简介 -->
+            <div class="referral">
+              <div class="intro">
+                剧情简介
+              </div>
+              <span v-html="movie.description">{{movie.description}}</span>
+            </div>
+            <!-- 演职人员 -->
+            <div class="actor">
+              <div class="intro">
+                <div class="intro-text">
+                  <span>演职人员</span>
+                  <span>
                             <a href="#">
                                 全部>
                             </a>
                         </span>
-            </div>
-          </div>
-          <div class="director">
-            <p>导演</p>
-            <div class="director-img">
-              <img src="@/assets/styles/images/新海诚.jpg" alt="">
-              <p>新海诚</p>
-            </div>
-          </div>
-          <div class="starts">
-            <p>演员</p>
-            <div class="start">
-              <img class="default-img" alt="天气之子 醍醐虎汰朗" src="https://p0.meituan.net/moviemachine/74cf5577c9cf7c2bf60f3c023c37135f158637.jpg@128w_170h_1e_1c">
-              <p>醍醐虎汰朗</p>
-              <p>饰:森鸟帆高</p>
-            </div>
-            <div class="start">
-              <img class="default-img" alt="天气之子 森七菜" src="https://p0.meituan.net/moviemachine/9a34f136c4edc05c42c4a4ccd0bb2585157478.jpg@128w_170h_1e_1c">
-              <p>森七菜</p>
-              <p>饰:天野阳菜</p>
-            </div>
-            <div class="start">
-              <img class="default-img" alt="天气之子 本田翼" src="https://p0.meituan.net/moviemachine/be397d21a7f15567ae5ec36063dc5610166398.jpg@128w_170h_1e_1c">
-              <p>本田翼</p>
-              <p>饰:夏美</p>
-            </div>
-            <div class="start">
-              <img class="default-img" alt="天气之子 小栗旬" src="https://p0.meituan.net/movie/9326c1fe5d87325da3a504d7d806bbcd58300.jpg@128w_170h_1e_1c">
-              <p>小栗旬</p>
-              <p>饰:须贺圭介</p>
-            </div>
-          </div>
-        </div>
-        <!-- 奖项 -->
-        <div class="awards">
-          <div class="intro">
-            <div class="intro-text">
-              <span>奖项</span>
-              <span>
-                            <a href="#">
-                                全部>
-                            </a>
-                        </span>
-            </div>
-          </div>
-          <div class="awards-body">
-            <ul>
-              <li class="awards-model">
-                <div class="awards-img">
-                  <img src="https://p0.meituan.net/movie/04d8bf2467f29ea0b72491587f8b34f95687.jpg@50w_50h_1e_1c" alt="">
                 </div>
-                第43届日本电影学院奖
-                <div class="awards-text">
-                  获奖：最佳动画片 / 最佳配乐
+              </div>
+              <div class="director">
+                <p>导演</p>
+                <div class="director-img">
+                  <img src="@/assets/styles/images/新海诚.jpg" alt="">
+                  <p>新海诚</p>
                 </div>
-              </li>
-              <li class="awards-model">
-                <div class="awards-img">
-                  <img src="https://p0.meituan.net/movie/a9f2bda1bf18b199972d69d1512840ed6444.jpg@50w_50h_1e_1c" alt=""></div>
-                第47届安妮奖
-                <div class="awards-text">
-                  提名：最佳动画视觉效果 / 最佳独立动画长片 / 最佳动画导演 / 最佳动画剧本 </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <!-- 图集 -->
-        <div class="images">
-          <div class="intro">
-            <div class="intro-text">
-              <span>图集</span>
-              <span>
+              </div>
+              <div class="starts">
+                <p>演员</p>
+                <div class="start">
+                  <img class="default-img" alt="天气之子 醍醐虎汰朗" src="https://p0.meituan.net/moviemachine/74cf5577c9cf7c2bf60f3c023c37135f158637.jpg@128w_170h_1e_1c">
+                  <p>醍醐虎汰朗</p>
+                  <p>饰:森鸟帆高</p>
+                </div>
+                <div class="start">
+                  <img class="default-img" alt="天气之子 森七菜" src="https://p0.meituan.net/moviemachine/9a34f136c4edc05c42c4a4ccd0bb2585157478.jpg@128w_170h_1e_1c">
+                  <p>森七菜</p>
+                  <p>饰:天野阳菜</p>
+                </div>
+                <div class="start">
+                  <img class="default-img" alt="天气之子 本田翼" src="https://p0.meituan.net/moviemachine/be397d21a7f15567ae5ec36063dc5610166398.jpg@128w_170h_1e_1c">
+                  <p>本田翼</p>
+                  <p>饰:夏美</p>
+                </div>
+                <div class="start">
+                  <img class="default-img" alt="天气之子 小栗旬" src="https://p0.meituan.net/movie/9326c1fe5d87325da3a504d7d806bbcd58300.jpg@128w_170h_1e_1c">
+                  <p>小栗旬</p>
+                  <p>饰:须贺圭介</p>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="演职人员" name="actor">
+            <!-- 演职人员 -->
+            <div class="actor">
+              <div class="director">
+                <p>导演</p>
+                <div class="director-img">
+                  <img src="@/assets/styles/images/新海诚.jpg" alt="">
+                  <p>新海诚</p>
+                </div>
+              </div>
+              <div class="starts">
+                <p>演员</p>
+                <div class="start">
+                  <img class="default-img" alt="天气之子 醍醐虎汰朗" src="https://p0.meituan.net/moviemachine/74cf5577c9cf7c2bf60f3c023c37135f158637.jpg@128w_170h_1e_1c">
+                  <p>醍醐虎汰朗</p>
+                  <p>饰:森鸟帆高</p>
+                </div>
+                <div class="start">
+                  <img class="default-img" alt="天气之子 森七菜" src="https://p0.meituan.net/moviemachine/9a34f136c4edc05c42c4a4ccd0bb2585157478.jpg@128w_170h_1e_1c">
+                  <p>森七菜</p>
+                  <p>饰:天野阳菜</p>
+                </div>
+                <div class="start">
+                  <img class="default-img" alt="天气之子 本田翼" src="https://p0.meituan.net/moviemachine/be397d21a7f15567ae5ec36063dc5610166398.jpg@128w_170h_1e_1c">
+                  <p>本田翼</p>
+                  <p>饰:夏美</p>
+                </div>
+                <div class="start">
+                  <img class="default-img" alt="天气之子 小栗旬" src="https://p0.meituan.net/movie/9326c1fe5d87325da3a504d7d806bbcd58300.jpg@128w_170h_1e_1c">
+                  <p>小栗旬</p>
+                  <p>饰:须贺圭介</p>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="奖项" name="awards">
+            <!-- 奖项 -->
+            <div class="awards">
+              <div class="intro">
+                <div class="intro-text">
+                  <span>奖项</span>
+                  <span>
                             <a href="#">
                                 全部>
                             </a>
                         </span>
+                </div>
+              </div>
+              <div class="awards-body">
+                <ul>
+                  <li class="awards-model">
+                    <div class="awards-img">
+                      <img src="https://p0.meituan.net/movie/04d8bf2467f29ea0b72491587f8b34f95687.jpg@50w_50h_1e_1c" alt="">
+                    </div>
+                    第43届日本电影学院奖
+                    <div class="awards-text">
+                      获奖：最佳动画片 / 最佳配乐
+                    </div>
+                  </li>
+                  <li class="awards-model">
+                    <div class="awards-img">
+                      <img src="https://p0.meituan.net/movie/a9f2bda1bf18b199972d69d1512840ed6444.jpg@50w_50h_1e_1c" alt=""></div>
+                    第47届安妮奖
+                    <div class="awards-text">
+                      提名：最佳动画视觉效果 / 最佳独立动画长片 / 最佳动画导演 / 最佳动画剧本 </div>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-          <div class="images-main">
-            <a href="#">
-              <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/95300ef2d49506fd68a2a56897bc5043315152.jpg@465w_258h_1e_1c">
-            </a>
-          </div>
-          <div class="images-aside">
-            <div class="aside-img1">
-              <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/11e1b4c016551a5f8be80612f6062a7d131097.jpg@126w_126h_1e_1c">
+          </el-tab-pane>
+          <el-tab-pane label="图集" name="images">
+            <!-- 图集 -->
+            <div class="images">
+              <div class="intro">
+                <div class="intro-text">
+                  <span>图集</span>
+                  <span>
+                            <a href="#">
+                                全部>
+                            </a>
+                        </span>
+                </div>
+              </div>
+              <div class="images-main">
+                <a href="#">
+                  <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/95300ef2d49506fd68a2a56897bc5043315152.jpg@465w_258h_1e_1c">
+                </a>
+              </div>
+              <div class="images-aside">
+                <div class="aside-img1">
+                  <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/11e1b4c016551a5f8be80612f6062a7d131097.jpg@126w_126h_1e_1c">
+                </div>
+                <div class="aside-img2">
+                  <img class="default-img" alt="天气之子剧照图集" src="https://p1.meituan.net/movie/7172e7db970129838ebd068372a2bfb1152767.jpg@126w_126h_1e_1c">
+                </div>
+                <div class="aside-img3">
+                  <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/55e6794ea722a7a58b410e38ae4b7cd7156727.jpg@126w_126h_1e_1c">
+                </div>
+                <div class="aside-img4">
+                  <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/2b38aeed774ed7fefd72b47ff191cc9c116946.jpg@126w_126h_1e_1c">
+                </div>
+              </div>
             </div>
-            <div class="aside-img2">
-              <img class="default-img" alt="天气之子剧照图集" src="https://p1.meituan.net/movie/7172e7db970129838ebd068372a2bfb1152767.jpg@126w_126h_1e_1c">
-            </div>
-            <div class="aside-img3">
-              <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/55e6794ea722a7a58b410e38ae4b7cd7156727.jpg@126w_126h_1e_1c">
-            </div>
-            <div class="aside-img4">
-              <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/2b38aeed774ed7fefd72b47ff191cc9c116946.jpg@126w_126h_1e_1c">
-            </div>
-          </div>
-        </div>
+          </el-tab-pane>
+        </el-tabs>
         <!-- 评论 -->
         <div class="comment">
           <div class="intro">
@@ -204,106 +265,6 @@
               </li>
 
             </ul>
-          </div>
-        </div>
-        <!-- 影片资料 -->
-        <div class="movie-deta">
-          <div class="intro">
-            <div class="intro-text">
-              <span>影片资料</span>
-            </div>
-          </div>
-          <div class="deta-body">
-            <div class="deta-model">
-              <div class="model-top">
-                <img class="attribute-item-icon" src="https://p0.meituan.net/mmdb/250a17bc199c0b942073bec5429d2f422175.png@14w_14h_1e_1c">
-                <span>家长引导</span>
-              </div>
-              <div class="model-bottom">
-                本片在日本的评级为【G】，适合任何年龄观看。
-              </div>
-            </div>
-            <div class="deta-model">
-              <div class="model-top">
-                <img class="attribute-item-icon" src="https://p0.meituan.net/mmdb/1764aeeb280e07c55b861481cc717e2c1511.png@14w_14h_1e_1c">
-                <span>出品发行</span>
-              </div>
-              <div class="model-bottom">
-                日本东宝株式会社
-              </div>
-            </div>
-            <div class="deta-model">
-              <div class="model-top">
-                <img class="attribute-item-icon" src="https://p0.meituan.net/mmdb/250a17bc199c0b942073bec5429d2f422175.png@14w_14h_1e_1c">
-                <span>技术参数</span>
-              </div>
-              <div class="model-bottom">
-                彩色
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- 获奖详情 -->
-        <div class="honor">
-          <div class="intro">
-            <div class="intro-text">
-              <span>荣誉奖项</span>
-            </div>
-          </div>
-          <div class="honor-body">
-            <div class="body-model">
-              <p>3次</p>
-              <p>获奖</p>
-            </div>
-            <div class="center body-model">
-              <p>5次</p>
-              <p>提名</p>
-            </div>
-            <div class="right body-model">
-              <p>第43届日本电影学院奖</p>
-              <p>最佳动画片</p>
-            </div>
-          </div>
-        </div>
-        <!-- 票房成绩 -->
-        <div class="honor">
-          <div class="intro">
-            <div class="intro-text">
-              <span>票房</span>
-              <span>
-                            <a href="#">
-                                票房详情>
-                            </a>
-                        </span>
-            </div>
-          </div>
-          <div class="honor-body">
-            <div class="body-model">
-              <p>15638</p>
-              <p>首周票房(万)</p>
-            </div>
-            <div class="body-model">
-              <p>28871</p>
-              <p>累计票房(万)</p>
-            </div>
-
-          </div>
-        </div>
-        <!-- 电影原声 -->
-        <div class="music">
-          <div class="intro">
-            <div class="intro-text">
-              <span>电影原声</span>
-            </div>
-          </div>
-          <div class="music-body">
-            <div class="music-model">
-              <img class="film-music-icon" src="https://p0.meituan.net/scarlett/52ed06a649b14df78ebee02e9959c32911524.png@140w_140h_1e_1c" alt="电影原声">
-              <div class="text">
-                <p>祝祭</p>
-                <p>盖盖Nyan</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -350,113 +311,120 @@
   </div>
 </template>
 <script>
-  import '@/assets/styles/less/index.less'
-  import '@/assets/styles/less/moviedetail.less'
-  import index from '@/api/index'
-  import { getDicts } from '@/api/system/dict/data'
-  import { listTag } from "@/api/media/tag";
-  import { listCategory } from "@/api/media/category";
-  import {getDictsByTypeList} from "@/api/system/dict/data";
-  import movieApi from "@/api/media/movie";
-  export default {
-    data() {
-      return {
-        countryOptions: [],
-        tagOptions: [],
-        categoryOptions: [],
-        timeOptions: [
-          '2020',
-          '2019',
-          '2018',
-          '2017',
-          '2016',
-          '2015',
-          '2014',
-          '2013',
-          '2012',
-          '2011',
-          '2010'
-        ],
-        activeNames: ['1'], //折叠面板默认打开
-        movieList: [],  //电影列表
-        total: 0,
-        queryParams: {
-          pageNum: 1,
-          pageSize: 12,
-          images: null,
-          title: null,
-          movieType: null,
-          country: '',
-          tagId: null,
-          description: null,
-          publishBy: null,
-          publishTime: null,
-          status: null,
-          categoryId: '',
-          orderByColumn: 'createTime',
-          isAsc: 'desc',
-          time: ''
-        }
-      }
-    },
-    created() {
-      this.init();
-    },
-    methods:{
-      async init() {
-        const tagOptions = await listTag({status: '1'});
-        const categoryOptions = await listCategory({status: '1'});
-        const dictTypeList =  ['movie_country', 'movie_status', 'movie_type'];
-        const dictDataList = await getDictsByTypeList(dictTypeList);
-        this.countryOptions = dictDataList.data.movie_country,
-        this.tagOptions = tagOptions.rows;
-        this.categoryOptions = categoryOptions.rows;
-        this.getList();
-      },
-      actorFormatter(actorList) {
-        if (!actorList||actorList.length === 0){
-          return '无';
-        }
-        const currentSeparator = ",";
-        let actions = [];
-        for (let index = 0; index < actorList.length; index++) {
-          actions.push(actorList[index].name + currentSeparator);
-        }
-        return actions.join('').substring(0, actions.join('').length - 1);
-      },
-      /** 标签翻译 */
-      tagFormat(tagOptions,tagId) {
-        if(!tagId || !tagOptions) {
-          return ''
-        }
-        const currentSeparator = ",";
-        let actions = [];
-        let tempArr = tagId.split(currentSeparator);
-        for (let i = 0; i < tempArr.length; i++) {
-          for (let j = 0; j < tagOptions.length ; j++) {
-            if (tagOptions[j].tagId == ('' + tempArr[i])) {
-              actions.push(tagOptions[j].content + '/');
-              break;
-            }
-          }
-        }
-        return actions.join('').substring(0, actions.join('').length - 1);
-      },
-      //1 查询第一页数据
-      getList() {
-        movieApi.listMovie(this.queryParams).then(response => {
-          this.movieList = response.rows;
-          this.total = response.total;
-        })
-      },
-      toDetail(movieId) {
-        window.location.href = 'movie' + movieId;
+import '@/assets/styles/less/index.less'
+import '@/assets/styles/less/moviedetail.less'
+import movieApi from '@/api/media/movie';
+import { listTag } from "@/api/media/tag";
+import { listCategory } from "@/api/media/category";
+import { getDictsByTypeList } from '@/api/system/dict/data';
+import { selectDictLabels } from '@/utils/ruoyi';
+
+export default {
+  components: {
+  },
+  computed:{
+  },
+  data() {
+    return {
+      movieId: undefined,
+      countryOptions: [],
+      statusOptions: [],
+      typeOptions: [],
+      tagOptions: [],
+      movie: undefined,
+      videoList: [],
+      actorList: [],
+      directorList: [],
+      video: undefined,
+      activeName: 'description',
+      // 评论
+      showCancel: false,
+      comments: [],
+      commentInfo: {
+        targetId: this.$route.params.movieId
       }
     }
+  },
+  async created() {//在页面渲染之前执行
+    const movieId = this.$route.params.movieId;
+    const tagOptions = await listTag({status: '1'});
+    const dictTypeList =  ['movie_country', 'movie_status', 'movie_type'];
+    const dictDataList = await getDictsByTypeList(dictTypeList);
+    const response = await movieApi.getMovie(movieId);
+    const movie = response.data;
+    let video = {};
+    if (movie.videoList.length > 0 ) {
+      video = movie.videoList[0]
+    }
+    this.movieId = movieId
+    this.countryOptions = dictDataList.data.movie_country;
+    this.statusOptions= dictDataList.data.movie_status
+    this.typeOptions= dictDataList.data.movie_type
+    this.tagOptions= tagOptions.rows
+    this.movie= movie
+    this.videoList= movie.videoList
+    this.actorList= movie.actorList
+    this.directorList= movie.directorList
+    this.video= video
+  },
+  methods:{
+    //查询电影详情信息
+    async initInfo() {
+      const response = await movieApi.getMovie(this.movieId);
+      this.movie = response.data;
+      this.videoList = this.movie.videoList;
+      this.actorList = this.movie.actorList;
+      this.directorList=this.movie.directorList;
+      if (this.videoList.length > 0 ) {
+        this.video = this.videoList[0]
+      }
+    },
+    //播放
+    play(){
+      if (this.videoList.length === 0){
+        this.msgError("暂时没有播放的视频！请联系管理员进行上传！")
+      }else {
+        this.$router.push({
+          path: "/video/" + this.videoList[0].videoId,
+          query: {}
+        });
+      }
+    },
+    /** 标签翻译 */
+    tagFormat(tagOptions,tagId) {
+      if(!tagId || !tagOptions) {
+        return ''
+      }
+      const currentSeparator = ",";
+      let actions = [];
+      let tempArr = tagId.split(currentSeparator);
+      for (let i = 0; i < tempArr.length; i++) {
+        for (let j = 0; j < tagOptions.length ; j++) {
+          if (tagOptions[j].tagId == ('' + tempArr[i])) {
+            actions.push(tagOptions[j].content);
+            break;
+          }
+        }
+      }
+      return actions;
+    }
   }
+};
 </script>
-<style>
+<style scoped>
 .cc-mask{background:rgba(0,0,0,.4);height:100%;left:0;opacity:0;filter:alpha(opacity=0);position:absolute;right:0;top:0;transition:all .3s ease 0s;width:100%;transition:.3s;-webkit-transition:.3s}
 .movies-body ul li:hover .img-responsive{transform:scale(1.1);-webkit-transform:scale(1.1)}
 .movies-body ul li:hover .cc-mask{opacity:1;filter:alpha(opacity=100)}
+
+>>> .el-tabs__nav .el-tabs__item {
+  font-size: 22px;
+  color: #ef4238;
+}
+>>> .el-tabs__item.is-active {
+  color: #ef4238;
+}
+>>> .el-tabs__active-bar{
+  background-color: #ef4238;
+}
+
 </style>

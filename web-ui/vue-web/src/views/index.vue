@@ -2,7 +2,7 @@
   <div class="mt60">
     <!-- 轮播图 -->
     <el-carousel :interval="4000" type="card">
-      <el-carousel-item v-for="banner in bannerList" :key="banner.bannerId">
+      <el-carousel-item v-for="banner in bannerList" :key="banner.bannerId" style="width: 100%;height: 520px">
         <a target="_blank" :href="banner.linkUrl">
           <el-image :src="fileUploadHost + banner.imageUrl" :alt="banner.title">
             <div slot="error" class="image-slot">
@@ -652,6 +652,11 @@
                 <a href="#">
                   <div class="first-item clearfix">
                     <img :src="fileUploadHost + hotActorList[0].avatar" alt="" srcset="">
+                    <div class="people-overlay">
+                      <div class="people-rank">
+                        <i class="index index-hot">1</i>
+                      </div>
+                    </div>
                   </div>
                   <p class="name">{{hotActorList[0].name}}</p>
                 </a>

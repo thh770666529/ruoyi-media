@@ -13,7 +13,7 @@ import {
   // Button,
   // ButtonGroup,
   // Calendar,
-  // Card,
+     Card,
   // Carousel,
   // CarouselItem,
   // Cascader,
@@ -61,7 +61,7 @@ import {
   // Radio,
   // RadioButton,
   // RadioGroup,
-  // Rate,
+   Rate,
   // Row,
   // Scrollbar,
   // Select,
@@ -73,9 +73,9 @@ import {
   // Switch,
   // Table,
   // TableColumn,
-  // TabPane,
-  // Tabs,
-  // Tag,
+   TabPane,
+   Tabs,
+   Tag,
   // Timeline,
   // TimelineItem,
   // TimePicker,
@@ -150,7 +150,7 @@ Vue.prototype.$message = Message
 // Vue.use(Radio)
 // Vue.use(RadioButton)
 // Vue.use(RadioGroup)
-// Vue.use(Rate)
+ Vue.use(Rate)
 // Vue.use(Row)
 // Vue.use(Scrollbar)
 // Vue.use(Select)
@@ -162,9 +162,9 @@ Vue.prototype.$message = Message
 // Vue.use(Switch)
 // Vue.use(Table)
 // Vue.use(TableColumn)
-// Vue.use(TabPane)
-// Vue.use(Tabs)
-// Vue.use(Tag)
+ Vue.use(TabPane)
+ Vue.use(Tabs)
+ Vue.use(Tag)
 // Vue.use(Timeline)
 // Vue.use(TimelineItem)
 // Vue.use(TimePicker)

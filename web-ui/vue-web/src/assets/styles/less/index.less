@@ -697,10 +697,8 @@ header {
             border: 1px solid #efefef;
 
             .first-item {
-              float: left;
               width: 120px;
               height: 80px;
-              margin-right: 10px;
             }
 
             .name {
@@ -1054,6 +1052,29 @@ header {
               width: 120px;
               height: 80px;
               margin-right: 10px;
+              overflow: hidden;
+              position: relative;
+              img {
+                height: 100%;
+              }
+              .people-overlay {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                .people-rank {
+                  background-color: #ef4238;
+                  color: white;
+                  display: inline-block;
+                  position: absolute;
+                  bottom: 0px;
+                  width: 18px;
+                  font-size: 14px;
+                }
+              }
+
             }
 
             .name {

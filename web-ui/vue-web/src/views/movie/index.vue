@@ -96,6 +96,15 @@
 
       </ul>
     </div>
+    <!-- 公共分页 开始 -->
+    <div style="display: block;width: 1200px;text-align: center;margin: 80px 0 40px 0;">
+      <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"/></div>
+
   </div>
 </template>
 <script>
