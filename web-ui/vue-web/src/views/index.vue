@@ -1,8 +1,8 @@
 <template>
-  <div class="mt60">
+  <div class="mt20">
     <!-- 轮播图 -->
     <el-carousel :interval="4000" type="card">
-      <el-carousel-item v-for="banner in bannerList" :key="banner.bannerId" style="width: 100%;height: 520px">
+      <el-carousel-item v-for="banner in bannerList" :key="banner.bannerId" style="width: 100%;">
         <a target="_blank" :href="banner.linkUrl">
           <el-image :src="fileUploadHost + banner.imageUrl" :alt="banner.title">
             <div slot="error" class="image-slot">

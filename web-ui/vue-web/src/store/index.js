@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import root from './root'
+import videoPreview from './videoPreview'
 Vue.use(Vuex)
 
 /**
@@ -13,7 +14,9 @@ export const store = new Vuex.Store({
   ...root,
 
   /* module 应该启用命名空间，即 namespaced: true */
-  modules: {},
+  modules: {
+    videoPreview
+  },
 })
 
 export default store

@@ -3,7 +3,7 @@
     <el-header style="padding: 0">
       <Header/>
     </el-header>
-    <el-main style="padding: 0">
+    <el-main style="padding: 0;">
       <router-view/>
     </el-main>
     <el-footer style="padding: 0">

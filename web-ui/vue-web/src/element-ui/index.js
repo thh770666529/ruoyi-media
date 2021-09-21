@@ -45,9 +45,9 @@ import {
   // Link,
   Loading,
   // Main,
-  // Menu,
-  // MenuItem,
-  // MenuItemGroup,
+   Menu,
+   MenuItem,
+   MenuItemGroup,
   Message,
   // MessageBox,
   // Notification,
@@ -58,18 +58,18 @@ import {
   // Popconfirm,
   // Popover,
   // Progress,
-  // Radio,
-  // RadioButton,
-  // RadioGroup,
+   Radio,
+   RadioButton,
+   RadioGroup,
    Rate,
-  // Row,
+   Row,
   // Scrollbar,
   // Select,
   // Slider,
   // Spinner,
   // Step,
   // Steps,
-  // Submenu,
+   Submenu,
   // Switch,
   // Table,
   // TableColumn,
@@ -98,7 +98,7 @@ import './rewrite/index.less'
 // Vue.use(Button)
 // Vue.use(ButtonGroup)
 // Vue.use(Calendar)
-// Vue.use(Card)
+ Vue.use(Card)
 // Vue.use(Carousel)
 // Vue.use(CarouselItem)
 // Vue.use(Cascader)
@@ -131,9 +131,9 @@ import './rewrite/index.less'
 Vue.use(Loading.directive)
 Vue.prototype.$loading = Loading.service
 // Vue.use(Main)
-// Vue.use(Menu)
-// Vue.use(MenuItem)
-// Vue.use(MenuItemGroup)
+ Vue.use(Menu)
+ Vue.use(MenuItem)
+ Vue.use(MenuItemGroup)
 Vue.prototype.$message = Message
 // Vue.prototype.$msgbox = MessageBox
 // Vue.prototype.$alert = MessageBox.alert
@@ -147,18 +147,18 @@ Vue.prototype.$message = Message
 // Vue.use(Popconfirm)
 // Vue.use(Popover)
 // Vue.use(Progress)
-// Vue.use(Radio)
-// Vue.use(RadioButton)
-// Vue.use(RadioGroup)
+ Vue.use(Radio)
+ Vue.use(RadioButton)
+ Vue.use(RadioGroup)
  Vue.use(Rate)
-// Vue.use(Row)
+ Vue.use(Row)
 // Vue.use(Scrollbar)
 // Vue.use(Select)
 // Vue.use(Slider)
 // Vue.use(Spinner)
 // Vue.use(Step)
 // Vue.use(Steps)
-// Vue.use(Submenu)
+ Vue.use(Submenu)
 // Vue.use(Switch)
 // Vue.use(Table)
 // Vue.use(TableColumn)

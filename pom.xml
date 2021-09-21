@@ -10,7 +10,7 @@
 
     <name>ruoyi-media</name>
     <url>http://www.ruoyi.vip</url>
-    <description>若依媒资视频系统</description>
+    <description>媒资视频系统</description>
 
     <properties>
         <ruoyi.version>3.4.0</ruoyi.version>

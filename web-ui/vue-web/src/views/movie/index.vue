@@ -1,5 +1,5 @@
 <template>
-  <div class="mt60">
+  <div>
     <!-- 导航 -->
     <div class="movies-nav">
       <div class="nav-body">

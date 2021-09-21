@@ -1,5 +1,5 @@
 <template>
-  <div class="mt60">
+  <div >
     <!-- 电影简介 -->
     <div class="movie-top">
       <div class="movie-banner">
@@ -67,6 +67,25 @@
             天气之子
           </a>
         </div>
+
+        <div class="nav">
+          <div class="intro">
+            <span>剧集列表</span>
+          </div>
+          <el-row :gutter="24">
+            <el-col :xs="3" :sm="4" :md="6" :lg="8" :xl="0" style="padding: 8px;" v-for="video in videoList" :key="video.videoId" >
+              <el-button v-if="video.title && video.title.length < 6" @click="play(video.videoId)"  style="margin-bottom: 20px" plain>{{ video.title | ellipsis(6)}}</el-button>
+              <el-popover v-else
+                placement="top-start"
+                :width="video.title.length > 15 ? 250: 150"
+                trigger="hover"
+                :content="video.title">
+                <el-button slot="reference" @click="play(video.videoId)"  style="margin-bottom: 20px" plain>{{ video.title | ellipsis(6)}}</el-button>
+              </el-popover>
+            </el-col>
+          </el-row>
+        </div>
+
         <!-- 标签页切换控制 -->
         <el-tabs v-model="activeName">
           <el-tab-pane label="介绍" name="description">
@@ -380,12 +399,12 @@ export default {
       }
     },
     //播放
-    play(){
+    play(videoId){
       if (this.videoList.length === 0){
         this.msgError("暂时没有播放的视频！请联系管理员进行上传！")
       }else {
         this.$router.push({
-          path: "/video/" + this.videoList[0].videoId,
+          path: "/video/" + videoId,
           query: {}
         });
       }
@@ -426,5 +445,4 @@ export default {
 >>> .el-tabs__active-bar{
   background-color: #ef4238;
 }
-
 </style>

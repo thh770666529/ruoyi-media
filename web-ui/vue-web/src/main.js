@@ -34,6 +34,21 @@ Vue.prototype.msgInfo = function (msg) {
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 
+
+// 全局过滤器设置
+Vue.filter('ellipsis', function (msg, num) {
+  const currentNum = num || 5
+  if(!msg) {
+    return ''
+  }
+  if(msg.length > currentNum) {
+    return msg.slice(0, currentNum) + '...'
+  }
+  return msg
+})
+
+
+
 Vue.use(element)
 //Vue.use(ElementUI) //使用elementUI
 new Vue({
