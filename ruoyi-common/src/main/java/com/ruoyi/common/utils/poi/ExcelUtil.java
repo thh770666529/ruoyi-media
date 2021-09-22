@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -19,8 +20,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
-
-import com.ruoyi.common.exception.UtilException;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFPicture;
 import org.apache.poi.hssf.usermodel.HSSFPictureData;
@@ -68,6 +67,7 @@ import com.ruoyi.common.annotation.Excels;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.UtilException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.DictUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -334,12 +334,19 @@ public class ExcelUtil<T>
                         {
                             val = reverseDictByExp(Convert.toStr(val), attr.dictType(), attr.separator());
                         }
+                        else if (!attr.handler().equals(ExcelHandlerAdapter.class))
+                        {
+                            val = dataFormatHandlerAdapter(val, attr);
+                        }
                         else if (ColumnType.IMAGE == attr.cellType() && StringUtils.isNotEmpty(pictures))
                         {
                             PictureData image = pictures.get(row.getRowNum() + "_" + entry.getKey());
-                            if (image == null){
+                            if (image == null)
+                            {
                                 val = "";
-                            }else{
+                            }
+                            else
+                            {
                                 byte[] data = image.getData();
                                 val = FileUtils.writeImportBytes(data);
                             }
@@ -727,6 +734,10 @@ public class ExcelUtil<T>
                 {
                     cell.setCellValue((((BigDecimal) value).setScale(attr.scale(), attr.roundingMode())).toString());
                 }
+                else if (!attr.handler().equals(ExcelHandlerAdapter.class))
+                {
+                    cell.setCellValue(dataFormatHandlerAdapter(value, attr));
+                }
                 else
                 {
                     // 设置列类型
@@ -897,6 +908,28 @@ public class ExcelUtil<T>
     public static String reverseDictByExp(String dictLabel, String dictType, String separator)
     {
         return DictUtils.getDictValue(dictType, dictLabel, separator);
+    }
+
+    /**
+     * 数据处理器
+     *
+     * @param value 数据值
+     * @param excel 数据注解
+     * @return
+     */
+    public String dataFormatHandlerAdapter(Object value, Excel excel)
+    {
+        try
+        {
+            Object instance = excel.handler().newInstance();
+            Method formatMethod = excel.handler().getMethod("format", new Class[] { Object.class, String[].class });
+            value = formatMethod.invoke(instance, value, excel.args());
+        }
+        catch (Exception e)
+        {
+            log.error("不能格式化数据 " + excel.handler(), e.getMessage());
+        }
+        return Convert.toStr(value);
     }
 
     /**
