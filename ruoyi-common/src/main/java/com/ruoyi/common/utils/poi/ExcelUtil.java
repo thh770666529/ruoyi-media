@@ -337,12 +337,12 @@ public class ExcelUtil<T>
                         else if (ColumnType.IMAGE == attr.cellType() && StringUtils.isNotEmpty(pictures))
                         {
                             PictureData image = pictures.get(row.getRowNum() + "_" + entry.getKey());
-                            if (image == null)
-                            {
+                            if (image == null){
                                 val = "";
+                            }else{
+                                byte[] data = image.getData();
+                                val = FileUtils.writeImportBytes(data);
                             }
-                            byte[] data = image.getData();
-                            val = FileUtils.writeImportBytes(data);
                         }
                         ReflectUtils.invokeSetter(entity, propertyName, val);
                     }
