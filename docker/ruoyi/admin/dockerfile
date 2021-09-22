@@ -1,0 +1,15 @@
+# 基础镜像
+FROM  openjdk:8-jre
+# author
+MAINTAINER thh
+
+# 挂载目录
+VOLUME /home/thh
+# 创建目录
+RUN mkdir -p /home/thh
+# 指定路径
+WORKDIR /home/thh
+# 复制jar文件到路径
+COPY ./jar/ruoyi-admin.jar /home/thh/ruoyi-admin.jar
+# 启动admin服务
+ENTRYPOINT ["java","-jar","ruoyi-admin.jar"]
