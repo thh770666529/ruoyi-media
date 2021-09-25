@@ -15,13 +15,13 @@ services:
       - ./mysql/db/:/docker-entrypoint-initdb.d/
     privileged: true
     command: [
-          'mysqld',
-          '--innodb-buffer-pool-size=80M',
-          '--character-set-server=utf8mb4',
-          '--collation-server=utf8mb4_unicode_ci',
-          '--default-time-zone=+8:00',
-          '--lower-case-table-names=1'
-        ]
+      'mysqld',
+      '--innodb-buffer-pool-size=80M',
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+      '--default-time-zone=+8:00',
+      '--lower-case-table-names=1'
+    ]
     environment:
       MYSQL_DATABASE: 'ruoyi-media'
       MYSQL_ROOT_PASSWORD: 123456
@@ -36,9 +36,9 @@ services:
       - "6379:6379"
     privileged: true
     volumes:
-      - ./redis/conf/redis.conf:/home/ruoyi/redis/redis.conf
+      - ./redis/conf/redis.conf:/home/thh/redis/redis.conf
       - ./redis/data:/data
-    command: redis-server /home/ruoyi/redis/redis.conf
+    command: redis-server /home/thh/redis/redis.conf
     networks:
       - thh
   ruoyi-nginx:
@@ -50,16 +50,15 @@ services:
       - "80:80"
       - "9000:9000"
       - "9898:9898"
+      - "8600:8600"
+    privileged: true
     volumes:
-      - ./nginx/html/admin/dist:/home/ruoyi/projects/web-ui/vue-admin
-      - ./nginx/html/web/dist:/home/ruoyi/projects/web-ui/vue-web
+      - ./nginx/html/file/data:/home/thh/projects/file_data
+      - ./nginx/html/admin/dist:/home/thh/projects/web-ui/vue-admin
+      - ./nginx/html/web/dist:/home/thh/projects/web-ui/vue-web
       - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/logs:/var/log/nginx
       - ./nginx/conf.d:/etc/nginx/conf.d
-    depends_on:
-      - ruoyi-admin
-    links:
-      - ruoyi-admin
     networks:
       - thh
   ruoyi-admin:
@@ -68,7 +67,10 @@ services:
       context: ./ruoyi/admin
       dockerfile: dockerfile
     ports:
-      - "8080:8080"
+      - "6868:6868"
+    privileged: true
+    volumes:
+      - ./nginx/html/file/data:/home/thh/projects/file_data
     depends_on:
       - ruoyi-redis
       - ruoyi-mysql
@@ -84,6 +86,9 @@ services:
       dockerfile: dockerfile
     ports:
       - "7070:7070"
+    privileged: true
+    volumes:
+      - ./nginx/html/file/data:/home/thh/projects/file_data
     depends_on:
       - ruoyi-redis
       - ruoyi-mysql
