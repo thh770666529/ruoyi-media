@@ -24,7 +24,7 @@ base(){
 
 # 启动程序模块（必须）
 modules(){
-	docker-compose up -d ruoyi-admin
+	docker-compose up -d ruoyi-admin ruoyi-web
 }
 
 # 关闭所有环境/模块

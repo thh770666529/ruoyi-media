@@ -1,24 +1,9 @@
 version : '3.8'
 services:
-#  ruoyi-nacos:
-#    container_name: ruoyi-nacos
-#    image: nacos/nacos-server
-#    build:
-#      context: ./nacos
-#    environment:
-#      - MODE=standalone
-#    volumes:
-#      - ./nacos/logs/:/home/nacos/logs
-#      - ./nacos/conf/application.properties:/home/nacos/conf/application.properties
-#    ports:
-#      - "8848:8848"
-#      - "9848:9848"
-#      - "9849:9849"
-#    depends_on:
-#      - ruoyi-mysql
   ruoyi-mysql:
     container_name: ruoyi-mysql
     image: mysql:5.7
+    restart: always
     build:
       context: ./mysql
     ports:
@@ -27,6 +12,8 @@ services:
       - ./mysql/conf:/etc/mysql/conf.d
       - ./mysql/logs:/logs
       - ./mysql/data:/var/lib/mysql
+      - ./mysql/db/:/docker-entrypoint-initdb.d/
+    privileged: true
     command: [
           'mysqld',
           '--innodb-buffer-pool-size=80M',
@@ -38,6 +25,8 @@ services:
     environment:
       MYSQL_DATABASE: 'ruoyi-media'
       MYSQL_ROOT_PASSWORD: 123456
+    networks:
+      - thh
   ruoyi-redis:
     container_name: ruoyi-redis
     image: redis
@@ -45,10 +34,13 @@ services:
       context: ./redis
     ports:
       - "6379:6379"
+    privileged: true
     volumes:
       - ./redis/conf/redis.conf:/home/ruoyi/redis/redis.conf
       - ./redis/data:/data
     command: redis-server /home/ruoyi/redis/redis.conf
+    networks:
+      - thh
   ruoyi-nginx:
     container_name: ruoyi-nginx
     image: nginx
@@ -68,6 +60,8 @@ services:
       - ruoyi-admin
     links:
       - ruoyi-admin
+    networks:
+      - thh
   ruoyi-admin:
     container_name: ruoyi-admin
     build:
@@ -81,6 +75,8 @@ services:
     links:
       - ruoyi-redis
       - ruoyi-mysql
+    networks:
+      - thh
   ruoyi-web:
     container_name: ruoyi-web
     build:
@@ -94,3 +90,8 @@ services:
     links:
       - ruoyi-redis
       - ruoyi-mysql
+    networks:
+      - thh
+networks:
+  thh:
+    external: true
