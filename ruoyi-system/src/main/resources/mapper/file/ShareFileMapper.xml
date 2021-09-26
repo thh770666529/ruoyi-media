@@ -23,7 +23,7 @@
 
     <select id="selectShareFileList" resultMap="ShareFileResult">
         select * from qiwen_share_file a
-        left join share on qiwen_share.share_batch_num = a.share_batch_num
+        left join qiwen_share on qiwen_share.share_batch_num = a.share_batch_num
         left join qiwen_user_file b on b.user_file_id = a.user_file_id
         left join qiwen_file c on c.file_id = b.file_id
         where a.share_batch_num = #{shareBatchNum}
