@@ -166,7 +166,7 @@ public class FiletransferController extends BaseController {
             }
         } else  {
             Map<String, Object> param = new HashMap<>();
-            param.put("shareBatchNum", previewDTO.getShareBatchNum());
+            param.put("share_batch_num", previewDTO.getShareBatchNum());
             List<Share> shareList = shareService.listByMap(param);
             //判断批次号
             if (shareList.size() <= 0) {
@@ -180,7 +180,7 @@ public class FiletransferController extends BaseController {
                     return;
                 }
             }
-            param.put("userFileId", previewDTO.getUserFileId());
+            param.put("user_file_id", previewDTO.getUserFileId());
             List<ShareFile> shareFileList = shareFileService.listByMap(param);
             if (shareFileList.size() <= 0) {
                 return;
