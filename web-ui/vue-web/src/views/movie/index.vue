@@ -89,8 +89,8 @@
               </div>
             </div>
           </a>
-          <span style="float: left">主演：{{actorFormatter(movie.actorList) | ellipsis(10)}}</span><br>
-          <span style="float: left">标签：{{ tagFormat(tagOptions , movie.tagId) | ellipsis(10)}}</span>
+          <span style="float: left">主演：{{actorFormatter(movie.actorList) | ellipsis(8)}}</span><br>
+          <span style="float: left">标签：{{ tagFormat(tagOptions , movie.tagId) | ellipsis(8)}}</span>
          <!--<i class="mix2d"></i>-->
         </li>
 

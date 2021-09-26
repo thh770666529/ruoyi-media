@@ -3,7 +3,7 @@
     <el-divider content-position="center">{{this.$route.params && this.$route.params.movieId ? '修改' : '新增'}}电影信息</el-divider>
       <el-form ref="form" :model="form" :label-width="formLabelWidth" :rules="rules" >
         <el-row>
-          <el-col :span="16">
+          <el-col :span="17">
             <el-form-item label="标题"  prop="title">
               <el-input v-model="form.title" placeholder="请输入标题"  auto-complete="off" ></el-input>
             </el-form-item>
@@ -113,22 +113,22 @@
               <el-input v-model="form.qrcodePath" disabled  placeholder="请输入专属二维码地址" />
             </el-form-item>
             <el-row>
-              <el-col :span="6">
-                <el-form-item label="价格" prop="price" style="width: 200px" >
-                  <el-input-number v-model="form.price" :precision="1" placeholder="请输入价格" :step="0.1" :max="10"></el-input-number>
+              <el-col :span="7">
+                <el-form-item label="价格" prop="price" >
+                  <el-input-number v-model="form.price" style="width: 100%" :precision="1" placeholder="请输入价格" :step="0.1"></el-input-number>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
-                <el-form-item label="评分" prop="rate" style="width: 200px" >
-                  <el-input-number v-model="form.rate" :precision="1" placeholder="评分" :step="0.1" :max="10"></el-input-number>
+              <el-col :span="7">
+                <el-form-item label="评分" prop="rate"  >
+                  <el-input-number v-model="form.rate" style="width: 100%" :precision="1" placeholder="评分" :step="0.1" :max="10"></el-input-number>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
-                <el-form-item label="标签">
+              <el-col :span="10">
+                <el-form-item prop="tagId" label="标签">
                   <el-select
+                    style="width: 100%"
                     v-model="tagList"
                     multiple
-                    style="width: 400px"
                     placeholder="请选择">
                     <el-option
                       v-for="tag in tagOptions"
@@ -144,7 +144,7 @@
               <el-input v-model="form.password" placeholder="请输入私密访问时的密钥" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="" class="images-uploader" prop="images">
               <el-upload
                 class="el-upload"
@@ -192,7 +192,7 @@
         <el-table :data="videoList" :row-class-name="rowIndex" @selection-change="handleVideoSelectionChange" ref="movieVideo">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
-          <el-table-column label="标题" prop="title"/>
+          <el-table-column label="标题" show-overflow-tooltip prop="title"/>
           <el-table-column label="url"  show-overflow-tooltip width="200" prop="url" align="center"/>
           <el-table-column label="文件后缀" prop="ext"/>
           <el-table-column label="播放长度" prop="length"/>
@@ -749,17 +749,14 @@ export default {
       this.movieVideoForm = this.selectedMovieVideo[0];
       this.open = true;
     },
-
     async submitForm(){
-      await this.save();
-      this.cancel();
+      const success = await this.save();
+      if(success){
+        this.cancel();
+      }
     },
     /** 保存按钮 */
     save() {
-      if(this.tagList.length <= 0) {
-        this.msgError("标签不能为空!");
-        return false;
-      }
       let that = this;
       that.form.tagId = that.tagList.join(",");
       this.$refs["form"].validate(valid => {
@@ -770,7 +767,8 @@ export default {
           if (this.form.movieId != null) {
             updateMovie(this.form).then(response => {
               this.msgSuccess("修改成功");
-              this.getDetail(this.form.movieId)
+              this.getDetail(this.form.movieId);
+              return true;
             });
           } else {
             addMovie(this.form).then(response => {
@@ -779,8 +777,11 @@ export default {
               this.$router.replace({
                 path: "/media/movie/detail/" + this.form.movieId
               });
+              return true;
             });
           }
+        }else {
+          return false;
         }
       });
     },
@@ -1045,9 +1046,9 @@ export default {
 .images-uploader-icon {
   font-size: 28px;
   color: #8c939d;
-  width: 330px;
-  height: 462px;
-  line-height:462px;
+  width: 234px;
+  height: 332.6px;
+  line-height:332.6px;
   text-align: center;
 }
 .images {
