@@ -750,40 +750,42 @@ export default {
       this.open = true;
     },
     async submitForm(){
-      const success = await this.save();
-      if(success){
+      const flag = await this.save();
+      if (flag){
         this.cancel();
       }
     },
     /** 保存按钮 */
-    save() {
-      let that = this;
-      that.form.tagId = that.tagList.join(",");
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          this.form.videoList = this.videoList;
-          this.form.actorList = this.actorList;
-          this.form.directorList = this.directorList;
-          if (this.form.movieId != null) {
-            updateMovie(this.form).then(response => {
-              this.msgSuccess("修改成功");
-              this.getDetail(this.form.movieId);
-              return true;
-            });
-          } else {
-            addMovie(this.form).then(response => {
-              this.form = response.data;
-              this.msgSuccess("新增成功");
-              this.$router.replace({
-                path: "/media/movie/detail/" + this.form.movieId
+    async save() {
+      return new Promise((resolve, reject) => {
+        let that = this;
+        that.form.tagId = that.tagList.join(",");
+        this.$refs["form"].validate(valid => {
+          if (valid) {
+            this.form.videoList = this.videoList;
+            this.form.actorList = this.actorList;
+            this.form.directorList = this.directorList;
+            if (this.form.movieId != null) {
+              updateMovie(this.form).then(response => {
+                this.msgSuccess("修改成功");
+                this.getDetail(this.form.movieId);
               });
-              return true;
-            });
+            } else {
+              addMovie(this.form).then(response => {
+                this.form = response.data;
+                this.msgSuccess("新增成功");
+                this.$router.replace({
+                  path: "/media/movie/detail/" + this.form.movieId
+                });
+              });
+            }
+            return resolve(true);
+          }else {
+            return resolve(false);
           }
-        }else {
-          return false;
-        }
-      });
+        });
+      })
+
     },
     /** 删除按钮操作 */
     handleDelete(row) {
