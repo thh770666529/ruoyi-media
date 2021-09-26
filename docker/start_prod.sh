@@ -10,7 +10,7 @@ docker rmi docker_ruoyi-admin
 docker rmi nginx
 
 #进入目录
-cd /home/ruoyi-media
+cd ..
 #打包
 echo 'mvn打包ruoyi-media'
 mvn clean package -Dmaven.test.skip=true
@@ -40,7 +40,6 @@ npm run build:prod
 cp /home/ruoyi-media/web-ui/vue-web/dist -r /home/ruoyi-media/docker/nginx/html/web
 
 cd /home/ruoyi-media/docker
-
 
 
 #启动
