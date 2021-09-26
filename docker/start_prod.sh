@@ -1,5 +1,5 @@
 #!/bin/sh
-
+echo '复制初始化sql'
 #停止
 docker-compose down
 
@@ -8,6 +8,10 @@ docker rmi docker_ruoyi-web
 docker rmi docker_ruoyi-admin
 
 docker rmi nginx
+
+cp /home/ruoyi-media/doc/sql/ruoyi-media.sql /home/ruoyi-media/docker/mysql/db
+
+mkdir -p  /home/ruoyi-media/docker/nginx/html/admin/dist /home/ruoyi-media/docker/nginx/html/web/dist  /home/ruoyi-media/docker/nginx/html/file/data
 
 #进入目录
 cd ..
