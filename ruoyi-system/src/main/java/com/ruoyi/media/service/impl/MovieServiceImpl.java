@@ -86,7 +86,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
      * @param movieVO
      */
     private void setMovieActor(MovieActorType movieActorType,MovieVO movieVO){
-        if (movieVO == null && movieVO.getMovieId() == null){
+        if (movieVO == null || movieVO.getMovieId() == null){
             return;
         }
         MovieActorVO actorVO = new MovieActorVO();
@@ -113,12 +113,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     public List<MovieVO> selectMovieList(Movie movie)
     {
         List<MovieVO> movieList = movieMapper.selectMovieList(movie);
-        List<MovieVO> newMovieList = new ArrayList<>();
-        for (MovieVO movieVO : movieList) {
-            setMovieActor(MovieActorType.ACTOR, movieVO);
-            newMovieList.add(movieVO);
-        }
-        return newMovieList;
+        return movieList;
     }
 
     /**
@@ -148,7 +143,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         List<MovieActorVO> directorList = movieVO.getDirectorList();
 
         List<MovieActorVO> insertList = null;
-       switch (movieActorType){
+        switch (movieActorType){
            case ACTOR:
                insertList = actorList;
                break;
@@ -207,15 +202,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
 
     @Override
     public List<MovieVO> selectHotMovieList(int top) {
-        List<Movie> movieList = movieMapper.selectHotMovieList(top);
-        List<MovieVO> newMovieList = new ArrayList<>();
-        for (Movie movie : movieList) {
-            MovieVO movieVO = new MovieVO();
-            BeanUtils.copyProperties(movie,movieVO);
-            setMovieActor(MovieActorType.ACTOR, movieVO);
-            newMovieList.add(movieVO);
-        }
-        return newMovieList;
+        return movieMapper.selectHotMovieList(top);
     }
 
     @Override
@@ -225,15 +212,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
 
     @Override
     public List<MovieVO> getListByActorId(Long actorId) {
-        List<Movie> movieList = movieMapper.getListByActorId(actorId);
-        List<MovieVO> newMovieList = new ArrayList<>();
-        for (Movie movie : movieList) {
-            MovieVO movieVO = new MovieVO();
-            BeanUtils.copyProperties(movie,movieVO);
-            setMovieActor(MovieActorType.ACTOR, movieVO);
-            newMovieList.add(movieVO);
-        }
-        return newMovieList;
+        return movieMapper.selectListByActorId(actorId);
     }
 
     /**

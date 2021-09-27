@@ -101,9 +101,11 @@
       <pagination
       v-show="total>0"
       :total="total"
+      :pageSizes="[12, 24, 36, 48]"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
-      @pagination="getList"/></div>
+      @pagination="getList"/>
+    </div>
 
   </div>
 </template>

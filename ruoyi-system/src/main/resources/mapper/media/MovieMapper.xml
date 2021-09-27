@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="MovieVO" id="MovieResult">
         <result property="movieId"    column="movie_id"    />
-        <result property="images"    column="images"    />
+        <result property="images"    column="images"  />
         <result property="title"    column="title"    />
         <result property="type"    column="type"    />
         <result property="country"    column="country"    />
@@ -38,8 +38,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="qrcodePath"   column="qrcode_path" />
         <result property="openPassword"   column="open_password" />
         <result property="password"   column="password" />
+        <collection property="actorList" column="movie_id" select="selectMovieActorList"/>
+        <collection property="directorList" column="movie_id" select="selectMovieDirectorList"/>
     </resultMap>
 
+    <resultMap type="MovieActorVO" id="MovieActorVOResult">
+        <result property="actorId"    column="actor_id"    />
+        <result property="movieId"    column="movie_id"    />
+        <result property="name"    column="name"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="label"    column="label"    />
+    </resultMap>
+
+    <select id="selectMovieActorList" parameterType="MovieActorVO" resultMap="MovieActorVOResult">
+        select ma.actor_id, ma.movie_id, ma.type,a.name, a.avatar, a.label
+        from wm_movie_actor ma,wm_actor a
+        <where>
+            ma.actor_id = a.actor_id AND ma.type = 'actor'
+            <if test="actorId != null "> AND ma.actor_id = #{actorId}</if>
+            <if test="movieId != null "> AND ma.movie_id = #{movieId}</if>
+        </where>
+    </select>
+
+    <select id="selectMovieDirectorList" parameterType="MovieActorVO" resultMap="MovieActorVOResult">
+        select ma.actor_id, ma.movie_id, ma.type,a.name, a.avatar, a.label
+        from wm_movie_actor ma,wm_actor a
+        <where>
+            ma.actor_id = a.actor_id AND ma.type = 'director'
+            <if test="actorId != null "> AND ma.actor_id = #{actorId}</if>
+            <if test="movieId != null "> AND ma.movie_id = #{movieId}</if>
+        </where>
+    </select>
 
     <sql id="selectMovieVo">
         select m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
@@ -57,7 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by m.create_time desc limit #{top}
     </select>
 
-    <select id="getListByActorId" parameterType="Long" resultMap="MovieResult">
+    <select id="selectListByActorId" parameterType="Long" resultMap="MovieResult">
        select m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
         m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
         m.open_comment, m.open_download, m.price, m.rate,
