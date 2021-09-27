@@ -21,7 +21,7 @@ import {
   // Checkbox,
   // CheckboxButton,
   // CheckboxGroup,
-  // Col,
+   Col,
   // Collapse,
   // CollapseItem,
   // ColorPicker,
@@ -106,7 +106,7 @@ import './rewrite/index.less'
 // Vue.use(Checkbox)
 // Vue.use(CheckboxButton)
 // Vue.use(CheckboxGroup)
-// Vue.use(Col)
+ Vue.use(Col)
 // Vue.use(Collapse)
 // Vue.use(CollapseItem)
 // Vue.use(ColorPicker)

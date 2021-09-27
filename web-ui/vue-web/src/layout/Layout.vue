@@ -3,7 +3,7 @@
     <el-header style="padding: 0">
       <Header/>
     </el-header>
-    <el-main style="padding: 0;">
+    <el-main class="el-main">
       <router-view/>
     </el-main>
     <el-footer style="padding: 0">
@@ -25,6 +25,8 @@ export default {
 <style scoped>
 .el-main {
   overflow: auto;
-  /* background: red; */
+  padding: 0;
+  min-height: 1000px;
+  margin-top: 80px;
 }
 </style>

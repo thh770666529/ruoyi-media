@@ -5,6 +5,7 @@ import store from './store'
 import App from './App.vue'
 import element from '@/utils/element'
 import '../src/assets/styles/css/global.css'
+import '@/assets/styles/less/index.less'
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
 import ElementUI from 'element-ui' //element-ui的全部组件

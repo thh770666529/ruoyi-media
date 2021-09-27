@@ -6,7 +6,7 @@
         <div class="movie-img">
           <el-image :src="fileUploadHost + movie.images" :alt="movie.title">
             <div slot="error" class="image-slot">
-              <img src="@/assets/styles/images/hotmovie1.png" alt="" style="width: 100%" >
+              <img src="../../assets/styles/images/hotmovie1.png" alt="" style="width: 100%" >
             </div>
           </el-image>
         </div>
@@ -327,7 +327,6 @@
   </div>
 </template>
 <script>
-import '@/assets/styles/less/index.less'
 import '@/assets/styles/less/moviedetail.less'
 import movieApi from '@/api/media/movie';
 import { listTag } from "@/api/media/tag";
@@ -361,39 +360,36 @@ export default {
       }
     }
   },
-  async created() {//在页面渲染之前执行
-    const movieId = this.$route.params.movieId;
-    const tagOptions = await listTag({status: '1'});
-    const dictTypeList =  ['movie_country', 'movie_status', 'movie_type'];
-    const dictDataList = await getDictsByTypeList(dictTypeList);
-    const response = await movieApi.getMovie(movieId);
-    const movie = response.data;
-    let video = {};
-    if (movie.videoList.length > 0 ) {
-      video = movie.videoList[0]
-    }
-    this.movieId = movieId
-    this.countryOptions = dictDataList.data.movie_country;
-    this.statusOptions= dictDataList.data.movie_status
-    this.typeOptions= dictDataList.data.movie_type
-    this.tagOptions= tagOptions.rows
-    this.movie= movie
-    this.videoList= movie.videoList
-    this.actorList= movie.actorList
-    this.directorList= movie.directorList
-    this.video= video
+  created() {
+    listTag({status: '1'}).then(response => {
+      this.tagOptions =  response.rows;
+    });
+    this.getDictList();
+    this.getDetail();
   },
+
   methods:{
+    getDictList() {
+      // 获取字典
+      const dictTypeList =  ['movie_country', 'movie_status', 'movie_type'];
+      getDictsByTypeList(dictTypeList).then(response => {
+        this.countryOptions = response.data.movie_country;
+        this.statusOptions= response.data.movie_status
+        this.typeOptions= response.data.movie_type
+      });
+    },
     //查询电影详情信息
-    async initInfo() {
-      const response = await movieApi.getMovie(this.movieId);
-      this.movie = response.data;
-      this.videoList = this.movie.videoList;
-      this.actorList = this.movie.actorList;
-      this.directorList=this.movie.directorList;
-      if (this.videoList.length > 0 ) {
-        this.video = this.videoList[0]
-      }
+    getDetail() {
+      this.movieId = this.$route.params.movieId;
+      movieApi.getMovie(this.movieId).then(response => {
+        this.movie = response.data;
+        this.videoList = this.movie.videoList;
+        this.actorList = this.movie.actorList;
+        this.directorList=this.movie.directorList;
+        if (this.videoList.length > 0 ) {
+          this.video = this.videoList[0]
+        }
+      });
     },
     //播放
     play(videoId){

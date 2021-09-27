@@ -134,10 +134,10 @@
               </el-select>
             </el-form-item>
             <el-form-item label="简述" prop="description">
-            <Editor ref="descriptionEditor" :value="form.description"   :height="200"></Editor>
+              <el-input v-model="form.description" rows="4" type="textarea" placeholder="请输入奖项内容" maxlength="1000" show-word-limit />
             </el-form-item>
             <el-form-item label="奖项" prop="awards">
-              <Editor ref="awardsEditor" :value="form.awards"  :height="200"></Editor>
+              <editor v-model="form.awards" :height="200"/>
             </el-form-item>
           </el-col>
         <el-col :span="8">
@@ -308,17 +308,17 @@
       /** 修改按钮操作 */
       handleUpdate(row) {
         this.reset();
-        const actorId = row.actorId || this.ids
+        const actorId = row.actorId || this.ids;
         getActor(actorId).then(response => {
           this.form = response.data;
           this.open = true;
           this.title = "修改演员";
           let that = this;
           that.labelList = [];
-          var dbLabelList = that.form.label.split(",");
-          for (var a = 0; a < dbLabelList.length; a++) {
-            if (dbLabelList[a] != null && dbLabelList[a] != "") {
-              that.labelList.push(dbLabelList[a]);
+          let dbLabelList = that.form.label.split(",");
+          for (let index = 0; index < dbLabelList.length; index++) {
+            if (dbLabelList[index] != null && dbLabelList[index] !== "") {
+              that.labelList.push(dbLabelList[index]);
             }
           }
         });
@@ -331,10 +331,7 @@
         }
         var that = this;
         that.form.label = that.labelList.join(",");
-        console.log(that.form.label);
         this.$refs["form"].validate(valid => {
-         this.form.description = this.$refs.descriptionEditor.currentValue;
-         this.form.awards = this.$refs.awardsEditor.currentValue;
           if (valid) {
             if (this.form.actorId != null) {
               updateActor(this.form).then(response => {

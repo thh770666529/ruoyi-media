@@ -21,7 +21,7 @@
       </div>
     </div>
     <!-- 电影分类列表 -->
-    <div class="movie-list">
+    <div class="movie-query">
       <div class="list-body">
         <div class="list-model">
           <div class="name">
@@ -106,11 +106,9 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"/>
     </div>
-
   </div>
 </template>
 <script>
-  import '@/assets/styles/less/index.less'
   import '@/assets/styles/less/movielist.less'
   import index from '@/api/index'
   import { getDicts } from '@/api/system/dict/data'
@@ -163,14 +161,17 @@
       this.init();
     },
     methods:{
-      async init() {
-        const tagOptions = await listTag({status: '1'});
-        const categoryOptions = await listCategory({status: '1'});
+      init() {
         const dictTypeList =  ['movie_country', 'movie_status', 'movie_type'];
-        const dictDataList = await getDictsByTypeList(dictTypeList);
-        this.countryOptions = dictDataList.data.movie_country,
-        this.tagOptions = tagOptions.rows;
-        this.categoryOptions = categoryOptions.rows;
+        getDictsByTypeList(dictTypeList).then(response => {
+          this.countryOptions = response.data.movie_country;
+        });
+        listCategory({status: '1'}).then(response => {
+          this.categoryOptions =  response.rows;
+        });
+        listTag({status: '1'}).then(response => {
+          this.tagOptions =  response.rows;
+        });
         this.getList();
       },
       actorFormatter(actorList) {
@@ -215,7 +216,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
 .cc-mask{background:rgba(0,0,0,.4);height:100%;left:0;opacity:0;filter:alpha(opacity=0);position:absolute;right:0;top:0;transition:all .3s ease 0s;width:100%;transition:.3s;-webkit-transition:.3s}
 .movies-body ul li:hover .img-responsive{transform:scale(1.1);-webkit-transform:scale(1.1)}
 .movies-body ul li:hover .cc-mask{opacity:1;filter:alpha(opacity=100)}

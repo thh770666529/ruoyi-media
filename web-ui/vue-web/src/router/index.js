@@ -23,6 +23,14 @@ const routes = [
             {
               path: '/video/:videoId?',
               component: () => import("@/views/video/index")
+            },
+            {
+              path: '/actor',
+              component: () => import("@/views/actor/index")
+            },
+            {
+              path: '/actor/:actorId?',
+              component: () => import("@/views/actor/detail")
             }
         ]
     }

@@ -60,7 +60,7 @@ public class IndexController extends BaseController {
     @GetMapping("/getHotMovieList")
     public AjaxResult getHotMovieList(){
         //查询前12的热门电影
-        return AjaxResult.success(movieService.selectHotMovieList(12));
+        return AjaxResult.success(movieService.selectHotMovieList(10));
     }
 
     @GetMapping("/getAllBannerList")
@@ -79,7 +79,7 @@ public class IndexController extends BaseController {
     @GetMapping("/getHotArticleList")
     public AjaxResult getHotArticleList(){
         log.info("门户获取首页排行博客");
-        List<Article> list = articleService.selectHotArticleList(5);
+        List<Article> list = articleService.selectHotArticleList(10);
         return AjaxResult.success(list);
     }
 

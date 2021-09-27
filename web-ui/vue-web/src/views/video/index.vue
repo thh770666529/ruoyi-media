@@ -1,5 +1,5 @@
 <template>
-  <div class="mt60">
+  <div>
     <div class="container">
       <div class="main">
         <div class="mt20">
@@ -39,9 +39,7 @@
     </div>
   </div>
 </template>
-
 <script>
-import '@/assets/styles/less/index.less'
 import VideoPreview from '@/components/Play/VideoPreview'
 import movieApi from '@/api/media/movie'
 import {getWebConfig} from '@/api/website/webConfig'
@@ -68,9 +66,9 @@ export default {
       webConfig: {}
     }
   },
-  async created() {
+  created() {
     this.videoId = this.$route.params && this.$route.params.videoId;
-    await getWebConfig().then(response => {
+    getWebConfig().then(response => {
       let data = response.data
       if (data.showList) {
         let showList = JSON.parse(data.showList);
@@ -82,7 +80,7 @@ export default {
       }
       this.webConfig = data
     });
-    await this.getVideoById(this.videoId);
+    this.getVideoById(this.videoId);
   },
   mounted() {
   },
@@ -95,8 +93,8 @@ export default {
     }
   },
   methods: {
-    async getVideoById(videoId) {
-      await movieApi.getMovieVideo(videoId).then(response => {
+    getVideoById(videoId) {
+      movieApi.getMovieVideo(videoId).then(response => {
         this.video = response.data.video;
         this.movie = response.data.movie;
         this.videoPreviewList = []
@@ -119,9 +117,9 @@ export default {
           videoPreviewList: this.videoPreviewList,
           activeIndex: 0,
           openSteamMedia: openSteamMedia
-        }
+        };
         if (!this.videoPreviewList.length) {
-          this.msgError("没有转化好的视频文件，请联系管理员！")
+          this.msgError("没有转化好的视频文件，请联系管理员！");
           data.videoPreviewVisible = false
         }
         this.$store.commit('setVideoPreviewData', data)

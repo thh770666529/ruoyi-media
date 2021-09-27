@@ -2,11 +2,11 @@
   <div class="mt20">
     <!-- 轮播图 -->
     <el-carousel :interval="4000" type="card">
-      <el-carousel-item v-for="banner in bannerList" :key="banner.bannerId" style="width: 100%;">
+      <el-carousel-item v-for="banner in bannerList" :key="banner.bannerId">
         <a target="_blank" :href="banner.linkUrl">
           <el-image :src="fileUploadHost + banner.imageUrl" :alt="banner.title">
             <div slot="error" class="image-slot">
-              <img src="../assets/styles/images/2.jpg" alt="" style="width: 100%;height: 520px" >
+              <img src="../assets/styles/images/2.jpg" alt="" style="width: 1700px;height: 520px" >
             </div>
           </el-image>
         </a>
@@ -18,9 +18,9 @@
       <div class="main">
         <!-- 正在热映 -->
         <div class="hot-movie">
-          <h2>正在热映（{{hotMovieList.length}}部）</h2>
+          <h2>正在热映（{{hotPlayMovieTotle}}部）</h2>
           <div class="movie-list">
-            <div class="movie-item" v-for="movie in hotMovieList" :key="movie.movieId">
+            <div class="movie-item" v-for="movie in hotPlayMovieList" :key="movie.movieId">
               <a :href="`/movie/` + movie.movieId">
                 <div class="movie-poster">
                   <img :src="fileUploadHost + movie.images" />
@@ -64,15 +64,6 @@
               <p>{{parseTime(movie.publishTime, '{m}月{d}日')}}上映</p>
             </div>
 
-            <!--<div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>46461661人想看</p>
-              <button onclick="alert('123')">预告片</button>
-              <button onclick="alert('123')">预售</button>
-              <p>9月31日上映</p>
-            </div>-->
           </div>
         </div>
 
@@ -377,61 +368,6 @@
       </div>
       <!-- 侧边栏 -->
       <div class="aside">
-        <!-- 今日票房 -->
-        <div class="rank">
-          <h2>今日票房</h2>
-          <div class="ranklist">
-            <ul class="ranks">
-              <li class=" rangk-item-first clearfix">
-                <a href="#">
-                  <div class="first-item clearfix">
-                    <img src="../assets/styles/images/rank.png" alt="" srcset="">
-                  </div>
-                  <p class="name">爱宠大机密2</p>
-                  <p class="money">0.72万</p>
-                </a>
-              </li>
-              <li class="rank-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">2</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="index-money">0.00万</span>
-
-                </a>
-              </li>
-              <li class="rank-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">3</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="index-money">0.00万</span>
-                </a>
-              </li>
-              <li class="rank-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">4</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="index-money">0.00万</span>
-
-                </a>
-              </li>
-              <li class="rank-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">5</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="index-money">0.00万</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
         <!-- 今日大盘 -->
         <div class="aside-total">
           <h2 class="total-nav">今日大盘</h2>
@@ -441,211 +377,42 @@
             <p class="time"><span>北京时间14:48:31</span> <span>猫眼专业版实时票房数据</span></p>
           </div>
         </div>
-        <!-- 最受期待 -->
-        <div class="hope">
-          <h2>最受期待 <span>查看完整榜单></span></h2>
-          <div class="hope-body">
-            <ul class="hope-list">
-              <li class="hope-item-top1">
-                <a href="#">
-                  <div class="hope-img">
-                    <img src="../assets/styles/images/hope1.png" alt="">
-                  </div>
-                  <div class="hope-text">
-                    <p class="hope-name">姜子牙</p>
-                    <p class="hope-time">上映时间：2020</p>
-                    <p class="hope-num">932707人想看</p>
-                  </div>
 
-                </a>
-              </li>
-              <li class="hope-item-top">
-                <a href="#">
-                  <div class="hope-img">
-                    <img src="../assets/styles/images/hope2.png" alt="">
-                  </div>
-                  <p class="hope-name">哪吒重生</p>
-                  <p class="hope-num">932707人想看</p>
-                </a>
-              </li>
-              <li class="hope-item-top left">
-                <a href="#">
-                  <div class="hope-img">
-                    <img src="../assets/styles/images/hope3.png" alt="">
-                  </div>
-                  <p class="hope-name">唐人街探案3</p>
-                  <p class="hope-num">932707人想看</p>
-                </a>
-              </li>
-              <li class="hope-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">4</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="hope-num">932707人想看</span>
-                </a>
-              </li>
-              <li class="hope-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">5</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="hope-num">932707人想看</span>
-                </a>
-              </li>
-              <li class="hope-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">6</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="hope-num">932707人想看</span>
-                </a>
-              </li>
-              <li class="hope-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">7</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="hope-num">932707人想看</span>
-                </a>
-              </li>
-              <li class="hope-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">8</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="hope-num">932707人想看</span>
-                </a>
-              </li>
-              <li class="hope-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">9</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="hope-num">932707人想看</span>
-                </a>
-              </li>
-              <li class="hope-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">10</i>
-                    <span>冰雪奇缘2</span>
-                  </div>
-                  <span class="hope-num">932707人想看</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
         <!-- top100 -->
         <div class="top">
           <h2>TOP 100 <span>查看完整榜单></span></h2>
           <div class="toplist">
             <ul class="topone">
-              <li class=" top-item-first clearfix">
+              <li class=" top-item-first clearfix"  >
                 <a href="#">
                   <div class="first-item clearfix">
-                    <img src="../assets/styles/images/top1.png" alt="" srcset="">
+                    <el-image :src="fileUploadHost + hotMovieList[0].images" style="width: 120px;height: 78px" :alt="hotMovieList[0].title">
+                      <div slot="error" class="image-slot">
+                        <img src="../assets/styles/images/2.jpg" alt="" style="width: 120px;height: 78px" >
+                      </div>
+                    </el-image>
                   </div>
-                  <p class="name">活着</p>
-                  <p class="money">9.0分</p>
+                  <p class="name">{{hotMovieList[0].title}}</p>
+                  <p class="money">{{hotMovieList[0].rate}}分</p>
                 </a>
               </li>
-              <li class="top-item">
+              <li class="top-item" :key="movie.movieId" v-for="(movie,index) in hotMovieList">
                 <a href="#">
                   <div class="index-box">
-                    <i class="index index-hot">2</i>
-                    <span>钢琴家</span>
+                    <i v-if="index < 2" class="index index-hot">{{index + 2}}</i>
+                    <i v-else class="index">{{index + 2}}</i>
+                    <span> {{movie.title}}</span>
                   </div>
-                  <span class="index-money">8.8分</span>
-
-                </a>
-              </li>
-              <li class="top-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">3</i>
-                    <span>勇敢的心</span>
-                  </div>
-                  <span class="index-money">8.8分</span>
-                </a>
-              </li>
-              <li class="top-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">4</i>
-                    <span>阿飞正传</span>
-                  </div>
-                  <span class="index-money">8.8分</span>
-
-                </a>
-              </li>
-              <li class="top-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">5</i>
-                    <span>射雕英雄传之东成西就</span>
-                  </div>
-                  <span class="index-money">8.8分</span>
-                </a>
-              </li>
-              <li class="top-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">6</i>
-                    <span>爱回家</span>
-                  </div>
-                  <span class="index-money">8.8分</span>
-                </a>
-              </li>
-              <li class="top-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">7</i>
-                    <span>初恋这件小事</span>
-                  </div>
-                  <span class="index-money">8.8分</span>
-                </a>
-              </li>
-              <li class="top-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">8</i>
-                    <span>泰坦尼克号</span>
-                  </div>
-                  <span class="index-money">8.8分</span>
-                </a>
-              </li>
-              <li class="top-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">9</i>
-                    <span>迁徙的鸟</span>
-                  </div>
-                  <span class="index-money">8.8分</span>
-                </a>
-              </li>
-              <li class="top-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">10</i>
-                    <span>蝙蝠侠：黑暗骑士</span>
-                  </div>
-                  <span class="index-money">8.8分</span>
+                  <span class="index-money">{{movie.rate}}分</span>
                 </a>
               </li>
             </ul>
           </div>
         </div>
-        <!-- 热门影人 -->
+
+        <!-- 热门演员 -->
         <div class="people">
-          <h2>热门影人</h2>
+          <h2>热门演员</h2>
           <div class="peoplelist">
             <ul class="peoples">
               <li class=" people-item-first clearfix" v-if="hotActorList.length > 0">
@@ -673,89 +440,30 @@
             </ul>
           </div>
         </div>
-        <!-- 娱乐热点 -->
+
+        <!-- 热门文章 -->
         <div class="hotspot">
-          <h2>娱乐热点</h2>
+          <h2>热门文章</h2>
           <div class="hotspotlist">
             <ul class="hotspots">
-              <li class=" hotspot-item-first clearfix">
+              <li class=" hotspot-item-first clearfix" v-if="hotArticleList.length > 0">
                 <a href="#">
                   <div class="first-item clearfix">
-                    <img src="../assets/styles/images/hotspot.png" alt="" srcset="">
+                    <el-image :src="fileUploadHost + hotArticleList[0].images" style="width: 120px;height: 68px" :alt="hotArticleList[0].title">
+                      <div slot="error" class="image-slot">
+                        <img src="../assets/styles/images/login-body-bg.png" alt="" style="width: 120px;height: 68px" >
+                      </div>
+                    </el-image>
                   </div>
-                  <p class="name">《什刹海》今晚央一开播...</p>
+                  <p class="name">{{hotArticleList[0].title | ellipsis(23)}}</p>
                 </a>
               </li>
-              <li class="hotspot-item">
+              <li class="hotspot-item" :key="article.articleId" v-for="(article,index) in hotArticleList" >
                 <a href="#">
                   <div class="index-box">
-                    <i class="index index-hot">2</i>
-                    <span>反差萌!动画电影《杨戬》“哮天犬” 形象首次曝光</span>
-                  </div>
-                </a>
-              </li>
-              <li class="hotspot-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index index-hot">3</i>
-                    <span>《民初奇人传》火热收官奇趣甜三大法宝发力赢口碑</span>
-                  </div>
-
-                </a>
-              </li>
-              <li class="hotspot-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">4</i>
-                    <span>电影《再见吧!少年》曝阵容刘敏涛荣梓杉大银幕..</span>
-                  </div>
-                </a>
-              </li>
-              <li class="hotspot-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">5</i>
-                    <span>布拉德:皮特参演《死侍2》导演全新动作片后者曾...</span>
-                  </div>
-                </a>
-              </li>
-              <li class="hotspot-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">6</i>
-                    <span>《漂亮书生》首曝剧照鞠婧祎宋威龙携“漂亮战队...</span>
-                  </div>
-                </a>
-              </li>
-              <li class="hotspot-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">7</i>
-                    <span>《温暖的抱抱》首曝预告常远李沁邂逅妙手“神经...</span>
-                  </div>
-                </a>
-              </li>
-              <li class="hotspot-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">8</i>
-                    <span>汤姆汉克斯一让每一 份人生， 都成为充满期待的..</span>
-                  </div>
-                </a>
-              </li>
-              <li class="hotspot-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">9</i>
-                    <span>电影《至暗陷阱》至暗双雄霸气亮相明暗对决一触..</span>
-                  </div>
-                </a>
-              </li>
-              <li class="hotspot-item">
-                <a href="#">
-                  <div class="index-box">
-                    <i class="index">10</i>
-                    <span>《什刹海》央一定档7.10， “多彩京韵” 版海报今...</span>
+                    <i v-if="index < 2" class="index index-hot">{{index + 2}}</i>
+                    <i v-else class="index">{{index + 2}}</i>
+                    <span>{{article.title}}</span>
                   </div>
                 </a>
               </li>
@@ -767,9 +475,10 @@
   </div>
 </template>
 <script>
-  import '@/assets/styles/less/index.less'
-  import index from '@/api/index'
-  import { getDicts } from '@/api/system/dict/data'
+
+  import index from '@/api/index';
+  import movieApi from "@/api/media/movie";
+  import { getDicts } from '@/api/system/dict/data';
   import { listTag } from "@/api/media/tag";
   import { listCategory } from "@/api/media/category";
   export default {
@@ -777,19 +486,35 @@
       return {
         tagOptions: [],
         hotMovieList: [],
+        hotPlayMovieList: [],
+        hotPlayMovieTotle: 0,
         bannerList: [],
-        hotActorList: []
+        hotActorList: [],
+        hotArticleList: []
       }
     },
-    async created() {
-      const tagOptions = await listTag({status: '1'});
-      const movieList = await index.getHotMovieList();
-      const actorList  = await index.getHotActorList();
-      const bannerList = await index.getAllBannerList();
-      this.tagOptions =  tagOptions.rows
-      this.hotMovieList =  movieList.data
-      this.bannerList = bannerList.data
-      this.hotActorList = actorList.data
+    created() {
+      listTag({status: '1'}).then(response => {
+         this.tagOptions =  response.rows;
+      });
+      index.getAllBannerList().then(response => {
+        this.bannerList =  response.data;
+      });
+      index.getHotMovieList().then(response => {
+        this.hotMovieList =  response.data;
+      });
+      index.getHotActorList().then(response => {
+        this.hotActorList =  response.data;
+      });
+
+      index.getHotArticleList().then(response => {
+        this.hotArticleList =  response.data;
+      });
+      const hotPlayMovieQueryParams = { pageNum: 1,pageSize: 8,orderByColumn: 'clickCount',isAsc: 'desc'};
+      movieApi.listMovie(hotPlayMovieQueryParams).then(response => {
+        this.hotPlayMovieList = response.rows;
+        this.hotPlayMovieTotle = response.total;
+      })
     },
     methods: {
       actorFormatter(actorList) {
