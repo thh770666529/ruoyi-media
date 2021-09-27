@@ -11,5 +11,5 @@ RUN mkdir -p /home/thh/projects/file_data
 WORKDIR /home/thh
 # 复制jar文件到路径
 COPY ./jar/ruoyi-admin.jar /home/thh/ruoyi-admin.jar
-# 启动admin服务
-ENTRYPOINT ["java","-jar","ruoyi-admin.jar"]
+# 启动后台服务
+ENTRYPOINT ["java","-jar","ruoyi-admin.jar","--spring.profiles.active=prod"]

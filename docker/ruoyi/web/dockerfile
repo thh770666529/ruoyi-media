@@ -11,5 +11,5 @@ RUN mkdir -p /home/thh/projects/file_data
 WORKDIR /home/thh
 # 复制jar文件到路径
 COPY ./jar/ruoyi-web.jar /home/thh/ruoyi-web.jar
-# 启动认证服务
-ENTRYPOINT ["java","-jar","ruoyi-web.jar"]
+# 启动门户服务
+ENTRYPOINT ["java","-jar","ruoyi-web.jar","--spring.profiles.active=prod"]
