@@ -1,83 +1,61 @@
-<!-- svg-sprite 图标 -->
-<!-- 单色模式(非'mt-'前缀)，大小继承至 font-size，颜色继承至 color -->
-<!-- 多色模式('mt-'前缀)，大小继承至 font-size，颜色则原始显示 -->
+<template>
+  <div v-if="isExternal" :style="styleExternalIcon" class="svg-external-icon svg-icon" v-on="$listeners" />
+  <svg v-else :class="svgClass" aria-hidden="true" v-on="$listeners">
+    <use :xlink:href="iconName" />
+  </svg>
+</template>
 
 <script>
-let requireCtx
-try {
-  requireCtx = require.context(
-    './icons/',
-    false, // 不解析子文件夹
-    /\.svg$/,
-  )
-} catch (err) {
-  if (
-    /* 允许文件夹缺失（处理 git 无法提交空文件夹的情况） */
-    err.code === 'MODULE_NOT_FOUND'
-  ) {
-    requireCtx = () => {}
-    requireCtx.keys = () => []
-  } else {
-    throw err
-  }
-}
+import { isExternal } from '@/utils/validate'
 
-const fileNames = requireCtx.keys()
-const names = Object.freeze(
-  fileNames.map(fileName =>
-    fileName
-      .split(/[/\\]+/)
-      .pop()
-      .replace(/\.\w+$/, ''),
-  ),
-)
-fileNames.forEach(fileName => requireCtx(fileName))
-
-export { names }
 export default {
   name: 'SvgIcon',
   props: {
-    icon: {
+    iconClass: {
       type: String,
-      required: true,
+      required: true
     },
+    className: {
+      type: String,
+      default: ''
+    }
   },
+  computed: {
+    isExternal() {
+      return isExternal(this.iconClass)
+    },
+    iconName() {
+      return `#icon-${this.iconClass}`
+    },
+    svgClass() {
+      if (this.className) {
+        return 'svg-icon ' + this.className
+      } else {
+        return 'svg-icon'
+      }
+    },
+    styleExternalIcon() {
+      return {
+        mask: `url(${this.iconClass}) no-repeat 50% 50%`,
+        '-webkit-mask': `url(${this.iconClass}) no-repeat 50% 50%`
+      }
+    }
+  }
 }
 </script>
 
-<template>
-  <i :class="['svg-icon', `svg-icon-${icon}`]">
-    <svg class="svg-icon__icon">
-      <use :xlink:href="`#svgSpriteIcon__${icon}`" />
-    </svg>
-  </i>
-</template>
-
-<style lang="less">
+<style scoped>
 .svg-icon {
-  display: inline-block;
   width: 1em;
   height: 1em;
-  vertical-align: -0.165em;
-  font-style: normal;
-  line-height: 1;
-  &__icon {
-    display: block;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-    fill: currentColor;
-  }
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
 
-[id^='svgSpriteIcon__']:not([id^='svgSpriteIcon__mt-']) {
-  // svgo-loader 会自动计算内联样式并应用到 fill 属性上
-  [fill]:not([fill='none']):not([fill='transparent']) {
-    fill: currentColor;
-  }
-  // svgo-loader 会自动计算内联样式并应用到 stroke 属性上
-  [stroke]:not([stroke='none']):not([stroke='transparent']) {
-    stroke: currentColor;
-  }
+.svg-external-icon {
+  background-color: currentColor;
+  mask-size: cover!important;
+  display: inline-block;
 }
 </style>

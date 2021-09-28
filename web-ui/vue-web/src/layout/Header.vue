@@ -57,28 +57,57 @@
           <input class="submit" type="submit" value="">
         </div>
       </div>
-      <div class="userimg">
-        <img src="../assets/styles/images/user.png" alt=""/>
+      <!--<div  class="userimg">
+        <img :src="fileUploadHost + avatar" alt=""/>
         <span class="caret"></span>
       </div>
       <div class="userlogin">
-        <a href="login.html" class=" notlogin">登录</a>
-        <div class="islogin nologin">
+        <a v-if="!isLogin" href="/login" class=" notlogin">登录</a>
+        <div v-if="isLogin" class="islogin nologin">
           <a href="personal.html">个人中心</a>
-          <a href="index.html">退出</a>
+          <a href="/logout">退出</a>
         </div>
-      </div>
+      </div>-->
+
+      <ul class="h-r-login">
+        <li v-if="!isLogin">
+          <a href="/login" tag="a" title="登录">
+            <em class="icon18 login-icon">&nbsp;</em>
+            <span class="vam ml5">登录</span>
+          </a>
+          |
+          <router-link to="/register" tag="a" title="注册">
+            <span class="vam ml5">注册</span>
+          </router-link>
+        </li>
+        <li v-if="isLogin" class="h-r-user">
+          <el-dropdown trigger="click" @command="handleCommand" >
+            <span class="el-dropdown-link">
+
+              <img style="width: 30px;height: 30px"
+                class="avatar"
+                :src="avatar"/>
+              {{ name }}
+            </span>
+            <el-dropdown-menu  slot="dropdown">
+              <el-dropdown-item command="ucenter" icon="el-icon-user-solid">个人中心</el-dropdown-item>
+              <el-dropdown-item command="logout" icon="el-icon-remove-outline">退出</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </li>
+      </ul>
+
     </div>
   </header>
 </template>
 
 <script>
 import  '@/assets/styles/css/clear.css';
+import { mapGetters } from 'vuex'
 export default {
   name: "Header",
   data() {
     return {
-      isLogin: false,
       searchList: [],
       state: '',
       timeout: null,
@@ -94,17 +123,63 @@ export default {
         routePath = routePath.substring(0, routePath.indexOf('/', 1));
       }
       return routePath;
-    }
+    },
+    ...mapGetters([
+      'name',
+      'avatar',
+      'isLogin'
+    ])
   },
 
   mounted() {
   },
 
   methods: {
+    handleCommand(command){
+      if (!this.isLogin){
+        //如果没有登录 则转到登录页面
+        window.location.href = '/login'
+      }
+      switch (command) {
+        case 'ucenter':
+          window.open('/ucenter', '_blank')
+          break
+        case 'editPassword':
+          window.open("/ucenter/editPassword", '_blank')
+          break
+        case 'movie':
+          // 以新窗口方式 打开编辑文章窗口
+          window.open('/movie', '_blank')
+          break
+        case 'actor':
+          window.open('/actor', '_blank')
+          break
+        case 'logout':
+          this.$store.dispatch('LogOut').then(() => {
+            this.msgInfo("退出成功！")
+          }).catch(err => {
+          })
+          break
+        default:
+          break
+      }
+    }
   },
 
 }
 </script>
 
 <style scoped>
+  .avatar{
+    margin: 0 auto;
+    border-radius: 50%;
+  }
+  .h-r-login li a:hover,.nav li a:hover,.nav li.current a{text-decoration:none}
+  .h-r-login,.h-r-search{float:right;padding-top:22px}
+  .h-r-login li{float:left;margin-left:10px;position:relative}
+  .h-r-login li a{cursor:pointer;line-height:50px;color:#666;font-size:16px;transition:.3s;-webkit-transition:.3s}
+  .h-r-login li.h-r-user a img{border-radius:50%;width:30px;height:30px}
+  .h-r-login li.h-r-user span{max-width:60px;height:17px;font-size:16px;line-height:16px;overflow:hidden}
+  .red-point{position:absolute;right:-4px;top:8px;display:block;width:8px;height:8px;border-radius:50%;background:#cb2020;text-indent:-9999px}
+
 </style>

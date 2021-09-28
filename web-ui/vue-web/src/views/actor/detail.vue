@@ -98,7 +98,6 @@
           this.countryOptions = response.data.movie_country
         });
         const actorId = this.$route.params && this.$route.params.actorId;
-        this.msgSuccess(actorId)
         getActor(actorId).then(response => {
           this.actor = response.data
         });

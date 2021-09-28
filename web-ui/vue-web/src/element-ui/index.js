@@ -5,12 +5,12 @@ import {
   // Alert,
   // Aside,
   // Autocomplete,
-  // Avatar,
+   Avatar,
   // Backtop,
   // Badge,
   // Breadcrumb,
   // BreadcrumbItem,
-  // Button,
+   Button,
   // ButtonGroup,
   // Calendar,
      Card,
@@ -30,19 +30,19 @@ import {
   // Dialog,
   // Divider,
   // Drawer,
-  // Dropdown,
-  // DropdownItem,
-  // DropdownMenu,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
   // Footer,
-  // Form,
-  // FormItem,
+   Form,
+   FormItem,
   // Header,
-  // Icon,
-  // Image,
+   Icon,
+   Image,
   // InfiniteScroll,
-  // Input,
+   Input,
   // InputNumber,
-  // Link,
+   Link,
   Loading,
   // Main,
    Menu,
@@ -90,12 +90,12 @@ import './rewrite/index.less'
 // Vue.use(Alert)
 // Vue.use(Aside)
 // Vue.use(Autocomplete)
-// Vue.use(Avatar)
+ Vue.use(Avatar)
 // Vue.use(Backtop)
 // Vue.use(Badge)
 // Vue.use(Breadcrumb)
 // Vue.use(BreadcrumbItem)
-// Vue.use(Button)
+Vue.use(Button)
 // Vue.use(ButtonGroup)
 // Vue.use(Calendar)
  Vue.use(Card)
@@ -115,19 +115,19 @@ import './rewrite/index.less'
 // Vue.use(Dialog)
 // Vue.use(Divider)
 // Vue.use(Drawer)
-// Vue.use(Dropdown)
-// Vue.use(DropdownItem)
-// Vue.use(DropdownMenu)
+ Vue.use(Dropdown)
+ Vue.use(DropdownItem)
+ Vue.use(DropdownMenu)
 // Vue.use(Footer)
-// Vue.use(Form)
-// Vue.use(FormItem)
+ Vue.use(Form)
+ Vue.use(FormItem)
 // Vue.use(Header)
-// Vue.use(Icon)
-// Vue.use(Image)
+ Vue.use(Icon)
+ Vue.use(Image)
 // Vue.use(InfiniteScroll)
-// Vue.use(Input)
+ Vue.use(Input)
 // Vue.use(InputNumber)
-// Vue.use(Link)
+ Vue.use(Link)
 Vue.use(Loading.directive)
 Vue.prototype.$loading = Loading.service
 // Vue.use(Main)

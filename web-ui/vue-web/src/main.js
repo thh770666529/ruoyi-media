@@ -4,11 +4,21 @@ import router from './router'
 import store from './store'
 import App from './App.vue'
 import element from '@/utils/element'
+import './assets/icons' // icon
+import './permission' // permission control
 import '../src/assets/styles/css/global.css'
 import '@/assets/styles/less/index.less'
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
-import ElementUI from 'element-ui' //element-ui的全部组件
+import PayCode from "@/components/PayCode";
+import About from "@/components/About";
+import FourthRecommend from "@/components/FourthRecommend";
+import HotArticle from "@/components/HotArticle";
+import hljs from 'highlight.js';
+import 'highlight.js/styles/atom-one-dark.css' //样式
+
+
+
 
 Vue.config.devtools = process.env.VUE_APP_ENV === 'dev' || process.env.VUE_APP_ENV === 'stage'
 Vue.config.silent = process.env.VUE_APP_ENV === 'prod'
@@ -34,7 +44,10 @@ Vue.prototype.msgInfo = function (msg) {
 
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
-
+Vue.component('PayCode', PayCode);
+Vue.component('About', About);
+Vue.component('FourthRecommend', FourthRecommend);
+Vue.component('HotArticle', HotArticle);
 
 // 全局过滤器设置
 Vue.filter('ellipsis', function (msg, num) {
@@ -49,9 +62,15 @@ Vue.filter('ellipsis', function (msg, num) {
 })
 
 
+Vue.directive('highlight',function(el){
+  let blocks = el.querySelectorAll('pre code');
+  blocks.forEach((block)=>{
+    hljs.highlightBlock(block)
+  })
+})
+
 
 Vue.use(element)
-//Vue.use(ElementUI) //使用elementUI
 new Vue({
   router,
   render: h => h(App),

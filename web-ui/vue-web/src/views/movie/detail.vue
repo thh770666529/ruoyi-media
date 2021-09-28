@@ -73,7 +73,7 @@
             <span>剧集列表</span>
           </div>
           <el-row :gutter="24">
-            <el-col :xs="3" :sm="4" :md="6" :lg="8" :xl="0" style="padding: 8px;" v-for="video in videoList" :key="video.videoId" >
+            <el-col :xs="3" :sm="4" :md="6" :lg="8"  style="padding: 8px;" v-for="video in videoList" :key="video.videoId" >
               <el-button v-if="video.title && video.title.length < 6" @click="play(video.videoId)"  style="margin-bottom: 20px" plain>{{ video.title | ellipsis(6)}}</el-button>
               <el-tooltip v-else :content="video.title" placement="top">
                 <el-button @click="play(video.videoId)"  style="margin-bottom: 20px" plain>{{ video.title | ellipsis(6)}}</el-button>

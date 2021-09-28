@@ -1,18 +1,18 @@
 <template>
-  <div>
-    <div class="container">
-      <div class="main">
+  <div class="video-body">
+    <el-row type="flex">
+      <!--左边-->
+      <el-col :md="18" :xs="24" :sm="24">
         <div class="mt20">
-          <span class="fsize20">{{ movie.title }}</span>
+          <span class="fsize20">{{movie.title}}</span>
         </div>
-        <!-- 播放器 -->
         <div style="min-height: 529px">
           <video-preview ref="player"></video-preview>
         </div>
-      </div>
+      </el-col>
 
-      <!-- 侧边栏 -->
-      <div class="aside">
+      <!--右边-->
+      <el-col  class="hidden-sm-and-down" :md="6">
         <!--剧情集数-->
         <div class="ml15 mt50">
           <el-menu
@@ -28,15 +28,15 @@
                 <i class="el-icon-film"></i>
                 <span>剧集列表</span>
               </template>
-              <el-menu-item :index="`/video/`+video.videoId" v-for="video in movie.videoList" :key="video.videoId">
+              <el-menu-item  :index="`/video/`+video.videoId" v-for="video in movie.videoList" :key="video.videoId" >
                 <span class="fsize12">{{ video.title | ellipsis(20) }}</span>
               </el-menu-item>
 
             </el-submenu>
           </el-menu>
         </div>
-      </div>
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -143,4 +143,10 @@ export default {
   height: 440px;
   overflow: auto;
 }
+
+.video-body{
+  width: 1200px;
+  margin: auto;
+}
+
 </style>

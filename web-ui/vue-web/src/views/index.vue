@@ -40,14 +40,14 @@
         <!-- 即将上映 -->
         <div class="movie-box">
           <div class="movie-header">
-            <h2>即将上映（{{hotMovieList.length}}部）</h2>
+            <h2>即将上映（{{hotPlayMovieTotle.length}}部）</h2>
             <a href="#">
               <span>全部></span>
             </a>
           </div>
           <div class="movies">
 
-            <div class="movies-model" v-for="movie in hotMovieList" :key="movie.movieId">
+            <div class="movies-model" v-for="movie in hotPlayMovieTotle" :key="movie.movieId">
               <a href="">
                 <div class="movie-poster">
                   <img :src="fileUploadHost + movie.images" />
