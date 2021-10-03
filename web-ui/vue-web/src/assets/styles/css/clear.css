@@ -70,10 +70,13 @@ table {
     table-layout: fixed;
 }
 
-input,
-textarea {
+/*input, textarea {
     outline: none;
     border: none;
+}*/
+input {
+  outline: none;
+  border: none;
 }
 
 textarea {

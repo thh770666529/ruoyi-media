@@ -164,7 +164,7 @@
       <el-table-column label="主键" align="center" prop="articleId" />
       <el-table-column label="标题图" align="center" prop="images" width="100">
         <template slot-scope="scope">
-          <el-image :src="fileUploadHost + scope.row.images" lazy />
+          <el-image :src="fileUploadHost + scope.row.images" lazy @click="previewPicture(fileUploadHost + scope.row.images)" />
         </template>
       </el-table-column>
       <el-table-column label="标题" align="center" prop="title" />

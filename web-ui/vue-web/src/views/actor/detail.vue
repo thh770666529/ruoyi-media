@@ -26,7 +26,7 @@
       <section class="mt30">
         <div class="comm-title">
           <h2 class="fl actor">
-            <span class="c-333">主演电影</span>
+            <span class="c-333">参与电影</span>
           </h2>
           <section class="c-tab-title">
             <a href="javascript: void(0)">&nbsp;</a>

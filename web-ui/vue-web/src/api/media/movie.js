@@ -26,13 +26,27 @@ export default {
   },
 
   // 查询演员相关电影
-  getListByActorId(actorId) {
+  getListByActorId(movieId) {
     return request({
-      url: '/media/movie/getListByActorId/' + actorId,
+      url: '/media/movie/getListByActorId/' + movieId,
       method: 'get'
     })
-  }
+  },
 
+  // 查询相关电影列表
+  getSameTypeMovieList(movieId) {
+    return request({
+      url: '/media/movie/getSameTypeMovieList/' + movieId,
+      method: 'get'
+    })
+  },
+  checkPassword(param) {
+    return request({
+      url: '/media/movie/checkPassword',
+      method: 'get',
+      params: param
+    })
+  }
 }
 
 

@@ -1,13 +1,13 @@
 <template>
   <div class="video-body">
-    <el-row type="flex">
+    <el-row type="flex" v-if="!dialogVideoFile.visible">
       <!--左边-->
       <el-col :md="18" :xs="24" :sm="24">
         <div class="mt20">
           <span class="fsize20">{{movie.title}}</span>
         </div>
         <div style="min-height: 529px">
-          <video-preview ref="player"></video-preview>
+          <video-preview ref="player" :autoplay="!dialogVideoFile.visible"></video-preview>
         </div>
       </el-col>
 
@@ -37,6 +37,31 @@
         </div>
       </el-col>
     </el-row>
+    <!-- 视频秘钥对话框 -->
+    <el-dialog
+      title="视频密码"
+      :visible.sync="dialogVideoFile.visible"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="500px"
+    >
+      <el-form
+        class="extraction-code-form"
+        ref="passwordForm"
+        :model="dialogVideoFile.passwordForm"
+        :rules="dialogVideoFile.passwordFormRules"
+        label-width="80px"
+      >
+        <el-form-item label="密码" prop="password">
+          <el-input show-password @keyup.enter.native="handleSubmitBtnClick('passwordForm')" v-model="dialogVideoFile.passwordForm.password"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button plain type="primary" @click.native.prevent="handleSubmitBtnClick('passwordForm')">提 交</el-button>
+        <el-button plain type="primary" @click="handleCloseBtnClick()">关 闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -63,13 +88,29 @@ export default {
       videoPreviewList: [],
       // 评论
       showCancel: false,
-      webConfig: {}
+      webConfig: {},
+      // 文件分享对话框数据
+      dialogVideoFile: {
+        visible: false,
+        passwordForm: {
+          password: ''
+        },
+        passwordFormRules: {
+          password: [
+            {
+              required: true,
+              message: '请输入密码',
+              trigger: 'blur'
+            }
+          ]
+        }
+      }
     }
   },
   created() {
     this.videoId = this.$route.params && this.$route.params.videoId;
     getWebConfig().then(response => {
-      let data = response.data
+      let data = response.data;
       if (data.showList) {
         let showList = JSON.parse(data.showList);
         let loginTypeList = JSON.parse(data.loginTypeList);
@@ -97,33 +138,44 @@ export default {
       movieApi.getMovieVideo(videoId).then(response => {
         this.video = response.data.video;
         this.movie = response.data.movie;
-        this.videoPreviewList = []
-        const openSteamMedia = this.webConfig.openSteamMedia;
-        if (openSteamMedia === '1') {
-          if (this.video.superDefinitionUrl) {
-            this.addVideoPreview('超清', this.fileUploadHost + this.video.superDefinitionUrl, 'application/x-mpegURL');
-          }
-          if (this.video.highDefinitionUrl) {
-            this.addVideoPreview('高清', this.fileUploadHost + this.video.highDefinitionUrl, 'application/x-mpegURL');
-          }
-          if (this.video.standardDefinitionUrl) {
-            this.addVideoPreview('标清', this.fileUploadHost + this.video.standardDefinitionUrl, 'application/x-mpegURL');
-          }
-        } else {
-          this.addVideoPreview('原文件', this.fileUploadHost + this.video.url, 'video/mp4');
+        const passwordFlag = this.getCookies(`movie_password${this.movie.movieId}`);
+        if (passwordFlag  === 'true'){
+          this.playVideo();
+          this.dialogVideoFile.visible = false;
+        }else if (this.movie.openPassword == 1){
+          this.dialogVideoFile.visible = true;
+        }else {
+          this.playVideo();
         }
-        let data = {
-          videoPreviewVisible: true,
-          videoPreviewList: this.videoPreviewList,
-          activeIndex: 0,
-          openSteamMedia: openSteamMedia
-        };
-        if (!this.videoPreviewList.length) {
-          this.msgError("没有转化好的视频文件，请联系管理员！");
-          data.videoPreviewVisible = false
-        }
-        this.$store.commit('setVideoPreviewData', data)
       });
+    },
+    playVideo() {
+      this.videoPreviewList = []
+      const openSteamMedia = this.webConfig.openSteamMedia;
+      if (openSteamMedia === '1') {
+        if (this.video.superDefinitionUrl) {
+          this.addVideoPreview('超清', this.fileUploadHost + this.video.superDefinitionUrl, 'application/x-mpegURL');
+        }
+        if (this.video.highDefinitionUrl) {
+          this.addVideoPreview('高清', this.fileUploadHost + this.video.highDefinitionUrl, 'application/x-mpegURL');
+        }
+        if (this.video.standardDefinitionUrl) {
+          this.addVideoPreview('标清', this.fileUploadHost + this.video.standardDefinitionUrl, 'application/x-mpegURL');
+        }
+      } else {
+        this.addVideoPreview('原文件', this.fileUploadHost + this.video.url, 'video/mp4');
+      }
+      let data = {
+        videoPreviewVisible: true,
+        videoPreviewList: this.videoPreviewList,
+        activeIndex: 0,
+        openSteamMedia: openSteamMedia
+      };
+      if (!this.videoPreviewList.length) {
+        this.msgError("没有转化好的视频文件，请联系管理员！");
+        data.videoPreviewVisible = false
+      }
+      this.$store.commit('setVideoPreviewData', data);
     },
     addVideoPreview(name, url, type) {
       let data = {
@@ -131,9 +183,34 @@ export default {
         type: type,
         src: url,
         name: name
-      }
+      };
       this.videoPreviewList.push(data)
-    }
+    },
+    handleCloseBtnClick() {
+      this.dialogVideoFile.visible = false
+      this.$router.push({ path: '/movie/' + this.movie.movieId, query: {} })
+    },
+    handleSubmitBtnClick(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          movieApi.checkPassword({
+            password: this.dialogVideoFile.passwordForm.password,
+            movieId: this.movie.movieId
+          }).then(res => {
+            if (res.code === 200){
+              this.playVideo();
+              this.resetForm(formName);//  清空表单
+              this.dialogVideoFile.visible = false
+              this.setCookies(`movie_password${this.movie.movieId}`, true);
+            }else {
+              this.msgError(res.msg)
+            }
+          });
+        } else {
+          return false
+        }
+      })
+    },
   }
 }
 </script>

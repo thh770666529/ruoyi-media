@@ -126,7 +126,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="images" label="封面" align="center" width="100">
         <template slot-scope="scope">
-          <el-image :src="fileUploadHost + scope.row.images" lazy />
+          <el-image :src="fileUploadHost + scope.row.images" lazy @click="previewPicture(fileUploadHost + scope.row.images)" />
         </template>
       </el-table-column>
       <el-table-column label="标题" align="left" show-overflow-tooltip  prop="title" width="200" />

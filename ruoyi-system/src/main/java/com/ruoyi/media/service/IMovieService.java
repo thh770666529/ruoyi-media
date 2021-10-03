@@ -71,5 +71,17 @@ public interface IMovieService extends IService<Movie>
      */
     int removeActorList(Long[] actorIds);
 
+    /**
+     * 获取演员参演的电影
+     * @param actorId
+     * @return
+     */
     List<MovieVO> getListByActorId(Long actorId);
+
+    /**
+     * 获取相关类型的电影
+     * @param movieId 电影id
+     * @return
+     */
+    List<Movie> getSameTypeMovieList(Long movieId);
 }

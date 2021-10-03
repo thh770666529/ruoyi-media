@@ -26,6 +26,7 @@
             style="margin: 0 0 5px 3px"
             :key="item.dictValue"
             :index="index"
+            size="small"
             @click="getListByTag(item.tagId)"
             :type="item.listClass == 'primary' ? '' : item.listClass"
             :class="item.cssClass">

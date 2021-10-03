@@ -206,7 +206,6 @@ export default {
   },
    data() {
      return {
-       isbuy: false,
        activeName: 'description',
        // 评论
        showCancel: false,
@@ -263,7 +262,7 @@ export default {
          }
        });
      },
-     getCommentList: function () {
+     getCommentList() {
        let params = {};
        params.targetId = this.commentInfo.targetId
        treeListComment(params).then(response => {

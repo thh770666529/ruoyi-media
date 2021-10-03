@@ -93,7 +93,7 @@ export default {
     //博客点赞
     praiseBlog: function(articleId) {
       // 判断用户是否登录
-      let isLogin = this.$store.state.isLogin;
+      let isLogin = this.$store.getters.isLogin;
       if (!isLogin){
         this.$notify.error({
           title: '警告',

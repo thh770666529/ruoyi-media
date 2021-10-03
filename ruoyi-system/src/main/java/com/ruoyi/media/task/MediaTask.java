@@ -1,6 +1,7 @@
 package com.ruoyi.media.task;
 
 import com.ruoyi.common.config.RuoYiConfig;
+import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.FfmpegConstant;
 import com.ruoyi.common.enums.FfmpegResolutionEnum;
 import com.ruoyi.common.enums.VideoStatus;
@@ -11,10 +12,13 @@ import com.ruoyi.common.utils.ffmpeg.VideoSize;
 import com.ruoyi.common.utils.ffmpeg.VideoUtils;
 import com.ruoyi.media.domain.Video;
 import com.ruoyi.media.mapper.VideoMapper;
+import com.ruoyi.website.domain.WebConfig;
+import com.ruoyi.website.service.IWebConfigService;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.io.File;
@@ -32,10 +36,18 @@ public class MediaTask {
 
     private static final Logger log = LoggerFactory.getLogger(MediaTask.class);
 
+    @Autowired
+    private IWebConfigService webConfigService;
+
     @Resource
     private VideoMapper videoMapper;
 
     public void convertVideoList(){
+        WebConfig webConfig = webConfigService.getWebConfig();
+        String openSteamMedia = webConfig.getOpenSteamMedia();
+        if (Constants.COMMON_SWITCH_CLOSE.equals(openSteamMedia)) {
+            return;
+        }
         Video videoCondition = new Video();
         videoCondition.setStatus(VideoStatus.READY_CONVERT.getCode());
         List<Video> videoList = videoMapper.selectVideoList(videoCondition);

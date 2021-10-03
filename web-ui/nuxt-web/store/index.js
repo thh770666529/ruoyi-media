@@ -84,7 +84,7 @@ const actions = {
        //跳转到认证用户端（登录页） redirecURL 作为登录参数 参数值是引发跳转的地址
       //window 是属于浏览器对象 所以触发时 只能在客户端触发
       window.location.href = `http://localhost:3000/login?redirectURL=${window.location.href}`
-    },
+  },
   Login({ commit }, loginUser) {
     const username = loginUser.username.trim()
     const password = loginUser.password

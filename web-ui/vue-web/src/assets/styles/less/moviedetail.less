@@ -117,12 +117,11 @@
 
 }
 .container{
-
     display: flex;
     justify-content: space-between;
     // 左部主题内容
     .main{
-        width: 730px;
+        width: 740px;
         // 标签导航
         .nav{
             margin-bottom: 20px;
@@ -161,28 +160,27 @@
             margin-bottom: 60px;
             .director{
                 display: inline-block;
-                width: 128px;
                 p{
                 font-size: 16px;
                 margin-bottom: 10px;
                 }
                 .director-img{
+                  margin-right: 20px;
+                  display: inline-block;
                     p{
                         text-align: center;
                     }
                 }
             }
             .starts{
-                display: inline-block;
                 vertical-align: top;
-            margin-left: 30px;
-
                 p{
                     font-size: 16px;
                     margin-bottom: 10px;
                 }
 
                 .start{
+                  margin-right: 20px;
                     display: inline-block;
                     p{
                         text-align: center;
@@ -458,19 +456,44 @@
             }
         }
         .other-movie{
-            .othermovie-model{
+          ul {
+            width: 100%;
+            margin: 10px 10px 0 0;
+            display: flex;
+            flex-wrap: wrap;
+
+            .othermovie-model {
+
+              width: 106px;
+              text-align: center;
+              margin: 3px 3px 0 0;
+              position: relative;
+
+              img {
+                width: 100%;
+              }
+
+              .movie-poster {
+                background-color: #fcfcfc;
                 width: 106px;
-                text-align: center;
-                a{
-                    p{
-                        height: 30px;
-                        line-height: 30px;
-                    }
+                height: 145px;
+                overflow: hidden;
+                position: relative;
+              }
+              text-align: center;
+
+              a {
+                p {
+                  height: 30px;
+                  line-height: 30px;
                 }
-                i{
-                    color: #ffb400;
-                }
+              }
+
+              i {
+                color: #ffb400;
+              }
             }
+          }
         }
 
     }

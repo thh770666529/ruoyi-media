@@ -56,7 +56,7 @@ export default {
           params.append("articleId", article.articleId);
           window.open(article.outsideLink, '_blank');
         }
-      },
+      }
     }
 }
 </script>

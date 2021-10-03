@@ -136,4 +136,8 @@ public class Movie extends BaseEntity
     @TableField(exist = false)
     private List<String> tagIdList;
 
+    /** 查询发布年 */
+    @TableField(exist = false)
+    private String publishYear;
+
 }

@@ -27,7 +27,7 @@ import {
   // ColorPicker,
   // Container,
   // DatePicker,
-  // Dialog,
+   Dialog,
   // Divider,
   // Drawer,
   Dropdown,
@@ -112,7 +112,7 @@ Vue.use(Button)
 // Vue.use(ColorPicker)
 // Vue.use(Container)
 // Vue.use(DatePicker)
-// Vue.use(Dialog)
+ Vue.use(Dialog)
 // Vue.use(Divider)
 // Vue.use(Drawer)
  Vue.use(Dropdown)

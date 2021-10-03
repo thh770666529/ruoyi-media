@@ -155,4 +155,12 @@ public class Constants
      */
     public static final String WEB_CONFIG_KEY = "web_config";
 
+    /**
+     * 通用开关(开启)
+     */
+    public static final String COMMON_SWITCH_OPEN = "1";
+    /**
+     * 通用开关(关闭)
+     */
+    public static final String COMMON_SWITCH_CLOSE = "0";
 }

@@ -8,24 +8,24 @@
         <div class="bloginfo">
           <ul>
             <li class="author">
-              <span class="iconfont"></span>
+              <span class="iconfont">&#xe60f; </span>
               <a href="javascript:void(0);" >{{article.author}}</a>
             </li>
             <li class="lmname">
-              <span class="iconfont"></span>
+              <span class="iconfont">&#xe603; </span>
               <a href="javascript:void(0);"
               >{{article.categoryData ? article.categoryData.name: ""}}</a>
             </li>
-            <li class="timer">
-              <span class="iconfont"></span>
+            <li class="createTime">
+              <span class="iconfont">&#xe606; </span>
               {{article.createTime}}
             </li>
             <li class="view">
-              <span class="iconfont"></span>
+              <span class="iconfont">&#xe8c7; </span>
               {{article.clickCount}}
             </li>
             <li class="like">
-              <span class="iconfont"></span>
+              <span class="iconfont">&#xe663; </span>
               {{article.collectCount}}
             </li>
           </ul>
@@ -49,17 +49,17 @@
           v-highlight
         ></div>
       </div>
-      </el-card>
         <!--付款码和点赞-->
         <PayCode  :articleId="articleId" :praiseCount.sync="article.collectCount"></PayCode>
+      </el-card>
         <el-card class="box-card">
           <div class="otherlink" v-if="sameBlogList.length > 0">
             <h2>相关文章</h2>
             <ul>
               <li v-for="item in sameBlogList" :key="item.articleId">
-              <!--<a href="javascript:void(0);"
+              <a href="javascript:void(0);"
                 @click="goToInfo(item)"
-                :title="item.title">{{item.title | ellipsis(18)}}</a>-->
+                :title="item.title">{{item.title | ellipsis(18)}}</a>
             </li>
           </ul>
         </div>
@@ -67,7 +67,6 @@
       </el-col>
       <el-col  class="hidden-sm-and-down" :offset="1" :span="6">
           <side-catalog
-            height="580px"
             class="catalog"
             v-bind="catalogProps">
           </side-catalog>
@@ -90,7 +89,8 @@
         },
         articleId: undefined,
         sameBlogList: [],
-        article: {}
+        article: {},
+
       }
     },
     computed: {
@@ -104,18 +104,17 @@
       }
     },
     mounted () {
-
     },
     created() {
+     this.articleId = this.$route.params && this.$route.params.articleId;
      this.initInfo();
     },
     methods: {
       initInfo() {
-        const articleId = this.$route.params && this.$route.params.articleId;
-         getArticle(articleId).then(response => {
+         getArticle(this.articleId).then(response => {
           this.article = response.data;
         });
-        getSameArticleList(articleId).then(response => {
+        getSameArticleList(this.articleId).then(response => {
           this.sameBlogList = response.data;
         });
       },
@@ -173,18 +172,12 @@
   .catalog {
     position: fixed;
     margin-left: 20px;
-    /*max-height: 700px*/
+    max-height: 400px;
+    overflow:auto;
+    /*border:1px solid #0f74ff*/
   }
-  .catalog2 {
-    position: fixed;
-    margin-left: 20px;
-    top: 70px;
-  }
-  .catalog3 {
-    position: fixed;
-    margin-left: 20px;
-    top: 20px;
-  }
+
+
   .line-style {
     display: inline-block;
     height: 20px;
@@ -195,7 +188,7 @@
     background: currentColor;
   }
   .article-container {
-    width: 1440px;
+    width: 1300px;
     margin: auto;
   }
 
@@ -356,29 +349,6 @@
   .bloginfo ul li a:hover {
     color: #000
   }
-
-  .bloginfo .author {
-    background: url(../../assets/img/blog/auicon.jpg) no-repeat 0 0
-  }
-
-  .bloginfo .lmname {
-    background: url(../../assets/img/blog/auicon.jpg) no-repeat top -23px left;
-  }
-
-  .bloginfo .timer {
-    background: url(../../assets/img/blog/auicon.jpg) no-repeat top -44px left;
-  }
-
-  .bloginfo .view {
-    background: url(../../assets/img/blog/auicon.jpg) no-repeat top -64px left;
-  }
-
-  .bloginfo .like {
-    background: url(../../assets/img/blog/auicon.jpg) no-repeat top -85px left;
-  }
-
-
-
 
   .otherlink, .xzsm, .ffsm {
     width: 100%;

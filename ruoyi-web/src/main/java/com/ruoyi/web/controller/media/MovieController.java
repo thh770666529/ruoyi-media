@@ -1,15 +1,26 @@
 package com.ruoyi.web.controller.media;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.file.domain.Share;
+import com.ruoyi.file.dto.CheckEndTimeDTO;
+import com.ruoyi.file.dto.CheckExtractionCodeDTO;
+import com.ruoyi.media.domain.Movie;
 import com.ruoyi.media.domain.Video;
 import com.ruoyi.media.domain.vo.MovieVO;
 import com.ruoyi.media.service.IMovieService;
 import com.ruoyi.media.service.IVideoService;
+import com.ruoyi.media.vo.CheckPasswordVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +33,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/media/movie")
+@Slf4j
 public class MovieController extends BaseController
 {
     @Autowired
@@ -75,5 +87,25 @@ public class MovieController extends BaseController
         data.put("video",video);
         data.put("movie",movieVO);
         return AjaxResult.success(data);
+    }
+
+    @GetMapping("/getSameTypeMovieList/{movieId}")
+    public AjaxResult getSameTypeMovieList(@PathVariable("movieId") Long movieId){
+        log.info("门户获取相关电影");
+        return AjaxResult.success(movieService.getSameTypeMovieList(movieId));
+    }
+
+    @Log(title = "校验密码", businessType = BusinessType.PASSWORD)
+    @GetMapping(value = "/checkPassword")
+    public AjaxResult checkExtractionCode(CheckPasswordVO checkPasswordVO) {
+        LambdaQueryWrapper<Movie> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Movie::getMovieId, checkPasswordVO.getMovieId())
+                .eq(Movie::getPassword, checkPasswordVO.getPassword());
+        List<Movie> list = movieService.list(lambdaQueryWrapper);
+        if (list.isEmpty()) {
+            return error("校验失败");
+        } else {
+            return success();
+        }
     }
 }

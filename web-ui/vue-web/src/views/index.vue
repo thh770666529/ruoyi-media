@@ -16,9 +16,15 @@
     <!-- 页面主体 -->
     <div class="container">
       <div class="main">
+
         <!-- 正在热映 -->
         <div class="hot-movie">
-          <h2>正在热映（{{hotPlayMovieTotle}}部）</h2>
+          <div class="movie-header">
+            <h2>正在热映（{{hotPlayMovieTotle}}部）</h2>
+            <a href="/movie">
+              <span>全部></span>
+            </a>
+          </div>
           <div class="movie-list">
             <div class="movie-item" v-for="movie in hotPlayMovieList" :key="movie.movieId">
               <a :href="`/movie/` + movie.movieId">
@@ -26,7 +32,7 @@
                   <img :src="fileUploadHost + movie.images" />
                   <div class="movie-overlay movie-overlay-bg">
                     <div class="movie-info">
-                      <div class="movie-score"><i class="integer">8.</i><i class="fraction">7</i></div>
+                      <div class="movie-score"><i class="integer">{{rateFormatter(movie.rate, 0)}}</i><i class="fraction">{{rateFormatter(movie.rate, 1)}}</i></div>
                       <div class="movie-title" :title="movie.title">{{ movie.title }}</div>
                     </div>
                   </div>
@@ -40,17 +46,17 @@
         <!-- 即将上映 -->
         <div class="movie-box">
           <div class="movie-header">
-            <h2>即将上映（{{hotPlayMovieTotle.length}}部）</h2>
-            <a href="#">
+            <h2>即将上映（{{hotPlayMovieTotle}}部）</h2>
+            <a href="/movie">
               <span>全部></span>
             </a>
           </div>
           <div class="movies">
 
-            <div class="movies-model" v-for="movie in hotPlayMovieTotle" :key="movie.movieId">
-              <a href="">
+            <div class="movies-model" v-for="(movie,index) in hotPlayMovieList" :key="index">
+              <a :href="`/movie/` + movie.movieId">
                 <div class="movie-poster">
-                  <img :src="fileUploadHost + movie.images" />
+                  <img :alt="movie.title" :src="fileUploadHost + movie.images" />
                   <div class="movie-overlay movie-overlay-bg">
                     <div class="movie-info">
                       <div class="movie-title" :title="movie.title">{{ movie.title }}</div>
@@ -66,317 +72,12 @@
 
           </div>
         </div>
-
-        <!-- 热播电影 -->
-        <div class="movie-box">
-          <div class="movie-header c hotmovie ">
-            <h2>热播电影（115部）</h2>
-            <a href="#">
-              <span>全部></span>
-            </a>
-          </div>
-          <div class="movies movies-hot">
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie2.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie3.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie4.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-          </div>
-        </div>
-        <!-- 喜剧电影 -->
-        <div class="movie-box">
-          <div class="movie-header">
-            <h2>喜剧电影（115部）</h2>
-            <a href="#">
-              <span>全部></span>
-            </a>
-          </div>
-          <div class="movies">
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie2.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie3.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie4.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-          </div>
-        </div>
-        <!-- 动作电影 -->
-        <div class="movie-box">
-          <div class="movie-header c hotmovie ">
-            <h2>动作电影（125部）</h2>
-            <a href="#">
-              <span>全部></span>
-            </a>
-          </div>
-          <div class="movies movies-hot">
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie2.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie3.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie4.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-          </div>
-        </div>
-        <!-- 恐怖片 -->
-        <div class="movie-box">
-          <div class="movie-header">
-            <h2>恐怖电影（115部）</h2>
-            <a href="#">
-              <span>全部></span>
-            </a>
-          </div>
-          <div class="movies">
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie2.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie3.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie4.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-            <div class="movies-model">
-              <a href="">
-                <img src="../assets/styles/images/hotmovie1.png" alt="" srcset="">
-              </a>
-              <p>9.0分</p>
-              <button class="buynow">立即购票</button>
-
-            </div>
-          </div>
-        </div>
       </div>
       <!-- 侧边栏 -->
       <div class="aside">
-        <!-- 今日大盘 -->
-        <div class="aside-total">
-          <h2 class="total-nav">今日大盘</h2>
-          <div class="total-body">
-            <h2>0.6 <span>万</span></h2>
-            <span class="more">查看更多></span>
-            <p class="time"><span>北京时间14:48:31</span> <span>猫眼专业版实时票房数据</span></p>
-          </div>
-        </div>
+
+        <!--关注我们-->
+        <About></About>
 
         <!-- top100 -->
         <div class="top">
@@ -384,9 +85,9 @@
           <div class="toplist">
             <ul class="topone">
               <li class=" top-item-first clearfix"  >
-                <a href="#">
+                <a :href="`/movie/` + hotMovieList[0].movieId">
                   <div class="first-item clearfix">
-                    <el-image :src="fileUploadHost + hotMovieList[0].images" style="width: 120px;height: 78px" :alt="hotMovieList[0].title">
+                    <el-image lazy :src="fileUploadHost + hotMovieList[0].images" style="width: 120px;height: 78px" :alt="hotMovieList[0].title">
                       <div slot="error" class="image-slot">
                         <img src="../assets/styles/images/2.jpg" alt="" style="width: 120px;height: 78px" >
                       </div>
@@ -396,8 +97,8 @@
                   <p class="money">{{hotMovieList[0].rate}}分</p>
                 </a>
               </li>
-              <li class="top-item" :key="movie.movieId" v-for="(movie,index) in hotMovieList">
-                <a href="#">
+              <li class="top-item" :key="index" v-for="(movie,index) in hotMovieList">
+                <a :href="`/movie/` + movie.movieId">
                   <div class="index-box">
                     <i v-if="index < 2" class="index index-hot">{{index + 2}}</i>
                     <i v-else class="index">{{index + 2}}</i>
@@ -416,7 +117,7 @@
           <div class="peoplelist">
             <ul class="peoples">
               <li class=" people-item-first clearfix" v-if="hotActorList.length > 0">
-                <a href="#">
+                <a :href="`/actor/` + hotActorList[0].actorId">
                   <div class="first-item clearfix">
                     <img :src="fileUploadHost + hotActorList[0].avatar" alt="" srcset="">
                     <div class="people-overlay">
@@ -428,8 +129,8 @@
                   <p class="name">{{hotActorList[0].name}}</p>
                 </a>
               </li>
-              <li class="people-item" :key="actor.actorId" v-for="(actor,index) in hotActorList">
-                <a href="#">
+              <li class="people-item" :key="index" v-for="(actor,index) in hotActorList">
+                <a :href="`/actor/` + actor.actorId">
                   <div class="index-box">
                     <i v-if="index < 2" class="index index-hot">{{index + 2}}</i>
                     <i v-else class="index">{{index + 2}}</i>
@@ -447,9 +148,9 @@
           <div class="hotspotlist">
             <ul class="hotspots">
               <li class=" hotspot-item-first clearfix" v-if="hotArticleList.length > 0">
-                <a href="#">
+                <a :href="`/article/` + hotArticleList[0].articleId">
                   <div class="first-item clearfix">
-                    <el-image :src="fileUploadHost + hotArticleList[0].images" style="width: 120px;height: 68px" :alt="hotArticleList[0].title">
+                    <el-image lazy :src="fileUploadHost + hotArticleList[0].images" style="width: 120px;height: 68px" :alt="hotArticleList[0].title">
                       <div slot="error" class="image-slot">
                         <img src="../assets/styles/images/login-body-bg.png" alt="" style="width: 120px;height: 68px" >
                       </div>
@@ -459,7 +160,7 @@
                 </a>
               </li>
               <li class="hotspot-item" :key="article.articleId" v-for="(article,index) in hotArticleList" >
-                <a href="#">
+                <a :href="`/article/` + article.articleId">
                   <div class="index-box">
                     <i v-if="index < 2" class="index index-hot">{{index + 2}}</i>
                     <i v-else class="index">{{index + 2}}</i>
@@ -517,6 +218,21 @@
       })
     },
     methods: {
+      rateFormatter(rate, index) {
+        if (!rate){
+          if (index === 1){
+            return '';
+          }
+          return '0';
+        }
+        let number = String(rate);
+        const numberArr = number.split('.');
+        number = numberArr[index];
+        if (!number){
+          return '';
+        }
+        return index===0 ?number:'.' + number;
+      },
       actorFormatter(actorList) {
         if (actorList.length === 0){
           return '无';

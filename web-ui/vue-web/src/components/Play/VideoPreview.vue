@@ -18,9 +18,9 @@
             v-if="videoPreviewVisible&&openSteamMedia==='0'">
           </video-player>
 
-          <div align="center" v-if="!videoPreviewVisible" >
+          <!--<div align="center" v-if=" videoPreviewList.length < 1" >
             <span style="color: red">没有转化好的视频文件，请联系管理员！</span>
-          </div>
+          </div>-->
           <div class="clarity-btn" v-if="videoPreviewVisible && videoPreviewList.length>1" ref="clarityRef">
             清晰度
             <ul class="clarity-list">
@@ -54,6 +54,12 @@
     components: {
       videoPlayer
     },
+    props: {
+      autoplay: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {
         activeIndex: 0, //  当前打开的视频索引  清晰度对应的文件索引和清晰度列表索引
@@ -83,7 +89,7 @@
       playerOptions() {
         return {
           playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
-          autoplay: true, //  如果true,浏览器准备好时开始播放。
+          autoplay: this.autoplay, //  如果true,浏览器准备好时开始播放。
           muted: false, // 默认情况下将会消除任何音频。
           loop: false, // 导致视频一结束就重新开始。
           preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
@@ -120,7 +126,7 @@
     methods: {
       handleChangeClarity(index) {
         this.activeIndex = index //进行切换视频源的操作...
-        var source = this.videoPreviewList[index]
+        const source = this.videoPreviewList[index]
         this.playerOptions.sources[0] = source
       },
       playerReadied(player) {

@@ -7,6 +7,7 @@ const user = {
     name: '',
     avatar: '',
     roles: [],
+    userId: '',
     permissions: []
   },
 
@@ -25,6 +26,9 @@ const user = {
     },
     SET_PERMISSIONS: (state, permissions) => {
       state.permissions = permissions
+    },
+    SET_USERID: (state, userId) => {
+      state.userId = userId
     }
   },
 
@@ -60,13 +64,23 @@ const user = {
           }
           commit('SET_NAME', user.userName)
           commit('SET_AVATAR', avatar)
+          commit('SET_USERID', user.userId)
           resolve(res)
         }).catch(error => {
           reject(error)
         })
       })
     },
+    //跳转到登录页面
+    LoginPage({commit}){
+      return new Promise(resolve => {
+        commit('SET_TOKEN', '')
+        removeToken()
+        resolve();
+        window.location.href = `/login?redirectURL=${window.location.href}`
+      });
 
+    },
     // 退出系统
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {

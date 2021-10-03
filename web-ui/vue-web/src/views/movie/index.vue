@@ -4,17 +4,17 @@
     <div class="movies-nav">
       <div class="nav-body">
         <div class="hotshowing">
-          <a href="#" class="active">
+          <a href="#" :class="defaulActive == `1`?`active`:`` " @click="defaulActive = `1`">
             正在热映
           </a>
         </div>
         <div class="willshow">
-          <a href="#">
+          <a href="#" :class="defaulActive == `2`?`active`:`` " @click="defaulActive = `2`">
             即将上映
           </a>
         </div>
         <div class="oldmovie">
-          <a href="#">
+          <a href="#" :class="defaulActive == `3`?`active`:`` " @click="defaulActive = `3`">
             经典影片
           </a>
         </div>
@@ -50,7 +50,7 @@
             年代:
           </div>
           <ul class="tags">
-            <el-radio-group size="small" fill="#f34d41" @change="getList" v-model="queryParams.time" style="margin-left: 10px">
+            <el-radio-group size="small" fill="#f34d41" @change="getList" v-model="queryParams.publishYear" style="margin-left: 10px">
               <el-radio-button  label="">全部</el-radio-button>
               <el-radio-button  v-for="(item,index) in timeOptions" :key="index" :label="item">{{item}}</el-radio-button>
             </el-radio-group>
@@ -119,10 +119,12 @@
   export default {
     data() {
       return {
+        defaulActive: '1',
         countryOptions: [],
         tagOptions: [],
         categoryOptions: [],
         timeOptions: [
+          '2021',
           '2020',
           '2019',
           '2018',
@@ -153,7 +155,7 @@
           categoryId: '',
           orderByColumn: 'createTime',
           isAsc: 'desc',
-          time: ''
+          publishYear: ''
         }
       }
     },

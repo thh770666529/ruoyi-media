@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.blog.domain.Article;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.MovieActorType;
 import com.ruoyi.media.domain.MovieActor;
@@ -213,6 +216,19 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Override
     public List<MovieVO> getListByActorId(Long actorId) {
         return movieMapper.selectListByActorId(actorId);
+    }
+
+    @Override
+    public List<Movie> getSameTypeMovieList(Long movieId) {
+        MovieVO movieVO = this.selectMovieById(movieId);
+        Integer categoryId = movieVO.getCategoryId();
+        Page<Movie> page = new Page<>(1, 10);
+        QueryWrapper<Movie> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status", 0);
+        queryWrapper.eq("category_id", categoryId);
+        queryWrapper.notIn("movie_id", movieId);
+        queryWrapper.orderByDesc("create_time");
+        return movieMapper.selectPage(page, queryWrapper).getRecords();
     }
 
     /**

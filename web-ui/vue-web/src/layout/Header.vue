@@ -2,7 +2,7 @@
   <header>
     <div class="header-body">
       <a href="/" class="logo">辉皇电影</a>
-      <div class="city">成都
+      <!--<div class="city">成都
         <span class="caret"></span>
       </div>
       <div class="city-list">
@@ -12,7 +12,7 @@
         <div class="citys">
           <span class="icon"></span> 定位失败
         </div>
-      </div>
+      </div>-->
       <div class="nav">
         <el-menu :default-active="defaultActive"
                  mode="horizontal"

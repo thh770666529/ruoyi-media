@@ -38,7 +38,6 @@ public class CategoryController extends BaseController
     /**
      * 获取博客分类详细信息
      */
-    @PreAuthorize("@ss.hasPermi('blog:category:query')")
     @GetMapping(value = "/{categoryId}")
     public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId)
     {

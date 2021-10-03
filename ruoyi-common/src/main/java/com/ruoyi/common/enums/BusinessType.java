@@ -1,5 +1,7 @@
 package com.ruoyi.common.enums;
 
+import sun.security.util.Password;
+
 /**
  * 业务操作类型
  *
@@ -66,6 +68,11 @@ public enum BusinessType
     /**
      * 文件操作
      */
-    File
+    File,
+
+    /**
+     * 密码操作
+     */
+    PASSWORD
 
 }

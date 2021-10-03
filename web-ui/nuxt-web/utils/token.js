@@ -28,8 +28,11 @@ export function getCookies (key) {
 * 设置Cookies
 * */
 export function setCookies (key, value, expiresTime) {
-  let seconds = expiresTime
-  let expires = new Date(new Date() * 1 + seconds * 1000)
+  let tempSeconds = expiresTime
+  if (!expiresTime){
+    tempSeconds = seconds
+  }
+  let expires = new Date(new Date() * 1 + tempSeconds * 1000)
   return Cookies.set(key, value, { expires: expires })
 }
 /*

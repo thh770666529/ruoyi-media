@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 import config from '@/config'
 import { getToken} from '@/utils/auth'
 import { Message } from 'element-ui';
-import TurndownService from'turndown'
+
 // 全局函数
 const globalFunction = {
   previewPicture(url){
@@ -21,26 +21,6 @@ const globalFunction = {
       activeIndex: 0
     };
     this.$store.commit('setImgPreviewData', data)
-  },
-  /**
-   * 将Html转成Markdown文件
-   * @param title：标题
-   * @param text：正文
-   */
-  htmlToMarkdownFile: (title, text) => {
-    title = title || "默认标题"
-    let turndownService = new TurndownService()
-    let markdown = turndownService.turndown(text)
-    //创建一个blob对象,file的一种
-    let blob = new Blob([markdown])
-    let aLink = document.createElement('a')
-    aLink.style.display = 'none'
-    aLink.href = URL.createObjectURL(blob)
-    aLink.setAttribute('download', title + '.md') // 设置下载文件名称
-    document.body.appendChild(aLink)
-    aLink.click()
-    URL.revokeObjectURL(aLink.href);//清除引用
-    document.body.removeChild(aLink);
   },
   /**
    * 格式化文件大小

@@ -141,7 +141,7 @@
               </el-col>
             </el-row>
             <el-form-item v-if="form.openPassword == 1" label="私密密钥" prop="password">
-              <el-input v-model="form.password" placeholder="请输入私密访问时的密钥" />
+              <el-input show-password v-model="form.password" minlength="6" maxlength="12" placeholder="请输入私密访问时的密钥" />
             </el-form-item>
           </el-col>
           <el-col :span="7">
@@ -541,6 +541,10 @@ export default {
         ],
         description: [
           { required: true, message: "简介不能为空", trigger: "blur" }
+        ],
+         password: [
+          { required: true, message: "秘钥不能为空", trigger: "blur" },
+           { min: 6, max: 12, message: '秘钥长度必须介于 6 和 12 之间', trigger: 'blur' }
         ]
       },
       // 表单校验
