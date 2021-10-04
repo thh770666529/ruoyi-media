@@ -122,6 +122,9 @@ export default {
         // 截取一级路由 /movie
         routePath = routePath.substring(0, routePath.indexOf('/', 1));
       }
+      if (routePath === '/video'){
+        return '/movie';
+      }
       return routePath;
     },
     ...mapGetters([
