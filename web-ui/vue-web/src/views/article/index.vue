@@ -4,85 +4,42 @@
       <!--左边-->
       <el-col :span="16" class="mt20">
         <FirstRecommend></FirstRecommend>
-        <span class="ml20 mb20 fsize14" v-if="queryParams.tagId">
+        <div class="ml20 mb20 fsize14" v-if="queryParams.tagId">
           搜索标签值:
-        </span>
-        <el-tag v-if="queryParams.tagId"
-                size="mini">
-            {{tagFormat(queryParams.tagId)}}
-        </el-tag>
-        <!--<el-row class="art-item mt20" v-for="article in articleList" :key="article.articleId">
-            <el-card shadow="hover">
-              <router-link :to="`/article/` + article.articleId" tag="a" target="_blank" class="art-title">
-                {{article.title}}
-              </router-link>
-              <el-row class="art-info d-flex align-items-center justify-content-start">
-                <div class="art-time"><i class="el-icon-user-solid"></i> {{article.author}}</div>
-                <div class="art-time"><i class="el-icon-time"></i> {{ parseTime(article.updateTime, '{y}-{m}-{d}') }}</div>
-                <div class="d-flex align-items-center">
-                  <img class="tag" src="../../assets/img/article/tag.png"/>
-                  <template v-for="(item, index) in tagOptions">
-                    <template v-if="getTagArray(article.tagId).includes(String(item.tagId))">
-                      <span
-                        style="margin-left: 3px"
-                        v-if="item.listClass == 'default' || item.listClass == ''"
-                        :key="item.tagId"
-                        :index="index">{{ item.content }}
-                      </span>
-                      <el-tag
-                        size="mini"
-                        v-else
-                        style="margin-left: 3px"
-                        :key="item.tagId"
-                        :index="index"
-                        :type="item.listClass == 'primary' ? '' : item.listClass"
-                        :class="item.cssClass">
-                        {{ item.content }}
-                      </el-tag>
-                    </template>
-                  </template>
+          <template v-for="(item, index) in tagOptions">
+            <template v-if="[String(queryParams.tagId)].includes(String(item.tagId))">
+              <span
+                v-if="item.listClass == 'default' || item.listClass == ''"
+                :key="item.tagId"
+                :index="index"
+                :class="item.cssClass">{{ item.content }}
+              </span>
+              <el-tag
+                v-else
+                :key="item.tagId"
+                 size="mini"
+                :index="index"
+                :type="item.listClass === 'primary' ? '' : item.listClass"
+                :class="item.cssClass? item.cssClass: ''">
+                {{ item.content }}
+              </el-tag>
+            </template>
+          </template>
 
-                </div>
-              </el-row>
-              <el-row class="art-body">
-                <div class="side-img hidden-sm-and-down">
-                  <el-image lazy class="art-banner" :src="fileUploadHost + article.images" :alt="article.title">
-                    <div slot="error" class="image-slot">
-                      <img class="art-banner" src="../../assets/img/article/vue.jpg">
-                    </div>
-                  </el-image>
-                </div>
-                <div class="side-abstract">
-                  <div class="art-abstract">
-                    {{ article.summary }}
-                  </div>
-                  <div class="art-more">
-                    <router-link :to="`/article/` + article.articleId" tag="a" target="_blank">
-                      <el-button plain>阅读全文</el-button>
-                    </router-link>
-                    <div class="view">
-                      <i class="el-icon-view"></i> {{article.clickCount}}
-                    </div>
-                  </div>
-                </div>
-              </el-row>
-            </el-card>
-            <img v-if="article.level === 1" class="star" src="../../assets/img/article/star.png"/>
-          </el-row>-->
-
+        </div>
         <div
-          v-for="(article,index) in articleList"
+          v-for="(item,index) in articleList"
           :key="index"
           class="art-item"
           data-scroll-reveal="enter bottom over 1s"
         >
           <h3 class="art-title">
-            <a href="javascript:void(0);" @click="goToInfo(article)">{{article.title}}</a>
+            <a href="javascript:void(0);" @click="goToInfo(item)">{{item.title}}</a>
           </h3>
 
           <span class="art-image">
-          <a href="javascript:void(0);" @click="goToInfo(article)" title>
-            <el-image lazy class="art-banner" :src="fileUploadHost + article.images" :alt="article.title">
+          <a href="javascript:void(0);" @click="goToInfo(item)" title>
+            <el-image lazy class="art-banner" :src="fileUploadHost + item.images" :alt="item.title">
               <div slot="error" class="image-slot">
                  <img class="art-banner" src="../../assets/img/article/vue.jpg">
               </div>
@@ -90,34 +47,34 @@
           </a>
         </span>
 
-          <p class="art-text">{{article.summary}}</p>
+          <p class="art-text">{{item.summary}}</p>
           <div class="art-info">
             <ul>
               <li class="author">
                 <span class="iconfont">&#xe60f; </span>
-                <a href="javascript:void(0);">{{article.author}}</a>
+                <a href="javascript:void(0);">{{item.author}}</a>
               </li>
-              <li class="lmname" v-if="article.categoryId">
+              <li class="lmname" v-if="item.categoryId">
                 <span class="iconfont">&#xe603; </span>
                 <a
                   href="javascript:void(0);"
-                >{{article.categoryName}}</a>
+                >{{item.categoryName}}</a>
               </li>
               <li class="view">
                 <span class="iconfont">&#xe8c7; </span>
-                <span>{{article.clickCount}}</span>
+                <span>{{item.clickCount}}</span>
               </li>
               <li class="like">
                 <span class="iconfont">&#xe663; </span>
-                {{article.collectCount}}
+                {{item.collectCount}}
               </li>
               <li class="createTime">
                 <span class="iconfont">&#xe606; </span>
-                {{article.createTime}}
+                {{item.createTime}}
               </li>
             </ul>
           </div>
-          <img v-if="article.level === 1"  class="star" src="../../assets/img/article/star.png"/>
+          <img v-if="item.level === 1"  class="star" src="../../assets/img/article/star.png"/>
         </div>
 
 
@@ -165,7 +122,7 @@
   import FirstRecommend from "@/components/FirstRecommend";
 
   export default {
-    name: 'article',
+    name: 'ArticleList',
     components: {
       tag,
       FirstRecommend
@@ -178,7 +135,7 @@
         queryParams: {
           pageNum: 1,
           pageSize: 8,
-          tagId: null
+          tagId: ''
         },
         loading: false,
         // 标签字典

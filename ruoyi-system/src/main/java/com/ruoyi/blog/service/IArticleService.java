@@ -1,6 +1,8 @@
 package com.ruoyi.blog.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.blog.domain.Article;
 
 /**
@@ -9,7 +11,7 @@ import com.ruoyi.blog.domain.Article;
  * @author thh
  * @date 2021-08-28
  */
-public interface IArticleService
+public interface IArticleService extends IService<Article>
 {
     /**
      * 查询博客文章

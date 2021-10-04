@@ -7,6 +7,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.constant.BaseRedisKeyConstants;
 import com.ruoyi.common.constant.BlogConstants;
 import com.ruoyi.common.constant.Constants;
@@ -16,6 +17,8 @@ import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.ServletUtils;
+import com.ruoyi.media.domain.Movie;
+import com.ruoyi.media.mapper.MovieMapper;
 import com.ruoyi.system.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +33,7 @@ import com.ruoyi.blog.service.IArticleService;
  * @date 2021-08-28
  */
 @Service
-public class ArticleServiceImpl implements IArticleService
+public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  implements IArticleService
 {
     @Autowired
     private ArticleMapper articleMapper;
@@ -69,7 +72,7 @@ public class ArticleServiceImpl implements IArticleService
     public List<Article> selectWebArticleList(Article article) {
         article.setIsPublish("1");
         article.setStatus(1);
-        return articleMapper.selectArticleList(article);
+        return articleMapper.selectWebArticleList(article);
     }
 
     /**
@@ -148,7 +151,7 @@ public class ArticleServiceImpl implements IArticleService
         queryWrapper.eq("is_publish", "1");
         queryWrapper.orderByDesc("create_time");
         //因为首页并不需要显示内容，所以需要排除掉内容字段
-        queryWrapper.select(Article.class, i -> !i.getProperty().equals("content"));
+        queryWrapper.select(Article.class, i -> !i.getProperty().equals("content") && !i.getProperty().equals("password") );
         return articleMapper.selectList(queryWrapper);
     }
 
@@ -165,7 +168,8 @@ public class ArticleServiceImpl implements IArticleService
         queryWrapper.eq("article_id", articleId);
         queryWrapper.eq("status", 1);
         queryWrapper.eq("is_publish", "1");
-        return  articleMapper.selectOne(queryWrapper);
+        queryWrapper.select(Article.class, i -> !i.getProperty().equals("password"));
+        return articleMapper.selectOne(queryWrapper);
     }
 
     @Override

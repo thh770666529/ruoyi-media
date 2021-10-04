@@ -83,7 +83,7 @@
               </div>-->
               <div class="movie-overlay movie-overlay-bg">
                 <div class="movie-info">
-                  <div class="movie-score"><i class="integer">{{ movie.rate }}</i></div>
+                  <div class="movie-score"><span class="fsize12" v-if="!movie.rate">暂无评分</span><i class="integer" v-if="movie.rate">{{ movie.rate}}</i></div>
                   <div class="movie-title"  style="float: left" :title="movie.title">{{ movie.title }}</div>
                 </div>
               </div>

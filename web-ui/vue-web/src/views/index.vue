@@ -32,7 +32,10 @@
                   <img :src="fileUploadHost + movie.images" />
                   <div class="movie-overlay movie-overlay-bg">
                     <div class="movie-info">
-                      <div class="movie-score"><i class="integer">{{rateFormatter(movie.rate, 0)}}</i><i class="fraction">{{rateFormatter(movie.rate, 1)}}</i></div>
+                      <div class="movie-score">
+                        <span class="fsize12" v-if="!movie.rate">暂无评分</span>
+                        <i class="integer">{{rateFormatter(movie.rate, 0)}}</i><i class="fraction">{{rateFormatter(movie.rate, 1)}}</i>
+                      </div>
                       <div class="movie-title" :title="movie.title">{{ movie.title }}</div>
                     </div>
                   </div>
@@ -223,7 +226,7 @@
           if (index === 1){
             return '';
           }
-          return '0';
+          return '';
         }
         let number = String(rate);
         const numberArr = number.split('.');

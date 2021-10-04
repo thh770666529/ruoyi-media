@@ -40,4 +40,10 @@ public class BaseRedisKeyConstants {
     public final static String HOT_BLOG_TAG = "HOT_BLOG_TAG";
 
 
+    /**
+     * 博客点击
+     */
+    public final static String MOVIE_CLICK = "MOVIE_CLICK";
+
+
 }

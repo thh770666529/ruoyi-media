@@ -3,7 +3,7 @@
     <div v-for="item in comments" :key="item.commentId">
       <div class="commentList">
         <span class="left p1">
-          <img v-if="item.user" :src="`http://localhost:7070`+item.user.avatar" onerror="onerror=null;src=defaultAvatar" />
+          <img v-if="item.user" :src="fileUploadHost + item.user.avatar" onerror="onerror=null;src=defaultAvatar" />
           <img v-else :src="defaultAvatar" />
 
         </span>
@@ -24,7 +24,7 @@
 
           <div class="rightCommentList">
             <CommentBox class="commentBoxClass"  :toInfo="toInfo" :id="item.commentId" :commentInfo="commentInfo"
-                        @submit-box="submitBox" @cancel-box="cancelBox"></CommentBox>
+                        :targetId="targetId" :tableName="tableName"         @submit-box="submitBox" @cancel-box="cancelBox"></CommentBox>
 
             <CommentList class="commentStyle" :id="'commentStyle:' + item.commentId" :comments="item.children" :commentInfo="commentInfo"></CommentList>
           </div>
@@ -38,12 +38,12 @@
 <script>
 
   import { mapGetters } from 'vuex'
-  import CommentBox from "@/components/website/CommentBox";
+  import CommentBox from "@/components/Comment/CommentBox";
   import {timeAgo} from "@/utils"
   import {replyComment,treeListComment,delMyComment} from '@/api/website/comment'
   export default {
     name: "CommentList",
-    props: ['comments', 'commentInfo'],
+    props: ['comments', 'commentInfo', 'tableName', 'targetId'],
     data() {
       return {
         taggleStatue: true,
@@ -53,7 +53,7 @@
           userId: '',
           commentId: ''
         },
-        defaultAvatar: "http://localhost:7070/profile/avatar/defaul/avatar.jpg"
+        defaultAvatar: require("@/assets/styles/images/profile.jpg")
       };
     },
     created() {
@@ -116,8 +116,8 @@
       },
       getCommentList() {
         let params = {};
-        params.targetId = this.commentInfo.targetId
-        params.tableName = 'wm_movie'
+        params.targetId = this.commentInfo.targetId;
+        params.tableName = this.tableName;
         if (this.toInfo.commentId){
           params.commentId = this.commentInfo.commentId
         }

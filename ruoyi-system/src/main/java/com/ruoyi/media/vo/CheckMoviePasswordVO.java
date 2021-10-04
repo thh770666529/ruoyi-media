@@ -9,7 +9,7 @@ import lombok.Data;
  * @Date 21:15 2021/10/03
  **/
 @Data
-public class CheckPasswordVO {
+public class CheckMoviePasswordVO {
 
     private Long movieId;
 

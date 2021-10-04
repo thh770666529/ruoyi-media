@@ -1,6 +1,6 @@
 <template>
   <div class="article-container">
-    <el-row type="flex" class="mt20">
+    <el-row type="flex" class="mt20"  v-if="!dialogArticle.visible">
       <el-col :span="17">
       <el-card class="box-card">
       <div class="newsview">
@@ -52,7 +52,13 @@
         <!--付款码和点赞-->
         <PayCode  :articleId="articleId" :praiseCount.sync="article.collectCount"></PayCode>
       </el-card>
-        <el-card class="box-card">
+      <el-card class="box-card mt20">
+        <div class="intro">
+          <div class="intro-text">
+            <span>文章短評</span>
+          </div>
+        </div>
+        <Comment :targetId="articleId" :tableName="`blog_article`"></Comment>
           <div class="otherlink" v-if="sameBlogList.length > 0">
             <h2>相关文章</h2>
             <ul>
@@ -63,7 +69,7 @@
             </li>
           </ul>
         </div>
-        </el-card>
+      </el-card>
       </el-col>
       <el-col  class="hidden-sm-and-down" :offset="1" :span="6">
           <side-catalog
@@ -72,10 +78,32 @@
           </side-catalog>
       </el-col>
     </el-row>
+    <!-- 文章秘钥对话框 -->
+    <el-dialog
+      title="文章密码"
+      :visible.sync="dialogArticle.visible"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="500px">
+      <el-form
+        ref="passwordForm"
+        :model="dialogArticle.passwordForm"
+        :rules="dialogArticle.passwordFormRules"
+        label-width="80px">
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" show-password placeholder="密码" minlength="6" maxlength="12" @keyup.enter.native="handleSubmitBtnClick('passwordForm')" v-model="dialogArticle.passwordForm.password"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button plain type="primary" @click.native.prevent="handleSubmitBtnClick('passwordForm')">提 交</el-button>
+        <el-button plain type="primary" @click="handleCloseBtnClick()">关 闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-  import { getArticle, getSameArticleList } from '@/api/blog/article';
+  import { getArticle, getSameArticleList, checkPassword } from '@/api/blog/article';
   import SideCatalog from '@/components/VueSideCatalog';
   export default {
     name: "articleDetail",
@@ -87,10 +115,31 @@
           watch: true,
           levelList: ["h1", "h2", "h3"],
         },
-        articleId: undefined,
+        articleId: '',
         sameBlogList: [],
         article: {},
-
+        // 文章秘钥对话框数据
+        dialogArticle: {
+          visible: false,
+          passwordForm: {
+            password: ''
+          },
+          passwordFormRules: {
+            password: [
+              {
+                required: true,
+                message: '请输入密码',
+                trigger: 'blur'
+              },
+              { min: 6,
+                max: 12,
+                message:
+                  '密码长度必须介于 6 和 12 之间',
+                trigger: 'blur'
+              }
+            ]
+          }
+        }
       }
     },
     computed: {
@@ -112,13 +161,21 @@
     methods: {
       initInfo() {
          getArticle(this.articleId).then(response => {
-          this.article = response.data;
+           this.article = response.data;
+           const passwordFlag = this.getCookies(`article_password${this.article.articleId}`);
+           this.getOtherData();
+           if (passwordFlag  === 'true'){
+             this.dialogArticle.visible = false;
+           }else if (this.article.openPassword == 1){
+             this.dialogArticle.visible = true;
+           }
         });
+      },
+      getOtherData() {
         getSameArticleList(this.articleId).then(response => {
           this.sameBlogList = response.data;
         });
       },
-
       //跳转到文章详情【或推广链接】
       goToInfo(article) {
         if(article.type == "0") {
@@ -131,6 +188,30 @@
           params.append("articleId", article.articleId);
           window.open(article.outsideLink, '_blank');
         }
+      },
+      handleSubmitBtnClick(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            checkPassword({
+              password: this.dialogArticle.passwordForm.password,
+              articleId: this.articleId
+            }).then(res => {
+              if (res.code === 200){
+                this.resetForm(formName);//  清空表单
+                this.dialogArticle.visible = false;
+                this.setCookies(`article_password${this.articleId}`, true);
+              }else {
+                this.msgError(res.msg)
+              }
+            });
+          } else {
+            return false
+          }
+        })
+      },
+      handleCloseBtnClick() {
+        this.dialogArticle.visible = false
+        this.$router.push({ path: '/article', query: {} })
       }
     }
   };

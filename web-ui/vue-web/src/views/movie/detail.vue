@@ -57,8 +57,8 @@
               score-template="{value}">
             </el-rate>
             <span style="color: #ffb400;" v-else>暂无评分</span>
-            <!--<p class="money">累计票房</p>
-            <p class="num">3000 <span>万</span></p>-->
+            <p class="money mt10"><span class="iconfont">&#xe8c7; </span>点击数</p>
+            <p class="num">{{movie.clickCount}}</p>
           </div>
         </div>
       </div>
@@ -166,19 +166,10 @@
           <el-card class="box-card">
           <div class="intro">
             <div class="intro-text">
-              <span>热门短评</span>
+              <span>電影短評</span>
             </div>
           </div>
-          <CommentBox
-            :commentInfo="commentInfo"
-            @submit-box="submitBox"
-            :showCancel="showCancel"
-          ></CommentBox>
-
-            <div class="message_infos">
-              <CommentList :comments="comments" :commentInfo="commentInfo"></CommentList>
-              <div class="noComment" v-if="comments.length === 0">还没有评论，快来抢沙发吧！</div>
-            </div>
+            <Comment :targetId="movieId" :tableName="tableName"></Comment>
           </el-card>
         </div>
 
@@ -217,17 +208,12 @@ import { listTag } from "@/api/media/tag";
 import { listCategory } from "@/api/media/category";
 import { getDictsByTypeList } from '@/api/system/dict/data';
 import { selectDictLabels } from '@/utils/ruoyi';
-import CommentList from "@/components/website/CommentList";
-import CommentBox from "@/components/website/CommentBox"
-import {replyComment,treeListComment} from '@/api/website/comment';
 export default {
   components: {
-    //注册组件
-    CommentList,
-    CommentBox
   },
   data() {
     return {
+      tableName: 'wm_movie',
       movieId: '',
       countryOptions: [],
       statusOptions: [],
@@ -239,12 +225,6 @@ export default {
       directorList: [],
       video: {},
       activeName: 'description',
-      // 评论
-      showCancel: false,
-      comments: [],
-      commentInfo: {
-        targetId: this.$route.params.movieId
-      },
       sameTypeMovieList: []
     }
   },
@@ -254,7 +234,6 @@ export default {
     });
     this.getDictList();
     this.getDetail();
-    this.getCommentList();
   },
 
   computed:{
@@ -267,36 +246,6 @@ export default {
     }
   },
   methods:{
-    // 发表评论
-    submitBox(e) {
-      let params = {};
-      params.targetId = e.targetId;
-      params.content = e.content;
-      params.commentId = e.commentId;
-      params.createTime = e.createTime;
-      params.updateTime = e.createTime;
-      params.tableName = 'wm_movie';
-      params.url = this.$route.path;
-      params.support = 0;
-      params.oppose = 0;
-      replyComment(params).then(response => {
-        if (response.code === 200){
-          this.msgSuccess("发表成功！");
-          this.getCommentList();
-        }else{
-          this.msgError("发表失败！")
-        }
-      });
-    },
-    getCommentList() {
-      let params = {};
-      params.targetId = this.commentInfo.targetId
-      treeListComment(params).then(response => {
-        if (response.code === 200) {
-          this.comments = response.rows
-        }
-      });
-    },
     getDictList() {
       // 获取字典
       const dictTypeList =  ['movie_country', 'movie_status', 'movie_type'];
@@ -369,8 +318,5 @@ export default {
   height: 170px;
 }
 
-.noComment {
-  width: 100%;
-  text-align: center;
-}
+
 </style>

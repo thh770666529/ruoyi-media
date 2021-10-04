@@ -5,7 +5,6 @@
       <img v-if="isLogin && avatar" :src="avatar" onerror="onerror=null;src=defaultAvatar" />
       <img v-else :src="defaultAvatar" />
     </span>
-
     <span class="right">
       <textarea class="commentTextArea" placeholder="既然来了，那就留下些什么吧~" v-model="value" @click="hideEmojiPanel" @input="vaildCount"></textarea>
     </span>
@@ -47,10 +46,6 @@
       // 评论主体信息
       commentInfo: {
         type: Object
-      },
-      showCancel: {
-        type: Boolean,
-        default: true
       }
     },
     components: {
@@ -66,7 +61,7 @@
         count: 1024,
         isShowEmojiPanel: false, // 是否显示表情面板
         isShowAvatar: true, // 是否显示头像
-        defaultAvatar: "http://localhost:7070/profile/avatar/defaul/avatar.jpg"
+        defaultAvatar: require("@/assets/styles/images/profile.jpg")
       }
     },
     computed: {
@@ -98,7 +93,6 @@
         }
       },
       handleSubmit() {
-        let token = this.$store.state.token
         if (!this.isLogin){
           this.$notify.error({
             title: '警告',
@@ -130,10 +124,8 @@
           });
           return;
         }
-
-
-        let targetId = ''
-        let commentId = ''
+        let targetId = '';
+        let commentId = '';
         if (this.commentInfo) {
           targetId = this.commentInfo.targetId
         }

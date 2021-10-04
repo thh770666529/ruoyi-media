@@ -8,7 +8,6 @@
 			<div class="text item">
         <el-tag
           style="margin: 0 0 5px 3px"
-          :index="index"
           @click="getListByTag('')">
           全部
         </el-tag>

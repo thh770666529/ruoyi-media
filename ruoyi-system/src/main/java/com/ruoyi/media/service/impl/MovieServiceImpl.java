@@ -2,12 +2,9 @@ package com.ruoyi.media.service.impl;
 
 
 import java.util.*;
-
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ruoyi.blog.domain.Article;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.MovieActorType;
 import com.ruoyi.common.utils.DateUtils;
@@ -21,9 +18,7 @@ import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.util.TokenUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.media.domain.Video;

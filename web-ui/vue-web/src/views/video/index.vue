@@ -9,6 +9,16 @@
         <div style="min-height: 529px">
           <video-preview ref="player" :autoplay="!dialogVideoFile.visible"></video-preview>
         </div>
+
+        <!-- 评论 -->
+          <el-card class="box-card mt20">
+            <div class="intro">
+              <div class="intro-text">
+                <span>電影短評</span>
+              </div>
+            </div>
+            <Comment :targetId="movie.movieId" tableName="wm_movie"></Comment>
+          </el-card>
       </el-col>
 
       <!--右边-->
@@ -44,14 +54,12 @@
       :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      width="500px"
-    >
+      width="500px">
       <el-form
         ref="passwordForm"
         :model="dialogVideoFile.passwordForm"
         :rules="dialogVideoFile.passwordFormRules"
-        label-width="80px"
-      >
+        label-width="80px">
         <el-form-item label="密码" prop="password">
           <el-input type="password" show-password placeholder="密码" minlength="6" maxlength="12" @keyup.enter.native="handleSubmitBtnClick('passwordForm')" v-model="dialogVideoFile.passwordForm.password"></el-input>
         </el-form-item>
@@ -67,11 +75,12 @@
 import VideoPreview from '@/components/Play/VideoPreview'
 import movieApi from '@/api/media/movie'
 import {getWebConfig} from '@/api/website/webConfig'
-
+import Comment from "@/components/Comment"
 export default {
   name: 'playVideo',
   components: {
-    VideoPreview
+    VideoPreview,
+    Comment
   },
   computed: {},
   data() {
@@ -80,15 +89,9 @@ export default {
       video: {},
       movie: {},
       sourceVideoUrl: '',
-      comments: [],
-      commentInfo: {
-        targetId: this.$route.params.videoId
-      },
       videoPreviewList: [],
-      // 评论
-      showCancel: false,
       webConfig: {},
-      // 文件分享对话框数据
+      // 视频秘钥对话框数据
       dialogVideoFile: {
         visible: false,
         passwordForm: {
@@ -215,7 +218,7 @@ export default {
           return false
         }
       })
-    },
+    }
   }
 }
 </script>

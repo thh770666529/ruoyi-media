@@ -2,25 +2,27 @@ package com.ruoyi.web.controller.media;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.constant.BaseRedisKeyConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.file.domain.Share;
-import com.ruoyi.file.dto.CheckEndTimeDTO;
-import com.ruoyi.file.dto.CheckExtractionCodeDTO;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.ip.IpUtils;
 import com.ruoyi.media.domain.Movie;
 import com.ruoyi.media.domain.Video;
 import com.ruoyi.media.domain.vo.MovieVO;
 import com.ruoyi.media.service.IMovieService;
 import com.ruoyi.media.service.IVideoService;
-import com.ruoyi.media.vo.CheckPasswordVO;
+import com.ruoyi.media.vo.CheckMoviePasswordVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 电影管理Controller
@@ -38,6 +40,9 @@ public class MovieController extends BaseController
 
     @Autowired
     private IVideoService videoService;
+
+    @Autowired
+    private RedisCache redisCache;
 
     /**
      * 查询电影管理列表
@@ -65,9 +70,28 @@ public class MovieController extends BaseController
      * 获取电影管理详细信息
      */
     @GetMapping(value = "/{movieId}")
-    public AjaxResult getMovie(@PathVariable("movieId") Long movieId)
+    public AjaxResult getMovie(HttpServletRequest request, @PathVariable("movieId") Long movieId)
     {
-        return AjaxResult.success(movieService.selectWebMovieById(movieId));
+        log.info("门户获取电影详细信息id={}", movieId);
+        String ip = IpUtils.getIpAddr(request);
+        MovieVO movieVO = movieService.selectWebMovieById(movieId);
+        if (movieVO == null) {
+            AjaxResult.error("电影已删除！请刷新查询列表！");
+        }
+        String clickJson = redisCache.getCacheObject(BaseRedisKeyConstants.MOVIE_CLICK + ":" + movieVO.getMovieId() + "#" + ip);
+        // 判断ip用户是否点击过这个文章
+        if (StringUtils.isEmpty(clickJson)) {
+            //电影点击数
+            Long clickCount = movieVO.getClickCount() + 1;
+            movieVO.setClickCount(clickCount);
+            Movie movie = new Movie();
+            BeanUtils.copyProperties(movieVO,movie);
+            movieService.updateById(movie);
+            //将该用户点击记录存储到redis中, 24小时后过期
+            redisCache.setCacheObject(BaseRedisKeyConstants.MOVIE_CLICK + ":" + movieVO.getMovieId() + "#" + ip, movieVO.getClickCount().toString(),
+                    24, TimeUnit.HOURS);
+        }
+        return AjaxResult.success(movieVO);
     }
 
 
@@ -94,10 +118,10 @@ public class MovieController extends BaseController
 
     @Log(title = "校验密码", businessType = BusinessType.PASSWORD)
     @GetMapping(value = "/checkPassword")
-    public AjaxResult checkExtractionCode(CheckPasswordVO checkPasswordVO) {
+    public AjaxResult checkExtractionCode(CheckMoviePasswordVO checkMoviePasswordVO) {
         LambdaQueryWrapper<Movie> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Movie::getMovieId, checkPasswordVO.getMovieId())
-                .eq(Movie::getPassword, checkPasswordVO.getPassword());
+        lambdaQueryWrapper.eq(Movie::getMovieId, checkMoviePasswordVO.getMovieId())
+                .eq(Movie::getPassword, checkMoviePasswordVO.getPassword());
         List<Movie> list = movieService.list(lambdaQueryWrapper);
         if (list.isEmpty()) {
             return error("校验失败");

@@ -15,6 +15,7 @@ import PayCode from "@/components/PayCode";
 import About from "@/components/About";
 import FourthRecommend from "@/components/FourthRecommend";
 import HotArticle from "@/components/HotArticle";
+import Comment from "@/components/Comment";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css' //样式
 import globalFunction from '@/utils/globalFunction'
@@ -51,6 +52,7 @@ Vue.component('PayCode', PayCode);
 Vue.component('About', About);
 Vue.component('FourthRecommend', FourthRecommend);
 Vue.component('HotArticle', HotArticle);
+Vue.component('Comment', Comment);
 
 for(let key in globalFunction) {
   Vue.prototype[key] = globalFunction[key]

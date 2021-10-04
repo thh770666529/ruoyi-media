@@ -51,9 +51,16 @@ public interface ArticleMapper extends BaseMapper<Article>
     List<Article> selectHotArticleList(@Param("status") int status,@Param("publishStatus") int publishStatus,@Param("top") int top);
 
     /**
-     * 通过门户获取文章列表
+     * 通过门户搜索文章列表
      * @param article
      * @return
      */
     List<Article> selectSearchArticleList(Article article);
+
+    /**
+     * 通过门户查找文章列表
+     * @param article
+     * @return
+     */
+    List<Article> selectWebArticleList(Article article);
 }

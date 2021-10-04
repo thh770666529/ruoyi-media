@@ -42,5 +42,13 @@ export function getSameArticleList(articleId) {
   })
 }
 
+export function checkPassword(param) {
+  return request({
+    url: '/blog/article/checkPassword',
+    method: 'get',
+    params: param
+  })
+}
+
 
 
