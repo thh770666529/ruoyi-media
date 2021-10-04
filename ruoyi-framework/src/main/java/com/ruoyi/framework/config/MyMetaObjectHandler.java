@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import static com.ruoyi.common.utils.SecurityUtils.getAuthentication;
 
@@ -20,8 +22,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         LoginUser loginUser = this.getLoginUser();
         log.info("start insert fill ....");
-        this.strictInsertFill(metaObject, "createTime", () -> LocalDateTime.now(), LocalDateTime.class);
-        this.strictInsertFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
+        this.strictInsertFill(metaObject, "createTime", () -> DateUtils.getNowDate(), Date.class);
+        this.strictInsertFill(metaObject, "updateTime", () -> DateUtils.getNowDate(), Date.class);
         if(loginUser != null){
             this.strictInsertFill(metaObject, "createBy", () -> loginUser.getUsername(), String.class);
             this.strictInsertFill(metaObject, "updateBy", () -> loginUser.getUsername(), String.class);
@@ -49,9 +51,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         log.info("start update fill ....");
         LoginUser loginUser = this.getLoginUser();
-        this.strictUpdateFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
+        this.strictUpdateFill(metaObject, "updateTime", () -> DateUtils.getNowDate(), Date.class);
         if(loginUser != null){
-            this.strictInsertFill(metaObject, "updateBy", () -> loginUser.getUsername(), String.class);
+            this.strictUpdateFill(metaObject, "updateBy", () -> loginUser.getUsername(), String.class);
         }
         log.info("end update fill ....");
     }
