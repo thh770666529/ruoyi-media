@@ -1,6 +1,6 @@
 ## 电影平台简介
 
-借助**ruoyi**这个平台开发一套资源平台。直接采用了[RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue)前后端分离基础平台。打造一款开源的电影视频平台。集成了奇文网盘。后台用的是vue+springboot，门户采用nuxtjs+springboot。
+借助**ruoyi**这个平台开发一套资源平台。直接采用了[RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue)前后端分离基础平台。打造一款开源的电影视频平台，集成了奇文网盘，涉及了电影 博客 问答多个模块。后台和门户用的都是vue+springboot
 
 
 
@@ -17,33 +17,61 @@
 - 集成了奇文网盘[qiwen-file](https://gitee.com/qiwen-cloud/qiwen-file)
 - 后台管理系统模块增加了资源管理模块、媒资管理模块、站点配置模块、博客模块、问答模块
 
+
+
+
+
+##  在线体验
+
+- admin/admin123
+
+演示地址：
+
+后台 http://8.129.13.79:9898
+
+门户 http://8.129.13.79:9000
+
 ## 项目截图
 
-![1631446450822](README.assets/1631446450822.png)
-
-![1631446483972](README.assets/1631446483972.png)
 
 
-
-![1631446495457](README.assets/1631446495457.png)
+![1633320389368](README.assets/1633320389368.png)
 
 
 
-![1631446519359](README.assets/1631446519359.png)
-
-
-
-![1631446540760](README.assets/1631446540760.png)
-
-
-
-![1631446558965](README.assets/1631446558965.png)
+![1633320407282](README.assets/1633320407282.png)
 
 
 
 
 
-![1631446584268](README.assets/1631446584268.png)
+![1633320436824](README.assets/1633320436824.png)
+
+
+
+![1633320462248](README.assets/1633320462248.png)
+
+
+
+![1633320477036](README.assets/1633320477036.png)
+
+
+
+![1633320616074](README.assets/1633320616074.png)
+
+
+
+![1633320645255](README.assets/1633320645255.png)
+
+
+
+
+
+![1633320660995](README.assets/1633320660995.png)
+
+
+
+
 
 
 
@@ -101,7 +129,13 @@
 
 微信群
 
-![1631447311772](README.assets/1631447311772.png)
+
+
+![1633331139909](README.assets/1633331139909.png)
+
+
+
+
 
 微信群进不去的可以加我微信 我拉进群
 
