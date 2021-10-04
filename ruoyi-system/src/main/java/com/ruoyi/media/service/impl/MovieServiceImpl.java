@@ -1,8 +1,7 @@
 package com.ruoyi.media.service.impl;
 
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -11,18 +10,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.blog.domain.Article;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.MovieActorType;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.media.domain.MovieActor;
 import com.ruoyi.media.domain.vo.MovieActorVO;
 import com.ruoyi.media.domain.vo.MovieVO;
 import com.ruoyi.media.mapper.MovieActorMapper;
 import com.ruoyi.media.mapper.VideoMapper;
+import com.ruoyi.media.service.IVideoService;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.util.TokenUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.Map;
 
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +45,9 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
 
     @Autowired
     private VideoMapper videoMapper;
+
+    @Autowired
+    private IVideoService videoService;
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -72,15 +75,19 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
                 SysUser sysUser = sysUserMapper.selectUserByUserName(publishBy);
                 movieVO.setPublishUsername(sysUser!=null?sysUser.getNickName():null);
             }
-            Video video = new Video();
-            video.setMovieId(movieId);
-            List<Video> videoList = videoMapper.selectVideoList(video);
-            movieVO.setVideoList(videoList);
+            movieVO.setVideoList(videoService.selectVideoByMovieId(movieId));
             setMovieActor(MovieActorType.ACTOR, movieVO);
             setMovieActor(MovieActorType.DIRECTOR, movieVO);
 
         }
         return movieVO;
+    }
+
+    @Override
+    public MovieVO selectWebMovieById(Long movieId) {
+        MovieVO movieVO = movieMapper.selectWebMovieById(movieId);
+        movieVO.setVideoList(videoService.selectVideoByMovieId(movieId));
+        return  movieVO;
     }
 
     /**
@@ -115,8 +122,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Override
     public List<MovieVO> selectMovieList(Movie movie)
     {
-        List<MovieVO> movieList = movieMapper.selectMovieList(movie);
-        return movieList;
+        return movieMapper.selectMovieList(movie);
     }
 
     /**
@@ -130,9 +136,11 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     public int insertMovie(MovieVO movieVO)
     {
         int rows = movieMapper.insert(movieVO);
-        this.insertVideo(movieVO);
-        this.insertActor(movieVO,MovieActorType.ACTOR);
-        this.insertActor(movieVO,MovieActorType.DIRECTOR);
+        if (rows > 0){
+           this.insertVideo(movieVO);
+           this.insertActor(movieVO,MovieActorType.ACTOR);
+           this.insertActor(movieVO,MovieActorType.DIRECTOR);
+        }
         return rows;
     }
 
@@ -184,7 +192,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         movieActorMap.put("movie_id",movieVO.getMovieId());
         movieActorMapper.deleteByMap(movieActorMap);
         this.insertActor(movieVO,MovieActorType.ACTOR);
-        this.insertActor(movieVO,MovieActorType.DIRECTOR);
+        movieVO.setUpdateTime(DateUtils.getNowDate());
         return  movieMapper.updateById(movieVO);
     }
 
@@ -222,11 +230,12 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     public List<Movie> getSameTypeMovieList(Long movieId) {
         MovieVO movieVO = this.selectMovieById(movieId);
         Integer categoryId = movieVO.getCategoryId();
-        Page<Movie> page = new Page<>(1, 10);
+        Page<Movie> page = new Page<>(1, 12);
         QueryWrapper<Movie> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status", 0);
         queryWrapper.eq("category_id", categoryId);
         queryWrapper.notIn("movie_id", movieId);
+        queryWrapper.select("movie_id", "images", "title", "type", "country", "tag_id", "publish_by", "publish_time", "open_comment", "rate", "category_id", "category_name");
         queryWrapper.orderByDesc("create_time");
         return movieMapper.selectPage(page, queryWrapper).getRecords();
     }
@@ -253,5 +262,10 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
                 videoMapper.batchVideo(list);
             }
         }
+    }
+
+    @Override
+    public List<MovieVO> selectWebMovieList(MovieVO movieVO) {
+        return movieMapper.selectWebMovieList(movieVO);
     }
 }

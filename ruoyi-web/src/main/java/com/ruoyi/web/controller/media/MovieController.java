@@ -20,10 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 电影管理Controller
@@ -49,7 +46,7 @@ public class MovieController extends BaseController
     public TableDataInfo list(MovieVO movieVO)
     {
         startPage();
-        List<MovieVO> list = movieService.selectMovieList(movieVO);
+        List<MovieVO> list = movieService.selectWebMovieList(movieVO);
         return getDataTable(list);
     }
 
@@ -70,7 +67,7 @@ public class MovieController extends BaseController
     @GetMapping(value = "/{movieId}")
     public AjaxResult getMovie(@PathVariable("movieId") Long movieId)
     {
-        return AjaxResult.success(movieService.selectMovieById(movieId));
+        return AjaxResult.success(movieService.selectWebMovieById(movieId));
     }
 
 
@@ -82,7 +79,7 @@ public class MovieController extends BaseController
     {
         Video video = videoService.getById(videoId);
         Long movieId = video.getMovieId();
-        MovieVO movieVO = movieService.selectMovieById(movieId);
+        MovieVO movieVO = movieService.selectWebMovieById(movieId);
         Map<String, Object> data = new HashMap<>(10);
         data.put("video",video);
         data.put("movie",movieVO);

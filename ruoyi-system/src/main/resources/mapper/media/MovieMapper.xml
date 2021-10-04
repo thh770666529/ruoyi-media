@@ -80,22 +80,69 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join sys_user u on m.publish_by = u.user_name
     </sql>
 
+    <sql id="selectWebMovieVo">
+        select m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
+        m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
+        m.open_comment, m.price, m.rate,
+        m.category_id,m.category_name,m.qrcode_path,m.open_password,
+        u.nick_name as publishUsername
+        from wm_movie m
+        left join sys_user u on m.publish_by = u.user_name
+    </sql>
 
     <select id="selectHotMovieList" parameterType="Integer" resultMap="MovieResult">
-        <include refid="selectMovieVo"/>
+        <include refid="selectWebMovieVo"/>
         order by m.create_time desc limit #{top}
     </select>
+
+
+    <select id="selectWebMovieById" parameterType="Long" resultMap="MovieResult">
+        <include refid="selectWebMovieVo"/>
+        where m.movie_id = #{movieId}
+    </select>
+
+    <select id="selectWebMovieList" parameterType="MovieVO" resultMap="MovieResult">
+        <include refid="selectWebMovieVo"/>
+        <where>
+             m.status = 0
+            <if test="title != null  and title != ''"> and m.title like concat('%', #{title}, '%')</if>
+            <if test="type != null  and type != ''"> and m.type = #{type}</if>
+            <if test="country != null  and country != ''"> and m.country = #{country}</if>
+            <if test="tagId != null  and tagId != ''">
+                and FIND_IN_SET(#{tagId},tag_id)
+            </if>
+            <if test="description != null  and description != ''"> and m.description like concat('%', #{description}, '%')</if>
+            <if test="publishBy != null  and publishBy != ''"> and m.publish_by = #{publishBy}</if>
+            <if test="publishTime != null "> and m.publish_time = #{publishTime}</if>
+            <if test="openComment != null  and openComment != ''"> and m.open_comment = #{openComment}</if>
+            <if test="openDownload != null  and openDownload != ''"> and m.open_download = #{openDownload}</if>
+            <if test="price != null "> and m.price = #{price}</if>
+            <if test="rate != null "> and m.rate = #{rate}</if>
+            <if test="categoryId != null "> and m.category_id = #{categoryId}</if>
+            <if test="categoryName != null "> and m.category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="qrcodePath != null "> and m.qrcode_path = #{qrcodePath}</if>
+            <if test="openPassword != null "> and m.open_password = #{openPassword}</if>
+            <if test="password != null "> and m.password = #{password}</if>
+            <if test="tagIdList != null and tagIdList.size() > 0 ">
+                <foreach item="tagId" collection="tagIdList" open="and (" separator="or" close=")">
+                    FIND_IN_SET(#{tagId},tag_id)
+                </foreach>
+            </if>
+            <if test="publishYear != null and publishYear != '' "> and date_format(m.publish_time,'%Y') =  #{publishYear}</if>
+        </where>
+    </select>
+
+
 
     <select id="selectListByActorId" parameterType="Long" resultMap="MovieResult">
        select DISTINCT m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
         m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
         m.open_comment, m.open_download, m.price, m.rate,
-        m.category_id,m.category_name,m.qrcode_path,m.open_password,m.password
+        m.category_id,m.category_name,m.qrcode_path,m.open_password
         from wm_movie m, wm_movie_actor ma
         where m.movie_id = ma.movie_id and ma.actor_id = #{actorId}
         order by m.create_time desc
     </select>
-
 
 
     <select id="selectMovieList" parameterType="MovieVO" resultMap="MovieResult">
@@ -126,8 +173,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 </foreach>
             </if>
             <if test="publishYear != null and publishYear != '' "> and date_format(m.publish_time,'%Y') =  #{publishYear}</if>
-
-
         </where>
     </select>
 </mapper>

@@ -40,4 +40,19 @@ public interface MovieMapper extends BaseMapper<Movie>
      * @return
      */
     List<MovieVO> selectListByActorId(Long actorId);
+
+    /**
+     * 门户查询电影
+     *
+     * @param movieId 电影ID
+     * @return 电影
+     */
+    MovieVO selectWebMovieById(Long movieId);
+
+    /**
+     * 门户查询电影列表
+     * @param movieVO
+     * @return
+     */
+    List<MovieVO> selectWebMovieList(MovieVO movieVO);
 }

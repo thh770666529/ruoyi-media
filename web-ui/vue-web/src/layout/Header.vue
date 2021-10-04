@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="header-body">
-      <a href="/" class="logo">辉皇电影</a>
+      <a href="/" class="logo">辉皇影院</a>
       <!--<div class="city">成都
         <span class="caret"></span>
       </div>

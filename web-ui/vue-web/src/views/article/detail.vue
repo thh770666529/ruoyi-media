@@ -85,7 +85,7 @@
           // 内容容器selector(必需)
           container: '.ck-content',
           watch: true,
-          levelList: ["h2", "h3"],
+          levelList: ["h1", "h2", "h3"],
         },
         articleId: undefined,
         sameBlogList: [],

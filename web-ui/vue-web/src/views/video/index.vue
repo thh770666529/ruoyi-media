@@ -47,14 +47,13 @@
       width="500px"
     >
       <el-form
-        class="extraction-code-form"
         ref="passwordForm"
         :model="dialogVideoFile.passwordForm"
         :rules="dialogVideoFile.passwordFormRules"
         label-width="80px"
       >
         <el-form-item label="密码" prop="password">
-          <el-input show-password @keyup.enter.native="handleSubmitBtnClick('passwordForm')" v-model="dialogVideoFile.passwordForm.password"></el-input>
+          <el-input type="password" show-password placeholder="密码" minlength="6" maxlength="12" @keyup.enter.native="handleSubmitBtnClick('passwordForm')" v-model="dialogVideoFile.passwordForm.password"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -100,6 +99,12 @@ export default {
             {
               required: true,
               message: '请输入密码',
+              trigger: 'blur'
+            },
+            { min: 6,
+              max: 12,
+              message:
+                '密码长度必须介于 6 和 12 之间',
               trigger: 'blur'
             }
           ]

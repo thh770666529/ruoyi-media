@@ -23,6 +23,14 @@ public interface IMovieService extends IService<Movie>
     public MovieVO selectMovieById(Long movieId);
 
 
+    /**
+     * 门户查询电影
+     *
+     * @param movieId 电影ID
+     * @return 电影
+     */
+    public MovieVO selectWebMovieById(Long movieId);
+
 
     /**
      * 查询电影列表
@@ -84,4 +92,11 @@ public interface IMovieService extends IService<Movie>
      * @return
      */
     List<Movie> getSameTypeMovieList(Long movieId);
+
+    /**
+     * 查询门户列表
+     * @param movieVO
+     * @return
+     */
+    List<MovieVO> selectWebMovieList(MovieVO movieVO);
 }

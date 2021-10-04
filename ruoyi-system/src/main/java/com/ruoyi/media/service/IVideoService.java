@@ -20,6 +20,9 @@ public interface IVideoService extends IService<Video>
 
     public List<Video> selectVideoList(Video video);
 
+
+    public List<Video> selectVideoByMovieId(Long movieId);
+
     /**
      * 通过网盘上传视频
      *@param netWorkDiskVO

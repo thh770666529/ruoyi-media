@@ -54,6 +54,13 @@ public class VideoServiceImpl  extends ServiceImpl<VideoMapper, Video> implement
     }
 
     @Override
+    public List<Video> selectVideoByMovieId(Long movieId) {
+        Video video = new Video();
+        video.setMovieId(movieId);
+        return videoMapper.selectVideoList(video);
+    }
+
+    @Override
     public UploadVideoVO uploadVideoByNetWorkDisk(NetWorkDiskVO netWorkDiskVO) {
         FileBean fileBean = fileService.getById(netWorkDiskVO.getFileId());
         //拿到网盘的本地真实路径
