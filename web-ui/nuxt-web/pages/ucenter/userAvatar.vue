@@ -126,7 +126,7 @@ export default {
         formData.append("avatarfile", data);
         uploadAvatar(formData).then(response => {
           this.open = false;
-          this.options.img = process.env.VUE_APP_BASE_API + response.imgUrl;
+          this.options.img = this.fileUploadHost + response.imgUrl;
           store.commit('SET_AVATAR', this.options.img);
           this.msgSuccess("修改成功");
           this.visible = false;
@@ -140,7 +140,7 @@ export default {
     // 关闭窗口
     closeDialog() {
       this.options.img = store.getters.avatar
-	  this.visible = false;
+	    this.visible = false;
     }
   }
 };

@@ -143,17 +143,18 @@ public class FileUploadUtils
         {
             throw new FileNameLengthLimitExceededException(FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
         }
-
         assertAllowed(file, allowedExtension);
-
-        String fileName = extractFilename2(file);
-
+        String fileName = "";
+        if (RuoYiConfig.getMovieVideoPath().equals(baseDir)) {
+            fileName = extractFilename2(file);
+        }else {
+            fileName = extractFilename(file);
+        }
         File desc = getAbsoluteFile(baseDir, fileName);
         file.transferTo(desc);
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(baseDir, dirLastIndex);
-        String pathFileName =  "/" + currentDir + "/" + fileName;
-        return pathFileName;
+        return "/" + currentDir + "/" + fileName;
     }
 
     /**

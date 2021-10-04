@@ -46,7 +46,7 @@ public class CommonController
      * @param fileName 文件名称
      * @param delete 是否删除
      */
-    @GetMapping("common/download")
+    @GetMapping("/common/download")
     public void fileDownload(String fileName, Boolean delete, HttpServletResponse response, HttpServletRequest request)
     {
         try
@@ -80,15 +80,6 @@ public class CommonController
     {
         try
         {
-           /* // 上传文件路径
-            String filePath = RuoYiConfig.getUploadPath();
-            // 上传并返回新文件名称
-            String fileName = FileUploadUtils.upload(filePath, file);
-            String url = serverConfig.getUrl() + fileName;
-            AjaxResult ajax = AjaxResult.success();
-            ajax.put("fileName", fileName);
-            ajax.put("url", url);
-            return ajax;*/
             String url = FileUploadUtils.upload2(RuoYiConfig.getImagePath(), file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
             AjaxResult ajax = AjaxResult.success();
             ajax.put("fileName", url);
