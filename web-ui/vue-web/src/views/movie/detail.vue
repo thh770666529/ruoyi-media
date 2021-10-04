@@ -226,8 +226,6 @@ export default {
     CommentList,
     CommentBox
   },
-  computed:{
-  },
   data() {
     return {
       movieId: '',
