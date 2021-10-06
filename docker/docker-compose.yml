@@ -59,6 +59,12 @@ services:
       - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/logs:/var/log/nginx
       - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - ruoyi-web
+      - ruoyi-admin
+    links:
+      - ruoyi-web
+      - ruoyi-admin
     networks:
       - thh
   ruoyi-admin:
