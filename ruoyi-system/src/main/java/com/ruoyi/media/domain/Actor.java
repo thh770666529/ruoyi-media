@@ -44,4 +44,7 @@ public class Actor extends BaseEntity
     @Excel(name = "标签 ")
     private String label;
 
+    private Long collectCount;
+
+    private Long clickCount;
 }

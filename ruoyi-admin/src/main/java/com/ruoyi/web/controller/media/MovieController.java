@@ -83,6 +83,8 @@ public class MovieController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody MovieVO movieVO)
     {
+        Long userId = getUserId();
+        movieVO.setPublishBy(userId + "");
         int row = movieService.insertMovie(movieVO);
         if(row>0){
             return AjaxResult.success(movieService.selectMovieById(movieVO.getMovieId()));

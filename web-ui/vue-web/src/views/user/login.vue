@@ -138,7 +138,8 @@
               Cookies.remove('rememberMe');
             }
             this.$store.dispatch("Login", this.loginForm).then(() => {
-              this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
+              //this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
+              window.location.href =  this.redirect || "/";
             }).catch(() => {
               this.loading = false;
               if (this.captchaOnOff) {

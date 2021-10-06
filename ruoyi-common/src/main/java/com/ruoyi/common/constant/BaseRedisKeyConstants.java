@@ -41,9 +41,17 @@ public class BaseRedisKeyConstants {
 
 
     /**
-     * 博客点击
+     * 电影点击
      */
     public final static String MOVIE_CLICK = "MOVIE_CLICK";
+
+
+    /**
+     * 演员点击
+     */
+    public final static String ACTOR_CLICK = "ACTOR_CLICK";
+
+
 
 
 }

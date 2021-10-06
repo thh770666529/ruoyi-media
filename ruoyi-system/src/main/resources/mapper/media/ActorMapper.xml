@@ -11,10 +11,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="description"    column="description"    />
         <result property="awards"    column="awards"    />
         <result property="label"    column="label"    />
+        <result property="clickCount"    column="click_count"    />
+        <result property="collectCount"    column="collect_count"    />
     </resultMap>
 
     <sql id="selectActorVo">
-        select actor_id, name, avatar, description, awards, label from wm_actor
+        select actor_id, name, avatar, description, awards, label,click_count,collect_count from wm_actor
     </sql>
 
     <select id="selectActorList" parameterType="Actor" resultMap="ActorResult">

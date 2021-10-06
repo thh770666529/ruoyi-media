@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <section class="actor-body">
+    <div class="actor-body">
       <div class="comm-title">
         <h2 class="fl actor">
           <span class="c-333">演员介绍</span>
@@ -17,11 +16,20 @@
               <span class="actorTitle">{{actor.name}}</span>
               <span class="actorDescription" v-html="actor.description"></span>
               <p class="mt20" v-html="actor.awards"></p>
+              <div class="other-info" >
+                <ul>
+                  <li class="view">
+                    <span class="iconfont">&#xe8c7; </span> {{actor.clickCount}}
+                  </li>
+                  <li class="like">
+                    <Collect  :targetId="actorId" :tableName="tableName" :collectCount="actor.collectCount"></Collect>
+                  </li>
+                </ul>
+              </div>
             </el-col>
           </el-row>
         </div>
       </el-card>
-
 
       <section class="mt30">
         <div class="comm-title">
@@ -60,10 +68,19 @@
           </ul>
         </div>
       </section>
-    </section>
 
-
-  </div>
+      <!-- 评论 -->
+      <div class="comment mt20">
+        <el-card class="box-card">
+          <div class="intro">
+            <div class="intro-text">
+              <span>演员短評</span>
+            </div>
+          </div>
+          <Comment :targetId="actorId" :tableName="tableName"></Comment>
+        </el-card>
+      </div>
+    </div>
 </template>
 <script>
   import {listActor, getActor} from '@/api/media/actor';
@@ -79,10 +96,13 @@
         categoryOptions: [],
         countryOptions: [],
         movieList: [],
-        actor: {}
+        actor: {},
+        tableName: 'wm_actor',
+        actorId: ''
       }
     },
     created() {
+      this.actorId = this.$route.params && this.$route.params.actorId;
       this.init();
     },
     methods: {
@@ -97,11 +117,11 @@
         getDictsByTypeList(dictTypeList).then(response => {
           this.countryOptions = response.data.movie_country
         });
-        const actorId = this.$route.params && this.$route.params.actorId;
-        getActor(actorId).then(response => {
+
+        getActor(this.actorId).then(response => {
           this.actor = response.data
         });
-        movieApi.getListByActorId(actorId).then(response => {
+        movieApi.getListByActorId(this.actorId).then(response => {
           this.movieList = response.rows
         });
 
@@ -189,6 +209,20 @@
   .actor-body ul li:hover .cc-mask {
     opacity: 1;
     filter: alpha(opacity=100)
+  }
+
+  .other-info {
+    position:absolute;right:0;bottom:0;
+  }
+
+  .other-info ul li {
+    float: left;
+    font-size: 13px;
+    padding: 0 0 0 20px;
+    margin: 0 15px 0 0;
+    color: #748594;
+    line-height: 1.5;
+    display: inline-block;
   }
 
 

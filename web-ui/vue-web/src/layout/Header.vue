@@ -25,7 +25,7 @@
           <el-menu-item index="/actor">演员</el-menu-item>
           <el-menu-item index="/article">文章</el-menu-item>
           <el-menu-item index="/question">问答</el-menu-item>
-          <el-menu-item index="/hot">热门</el-menu-item>
+          <el-menu-item><a href="https://gitee.com/tanhuihuang/ruoyi-media.git" target="_blank">源码</a></el-menu-item>
         </el-menu>
        <!--<ul class="nav-list">
           <li><a href="/" class="nav-model active">首页</a></li>

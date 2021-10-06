@@ -16,6 +16,7 @@ import About from "@/components/About";
 import FourthRecommend from "@/components/FourthRecommend";
 import HotArticle from "@/components/HotArticle";
 import Comment from "@/components/Comment";
+import Collect from "@/components/Collect";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css' //样式
 import globalFunction from '@/utils/globalFunction'
@@ -46,6 +47,20 @@ Vue.prototype.msgInfo = function (msg) {
 }
 
 
+Vue.prototype.toArticleDetail = function (article) {
+  if(article.type == '0') {
+    let routeData = this.$router.resolve({
+      path: "/article/" + article.articleId
+    });
+    window.open(routeData.href, '_blank');
+  } else if(article.type == '1') {
+    const params = new URLSearchParams();
+    params.append("articleId", article.articleId);
+    window.open(article.outsideLink, '_blank');
+  }
+}
+
+
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.component('PayCode', PayCode);
@@ -53,6 +68,7 @@ Vue.component('About', About);
 Vue.component('FourthRecommend', FourthRecommend);
 Vue.component('HotArticle', HotArticle);
 Vue.component('Comment', Comment);
+Vue.component('Collect', Collect);
 
 for(let key in globalFunction) {
   Vue.prototype[key] = globalFunction[key]

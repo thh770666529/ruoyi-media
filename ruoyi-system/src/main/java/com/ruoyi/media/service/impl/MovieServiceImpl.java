@@ -67,7 +67,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
             BeanUtils.copyProperties(movie,movieVO);
             String publishBy = movieVO.getPublishBy();
             if (StringUtils.isNotEmpty(publishBy)){
-                SysUser sysUser = sysUserMapper.selectUserByUserName(publishBy);
+                SysUser sysUser = sysUserMapper.selectUserById(Long.valueOf(publishBy));
                 movieVO.setPublishUsername(sysUser!=null?sysUser.getNickName():null);
             }
             movieVO.setVideoList(videoService.selectVideoByMovieId(movieId));

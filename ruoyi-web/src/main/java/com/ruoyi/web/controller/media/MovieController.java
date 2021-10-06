@@ -79,7 +79,7 @@ public class MovieController extends BaseController
             AjaxResult.error("电影已删除！请刷新查询列表！");
         }
         String clickJson = redisCache.getCacheObject(BaseRedisKeyConstants.MOVIE_CLICK + ":" + movieVO.getMovieId() + "#" + ip);
-        // 判断ip用户是否点击过这个文章
+        // 判断ip用户是否点击过这个电影
         if (StringUtils.isEmpty(clickJson)) {
             //电影点击数
             Long clickCount = movieVO.getClickCount() + 1;

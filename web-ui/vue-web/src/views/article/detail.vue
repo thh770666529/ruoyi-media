@@ -25,9 +25,10 @@
               {{article.clickCount}}
             </li>
             <li class="like">
-              <span class="iconfont">&#xe663; </span>
-              {{article.collectCount}}
+              <Collect :targetId="articleId" :tableName="tableName" :collectCount="article.collectCount">
+              </Collect>
             </li>
+
           </ul>
         </div>
         <div class="tags">
@@ -58,13 +59,13 @@
             <span>文章短評</span>
           </div>
         </div>
-        <Comment :targetId="articleId" :tableName="`blog_article`"></Comment>
+        <Comment :targetId="articleId" :tableName="tableName"></Comment>
           <div class="otherlink" v-if="sameBlogList.length > 0">
             <h2>相关文章</h2>
             <ul>
               <li v-for="item in sameBlogList" :key="item.articleId">
               <a href="javascript:void(0);"
-                @click="goToInfo(item)"
+                @click="toArticleDetail(item)"
                 :title="item.title">{{item.title | ellipsis(18)}}</a>
             </li>
           </ul>
@@ -105,10 +106,12 @@
 <script>
   import { getArticle, getSameArticleList, checkPassword } from '@/api/blog/article';
   import SideCatalog from '@/components/VueSideCatalog';
+  import { checkCollectFlag, addCollect, cancelCollectByTargetId } from "@/api/website/collect";
   export default {
     name: "articleDetail",
     data() {
       return {
+        tableName: 'blog_article',
         catalogProps: {
           // 内容容器selector(必需)
           container: '.ck-content',
@@ -175,19 +178,6 @@
         getSameArticleList(this.articleId).then(response => {
           this.sameBlogList = response.data;
         });
-      },
-      //跳转到文章详情【或推广链接】
-      goToInfo(article) {
-        if(article.type == "0") {
-          let routeData = this.$router.resolve({
-            path: "/article/" + article.articleId
-          });
-          window.open(routeData.href, '_blank');
-        } else if(article.type == "1") {
-          const params = new URLSearchParams();
-          params.append("articleId", article.articleId);
-          window.open(article.outsideLink, '_blank');
-        }
       },
       handleSubmitBtnClick(formName) {
         this.$refs[formName].validate((valid) => {

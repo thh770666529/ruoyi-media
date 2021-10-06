@@ -40,7 +40,12 @@ const routes = [
             {
               path: '/article/:articleId?',
               component: () => import("@/views/article/detail")
+            },
+            {
+              path: '/ucenter',
+              component: () => import("@/views/user/profile/index")
             }
+
         ],
     },
     {

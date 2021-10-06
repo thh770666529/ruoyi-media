@@ -31,14 +31,13 @@
           v-for="(item,index) in articleList"
           :key="index"
           class="art-item"
-          data-scroll-reveal="enter bottom over 1s"
-        >
+          data-scroll-reveal="enter bottom over 1s">
           <h3 class="art-title">
-            <a href="javascript:void(0);" @click="goToInfo(item)">{{item.title}}</a>
+            <a href="javascript:void(0);" @click="toArticleDetail(item)">{{item.title}}</a>
           </h3>
 
           <span class="art-image">
-          <a href="javascript:void(0);" @click="goToInfo(item)" title>
+          <a href="javascript:void(0);" @click="toArticleDetail(item)" title>
             <el-image lazy class="art-banner" :src="fileUploadHost + item.images" :alt="item.title">
               <div slot="error" class="image-slot">
                  <img class="art-banner" src="../../assets/img/article/vue.jpg">
@@ -153,19 +152,6 @@
       this.getList();
     },
     methods: {
-      //跳转到文章详情【或推广链接】
-      goToInfo(article) {
-        if(article.type == "0") {
-          let routeData = this.$router.resolve({
-            path: "/article/" + article.articleId
-          });
-          window.open(routeData.href, '_blank');
-        } else if(article.type == "1") {
-          const params = new URLSearchParams();
-          params.append("articleId", article.articleId);
-          window.open(article.outsideLink, '_blank');
-        }
-      },
       changeTagId(value) {
         this.queryParams.tagId = value;
         this.getList();

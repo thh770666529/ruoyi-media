@@ -14,6 +14,7 @@ import {
   // ButtonGroup,
   // Calendar,
      Card,
+    Empty,
   // Carousel,
   // CarouselItem,
   // Cascader,
@@ -99,6 +100,7 @@ Vue.use(Button)
 // Vue.use(ButtonGroup)
 // Vue.use(Calendar)
  Vue.use(Card)
+ Vue.use(Empty)
 // Vue.use(Carousel)
 // Vue.use(CarouselItem)
 // Vue.use(Cascader)

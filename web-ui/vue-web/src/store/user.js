@@ -77,7 +77,7 @@ const user = {
         commit('SET_TOKEN', '')
         removeToken()
         resolve();
-        window.location.href = `/login?redirectURL=${window.location.href}`
+        window.location.href = `/login?redirect=${window.location.href}`
       });
 
     },

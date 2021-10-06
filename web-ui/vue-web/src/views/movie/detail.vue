@@ -42,8 +42,8 @@
 
           </div>
           <div class="movie-btn">
-            <a href="#"><i></i> <span>想看</span></a>
-            <a href="#"><i></i> <span>评分</span></a>
+           <!-- <a href="#" class="like"><i class="normal"></i> <span>想看</span></a>-->
+            <Collect :targetId="movieId" :tableName="tableName" :collectCount="movie.collectionCount"></Collect>
           </div>
           <div class="watching">
             <p class="name">评分</p>
@@ -207,6 +207,7 @@ import movieApi from '@/api/media/movie';
 import { listTag } from "@/api/media/tag";
 import { listCategory } from "@/api/media/category";
 import { getDictsByTypeList } from '@/api/system/dict/data';
+import { checkCollectFlag, addCollect, cancelCollectByTargetId } from "@/api/website/collect";
 import { selectDictLabels } from '@/utils/ruoyi';
 export default {
   components: {
@@ -229,6 +230,7 @@ export default {
     }
   },
   created() {
+    this.movieId = this.$route.params && this.$route.params.movieId;
     listTag({status: '1'}).then(response => {
       this.tagOptions =  response.rows;
     });
@@ -257,7 +259,6 @@ export default {
     },
     //查询电影详情信息
     getDetail() {
-      this.movieId = this.$route.params.movieId;
       movieApi.getMovie(this.movieId).then(response => {
         this.movie = response.data;
         this.videoList = this.movie.videoList;

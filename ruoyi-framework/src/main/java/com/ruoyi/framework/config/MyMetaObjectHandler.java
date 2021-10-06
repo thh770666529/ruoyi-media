@@ -25,8 +25,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "createTime", () -> DateUtils.getNowDate(), Date.class);
         this.strictInsertFill(metaObject, "updateTime", () -> DateUtils.getNowDate(), Date.class);
         if(loginUser != null){
-            this.strictInsertFill(metaObject, "createBy", () -> loginUser.getUsername(), String.class);
-            this.strictInsertFill(metaObject, "updateBy", () -> loginUser.getUsername(), String.class);
+            this.strictInsertFill(metaObject, "createBy", () -> loginUser.getUserId() + "", String.class);
+            this.strictInsertFill(metaObject, "updateBy", () -> loginUser.getUserId() + "", String.class);
         }
         log.info("end insert fill ....");
     }
@@ -53,7 +53,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         LoginUser loginUser = this.getLoginUser();
         this.strictUpdateFill(metaObject, "updateTime", () -> DateUtils.getNowDate(), Date.class);
         if(loginUser != null){
-            this.strictUpdateFill(metaObject, "updateBy", () -> loginUser.getUsername(), String.class);
+            this.strictUpdateFill(metaObject, "updateBy", () -> loginUser.getUserId() + "", String.class);
         }
         log.info("end update fill ....");
     }

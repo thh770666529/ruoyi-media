@@ -88,7 +88,6 @@ public class CommentController extends BaseController
 
         Comment commentCondition = new Comment();
         commentCondition.setCommentId(dbComment.getCommentId());
-        //List<Comment> commentList = commentService.getCommentListByParentCommentId(commentCondition, dbComment.getCommentId());
         List<Comment> commentList = commentService.getAllCommentList(commentCondition, dbComment.getCommentId());
         commentList.add(dbComment);
         if (commentList.size() > 0) {

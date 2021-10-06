@@ -77,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         m.category_id,m.category_name,m.qrcode_path,m.open_password,m.password,
         u.nick_name as publishUsername
         from wm_movie m
-        left join sys_user u on m.publish_by = u.user_name
+        left join sys_user u on m.publish_by = u.user_id
     </sql>
 
     <sql id="selectWebMovieVo">
@@ -88,7 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         m.click_count, m.comment_count,m.follow_count,m.collection_count,m.support_count,m.oppose_count,m.share_count,
         u.nick_name as publishUsername
         from wm_movie m
-        left join sys_user u on m.publish_by = u.user_name
+        left join sys_user u on m.publish_by = u.user_id
     </sql>
 
     <select id="selectHotMovieList" parameterType="Integer" resultMap="MovieResult">

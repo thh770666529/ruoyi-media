@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="" @click="editCropper()"><img v-bind:src="options.img" title="点击上传头像" class="img-circle img-lg" /></div>
+    <div class="user-info-head" @click="editCropper()"><img v-bind:src="options.img" title="点击上传头像" class="img-circle img-lg" /></div>
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body @opened="modalOpened"  @close="closeDialog()">
       <el-row>
         <el-col :xs="24" :md="12" :style="{height: '350px'}">
@@ -139,8 +139,8 @@ export default {
     },
     // 关闭窗口
     closeDialog() {
-      this.options.img = getters.avatar
-	  this.visible = false;
+      this.options.img = store.getters.avatar
+	    this.visible = false;
     }
   }
 };
@@ -168,5 +168,38 @@ export default {
   cursor: pointer;
   line-height: 110px;
   border-radius: 50%;
+}
+
+/* image */
+.img-circle {
+  border-radius: 50%;
+}
+
+.img-lg {
+  width: 120px;
+  height: 120px;
+}
+
+.avatar-upload-preview {
+  position: absolute;
+  top: 50%;
+  transform: translate(50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  box-shadow: 0 0 4px #ccc;
+  overflow: hidden;
+}
+
+/* 拖拽列样式 */
+.sortable-ghost{
+  opacity: .8;
+  color: #fff!important;
+  background: #42b983!important;
+}
+
+.top-right-btn {
+  position: relative;
+  float: right;
 }
 </style>

@@ -92,7 +92,9 @@ public class ActorController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Actor actor)
     {
-        return toAjax(actorService.saveOrUpdate(actor));
+        actor.setClickCount(0L);
+        actor.setCollectCount(0L);
+        return toAjax(actorService.save(actor));
     }
 
     /**
