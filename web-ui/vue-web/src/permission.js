@@ -7,6 +7,8 @@ import { getToken } from '@/utils/auth'
 
 NProgress.configure({ showSpinner: false })
 
+const backList = ['/ucenter']
+
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
@@ -25,7 +27,17 @@ router.beforeEach((to, from, next) => {
       next();
     }
   }else {
-    next();
+    // 没有token
+    if (backList.indexOf(to.path) !== -1) {
+      // 黑名单做拦截
+      next({ path: '/' }) // 否则全部重定向到登录页
+      Message.error('未登录无法访问！');
+      store.dispatch('showLoginForm');
+      NProgress.done()
+    } else {
+      next();
+    }
+
   }
 
 })

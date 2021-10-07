@@ -162,6 +162,7 @@
             }
             this.$store.dispatch("Login", this.loginForm).then(() => {
               this.$store.dispatch('GetInfo').then(() => {
+                this.loading = false;
               }).catch(err => {
                 this.$store.store.dispatch('LogOut').then(() => {
                   this.msgError(err)
