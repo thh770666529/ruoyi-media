@@ -3,6 +3,7 @@
     <el-dialog
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :before-close="handleCloseLoginForm"
       :visible.sync="loginFormVisible"
       width="500px">
     <svg-icon slot="prefix" class="QRcodeIcon" icon-class="QRcode"  />
@@ -117,6 +118,10 @@
       this.getCookie();
     },
     methods: {
+      // 关闭登录弹出框
+      handleCloseLoginForm() {
+        this.$store.commit('SET_LOGINFORMVISIBLE', false)
+      },
       getCode() {
         getCodeImg().then(res => {
           this.captchaOnOff = res.captchaOnOff === undefined ? true : res.captchaOnOff;

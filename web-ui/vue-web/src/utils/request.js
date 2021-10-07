@@ -63,7 +63,7 @@ service.interceptors.response.use(res => {
         }
       ).then(() => {
         store.dispatch('LogOut').then(() => {
-          window.location.href = '/';
+          store.dispatch('showLoginForm');
         })
       }).catch(() => {});
       return Promise.reject('无效的会话，或者会话已过期，请重新登录。')

@@ -79,8 +79,6 @@ const user = {
     //跳转到登录页面
     showLoginForm({commit}){
       return new Promise(resolve => {
-        commit('SET_TOKEN', '');
-        removeToken();
         commit('SET_LOGINFORMVISIBLE', true);
         resolve();
         //window.location.href = `/login?redirect=${window.location.href}`
