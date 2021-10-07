@@ -26,17 +26,17 @@
             </a>
           </div>
           <div class="movie-list">
-            <div class="movie-item" v-for="movie in hotPlayMovieList" :key="movie.movieId">
-              <a :href="`/movie/` + movie.movieId">
+            <div class="movie-item" v-for="(item,index) in hotPlayMovieList" :key="index">
+              <a :href="`/movie/` + item.movieId">
                 <div class="movie-poster">
-                  <img :src="fileUploadHost + movie.images" />
+                  <img :src="fileUploadHost + item.images" />
                   <div class="movie-overlay movie-overlay-bg">
                     <div class="movie-info">
                       <div class="movie-score">
-                        <span class="fsize12" v-if="!movie.rate">暂无评分</span>
-                        <i class="integer">{{rateFormatter(movie.rate, 0)}}</i><i class="fraction">{{rateFormatter(movie.rate, 1)}}</i>
+                        <span class="fsize12" v-if="!item.rate">暂无评分</span>
+                        <i class="integer">{{rateFormatter(item.rate, 0)}}</i><i class="fraction">{{rateFormatter(item.rate, 1)}}</i>
                       </div>
-                      <div class="movie-title" :title="movie.title">{{ movie.title }}</div>
+                      <div class="movie-title" :title="item.title">{{ item.title }}</div>
                     </div>
                   </div>
                 </div>
@@ -56,13 +56,13 @@
           </div>
           <div class="movies">
 
-            <div class="movies-model" v-for="(movie,index) in hotPlayMovieList" :key="index">
-              <a :href="`/movie/` + movie.movieId">
+            <div class="movies-model" v-for="(item,index) in hotPlayMovieList" :key="index">
+              <a :href="`/movie/` + item.movieId">
                 <div class="movie-poster">
-                  <img :alt="movie.title" :src="fileUploadHost + movie.images" />
+                  <img :alt="item.title" :src="fileUploadHost + item.images" />
                   <div class="movie-overlay movie-overlay-bg">
                     <div class="movie-info">
-                      <div class="movie-title" :title="movie.title">{{ movie.title }}</div>
+                      <div class="movie-title" :title="item.title">{{ item.title }}</div>
                     </div>
                   </div>
                 </div>
@@ -70,7 +70,7 @@
               <p>46461661人想看</p>
               <button onclick="alert('123')">预告片</button>
               <button onclick="alert('123')">预售</button>
-              <p>{{parseTime(movie.publishTime, '{m}月{d}日')}}上映</p>
+              <p>{{parseTime(item.publishTime, '{m}月{d}日')}}上映</p>
             </div>
 
           </div>
@@ -87,7 +87,7 @@
           <h2>TOP 100 <span>查看完整榜单></span></h2>
           <div class="toplist">
             <ul class="topone">
-              <li class=" top-item-first clearfix"  >
+              <li class=" top-item-first clearfix" v-if="hotMovieList.length > 0" >
                 <a :href="`/movie/` + hotMovieList[0].movieId">
                   <div class="first-item clearfix">
                     <el-image lazy :src="fileUploadHost + hotMovieList[0].images" style="width: 120px;height: 78px" :alt="hotMovieList[0].title">
@@ -100,14 +100,14 @@
                   <p class="money">{{hotMovieList[0].rate}}分</p>
                 </a>
               </li>
-              <li class="top-item" :key="index" v-for="(movie,index) in hotMovieList">
-                <a :href="`/movie/` + movie.movieId">
+              <li class="top-item" :key="index" v-for="(item,index) in hotMovieList">
+                <a :href="`/movie/` + item.movieId" v-if="index > 0">
                   <div class="index-box">
-                    <i v-if="index < 2" class="index index-hot">{{index + 2}}</i>
-                    <i v-else class="index">{{index + 2}}</i>
-                    <span> {{movie.title}}</span>
+                    <i v-if="index < 3" class="index index-hot">{{index + 1}}</i>
+                    <i v-else class="index">{{index + 1}}</i>
+                    <span> {{item.title}}</span>
                   </div>
-                  <span class="index-money">{{movie.rate}}分</span>
+                  <span class="index-money">{{item.rate}}分</span>
                 </a>
               </li>
             </ul>
@@ -133,10 +133,10 @@
                 </a>
               </li>
               <li class="people-item" :key="index" v-for="(actor,index) in hotActorList">
-                <a :href="`/actor/` + actor.actorId">
+                <a :href="`/actor/` + actor.actorId" v-if="index > 0">
                   <div class="index-box">
-                    <i v-if="index < 2" class="index index-hot">{{index + 2}}</i>
-                    <i v-else class="index">{{index + 2}}</i>
+                    <i v-if="index < 3" class="index index-hot">{{index + 1}}</i>
+                    <i v-else class="index">{{index + 1}}</i>
                     <span>{{actor.name}}</span>
                   </div>
                 </a>
@@ -163,10 +163,10 @@
                 </a>
               </li>
               <li class="hotspot-item" :key="article.articleId" v-for="(article,index) in hotArticleList" >
-                <a :href="`/article/` + article.articleId">
+                <a :href="`/article/` + article.articleId" v-if="index > 0">
                   <div class="index-box">
-                    <i v-if="index < 2" class="index index-hot">{{index + 2}}</i>
-                    <i v-else class="index">{{index + 2}}</i>
+                    <i v-if="index < 3" class="index index-hot">{{index + 1}}</i>
+                    <i v-else class="index">{{index + 1}}</i>
                     <span>{{article.title}}</span>
                   </div>
                 </a>

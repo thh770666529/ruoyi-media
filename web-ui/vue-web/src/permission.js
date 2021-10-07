@@ -10,25 +10,24 @@ NProgress.configure({ showSpinner: false })
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
-    if (to.path === '/login') {
-      next({ path: '/' })
-      NProgress.done()
-    } else {
-      if (!store.getters.userId) {
+    if (!store.getters.userId) {
         // 判断当前用户是否已拉取完user_info信息
         store.dispatch('GetInfo').then(() => {
+          next();
         }).catch(err => {
           store.dispatch('LogOut').then(() => {
               Message.error(err)
-              next({ path: '/login' })
-            })
+              next({ path: '/' })
           })
-      }
-      next()
+        })
+
+    }else {
+      next();
     }
   }else {
-    next()
+    next();
   }
+
 })
 
 router.afterEach(() => {

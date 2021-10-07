@@ -9,5 +9,7 @@ const getters = {
   isLogin: (state) => state.user.token,
   // 用户ID
   userId: (state) => state.user.userId,
+  // 登录弹出框
+  loginFormVisible: (state) => state.user.loginFormVisible
 }
 export default getters

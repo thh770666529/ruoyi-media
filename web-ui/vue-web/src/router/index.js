@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Layout from '../layout/Layout'
-import UserLayout from '../layout/UserLayout'
 Vue.use(VueRouter);
 
 const routes = [
@@ -47,18 +46,6 @@ const routes = [
             }
 
         ],
-    },
-    {
-      path: '/',
-      component: UserLayout,
-      hidden: true,
-      children: [
-        {
-          path: 'login',
-          name: 'login',
-          component: () => import(/* webpackChunkName: "user" */ '@/views/user/login')
-        }
-      ]
     }
 ];
 

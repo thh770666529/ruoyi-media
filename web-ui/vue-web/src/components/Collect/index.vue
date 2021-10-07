@@ -53,7 +53,7 @@
             type: 'warning'
           }).then(() => {
             //如果没有登录 则转到登录页面
-            return this.$store.dispatch('LoginPage')
+            return this.$store.dispatch('showLoginForm')
           }).catch(() => {
             this.$message({
               type: 'info',

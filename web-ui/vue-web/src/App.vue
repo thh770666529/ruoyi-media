@@ -1,9 +1,23 @@
 <template>
   <div id="vue_web">
     <router-view />
+    <loginForm></loginForm>
   </div>
 </template>
-
+<script>
+  import loginForm from '@/components/LoginForm'
+  export default  {
+    data() {
+      return {
+      }
+    },
+    components: {
+      loginForm
+    },
+    computed: {
+    }
+  }
+</script>
 <style lang="less" module>
 .header {
   margin: 1.5em;

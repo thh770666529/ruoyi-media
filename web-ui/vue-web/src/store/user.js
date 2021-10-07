@@ -8,7 +8,8 @@ const user = {
     avatar: '',
     roles: [],
     userId: '',
-    permissions: []
+    permissions: [],
+    loginFormVisible: false  //  登录框显隐状态
   },
 
   mutations: {
@@ -29,6 +30,9 @@ const user = {
     },
     SET_USERID: (state, userId) => {
       state.userId = userId
+    },
+    SET_LOGINFORMVISIBLE: (state, loginFormVisible) => {
+      state.loginFormVisible = loginFormVisible
     }
   },
 
@@ -43,6 +47,7 @@ const user = {
         login(username, password, code, uuid).then(res => {
           setToken(res.token)
           commit('SET_TOKEN', res.token)
+          commit('SET_LOGINFORMVISIBLE', false);
           resolve()
         }).catch(error => {
           reject(error)
@@ -62,9 +67,9 @@ const user = {
           } else {
             commit('SET_ROLES', ['ROLE_DEFAULT'])
           }
-          commit('SET_NAME', user.userName)
-          commit('SET_AVATAR', avatar)
-          commit('SET_USERID', user.userId)
+          commit('SET_NAME', user.userName);
+          commit('SET_AVATAR', avatar);
+          commit('SET_USERID', user.userId);
           resolve(res)
         }).catch(error => {
           reject(error)
@@ -72,12 +77,13 @@ const user = {
       })
     },
     //跳转到登录页面
-    LoginPage({commit}){
+    showLoginForm({commit}){
       return new Promise(resolve => {
-        commit('SET_TOKEN', '')
-        removeToken()
+        commit('SET_TOKEN', '');
+        removeToken();
+        commit('SET_LOGINFORMVISIBLE', true);
         resolve();
-        window.location.href = `/login?redirect=${window.location.href}`
+        //window.location.href = `/login?redirect=${window.location.href}`
       });
 
     },

@@ -1,5 +1,10 @@
 <template>
   <div class="main">
+    <el-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :visible.sync="loginFormVisible"
+      width="500px">
     <svg-icon slot="prefix" class="QRcodeIcon" icon-class="QRcode"  />
     <el-form id="formLogin" ref="loginForm" class="user-layout-login" :model="loginForm" :rules="loginRules">
       <h2 class="mt10 mb15">用户登录</h2>
@@ -54,7 +59,9 @@
           <svg-icon slot="prefix" class="Sina" icon-class="Sina" />
         </div>
       </el-row>
-    </el-form>
+     </el-form>
+
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -100,6 +107,11 @@
         immediate: true
       }
     },
+    computed: {
+      loginFormVisible(){
+        return this.$store.state.user.loginFormVisible
+      }
+    },
     created() {
       this.getCode();
       this.getCookie();
@@ -138,8 +150,14 @@
               Cookies.remove('rememberMe');
             }
             this.$store.dispatch("Login", this.loginForm).then(() => {
+              this.$store.dispatch('GetInfo').then(() => {
+              }).catch(err => {
+                this.$store.store.dispatch('LogOut').then(() => {
+                  this.msgError(err)
+                })
+              })
               //this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
-              window.location.href =  this.redirect || "/";
+              //window.location.href =  this.redirect || "/";
             }).catch(() => {
               this.loading = false;
               if (this.captchaOnOff) {

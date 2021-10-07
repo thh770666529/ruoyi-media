@@ -71,7 +71,7 @@
 
       <ul class="h-r-login">
         <li v-if="!isLogin">
-          <a href="/login" tag="a" title="登录">
+          <a href="#" @click="$store.dispatch('showLoginForm')" title="登录">
             <em class="icon18 login-icon">&nbsp;</em>
             <span class="vam ml5">登录</span>
           </a>
@@ -140,8 +140,7 @@ export default {
   methods: {
     handleCommand(command){
       if (!this.isLogin){
-        //如果没有登录 则转到登录页面
-        window.location.href = '/login'
+        this.$store.dispatch('showLoginForm');
       }
       switch (command) {
         case 'ucenter':
