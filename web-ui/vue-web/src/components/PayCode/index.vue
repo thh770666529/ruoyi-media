@@ -296,12 +296,12 @@ export default {
   }
 
   .shang_payimg {
-    width: 140px;
-    padding: 10px;
+    width: 162px;
+    padding: 5px;
     border: 6px solid #EA5F00;
     margin: 0 auto;
     border-radius: 3px;
-    height: 140px;
+    height: 162px;
   }
 
   .shang_payimg img {
