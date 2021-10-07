@@ -1,9 +1,12 @@
+'use strict'
 const autoprefixer = require('autoprefixer')
 const _ = require('lodash')
-const { join } = require('path')
 const env = process.env
 const isDev = env.VUE_APP_ENV === 'dev'
-
+const path = require('path')
+function resolve(dir) {
+  return path.join(__dirname, dir)
+}
 /* 当代理的前缀为空时 */
 if (isDev) {
   const isEmpty = prefix => prefix === '' || prefix === '/'
@@ -86,20 +89,26 @@ module.exports = () => ({
       return /[\\/]src[\\/]libs[\\/].+\.js$/.test(path)
     })
 
-    const svgSpriteIconsDir = join(__dirname, './src/components/SvgIcon/icons/')
-    config.module.rule('svg').exclude.add(svgSpriteIconsDir)
+    config.plugins.delete('preload') // TODO: need test
+    config.plugins.delete('prefetch') // TODO: need test
+
+    // set svg-sprite-loader
     config.module
-      .rule('svg-sprite')
-      .after('svg')
-      .test(/\.(svg)(\?.*)?$/)
-      .include.add(svgSpriteIconsDir)
+      .rule('svg')
+      .exclude.add(resolve('src/assets/icons'))
+      .end()
+    config.module
+      .rule('icons')
+      .test(/\.svg$/)
+      .include.add(resolve('src/assets/icons'))
       .end()
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
-      .options({ symbolId: 'svgSpriteIcon__[name]' })
-      .end()
-      .use('svgo-loader')
-      .loader('svgo-loader')
+      .options({
+        symbolId: 'icon-[name]'
+      }).end()
+
+
 
         if (config.plugins.has('copy')) {
       config.plugin('copy').tap(args => {

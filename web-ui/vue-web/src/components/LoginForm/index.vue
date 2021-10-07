@@ -1,11 +1,12 @@
 <template>
-  <div class="main">
+  <div>
     <el-dialog
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       :before-close="handleCloseLoginForm"
       :visible.sync="loginFormVisible"
       width="500px">
+    <div class="logFormMain">
     <svg-icon slot="prefix" class="QRcodeIcon" icon-class="QRcode"  />
     <el-form id="formLogin" ref="loginForm" class="user-layout-login" :model="loginForm" :rules="loginRules">
       <h2 class="mt10 mb15">用户登录</h2>
@@ -52,16 +53,20 @@
         </el-button>
       </el-form-item>
       <el-row>
-        <div style="margin-top: -10px;">其它登录方式</div>
-        <div class="icons-list">
-          <svg-icon slot="prefix" class="dingtalk" icon-class="dingtalk"  />
-          <svg-icon slot="prefix" class="WeChat" icon-class="WeChat" />
-          <svg-icon slot="prefix" class="Alipay" icon-class="Alipay"  />
-          <svg-icon slot="prefix" class="Sina" icon-class="Sina" />
-        </div>
+        <el-col :span="5">
+          <div style="margin: auto;">其它登录方式</div>
+        </el-col>
+        <el-col :span="18">
+          <div class="icons-list">
+            <svg-icon slot="prefix" class="dingtalk" icon-class="dingtalk"  />
+            <svg-icon slot="prefix" class="WeChat" icon-class="WeChat" />
+            <svg-icon slot="prefix" class="Alipay" icon-class="Alipay"  />
+            <svg-icon slot="prefix" class="Sina" icon-class="Sina" />
+          </div>
+        </el-col>
       </el-row>
      </el-form>
-
+    </div>
     </el-dialog>
   </div>
 </template>
@@ -177,13 +182,22 @@
 </script>
 
 <style lang="less" scoped>
+
+  .logFormMain {
+    position: relative;
+  }
   .QRcodeIcon{
     position: absolute;
     right:0;
     font-size: 32px;
     color: #1890ff;
-    margin-top:5px;
-    margin-right:5px;
+    bottom: -15px;
+    margin-right:-15px;
+    transform:rotate(90deg);
+    -ms-transform:rotate(90deg); 	/* IE 9 */
+    -moz-transform:rotate(90deg); 	/* Firefox */
+    -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+    -o-transform:rotate(90deg); 	/* Opera */
   }
   .ant-space-align-center{
     color:#8f959e;
@@ -214,9 +228,9 @@
     border-radius: 4px;
   }
   .icons-list{
-    .anticon {
-      font-size: 30px;
-      width: 40px;
+    .svg-icon {
+      font-size: 27px;
+      width: 36px;
     }
     .dingtalk{
       color: #0089FF;
