@@ -59,6 +59,7 @@
         <el-col :span="18">
           <div class="icons-list">
             <svg-icon slot="prefix" class="dingtalk" icon-class="dingtalk"  />
+            <svg-icon slot="prefix" class="github" icon-class="github" />
             <svg-icon slot="prefix" class="WeChat" icon-class="WeChat" />
             <svg-icon slot="prefix" class="Alipay" icon-class="Alipay"  />
             <svg-icon slot="prefix" class="Sina" icon-class="Sina" />
