@@ -187,7 +187,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         movieActorMap.put("movie_id",movieVO.getMovieId());
         movieActorMapper.deleteByMap(movieActorMap);
         this.insertActor(movieVO,MovieActorType.ACTOR);
-        movieVO.setUpdateTime(DateUtils.getNowDate());
+        this.insertActor(movieVO,MovieActorType.DIRECTOR);
         return  movieMapper.updateById(movieVO);
     }
 

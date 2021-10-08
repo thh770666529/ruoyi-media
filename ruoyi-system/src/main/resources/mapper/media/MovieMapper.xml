@@ -55,7 +55,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from wm_movie_actor ma,wm_actor a
         <where>
             ma.actor_id = a.actor_id AND ma.type = 'actor'
-            <if test="actorId != null "> AND ma.actor_id = #{actorId}</if>
             <if test="movieId != null "> AND ma.movie_id = #{movieId}</if>
         </where>
     </select>
@@ -65,7 +64,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from wm_movie_actor ma,wm_actor a
         <where>
             ma.actor_id = a.actor_id AND ma.type = 'director'
-            <if test="actorId != null "> AND ma.actor_id = #{actorId}</if>
             <if test="movieId != null "> AND ma.movie_id = #{movieId}</if>
         </where>
     </select>
