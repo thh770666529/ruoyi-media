@@ -125,7 +125,7 @@ public class FileDealComp {
                 .eq(UserFile::getDeleteFlag, 0)
                 .eq(UserFile::getUserId, sessionUserId)
                 .groupBy(UserFile::getFilePath, UserFile::getFileName)
-                .having("count(fileName) >= 2");
+                .having("count(file_name) >= 2");
         List<UserFile> repeatList = userFileMapper.selectList(lambdaQueryWrapper);
 
         for (UserFile userFile : repeatList) {
