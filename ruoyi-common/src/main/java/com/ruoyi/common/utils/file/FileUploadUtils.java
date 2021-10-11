@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import cn.hutool.core.io.file.FileNameUtil;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -87,6 +88,38 @@ public class FileUploadUtils
         catch (Exception e)
         {
             throw new IOException(e.getMessage(), e);
+        }
+    }
+
+
+    /**
+     * 根据文件路径上传
+     *
+     * @param baseDir 相对应用的基目录
+     * @param url 上传的文件
+     * @return 文件名称
+     * @throws IOException
+     */
+    public static final String uploadByUrl(String baseDir, String url) throws IOException
+    {
+        if (StringUtils.isEmpty(url)){
+            return "";
+        }
+        String extension = FilenameUtils.getExtension(url);
+        File dirFile = new File(baseDir);
+        if (!dirFile.exists()){
+            dirFile.mkdirs();
+        }
+        String fileName = IdUtils.fastUUID() + "." + extension;
+        String filePath = baseDir + "/" +  DateUtils.datePath() + "/" + fileName;
+        FileUtils.download(url, filePath);
+        File file = new File(filePath);
+        if (file.exists()) {
+            int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
+            String currentPath = StringUtils.substring(filePath, dirLastIndex);
+            return "/" + currentPath;
+        } else {
+            return "";
         }
     }
 

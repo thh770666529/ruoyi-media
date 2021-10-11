@@ -59,7 +59,7 @@
         <el-col :span="18">
           <div class="icons-list">
             <svg-icon slot="prefix" class="dingtalk" icon-class="dingtalk"  />
-            <svg-icon slot="prefix" class="github" icon-class="github" />
+            <svg-icon slot="prefix" class="github" @click="thirdAuthRender('gitee')" icon-class="github" />
             <svg-icon slot="prefix" class="WeChat" icon-class="WeChat" />
             <svg-icon slot="prefix" class="Alipay" icon-class="Alipay"  />
             <svg-icon slot="prefix" class="Sina" icon-class="Sina" />
@@ -73,6 +73,7 @@
 </template>
 <script>
   import { getCodeImg } from "@/api/login";
+  import { authRender } from "@/api/auth";
   import Cookies from "js-cookie";
   import { encrypt, decrypt } from '@/utils/jsencrypt'
 
@@ -103,7 +104,8 @@
         captchaOnOff: true,
         // 注册开关
         register: false,
-        redirect: undefined
+        redirect: undefined,
+        authorizeUrl: undefined
       };
     },
     watch: {
@@ -112,6 +114,9 @@
           this.redirect = route.query && route.query.redirect;
         },
         immediate: true
+      },
+      authorizeUrl(url){
+        window.open(url, '第三方授权', 'height=600, width=1000, top=200, left=400, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
       }
     },
     computed: {
@@ -124,6 +129,13 @@
       this.getCookie();
     },
     methods: {
+      // 第三方登录认证
+      thirdAuthRender(source) {
+        this.handleCloseLoginForm();
+        authRender(source).then(res => {
+          this.authorizeUrl = res.data.authorizeUrl;
+        })
+      },
       // 关闭登录弹出框
       handleCloseLoginForm() {
         this.$store.commit('SET_LOGINFORMVISIBLE', false)

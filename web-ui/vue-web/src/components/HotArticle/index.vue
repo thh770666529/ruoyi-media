@@ -11,8 +11,8 @@
 
       <ul class="sidenews">
         <li v-for="item in sideNews" :key="item.articleId">
-          <i><img style="cursor:pointer" v-if="item.images" @click="goToInfo(hotArticleData[0])" :src="fileUploadHost + item.images"></i>
-          <p><a href="javascript:void(0);" @click="goToInfo(item)">{{item.title}}</a></p>
+          <i><img style="cursor:pointer" @click="goToInfo(hotArticleData[0])" :src="fileUploadHost + item.images"></i>
+          <p><a href="javascript:void(0);" @click="goToInfo(item)">{{item.title?item.title:'暂无标题'}}</a></p>
           <span>{{item.createTime}}</span>
         </li>
       </ul>

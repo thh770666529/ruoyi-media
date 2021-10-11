@@ -174,7 +174,19 @@ export function handleTree(data, id, parentId, children) {
 }
 
 export function timeFix () {
-  const time = new Date()
-  const hour = time.getHours()
-  return hour < 9 ? '早上好' : hour <= 11 ? '上午好' : hour <= 13 ? '中午好' : hour < 20 ? '下午好' : '晚上好'
+  const time = new Date();
+  const hour = time.getHours();
+  return hour < 9 ? '早上好' : hour <= 11 ? '上午好' : hour <= 13 ? '中午好' : hour < 20 ? '下午好' : '晚上好';
+}
+
+/**
+ * 截取URL中的参数
+ * @returns {{}}
+ */
+export function getUrlParams() {
+  let varMap = {};
+  window.location.href.replace(/[?&]+([^=&]+)=([^&#]*)/gi,function (m, key, value) {
+    varMap[key] = value;
+   });
+  return varMap;
 }

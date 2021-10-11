@@ -1,7 +1,7 @@
 # 项目相关配置
 ruoyi:
   # 名称
-  name: RuoYi
+  name: RuoYi-Media
   # 版本
   version: 0.1.0
   # 版权年份
@@ -11,10 +11,9 @@ ruoyi:
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   profile: /home/thh/projects/file_data
   # 获取ip地址开关
-  addressEnabled: false
+  addressEnabled: true
   # 验证码类型 math 数组计算 char 字符验证
   captchaType: math
-
 
 ufo:
   storage-type: 0  #存储类型 0 本地存储
@@ -117,3 +116,18 @@ spring:
         max-active: 8
         # #连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1ms
+
+# 第三方登录，参考 https://justauth.wiki/guide/oauth
+just-auth:
+  gitee:
+    clientId: f7e32141f5c178ab24d7764a538f43131d40839037ce63eb1ca54159cca6ccda
+    clientSecret: e4005bf9763c288a184d87d05c8afbe426612d5563b4c47823ed1dab68955f5b
+  gihub:
+    clientId: e5cf90f79b02128d8f140d6898c480ea9dc5278e15a23617e38b58de8ebdc8be
+    clientSecret: c02d1df684909ba465cf521d94209e2a50e45f2199244f2af697b514efb38d60
+  qq:
+    clientId: e5cf90f79b02128d8f140d6898c480ea9dc5278e15a23617e38b58de8ebdc8be
+    clientSecret: c02d1df684909ba465cf521d94209e2a50e45f2199244f2af697b514efb38d60
+  redirectUri: http://8.129.13.79:7070/auth/callback/
+  defaultPwd: 123456
+  websiteUrl: http://8.129.13.79:9000/

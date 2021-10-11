@@ -2185,4 +2185,22 @@ INSERT INTO `wm_video` VALUES (3, '23_actuator微服务信息完善', '/movie/vi
 INSERT INTO `wm_video` VALUES (4, '15_Eureka基础知识', '/movie/video/2021/10/01/109cd9d692324b6cbbf74e7f466d1895/109cd9d692324b6cbbf74e7f466d1895.mp4', 'mp4', '11:25', NULL, NULL, '2021-10-04 10:51:20', 'admin', '2021-10-04 10:51:20', 'admin', NULL, NULL, 128, 41229225, '4', '', '/movie\\video\\2021\\10\\01\\109cd9d692324b6cbbf74e7f466d1895/720/hls/109cd9d692324b6cbbf74e7f466d1895.m3u8', '/movie\\video\\2021\\10\\01\\109cd9d692324b6cbbf74e7f466d1895/360/hls/109cd9d692324b6cbbf74e7f466d1895.m3u8', NULL);
 INSERT INTO `wm_video` VALUES (6, '第一集', '/movie/video/2021/10/03/b846f93421f84454979da619879de15c/b846f93421f84454979da619879de15c.mp4', 'mp4', '11:25', NULL, NULL, NULL, 'admin', NULL, 'admin', NULL, NULL, 129, 41229225, '1', NULL, NULL, NULL, NULL);
 
+
+-- ----------------------------
+-- 第三方授权表
+-- ----------------------------
+drop table if exists sys_auth_user;
+create table sys_auth_user (
+  auth_id           bigint(20)      not null auto_increment    comment '授权ID',
+  uuid              varchar(500)    not null                   comment '第三方平台用户唯一ID',
+  user_id           bigint(20)      not null                   comment '系统用户ID',
+  login_name        varchar(30)     not null                   comment '登录账号',
+  user_name         varchar(30)     default ''                 comment '用户昵称',
+  avatar            varchar(500)    default ''                 comment '头像地址',
+  email             varchar(255)    default ''                 comment '用户邮箱',
+  source            varchar(255)    default ''                 comment '用户来源',
+  create_time       datetime                                   comment '创建时间',
+  primary key (auth_id)
+) engine=innodb auto_increment=100 comment = '第三方授权表';
+
 SET FOREIGN_KEY_CHECKS = 1;

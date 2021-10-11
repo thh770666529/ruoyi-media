@@ -103,6 +103,8 @@
 
 <script>
 import  '@/assets/styles/css/clear.css';
+import  { getUrlParams } from '@/utils/ruoyi';
+import  { setToken } from '@/utils/auth';
 import { mapGetters } from 'vuex'
 export default {
   name: "Header",
@@ -133,41 +135,47 @@ export default {
       'isLogin'
     ])
   },
-
   mounted() {
+    this.getToken();
   },
-
   methods: {
+    getToken() {
+      let token = this.$route.query.thirdToken || '';
+      if (token){
+        setToken(token);
+        self.opener.location.reload();
+        window.close()
+      }
+    },
     handleCommand(command){
       if (!this.isLogin){
         this.$store.dispatch('showLoginForm');
       }
       switch (command) {
         case 'ucenter':
-          window.open('/ucenter', '_blank')
-          break
+          window.open('/ucenter', '_blank');
+          break;
         case 'editPassword':
-          window.open("/ucenter/editPassword", '_blank')
-          break
+          window.open("/ucenter/editPassword", '_blank');
+          break;
         case 'movie':
           // 以新窗口方式 打开编辑文章窗口
-          window.open('/movie', '_blank')
-          break
+          window.open('/movie', '_blank');
+          break;
         case 'actor':
-          window.open('/actor', '_blank')
-          break
+          window.open('/actor', '_blank');
+          break;
         case 'logout':
           this.$store.dispatch('LogOut').then(() => {
             this.msgInfo("退出成功！")
           }).catch(err => {
-          })
-          break
+          });
+          break;
         default:
           break
       }
     }
-  },
-
+  }
 }
 </script>
 
