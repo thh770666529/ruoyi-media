@@ -287,17 +287,10 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!--文件上传模块-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
                 <artifactId>ruoyi-ufo</artifactId>
-                <version>${ruoyi.version}</version>
-            </dependency>
-
-
-
-            <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-file</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
