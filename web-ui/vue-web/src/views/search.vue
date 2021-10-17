@@ -3,7 +3,12 @@
     <el-row type="flex">
       <!--左边-->
       <el-col :span="16" class="mt20">
-        <div class="keyword">与<span style = 'color:red'>{{keyword}}</span>相关的搜索结果</div>
+        <span>
+          <el-input v-model="keyword" maxlength="256" >
+             <el-button type="primary" @click="search"  slot="append">搜索</el-button>
+          </el-input>
+        </span>
+        <div class="keyword">与<span style='color:red'>{{queryParams.keyword}}</span>相关的搜索结果</div>
 
         <el-empty v-if="movieList.length === 0" description="没有搜索到任何数据！"></el-empty>
 
@@ -25,7 +30,7 @@
           <h3 class="movie-title">
             <a href="javascript:void(0);" @click="toMovieDetail(item.movieId)" v-html="item.title">{{item.title}}</a>
           </h3>
-         <p class="movie-text" v-html="item.description"></p>
+          <p class="movie-text" v-html="item.description"></p>
 
           <div class="movie-info">
             <ul>
@@ -79,20 +84,21 @@
 
 <script>
   import indexApi from '@/api/index'
-  import { getDicts } from '@/api/system/dict/data'
-  import { listTag } from "@/api/media/tag";
-  import { listCategory } from "@/api/media/category";
+  import {getDicts} from '@/api/system/dict/data'
+  import {listTag} from "@/api/media/tag";
+  import {listCategory} from "@/api/media/category";
   import {getDictsByTypeList} from "@/api/system/dict/data";
+
   export default {
     name: 'ArticleList',
-    components: {
-    },
+    components: {},
     data() {
       return {
         movieList: [],
         tagOptions: [],
         categoryOptions: [],
         total: 0,
+        keyword: '',
         queryParams: {
           pageNum: 1,
           pageSize: 12,
@@ -102,34 +108,33 @@
       }
     },
     computed: {
-      keyword() {
-        return  this.$route.query.keyword;
-      }
     },
     watch: {
       $route(route) {
+        this.keyword =  route.query.keyword;
         this.search();
       }
     },
     created() {
+      this.keyword =  this.$route.query.keyword;
       this.init();
     },
     methods: {
       init() {
-        const dictTypeList =  ['movie_country', 'movie_status', 'movie_type'];
+        const dictTypeList = ['movie_country', 'movie_status', 'movie_type'];
         getDictsByTypeList(dictTypeList).then(response => {
           this.countryOptions = response.data.movie_country;
         });
         listCategory({status: '1'}).then(response => {
-          this.categoryOptions =  response.rows;
+          this.categoryOptions = response.rows;
         });
         listTag({status: '1'}).then(response => {
-          this.tagOptions =  response.rows;
+          this.tagOptions = response.rows;
         });
         this.search();
       },
       actorFormatter(actorList) {
-        if (!actorList||actorList.length === 0){
+        if (!actorList || actorList.length === 0) {
           return '无';
         }
         const currentSeparator = ",";
@@ -140,15 +145,15 @@
         return actions.join('').substring(0, actions.join('').length - 1);
       },
       /** 标签翻译 */
-      tagFormat(tagOptions,tagId) {
-        if(!tagId || !tagOptions) {
+      tagFormat(tagOptions, tagId) {
+        if (!tagId || !tagOptions) {
           return ''
         }
         const currentSeparator = ",";
         let actions = [];
         let tempArr = tagId.split(currentSeparator);
         for (let i = 0; i < tempArr.length; i++) {
-          for (let j = 0; j < tagOptions.length ; j++) {
+          for (let j = 0; j < tagOptions.length; j++) {
             if (tagOptions[j].tagId == ('' + tempArr[i])) {
               actions.push(tagOptions[j].content + '/');
               break;
@@ -158,7 +163,7 @@
         return actions.join('').substring(0, actions.join('').length - 1);
       },
       search() {
-        if (!this.keyword){
+        if (!this.keyword) {
           this.msgError('搜索关键字不得为空！')
           return;
         }
@@ -180,6 +185,7 @@
     width: 1200px;
     margin: auto;
   }
+
   .keyword {
     font-size: 24px;
     margin-bottom: 15px;
@@ -309,6 +315,16 @@
 
   .movie-info ul li a:hover {
     color: #000
+  }
+
+   .s_ipt_wr {
+    width: 590px;
+    height: 36px;
+    border: 2px solid #c4c7ce;
+    border-radius: 10px 0 0 10px;
+    border-right: 0;
+    overflow: visible;
+    background-image: none;
   }
 
 </style>
