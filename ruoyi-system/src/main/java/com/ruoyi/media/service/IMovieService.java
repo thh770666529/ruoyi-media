@@ -3,6 +3,7 @@ package com.ruoyi.media.service;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ruoyi.index.vo.SearchParamVO;
 import com.ruoyi.media.domain.Movie;
 import com.ruoyi.media.domain.vo.MovieVO;
 
@@ -99,4 +100,11 @@ public interface IMovieService extends IService<Movie>
      * @return
      */
     List<MovieVO> selectWebMovieList(MovieVO movieVO);
+
+    /**
+     * 搜索门户
+     * @param searchParamVO
+     * @return
+     */
+    List<MovieVO> search(SearchParamVO searchParamVO);
 }

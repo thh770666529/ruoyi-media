@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.MovieActorType;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.index.vo.SearchParamVO;
 import com.ruoyi.media.domain.MovieActor;
 import com.ruoyi.media.domain.vo.MovieActorVO;
 import com.ruoyi.media.domain.vo.MovieVO;
@@ -262,5 +263,92 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Override
     public List<MovieVO> selectWebMovieList(MovieVO movieVO) {
         return movieMapper.selectWebMovieList(movieVO);
+    }
+
+    @Override
+    public List<MovieVO> search(SearchParamVO searchParamVO) {
+        List<MovieVO> movieVOList = movieMapper.searchWebMovieList(searchParamVO);
+        String keyword = searchParamVO.getKeyword();
+        movieVOList.forEach(item -> {
+            // 给标题、简介、分类 设置高亮
+            item.setTitle(getHitCode(item.getTitle(), keyword));
+            item.setDescription(getHitCode(item.getDescription(), keyword));
+            item.setCategoryName(getHitCode(item.getCategoryName(), keyword));
+        });
+        return movieVOList;
+    }
+
+
+
+
+    /**
+     * 添加高亮
+     * @param str 截取字符串
+     * @param keyword 关键字
+     * @return 返回添加了高亮的字符串
+     */
+    private String getHitCode(String str, String keyword) {
+        if (StringUtils.isEmpty(keyword) || StringUtils.isEmpty(str)) {
+            return str;
+        }
+        String startStr = "<span style = 'color:red'>";
+        String endStr = "</span>";
+        // 判断关键字是否直接是搜索的内容，否者直接返回
+        if (str.equals(keyword)) {
+            return startStr + str + endStr;
+        }
+        String lowerCaseStr = str.toLowerCase();
+        String lowerKeyword = keyword.toLowerCase();
+        String[] lowerCaseArray = lowerCaseStr.split(lowerKeyword);
+        boolean isEndWith = lowerCaseStr.endsWith(lowerKeyword);
+
+        // 计算分割后的字符串位置
+        Integer count = 0;
+        List<Map<String, Integer>> list = new ArrayList<>();
+        List<Map<String, Integer>> keyList = new ArrayList<>();
+        for (int index = 0; index < lowerCaseArray.length; index++) {
+            // 将切割出来的存储map
+            Map<String, Integer> map = new HashMap<>();
+            Map<String, Integer> keyMap = new HashMap<>();
+            map.put("startIndex", count);
+            Integer len = lowerCaseArray[index].length();
+            count += len;
+            map.put("endIndex", count);
+            list.add(map);
+            if (index < lowerCaseArray.length - 1 || isEndWith) {
+                // 将keyword存储map
+                keyMap.put("startIndex", count);
+                count += keyword.length();
+                keyMap.put("endIndex", count);
+                keyList.add(keyMap);
+            }
+        }
+        // 截取切割对象
+        List<String> arrayList = new ArrayList<>();
+        for (Map<String, Integer> item : list) {
+            Integer start = item.get("startIndex");
+            Integer end = item.get("endIndex");
+            String itemStr = str.substring(start, end);
+            arrayList.add(itemStr);
+        }
+        // 截取关键字
+        List<String> keyArrayList = new ArrayList<>();
+        for (Map<String, Integer> item : keyList) {
+            Integer start = item.get("startIndex");
+            Integer end = item.get("endIndex");
+            String itemStr = str.substring(start, end);
+            keyArrayList.add(itemStr);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int index = 0; index < arrayList.size(); index++) {
+            sb.append(arrayList.get(index));
+            if (index < arrayList.size() - 1 || isEndWith) {
+                sb.append(startStr);
+                sb.append(keyArrayList.get(index));
+                sb.append(endStr);
+            }
+        }
+        return sb.toString();
     }
 }

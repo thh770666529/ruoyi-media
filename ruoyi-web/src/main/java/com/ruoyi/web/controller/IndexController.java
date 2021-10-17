@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.blog.domain.Article;
 import com.ruoyi.blog.domain.Tag;
 import com.ruoyi.blog.service.IArticleService;
@@ -8,6 +9,9 @@ import com.ruoyi.blog.service.ITagService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.index.vo.SearchParamVO;
+import com.ruoyi.media.domain.vo.MovieVO;
 import com.ruoyi.media.service.IActorService;
 import com.ruoyi.media.service.IMovieService;
 import com.ruoyi.website.domain.WebsiteBanner;
@@ -101,5 +105,15 @@ public class IndexController extends BaseController {
         log.info("门户获取最热标签");
         List<Tag> list = tagService.selectHotTagList(10);
         return AjaxResult.success(list);
+    }
+
+
+    @GetMapping("/search")
+    public TableDataInfo search(SearchParamVO searchParamVO){
+        if (searchParamVO == null || StringUtils.isBlank(searchParamVO.getKeyword())){
+            error("请输入关键字！");
+        }
+        List<MovieVO> list = movieService.search(searchParamVO);
+        return getDataTable(list);
     }
 }

@@ -51,5 +51,14 @@ export default {
       url: '/index/getHotTagList',
       method: 'get'
     })
+  },
+
+  //获取最新的文章列表
+  search(query) {
+    return request({
+      url: '/index/search',
+      method: 'get',
+      params: query
+    })
   }
 }

@@ -89,6 +89,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join sys_user u on m.publish_by = u.user_id
     </sql>
 
+
+
+    <select id="searchWebMovieList" parameterType="com.ruoyi.index.vo.SearchParamVO" resultMap="MovieResult">
+        select m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
+        m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
+        m.open_comment, m.price, m.rate,
+        m.category_id,m.category_name,m.qrcode_path,m.open_password,
+        m.click_count, m.comment_count,m.follow_count,m.collection_count,m.support_count,m.oppose_count,m.share_count,
+        u.nick_name as publishUsername
+        from wm_movie m
+        left join sys_user u on m.publish_by = u.user_id
+        where
+            m.status = 0
+        <if test="keyword != null  and keyword != ''">
+           and
+           (
+           m.title like concat('%', #{keyword}, '%')
+           or m.description like concat('%', #{keyword}, '%')
+           or m.category_name like concat('%', #{keyword}, '%')
+           or date_format(m.publish_time,'%Y') like concat('%', #{keyword}, '%')
+           )
+        </if>
+           order by create_time desc
+    </select>
+
+
+
     <select id="selectHotMovieList" parameterType="Integer" resultMap="MovieResult">
         <include refid="selectWebMovieVo"/>
         order by m.create_time desc limit #{top}

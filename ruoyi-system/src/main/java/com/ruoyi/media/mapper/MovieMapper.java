@@ -3,6 +3,7 @@ package com.ruoyi.media.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.index.vo.SearchParamVO;
 import com.ruoyi.media.domain.Movie;
 import com.ruoyi.media.domain.vo.MovieVO;
 import org.springframework.stereotype.Repository;
@@ -55,4 +56,11 @@ public interface MovieMapper extends BaseMapper<Movie>
      * @return
      */
     List<MovieVO> selectWebMovieList(MovieVO movieVO);
+
+    /**
+     * 搜索电影列表
+     * @param searchParamVO
+     * @return
+     */
+    List<MovieVO> searchWebMovieList(SearchParamVO searchParamVO);
 }
