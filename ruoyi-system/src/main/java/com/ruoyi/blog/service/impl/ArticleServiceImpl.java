@@ -104,6 +104,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
     @Override
     public int updateArticle(Article article)
     {
+        //删除热门文章 防止门户热门文章不同步的情况
+        redisCache.deleteObject(BaseRedisKeyConstants.HOT_BLOG_ARTICLE);
         article.setUpdateTime(DateUtils.getNowDate());
         return articleMapper.updateById(article);
     }
