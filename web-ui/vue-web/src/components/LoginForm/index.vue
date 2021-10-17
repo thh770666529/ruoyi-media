@@ -58,11 +58,14 @@
         </el-col>
         <el-col :span="18">
           <div class="icons-list">
-            <svg-icon slot="prefix" class="dingtalk" icon-class="dingtalk"  />
+            <svg-icon slot="prefix" v-if="loginType.wechat" class="WeChat" @click="thirdAuthRender('wechat')" icon-class="WeChat" />
+            <svg-icon slot="prefix" v-if="loginType.qq" class="Alipay"  @click="thirdAuthRender('qq')" icon-class="qq"  />
+            <svg-icon slot="prefix" v-if="loginType.gitee" @click="thirdAuthRender('gitee')" icon-class="gitee" />
+            <svg-icon slot="prefix"  v-if="loginType.github" class="github" @click="thirdAuthRender('github')" icon-class="github" />
+            <!--<svg-icon slot="prefix" class="dingtalk" icon-class="dingtalk"  />
             <svg-icon slot="prefix" class="github" @click="thirdAuthRender('gitee')" icon-class="github" />
-            <svg-icon slot="prefix" class="WeChat" icon-class="WeChat" />
             <svg-icon slot="prefix" class="Alipay" icon-class="Alipay"  />
-            <svg-icon slot="prefix" class="Sina" icon-class="Sina" />
+            <svg-icon slot="prefix" class="Sina" icon-class="Sina" />-->
           </div>
         </el-col>
       </el-row>
@@ -76,6 +79,7 @@
   import { authRender } from "@/api/auth";
   import Cookies from "js-cookie";
   import { encrypt, decrypt } from '@/utils/jsencrypt'
+  import {getWebConfig} from '@/api/website/webConfig'
 
   export default {
     name: "Login",
@@ -83,6 +87,15 @@
       return {
         codeUrl: "",
         cookiePassword: "",
+        webConfig: undefined,
+        // 登录类别
+        loginType: {
+          password: false,
+          gitee: false,
+          github: false,
+          qq: false,
+          wechat: false
+        },
         loginForm: {
           username: "admin",
           password: "admin123",
@@ -125,6 +138,7 @@
       }
     },
     created() {
+      this.getLoginTypeList();
       this.getCode();
       this.getCookie();
     },
@@ -146,6 +160,46 @@
           if (this.captchaOnOff) {
             this.codeUrl = "data:image/gif;base64," + res.img;
             this.loginForm.uuid = res.uuid;
+          }
+        });
+      },
+      getLoginTypeList() {
+        getWebConfig().then(response => {
+          let data = response.data;
+          if (data.showList) {
+            let showList = JSON.parse(data.showList);
+            let loginTypeList = JSON.parse(data.loginTypeList);
+            data.showList = showList;
+            data.loginTypeList = loginTypeList;
+          } else {
+            data.showList = [];
+          }
+          this.webConfig = data
+          if(this.webConfig && this.webConfig.loginTypeList) {
+            let loginTypeList = this.webConfig.loginTypeList
+            for(let index=0; index <loginTypeList.length; index++) {
+              console.log(loginTypeList[index])
+              switch (loginTypeList[index]) {
+                case "1": {
+                  this.loginType.password = true
+                } break;
+                case "2": {
+                  this.loginType.gitee = true
+                } break;
+                case "3": {
+                  this.loginType.github = true
+                } break;
+                case "4": {
+                  this.loginType.qq = true
+                } break;
+                case "5": {
+                  this.loginType.wechat = true
+                } break;
+                default: {
+                  this.msgError('登录方式设置有误')
+                }
+              }
+            }
           }
         });
       },

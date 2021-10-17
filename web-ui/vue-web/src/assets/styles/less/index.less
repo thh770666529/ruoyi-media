@@ -976,6 +976,25 @@ header {
               width: 120px;
               height: 80px;
               margin-right: 10px;
+              overflow: hidden;
+              position: relative;
+              .movie-overlay {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                .movie-rank {
+                  background-color: #ef4238;
+                  color: white;
+                  display: inline-block;
+                  position: absolute;
+                  bottom: 0;
+                  width: 18px;
+                  font-size: 14px;
+                }
+              }
             }
 
             .name {
@@ -1090,7 +1109,7 @@ header {
                   color: white;
                   display: inline-block;
                   position: absolute;
-                  bottom: 0px;
+                  bottom: 0;
                   width: 18px;
                   font-size: 14px;
                 }
@@ -1176,6 +1195,24 @@ header {
               width: 120px;
               height: 80px;
               margin-right: 10px;
+              position: relative;
+              .article-overlay {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                .article-rank {
+                  background-color: #ef4238;
+                  color: white;
+                  display: inline-block;
+                  position: absolute;
+                  bottom: 0;
+                  width: 18px;
+                  font-size: 14px;
+                }
+              }
             }
 
             .name {

@@ -53,8 +53,8 @@
       </div>
       <div class="search">
         <div type="text" class="searchinput">
-          <input type="text" class="input" placeholder="找影视剧、影人、影院">
-          <input class="submit" type="submit" value="">
+          <input type="text" v-model="keyword" class="input" placeholder="找影视剧、影人、影院">
+          <input class="submit" @click="search"  type="submit" value="">
         </div>
       </div>
       <!--<div  class="userimg">
@@ -114,6 +114,7 @@ export default {
       state: '',
       timeout: null,
       user: {},
+      keyword: ''
     }
   },
   computed: {
@@ -139,6 +140,9 @@ export default {
     this.getToken();
   },
   methods: {
+    search() {
+      this.$router.push({ path: '/search', query: {keyword: this.keyword} })
+    },
     getToken() {
       let token = this.$route.query.thirdToken || '';
       if (token){

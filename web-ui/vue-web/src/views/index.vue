@@ -40,7 +40,7 @@
                     </div>
                   </div>
                 </div>
-                <button onclick="alert('123')">抢购</button>
+                <button @click="toMovieDetail(item.movieId)">观看</button>
               </a>
             </div>
           </div>
@@ -67,10 +67,10 @@
                   </div>
                 </div>
               </a>
-              <p>46461661人想看</p>
-              <button onclick="alert('123')">预告片</button>
-              <button onclick="alert('123')">预售</button>
-              <p>{{parseTime(item.publishTime, '{m}月{d}日')}}上映</p>
+              <p>111111111想看</p>
+              <button @click="toMovieDetail(item.movieId)">观看</button>
+              <button @click="toMovieDetail(item.movieId)">预告片</button>
+              <p>{{item.publishTime?parseTime(item.publishTime, '{m}月{d}日'):`即将` }}上映</p>
             </div>
 
           </div>
@@ -95,6 +95,11 @@
                         <img src="../assets/styles/images/2.jpg" alt="" style="width: 120px;height: 78px" >
                       </div>
                     </el-image>
+                    <div class="movie-overlay">
+                      <div class="movie-rank">
+                        <i class="index index-hot">1</i>
+                      </div>
+                    </div>
                   </div>
                   <p class="name">{{hotMovieList[0].title}}</p>
                   <p class="money">{{hotMovieList[0].rate}}分</p>
@@ -153,11 +158,16 @@
               <li class=" hotspot-item-first clearfix" v-if="hotArticleList.length > 0">
                 <a :href="`/article/` + hotArticleList[0].articleId">
                   <div class="first-item clearfix">
-                    <el-image lazy :src="fileUploadHost + hotArticleList[0].images" style="width: 120px;height: 68px" :alt="hotArticleList[0].title">
+                    <el-image lazy :src="fileUploadHost + hotArticleList[0].images" style="width: 100%;height: 100%" :alt="hotArticleList[0].title">
                       <div slot="error" class="image-slot">
-                        <img src="../assets/styles/images/login-body-bg.png" alt="" style="width: 120px;height: 68px" >
+                        <img src="../assets/styles/images/login-body-bg.png" alt="" style="width: 100%;height: 100%" />
                       </div>
                     </el-image>
+                    <div class="article-overlay">
+                      <div class="article-rank">
+                        <i class="index index-hot">1</i>
+                      </div>
+                    </div>
                   </div>
                   <p class="name">{{hotArticleList[0].title | ellipsis(23)}}</p>
                 </a>
@@ -167,7 +177,7 @@
                   <div class="index-box">
                     <i v-if="index < 3" class="index index-hot">{{index + 1}}</i>
                     <i v-else class="index">{{index + 1}}</i>
-                    <span>{{article.title}}</span>
+                    <span>{{article.title ? article.title : `未知`}}</span>
                   </div>
                 </a>
               </li>
@@ -221,6 +231,9 @@
       })
     },
     methods: {
+      toMovieDetail(movieId){
+        window.open('/movie/' + movieId , '_blank')
+      },
       rateFormatter(rate, index) {
         if (!rate){
           if (index === 1){
