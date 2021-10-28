@@ -11,10 +11,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.enums.CommentStatusEnum;
 import com.ruoyi.common.exception.ServiceException;
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.ServletUtils;
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.utils.XssKillerUtil;
+import com.ruoyi.common.utils.*;
 import com.ruoyi.common.utils.ip.AddressUtils;
 import com.ruoyi.common.utils.ip.IpUtils;
 import com.ruoyi.media.domain.Actor;
@@ -46,6 +43,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
     @Autowired
     private TokenUtil tokenUtil;
 
+    @Autowired
+    SensitiveFilter sensitiveFilter;
 
     /**
      * 查询评论
@@ -256,7 +255,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
         if (StringUtils.isEmpty(content) || "\n".equals(content)) {
             throw new ServiceException("说点什么吧");
         }
-        comment.setContent(content);
+        comment.setContent(sensitiveFilter.filter(content));
     }
 
     /**
