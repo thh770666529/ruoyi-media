@@ -4,7 +4,6 @@
       :commentInfo="commentInfo"
       @submit-box="submitBox"
     ></CommentBox>
-
     <div class="message_infos">
       <CommentList :comments="comments" :commentInfo="commentInfo"></CommentList>
       <div class="noComment" v-if="comments.length === 0">还没有评论，快来抢沙发吧！</div>
@@ -40,8 +39,18 @@
     },
     computed: {
     },
+    watch: {
+      targetId:{//深度监听，可监听到对象、数组的变化
+        handler(newValue, oldVal){
+          this.commentInfo.targetId = newValue;
+          this.getCommentList();
+        }
+      }
+    },
     mounted() {
-      this.getCommentList();
+      if (this.targetId){
+        this.getCommentList();
+      }
     },
     methods: {
       // 发表评论
