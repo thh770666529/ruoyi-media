@@ -1,0 +1,147 @@
+/* 预告 */
+.video {
+	display: flex;
+	justify-content: center;
+	background-color: black;
+}
+
+/* 预告信息 */
+.video-movie {
+	width: 100%;
+	height: 440upx;
+}
+
+.video-wapper {
+	display: flex;
+	flex-direction: row;
+	padding: 40upx 20upx;
+	background-color: #f7f4f9;
+}
+
+.view-img {
+	width: 280upx;
+	height: 380upx;
+}
+
+.video-info {
+	display: flex;
+	flex-direction: column;
+
+	margin-left: 30upx;
+	width: 400upx;
+}
+
+.video-title {
+	font-size: 30px;
+}
+
+.video-desc {
+	color: darkgray;
+	font-size: 13px;
+	line-height: 36upx;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+/* 综合评分 */
+.score-block {
+	 display: flex;
+	 flex-direction: row;
+	 justify-content: flex-start;
+	 background-color: white;
+	 margin-top: 20upx;
+	 border-radius: 3%;
+	 width: 360upx;
+	 height: 120upx;
+	 padding: 20upx;
+
+	 box-shadow: 3px 2px 10px #C0C0C0;
+}
+.score-big {
+
+}
+
+.vide-star {
+	font-size: 20px;
+	color: grey;
+}
+.score-score {
+	font-size: 30px;
+	font-weight: bold;
+	color: #F0AD4E;
+	margin-left: 8upx;
+	line-height: 60upx;
+}
+
+.score-like{
+	margin-left: 40upx;
+	margin-top: 45upx;
+}
+
+.like-like {
+	font-size: 13px;
+	color: #999999;
+}
+
+/* 剧情介绍 */
+.plots-block {
+	background-color: #f7f4f9;
+	padding: 20upx 40upx;
+}
+.plots-title{
+	font-size: 20px;
+	color: #A9A9A9;
+}
+.plots-desc{
+	font-size: 15px;
+	color: #333333;
+	margin-top: 10upx;
+}
+
+/* 演员列表  大部分通剧照*/
+.actor-block{
+	display: inline-block;
+}
+.actor-actor{
+	width: 170upx;
+	height: 240upx;
+	margin-right: 10upx;
+}
+.actor-title{
+	width: 170upx;
+	text-align: center;
+	font-size: 15px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.actor-role {
+	width: 170upx;
+	text-align: center;
+	font-size: 13px;
+	color: #A9A9A9;
+}
+
+/* 剧照 */
+.photo-block {
+	background-color: #F7F4F9;
+	padding: 20upx 40upx;
+/*  display: flex;
+	flex-direction: column; */
+}
+.photo-title {
+
+}
+.photo-list{
+	width: 100%;
+	white-space: nowrap;
+	margin-top: 20upx;
+
+	display: flex;
+	flex-direction: row;
+}
+.photo-photo{
+	width: 220upx;
+	height: 320upx;
+	margin-right: 10upx;
+}
