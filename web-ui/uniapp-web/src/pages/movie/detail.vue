@@ -1,21 +1,17 @@
 <template>
 	<view>
 		<view class="video">
-			<!--<video class="video-movie" src="https://media.w3.org/2010/05/sintel/trailer.mp4"
-				poster="https://img2.baidu.com/it/u=1776766142,680351088&fm=26&fmt=auto&gp=0.jpg" controls></video>-->
-			<video class="video-movie" :src="$fileUploadHost + video.url"
-				:poster="initData.images" controls></video>
+			<video class="video-movie" autoplay="true" :title="video.title" :src="$fileUploadHost + video.url"
+				poster="initData.images" controls></video>
 		</view>
 		<view class="video-wapper">
-			<navigator :url="'./cover/cover?coverId=' + 123 ">
-				<!--<image class="view-img" src="https://img1.baidu.com/it/u=488054824,781673712&fm=26&fmt=auto&gp=0.jpg"
-					mode="aspectFill"></image>-->
-				<image class="view-img" :src="initData.images"
-					   mode="aspectFill"></image>
+			<navigator :url="initData.images">
+				<image class="view-img" :src="initData.images" mode="aspectFill"></image>
 			</navigator>
 			<view class="video-info">
 				<view class="video-title">{{initData.title}}</view>
-				<view class="video-desc">{{ $parseTime(initData.publishTime, '{y}') }}/{{initData.countryName}}/科幻/超级英雄</view>
+				<view class="video-desc">{{ $parseTime(initData.publishTime, '{y}') }}/{{initData.countryName}}/科幻/超级英雄
+				</view>
 				<view class="video-desc">影片时长：143分钟</view>
 				<view class="video-desc">上映时间：{{ $parseTime(initData.publishTime, '{y}-{m}-{d}') }}</view>
 				<view class="score-block">
@@ -29,6 +25,18 @@
 					</view>
 
 				</view>
+			</view>
+		</view>
+
+		<view class="video-block">
+			<view class="margin-bottom-sm flex justify-between">
+				<text class="text-bold text-lg">剧集列表</text>
+				<text class="text-gray text-df" v-if="videoList.length > 0">共{{videoList.length}}集</text>
+			</view>
+			<view v-if="videoList.length === 0" style="color:#ef4238"> 暂时没有播放的视频！请联系管理员进行上传！</view>
+			<view class="videoBox flex justify-around">
+				<view @click="play(index)" :class="active == index ?`active`:``" v-for="(video, index) in videoList">
+					{{video.title}}</view>
 			</view>
 		</view>
 
@@ -71,6 +79,7 @@
 		components: {},
 		data() {
 			return {
+				active: 0,
 				initData: {},
 				movie: {},
 				videoList: [],
@@ -123,6 +132,10 @@
 
 		},
 		methods: {
+			play(index) {
+				this.active = index;
+				this.video = this.videoList[index]
+			},
 			load(e) {
 				this.getDetail();
 			},

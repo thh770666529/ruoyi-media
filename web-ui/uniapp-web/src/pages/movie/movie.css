@@ -8,37 +8,38 @@
 /* 预告信息 */
 .video-movie {
 	width: 100%;
-	height: 440upx;
+	height: 440rpx;
 }
 
 .video-wapper {
 	display: flex;
 	flex-direction: row;
-	padding: 40upx 20upx;
-	background-color: #f7f4f9;
+	padding: 20rpx 30rpx;
+	background-color: #FFFFFF;
 }
 
 .view-img {
-	width: 280upx;
-	height: 380upx;
+	width: 280rpx;
+	height: 380rpx;
 }
 
 .video-info {
 	display: flex;
 	flex-direction: column;
-
-	margin-left: 30upx;
-	width: 400upx;
+	margin-left: 30rpx;
+	width: 400rpx;
 }
 
 .video-title {
-	font-size: 30px;
+	font-size: 50rpx;
+	font-weight: 550;
+	color: #333333;
 }
 
 .video-desc {
 	color: darkgray;
 	font-size: 13px;
-	line-height: 36upx;
+	line-height: 36rpx;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -48,34 +49,40 @@
 	 display: flex;
 	 flex-direction: row;
 	 justify-content: flex-start;
-	 background-color: white;
-	 margin-top: 20upx;
+	 background-color: #FFFFFF;
+	 margin-top: 20rpx;
 	 border-radius: 3%;
-	 width: 360upx;
-	 height: 120upx;
-	 padding: 20upx;
-
+	 width: 360rpx;
+	 height: 150rpx;
+	 padding: 20rpx;
 	 box-shadow: 3px 2px 10px #C0C0C0;
+	position: relative;
 }
 .score-big {
-
+	position: relative;
+	display: block;
 }
 
 .vide-star {
-	font-size: 20px;
+	font-size: 30rpx;
 	color: grey;
+	position: relative;
+	display: inline-flex;
 }
 .score-score {
 	font-size: 30px;
 	font-weight: bold;
 	color: #F0AD4E;
-	margin-left: 8upx;
-	line-height: 60upx;
+	margin-left: 8rpx;
+	line-height: 60rpx;
+	position: relative;
+	display: inline-flex;
 }
 
 .score-like{
-	margin-left: 40upx;
-	margin-top: 45upx;
+	position: absolute;
+	right: 10rpx;
+	bottom: 0;
 }
 
 .like-like {
@@ -85,30 +92,85 @@
 
 /* 剧情介绍 */
 .plots-block {
-	background-color: #f7f4f9;
-	padding: 20upx 40upx;
+	margin-top: 20rpx;
+	background-color: #FFFFFF;
+	padding: 20rpx 40rpx;
 }
 .plots-title{
-	font-size: 20px;
-	color: #A9A9A9;
+	font-size: 30rpx;
+	font-weight: 550;
+	color: #333333;
 }
 .plots-desc{
 	font-size: 15px;
-	color: #333333;
-	margin-top: 10upx;
+	color: #A9A9A9;
+	margin-top: 10rpx;
 }
+
+/* 视频列表 */
+.video-block {
+
+	padding: 20rpx 30rpx;
+	background-color: #FFFFFF;
+	margin-top: 15rpx;
+}
+
+
+.videoBox{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	margin-left: -10px;
+}
+
+.videoBox view{
+	width: 240rpx;
+	height: 58rpx;
+	border: 2rpx solid #909399;
+	text-align: center;
+	line-height: 58rpx;
+	-webkit-border-radius: 6px;
+	border-radius: 12rpx;
+	margin:10rpx 0 20rpx;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	overflow: hidden;
+	word-break: break-all;
+	font-size: 24rpx;
+	color: #909399;
+	padding: 0 6rpx;
+}
+
+.videoBox .active{
+	border: 2rpx solid #2979ff;
+	background-color: #2979ff;
+	color: #FFFFFF;
+}
+
+.videoBox::after {
+	content: "";
+	flex: auto;
+}
+.videoBox>view {
+	margin-left: 10px;
+	margin-bottom: 10px;
+	width: -webkit-calc((100% - 10px*3)/ 3);
+	width: calc((100% - 10px*3)/ 3);
+}
+
 
 /* 演员列表  大部分通剧照*/
 .actor-block{
 	display: inline-block;
 }
 .actor-actor{
-	width: 170upx;
-	height: 240upx;
-	margin-right: 10upx;
+	width: 170rpx;
+	height: 240rpx;
+	margin-right: 10rpx;
 }
 .actor-title{
-	width: 170upx;
+	width: 170rpx;
 	text-align: center;
 	font-size: 15px;
 	white-space: nowrap;
@@ -116,7 +178,7 @@
 	text-overflow: ellipsis;
 }
 .actor-role {
-	width: 170upx;
+	width: 170rpx;
 	text-align: center;
 	font-size: 13px;
 	color: #A9A9A9;
@@ -124,24 +186,27 @@
 
 /* 剧照 */
 .photo-block {
-	background-color: #F7F4F9;
-	padding: 20upx 40upx;
+	margin-top: 20rpx;
+	background-color: #FFFFFF;
+	padding: 20rpx 40rpx;
 /*  display: flex;
 	flex-direction: column; */
 }
 .photo-title {
-
+	font-size: 30rpx;
+	font-weight: 550;
+	color: #333333;
 }
 .photo-list{
 	width: 100%;
 	white-space: nowrap;
-	margin-top: 20upx;
+	margin-top: 20rpx;
 
 	display: flex;
 	flex-direction: row;
 }
 .photo-photo{
-	width: 220upx;
-	height: 320upx;
-	margin-right: 10upx;
+	width: 220rpx;
+	height: 320rpx;
+	margin-right: 10rpx;
 }
