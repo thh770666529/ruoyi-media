@@ -77,7 +77,7 @@
               <span>演员短評</span>
             </div>
           </div>
-          <Comment :targetId="actorId" :tableName="tableName"></Comment>
+          <Comment :targetId="actorId" :tableName="tableName" :createBy="actor.createBy"></Comment>
         </el-card>
       </div>
     </div>

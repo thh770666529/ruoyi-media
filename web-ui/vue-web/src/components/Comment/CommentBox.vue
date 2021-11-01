@@ -61,7 +61,7 @@
         count: 1024,
         isShowEmojiPanel: false, // 是否显示表情面板
         isShowAvatar: true, // 是否显示头像
-        defaultAvatar: require("@/assets/styles/images/profile.jpg")
+        defaultAvatar: require("@/assets/styles/images/user.png")
       }
     },
     computed: {
@@ -85,7 +85,7 @@
     },
     methods: {
       vaildCount: function() {
-        var count = 1024 - this.value.length;
+        let count = 1024 - this.value.length;
         if(count <= 0) {
           this.count = 0
         } else {
@@ -105,7 +105,7 @@
             type: 'warning'
           }).then(() => {
             //如果没有登录 则转到登录页面
-            return this.$store.dispatch('showLoginForm')
+            this.$store.dispatch('showLoginForm')
           }).catch(() => {
             this.$message({
               type: 'info',
@@ -190,15 +190,16 @@
   .commentBox {
     width: 100%;
     height: 100px;
-    margin: 0 auto;
   }
   .commentBox .left {
     display: inline-block;
     width: 7%;
+    height: 100%;
   }
   .commentBox .left img {
+    position: relative;
+    top: -40%;
     cursor: pointer;
-    margin: 0 auto;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -206,7 +207,7 @@
 
   .commentBox .right {
     display: inline-block;
-    margin: 5px 2px 0 0;
+    margin: 5px 2px 2px 0;
     width: 90%;
     height: 100%;
   }
@@ -215,17 +216,15 @@
   }
   .commentBox .right .commentTextArea {
     color: #606266;
-    padding:10px 5px 5px 10px;
-    resize: none;
+    padding:8px 5px 5px 10px;
     width: 95%;
-    height: 100%;
+    height: 99%;
   }
   .bottom {
-    position: relative;
     width: 98%;
     height: 60px;
     line-height: 40px;
-    margin-top: 20px;
+    margin-top: 25px;
   }
   .bottom .p2 {
     float: right;

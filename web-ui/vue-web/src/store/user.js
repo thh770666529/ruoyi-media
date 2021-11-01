@@ -60,7 +60,7 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo().then(res => {
           const user = res.user
-          const avatar = user.avatar == "" ? require("@/assets/styles/images/profile.jpg") : process.env.VUE_APP_FILE_UPLOAD_HOST + user.avatar;
+          const avatar = user.avatar == "" ? require("@/assets/styles/images/user.png") : process.env.VUE_APP_FILE_UPLOAD_HOST + user.avatar;
           if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', res.roles)
             commit('SET_PERMISSIONS', res.permissions)

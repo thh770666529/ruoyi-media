@@ -169,7 +169,7 @@
               <span>電影短評</span>
             </div>
           </div>
-            <Comment :targetId="movieId" :tableName="tableName"></Comment>
+            <Comment :targetId="movieId" :tableName="tableName" :createBy="movie.createBy"></Comment>
           </el-card>
         </div>
 

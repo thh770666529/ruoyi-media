@@ -5,7 +5,7 @@
       @submit-box="submitBox"
     ></CommentBox>
     <div class="message_infos">
-      <CommentList :comments="comments" :commentInfo="commentInfo"></CommentList>
+      <CommentList :tableName="tableName" :comments="comments" :createBy="createBy" :commentInfo="commentInfo"></CommentList>
       <div class="noComment" v-if="comments.length === 0">还没有评论，快来抢沙发吧！</div>
     </div>
   </div>
@@ -18,6 +18,10 @@
   export default {
     name: 'Comment',
     props: {
+      createBy: {
+        type: [Number, String],
+        default: ''
+      },
       targetId: [Number, String],
       tableName: {
         type: String,

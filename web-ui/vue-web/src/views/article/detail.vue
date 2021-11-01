@@ -59,7 +59,7 @@
             <span>文章短評</span>
           </div>
         </div>
-        <Comment :targetId="articleId" :tableName="tableName"></Comment>
+        <Comment :targetId="articleId" :tableName="tableName" :createBy="article.createBy"></Comment>
           <div class="otherlink" v-if="sameBlogList.length > 0">
             <h2>相关文章</h2>
             <ul>

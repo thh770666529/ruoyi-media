@@ -11,6 +11,9 @@
         <span class="right p1">
           <div class="rightTop" v-if="item.user">
             <el-link class="userName" :underline="false">{{item.user.nickName}}</el-link>
+            <el-tooltip  content="管理员" placement="top">
+               <span class="peopleRole" v-if="createBy && createBy == item.user.userId" >管理员 </span>
+             </el-tooltip>
             <span class="timeAgo" v-if="item.createTime">{{timeAgo(item.createTime)}}</span>
             <span class="timeAgo" v-else>刚刚</span>
           </div>
@@ -18,15 +21,16 @@
           <div class="rightCenter" v-html="item.content"></div>
 
           <div class="rightBottom">
-            <el-link class="b1" :underline="false" @click="replyTo(item)">回复</el-link>
+            <el-link class="b1" :underline="false" @click="replyTo(item)" v-if="level < maxReplyLevel" >回复</el-link>
             <el-link class="b1" v-if="isLogin&&userId == item.userId" :underline="false" @click="delComment(item)">删除</el-link>
+            <span class="b1">level：{{ level }}</span>
           </div>
 
           <div class="rightCommentList">
             <CommentBox class="commentBoxClass"  :toInfo="toInfo" :id="item.commentId" :commentInfo="commentInfo"
-                        :targetId="targetId" :tableName="tableName"         @submit-box="submitBox" @cancel-box="cancelBox"></CommentBox>
+                        @submit-box="submitBox" @cancel-box="cancelBox"></CommentBox>
 
-            <CommentList class="commentStyle" :id="'commentStyle:' + item.commentId" :comments="item.children" :commentInfo="commentInfo"></CommentList>
+            <CommentList :tableName="tableName" :createBy="createBy" :level="level + 1" class="commentStyle" :id="'commentStyle:' + item.commentId" :comments="item.children" :commentInfo="commentInfo"></CommentList>
           </div>
         </span>
       </div>
@@ -43,9 +47,33 @@
   import {replyComment,treeListComment,delMyComment} from '@/api/website/comment'
   export default {
     name: "CommentList",
-    props: ['comments', 'commentInfo', 'tableName', 'targetId'],
+    props: {
+      createBy: {
+        type: [Number, String],
+        default: ''
+      },
+      // 父级组件传过来的评论列表
+      comments: {
+        type: Array,
+        default: () => []
+      },
+      // 评论主体信息
+      commentInfo: {
+        type: Object
+      },
+      // 递归组件的嵌套层级，递归了1层、2层、3层、4层、5层，在最后一层可以禁止回复，拒绝无休止的评论
+      level: {
+        type: Number,
+        default: 1,
+      },
+      tableName: {
+        type: String
+      },
+      targetId: [Number, String]
+    },
     data() {
       return {
+        maxReplyLevel: 5, // 控制最大评论层级
         taggleStatue: true,
         submitting: false,
         value: '',
@@ -53,7 +81,7 @@
           userId: '',
           commentId: ''
         },
-        defaultAvatar: require("@/assets/styles/images/profile.jpg")
+        defaultAvatar: require("@/assets/styles/images/user.png")
       };
     },
     created() {
@@ -74,11 +102,24 @@
     },
     methods: {
       replyTo: function (item) {
-        if(!this.isLogin) {
+        if (!this.isLogin){
           this.$notify.error({
-            title: '错误',
-            message: "登录后才能回复评论哦~",
+            title: '警告',
+            message: '登录后才可以评论哦~',
             offset: 100
+          });
+          this.$confirm('登录后才可以评论，是否进行登录', '提示', {
+            confirmButtonText: '登录',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            //如果没有登录 则转到登录页面
+            this.$store.dispatch('showLoginForm')
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消登录'
+            });
           });
           return
         }
@@ -99,12 +140,12 @@
         params.commentId = e.commentId;
         params.createTime = e.createTime;
         params.updateTime = e.createTime;
-        params.tableName = 'wm_movie';
+        params.tableName = this.tableName;
         params.url = this.$route.path;
         params.support = 0;
         params.oppose = 0;
         replyComment(params).then(response => {
-          if (response.code == 200){
+          if (response.code === 200){
             const commentData = response.data
             this.msgSuccess("发表成功！")
             document.getElementById(e.commentId).style.display = 'none';
@@ -137,6 +178,19 @@
             title: '错误',
             message: "登录后才能删除评论哦~",
             offset: 100
+          });
+          this.$confirm('登录后才能删除评论，是否进行登录', '提示', {
+            confirmButtonText: '登录',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            //如果没有登录 则转到登录页面
+            this.$store.dispatch('showLoginForm')
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消登录'
+            });
           });
           return
         }
@@ -257,6 +311,17 @@
     font-size: 16px;
     font-weight: bold;
   }
+
+  .commentList .rightTop .peopleRole {
+    color: #21ba45;
+    border: 1px solid #9bd4a9;
+    padding: 2px;
+    font-size: 12px;
+    border-radius: 4px;
+    margin-left: 4px;
+    cursor: default;
+  }
+
   .commentList .rightTop .timeAgo {
     color: #909399;
     margin-left: 10px;
@@ -275,7 +340,8 @@
 
   }
   .commentList .rightBottom .b1 {
-    margin-left: 10px;
+    margin-left: 8px;
+    color: #909399;
   }
 
   @media only screen and (min-width: 300px) and (max-width: 767px) {
