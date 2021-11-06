@@ -36,4 +36,10 @@ public class ArticleVO extends Article
      * 作者
      */
     private SysUser authorUser;
+
+    /**
+     * 用户是否已经点赞
+     * 24小时以内无法点赞
+     */
+    private Boolean thumbFlag;
 }

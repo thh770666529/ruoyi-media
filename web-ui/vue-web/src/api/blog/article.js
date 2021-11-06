@@ -9,9 +9,9 @@ export function getArticle(articleId) {
 }
 
 // 支持文章
-export function supportArticle(articleId) {
+export function thumbArticle(articleId) {
   return request({
-    url: '/blog/article/supportArticle/' + articleId,
+    url: '/blog/article/thumbArticle/' + articleId,
     method: 'get'
   })
 }

@@ -51,7 +51,7 @@
         ></div>
       </div>
         <!--付款码和点赞-->
-        <PayCode  :articleId="articleId" :praiseCount.sync="article.collectCount"></PayCode>
+        <PayCode :thumbFlag.sync="article.thumbFlag" :articleId="articleId" :supportCount.sync="article.supportCount"></PayCode>
       </el-card>
       <el-card class="box-card mt20">
         <div class="intro">

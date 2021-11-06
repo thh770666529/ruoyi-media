@@ -5,6 +5,10 @@ Vue.use(VueRouter);
 
 const routes = [
     {
+      path: '/register',
+      component: () => import("@/views/register")
+    },
+    {
         path: '/',
         component: Layout,
         children: [

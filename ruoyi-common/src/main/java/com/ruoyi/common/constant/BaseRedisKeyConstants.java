@@ -32,7 +32,7 @@ public class BaseRedisKeyConstants {
     /**
      * 支持博客文章
      */
-    public final static String CIICK_BLOG_SUPPORT = "CIICK_BLOG_SUPPORT";
+    public final static String THUMB_BLOG_SUPPORT = "THUMB_BLOG_SUPPORT";
 
     /**
      * 最热博客标签

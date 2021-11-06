@@ -175,20 +175,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
     }
 
     @Override
-    public void supportArticleById(Long articleId) {
+    public void thumbArticleById(Long articleId) {
         Long userId = SecurityUtils.getUserId();
-        Integer redisJson = redisCache.getCacheObject(BaseRedisKeyConstants.CIICK_BLOG_SUPPORT + ":" + articleId + "#" + userId);
+        Integer redisJson = redisCache.getCacheObject(BaseRedisKeyConstants.THUMB_BLOG_SUPPORT + ":" + articleId + "#" + userId);
         if (redisJson != null){
             throw new ServiceException("24小时内无法重复点赞同一篇文章");
         } else {
             Article article = articleMapper.selectById(articleId);
-            Long supportClickCount = article.getOpposeCount();
-            if (supportClickCount == null){
-                supportClickCount = 0L;
+            Long supportCount = article.getOpposeCount();
+            if (supportCount == null){
+                supportCount = 0L;
             }
-            article.setOpposeCount(supportClickCount + 1);
-            articleMapper.insert(article);
-            redisCache.setCacheObject(BaseRedisKeyConstants.CIICK_BLOG_SUPPORT + ":" + articleId + "#" + userId, 1);
+            article.setSupportCount(supportCount + 1);
+            articleMapper.updateById(article);
+            redisCache.setCacheObject(BaseRedisKeyConstants.THUMB_BLOG_SUPPORT + ":" + articleId + "#" + userId, 1);
         }
     }
 

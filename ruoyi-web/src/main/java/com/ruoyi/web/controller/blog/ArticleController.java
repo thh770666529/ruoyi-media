@@ -15,11 +15,15 @@ import com.ruoyi.common.constant.BlogConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.ip.IpUtils;
+import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -56,6 +60,8 @@ public class ArticleController extends BaseController
     @Autowired
     private ISysUserService sysUserService;
 
+    @Autowired
+    private TokenService tokenService;
     /**
      * 门户搜索博客文章列表
      */
@@ -132,6 +138,15 @@ public class ArticleController extends BaseController
             articleVO.setAuthorUser(sysUser);
             articleVO.setAuthor(sysUser.getNickName());
         }
+        //thumbFlag 默认没有点赞
+        articleVO.setThumbFlag(false);
+        LoginUser loginUser = tokenService.getLoginUser(request);
+        if (loginUser!=null) {
+            Integer thumbCount = redisCache.getCacheObject(BaseRedisKeyConstants.THUMB_BLOG_SUPPORT + ":" + articleId + "#" + loginUser.getUserId());
+            if (thumbCount != null) {
+                articleVO.setThumbFlag(true);
+            }
+        }
         return AjaxResult.success(articleVO);
     }
 
@@ -151,10 +166,10 @@ public class ArticleController extends BaseController
         }
     }
 
-    @GetMapping("/supportArticle/{articleId}")
-    public AjaxResult supportArticle(@PathVariable("articleId") Long articleId) {
+    @GetMapping("/thumbArticle/{articleId}")
+    public AjaxResult thumbArticle(@PathVariable("articleId") Long articleId) {
         log.info("门户点赞博客文章id={}", articleId);
-        articleService.supportArticleById(articleId);
+        articleService.thumbArticleById(articleId);
         return AjaxResult.success();
     }
 

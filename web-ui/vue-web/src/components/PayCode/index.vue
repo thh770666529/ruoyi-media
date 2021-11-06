@@ -1,11 +1,19 @@
 <template>
   <div class="share">
-    <p class="diggit" @click="praiseBlog(articleId)">
-      <span>很赞哦！</span>
-      <span v-if="praiseCount!= 0">
-        (<b id="diggnum">{{praiseCount}}</b>)
+    <p v-if="thumbFlag" class="diggit" @click="thumbArticle(articleId)">
+      <i v-if="thumbFlag" class="el-icon-thumb"> 很赞！</i>
+      <span v-if="supportCount">
+        (<b>{{supportCount}}</b>)
       </span>
     </p>
+    <p v-else class="diggit2" @click="thumbArticle(articleId)">
+      <i v-if="!thumbFlag" class="el-icon-thumb">点赞！</i>
+      <span v-if="supportCount">
+        (<b>{{supportCount}}</b>)
+      </span>
+    </p>
+
+
     <p class="dasbox">
       <a href="javascript:void(0)" @click="dashangToggle()" class="dashang" title="打赏，支持一下">打赏本站</a>
     </p>
@@ -47,94 +55,110 @@
 </template>
 
 <script>
-import { getWebConfig } from '@/api/website/webConfig'
-import { supportArticle } from "@/api/blog/article";
-export default {
-  name: "PayCode",
-  props: {
-    praiseCount: {
-      type: Number,
-      default: 0
+  import {getWebConfig} from '@/api/website/webConfig'
+  import {thumbArticle} from "@/api/blog/article";
+
+  export default {
+    name: "PayCode",
+    props: {
+      thumbFlag: {
+        type: Boolean,
+        default: false
+      },
+      supportCount: {
+        type: [Number,String],
+        default: 0
+      },
+      articleId: {
+        type: String
+      }
     },
-    articleId: {
-      type: String
-    }
-  },
-  data() {
-    return {
-      webConfig: undefined,
-      showPay: false, //是否显示支付
-      payMethod: 1, // 1: 支付宝  2：微信
-      payCode: '', //支付码图片
-    };
-  },
-  async created() {
-      if(!this.webConfig) {
+    data() {
+      return {
+        webConfig: undefined,
+        showPay: false, //是否显示支付
+        payMethod: 1, // 1: 支付宝  2：微信
+        payCode: '', //支付码图片
+      };
+    },
+    async created() {
+      if (!this.webConfig) {
         await getWebConfig().then(response => {
           this.webConfig = response.data;
           this.payCode = this.webConfig.aliPay;
         });
       }
-  },
-  methods: {
-    //拿到vuex中的写的方法
-    dashangToggle: function() {
-      this.showPay = !this.showPay;
     },
-    // 支付方式
-    choosePay: function(type) {
-      this.payMethod = type;
-      if (type === 1) {
-        this.payCode = this.webConfig.aliPay;
-      } else {
-        this.payCode = this.webConfig.weixinPay;
-      }
-    },
-    //博客点赞
-    praiseBlog: function(articleId) {
-      // 判断用户是否登录
-      let isLogin = this.$store.getters.isLogin;
-      if (!isLogin){
-        this.$notify.error({
-          title: '警告',
-          message: '登录后才可以点赞哦~',
-          offset: 100
-        });
-        this.$confirm('登录后才可以评论，是否进行登录', '提示', {
-          confirmButtonText: '登录',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          //如果没有登录 则转到登录页面
-          return this.$store.dispatch('showLoginForm')
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消登录'
-          });
-        });
-        return
-      }
-      supportArticle(articleId).then(response => {
-        if (response.code === 200) {
-          this.$notify({
-            title: '成功',
-            message: "点赞成功",
-            type: 'success',
-            offset: 100
-          });
-          this.$emit('update:praiseCount',response.data);
+    methods: {
+      //拿到vuex中的写的方法
+      dashangToggle: function () {
+        this.showPay = !this.showPay;
+      },
+      // 支付方式
+      choosePay: function (type) {
+        this.payMethod = type;
+        if (type === 1) {
+          this.payCode = this.webConfig.aliPay;
         } else {
-          this.$notify.error({
-            title: '错误',
-            message: response.msg,
+          this.payCode = this.webConfig.weixinPay;
+        }
+      },
+      //博客点赞
+      thumbArticle: function (articleId) {
+        if (this.thumbFlag) {
+          this.$notify({
+            title: '失败',
+            message: "点赞失败！,无法重复点赞！",
+            type: 'error',
             offset: 100
           });
+          return;
         }
-      });
+        // 判断用户是否登录
+        let isLogin = this.$store.getters.isLogin;
+        if (!isLogin) {
+          this.$notify.error({
+            title: '警告',
+            message: '登录后才可以点赞哦~',
+            offset: 100
+          });
+          this.$confirm('登录后才可以评论，是否进行登录', '提示', {
+            confirmButtonText: '登录',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            //如果没有登录 则转到登录页面
+            return this.$store.dispatch('showLoginForm')
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消登录'
+            });
+          });
+          return
+        }
+        this.thumbFlag = true;
+        thumbArticle(articleId).then(response => {
+          if (response.code === 200) {
+            this.$notify({
+              title: '成功',
+              message: "点赞成功",
+              type: 'success',
+              offset: 100
+            });
+            this.$emit('update:supportCount', this.supportCount + 1);
+            this.$emit('update:thumbFlag', true);
+          } else {
+            this.$notify.error({
+              title: '错误',
+              message: response.msg,
+              offset: 100
+            });
+          }
+        });
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
@@ -143,13 +167,28 @@ export default {
     float: left;
     width: 140px;
     margin: auto;
-    background: #E2523A url( ../../assets/img/blog/dzbg.jpg) no-repeat center left 10px;
+    background: #E2523A no-repeat center left 5px;
     color: #fff !important;
-    box-shadow: 1px 2px 6px 0px rgba(0, 0, 0, .2);
+    box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, .2);
     border-radius: 3px;
     line-height: 40px;
     text-align: center;
-    padding-left: 20px;
+    padding-left: 10px;
+    margin-left: 20%;
+  }
+
+  .diggit2 {
+    cursor: pointer;
+    float: left;
+    width: 140px;
+    margin: auto;
+    background: #909399 no-repeat center left 5px;
+    color: #fff !important;
+    box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, .2);
+    border-radius: 3px;
+    line-height: 40px;
+    text-align: center;
+    padding-left: 10px;
     margin-left: 20%;
   }
 
@@ -227,11 +266,11 @@ export default {
 
   /*money*/
   .dasbox {
-    color: #FFF ;
+    color: #FFF;
     width: 130px;
     float: left;
     margin-left: 40px;
-    background: url( ../../assets/img/blog/dsbz.jpg) no-repeat left 20px center #E2523A;
+    background: url(../../assets/img/blog/dsbz.jpg) no-repeat left 20px center #E2523A;
     box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, .2);
     border-radius: 3px;
     line-height: 40px;
@@ -257,7 +296,7 @@ export default {
   .shang_box {
     width: 430px;
     padding: 40px 10px;
-    background: #fff url( ../../assets/img/blog/tbg.jpg) no-repeat left top 30px;;
+    background: #fff url(../../assets/img/blog/tbg.jpg) no-repeat left top 30px;;
     border-radius: 10px;
     position: fixed;
     z-index: 1000;

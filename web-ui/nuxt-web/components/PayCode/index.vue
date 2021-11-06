@@ -48,7 +48,7 @@
 
 <script>
 import { getWebConfig } from '@/api/website/webConfig'
-import { supportArticle } from "@/api/blog/article";
+import { thumbArticle } from "@/api/blog/article";
 export default {
   name: "PayCode",
   props: {
@@ -115,7 +115,7 @@ export default {
         });
         return
       }
-      supportArticle(articleId).then(response => {
+      thumbArticle(articleId).then(response => {
         if (response.code === 200) {
           this.$notify({
             title: '成功',

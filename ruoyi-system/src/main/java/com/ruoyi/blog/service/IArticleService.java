@@ -100,7 +100,7 @@ public interface IArticleService extends IService<Article>
      *  支持文章
      * @param articleId
      */
-    void supportArticleById(Long articleId);
+    void thumbArticleById(Long articleId);
 
     /**
      * 获取相同类型的文章列表
