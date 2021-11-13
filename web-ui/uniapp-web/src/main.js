@@ -3,7 +3,7 @@ const host = 'https://unidemo.dcloud.net.cn/';
 import Vue from 'vue'
 import App from './App'
 import config from '@/config'
-import { friendlyDate, parseTime, resetForm, selectDictLabel, selectDictLabels } from "@/utils";
+import { formatVideoTime, friendlyDate, parseTime, resetForm, selectDictLabel, selectDictLabels } from "@/utils";
 // 此处为引用自定义顶部
 import cuCustom from './colorui/components/cu-custom.vue'
 Vue.component('cu-custom',cuCustom);
@@ -14,8 +14,8 @@ Vue.prototype.$parseTime = parseTime
 Vue.prototype.$resetForm = resetForm
 Vue.prototype.$selectDictLabel = selectDictLabel
 Vue.prototype.$selectDictLabels = selectDictLabels
-Vue.prototype.$friendlyDate = friendlyDate
-
+Vue.prototype.$friendlyDate = friendlyDate 
+Vue.prototype.formatVideoTime = formatVideoTime
 // 引入:uView-UI
 import uView from 'uview-ui';
 Vue.use(uView);

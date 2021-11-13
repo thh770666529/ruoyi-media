@@ -12,7 +12,7 @@
 				<view class="video-title">{{initData.title}}</view>
 				<view class="video-desc">{{ $parseTime(initData.publishTime, '{y}') }}/{{initData.countryName}}/科幻/超级英雄
 				</view>
-				<view class="video-desc">影片时长：143分钟</view>
+				<view class="video-desc">影片总时长：{{formatVideoTime(movie.totalVideoLength)}}</view>
 				<view class="video-desc">上映时间：{{ $parseTime(initData.publishTime, '{y}-{m}-{d}') }}</view>
 				<view class="score-block">
 					<view class="score-big">
@@ -36,7 +36,8 @@
 			<view v-if="videoList.length === 0" style="color:#ef4238"> 暂时没有播放的视频！请联系管理员进行上传！</view>
 			<view class="videoBox flex justify-around">
 				<view @click="play(index)" :class="active == index ?`active`:``" v-for="(video, index) in videoList">
-					{{video.title}}</view>
+					{{video.title}}
+				</view>
 			</view>
 		</view>
 
@@ -60,16 +61,13 @@
 				</view>
 			</scroll-view>
 		</view>
-
 		<view class="photo-block">
 			<view class="photo-title">剧照</view>
 			<scroll-view scroll-x="true" class="photo-list">
-				<image @click="previewPhoto" :data-imgid="index" v-for="(img,index) in imgs" class="photo-photo"
-					:src="img" mode="aspectFill"></image>
+				<image @click="previewPhoto" :data-imgid="index" v-for="(img,index) in movieImagesList" class="photo-photo"
+			     :src="img"  mode="aspectFill"></image>
 			</scroll-view>
-
 		</view>
-
 	</view>
 </template>
 
@@ -86,12 +84,7 @@
 				actorList: [],
 				directorList: [],
 				video: {},
-				imgs: ['https://img1.baidu.com/it/u=488054824,781673712&fm=26&fmt=auto&gp=0.jpg',
-					'https://img2.baidu.com/it/u=1804272601,468942649&fm=26&fmt=auto&gp=0.jpg',
-					'https://img0.baidu.com/it/u=3753972264,2197167502&fm=26&fmt=auto&gp=0.jpg',
-					'https://img0.baidu.com/it/u=3033541366,2843962344&fm=26&fmt=auto&gp=0.jpg',
-					'https://img2.baidu.com/it/u=1943521773,1045531091&fm=26&fmt=auto&gp=0.jpg',
-				]
+				movieImagesList: []
 			}
 		},
 		onLoad(event) {
@@ -103,33 +96,6 @@
 				title: this.initData.title,
 				path: '/pages/movie/detail?query=' + JSON.stringify(this.initData)
 			}
-		},
-		onNavigationBarButtonTap(par) {
-			if (par.type == 'share') {
-				uni.share({
-					provider: "weixin",
-					scene: "WXSenceTimeline",
-					type: 0,
-					href: "http://uniapp.dcloud.io/",
-					title: "uni-app分享",
-					summary: "我正在使用HBuilderX开发uni-app，赶紧跟我一起来体验！",
-					imageUrl: "https://bjetxgzv.cdn.bspapp.com/VKCEYUGU-uni-app-doc/d8590190-4f28-11eb-b680-7980c8a877b8.png",
-					success: function(res) {
-						console.log("success:" + JSON.stringify(res));
-					},
-					fail: function(err) {
-						console.log("fail:" + JSON.stringify(err));
-					}
-				});
-
-			}
-
-			if (par.type == 'home') {
-				uni.switchTab({
-					url: "../index/index"
-				})
-			}
-
 		},
 		methods: {
 			play(index) {
@@ -148,16 +114,29 @@
 					if (this.videoList.length > 0) {
 						this.video = this.videoList[0]
 					}
-					console.log(this.video)
+					//获取剧照
+					this.getStills(this.movie.stills);
 				});
 			},
+			getStills(val) {
+				if (val) {
+					let temp = 1;
+					// 首先将值转为数组
+					const list = val.split(',');
+					// 然后将数组转为对象数组
+					this.movieImagesList = list.map(item => {
+						return this.$fileUploadHost + item;
+					});
+				} else {
+					this.movieImagesList = [];
+					return [];
+				}
+			},
 			previewPhoto(e) {
-				var id = e.currentTarget.dataset.imgid;
-
-				console.log(e)
+				var index = e.currentTarget.dataset.imgid;
 				uni.previewImage({
-					urls: this.imgs,
-					current: this.imgs[id]
+					urls: this.movieImagesList,
+					current: this.movieImagesList[index]
 				})
 			},
 			showImg(e) {

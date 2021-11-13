@@ -2,6 +2,23 @@
  * 通用js方法封装处理
  */
 
+// 格式化播放时间
+export function formatVideoTime(timestamp) {
+	if (!timestamp) {
+		return ''
+	}
+	let timeMs = timestamp / 1000;
+	let hours = parseInt(timeMs / 3600);
+	let mini = parseInt(timeMs % 3600 / 60);
+	let second = Math.ceil(timeMs % 60);
+	if (hours > 0) {
+		return hours + ':' + mini + ':' + second;
+	} else {
+		return mini + ':' + second;
+	}
+}
+
+
 // 日期格式化
 export function parseTime(time, pattern) {
 	if (arguments.length === 0 || !time) {
@@ -15,7 +32,7 @@ export function parseTime(time, pattern) {
 		if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
 			time = parseInt(time)
 		} else if (typeof time === 'string') {
-      time = time.replace(new RegExp(/-/gm), '/').replace('T', ' ').replace(new RegExp(/\.[\d]{3}/gm),'');
+			time = time.replace(new RegExp(/-/gm), '/').replace('T', ' ').replace(new RegExp(/\.[\d]{3}/gm), '');
 		}
 		if ((typeof time === 'number') && (time.toString().length === 10)) {
 			time = time * 1000
@@ -34,7 +51,9 @@ export function parseTime(time, pattern) {
 	const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
 		let value = formatObj[key]
 		// Note: getDay() returns 0 on Sunday
-		if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+		if (key === 'a') {
+			return ['日', '一', '二', '三', '四', '五', '六'][value]
+		}
 		if (result.length > 0 && value < 10) {
 			value = '0' + value
 		}
@@ -104,17 +123,18 @@ export function resetForm(refName) {
 
 // 添加日期范围
 export function addDateRange(params, dateRange, propName) {
-  let search = params
-  search.params = typeof (search.params) === 'object' && search.params !== null && !Array.isArray(search.params) ? search.params : {}
-  dateRange = Array.isArray(dateRange) ? dateRange : [];
-  if (typeof (propName) === 'undefined') {
-    search.params['beginTime'] = dateRange[0];
-    search.params['endTime'] = dateRange[1];
-  } else {
-    search.params['begin' + propName] = dateRange[0];
-    search.params['end' + propName] = dateRange[1];
-  }
-  return search
+	let search = params
+	search.params = typeof(search.params) === 'object' && search.params !== null && !Array.isArray(search.params) ?
+		search.params : {}
+	dateRange = Array.isArray(dateRange) ? dateRange : [];
+	if (typeof(propName) === 'undefined') {
+		search.params['beginTime'] = dateRange[0];
+		search.params['endTime'] = dateRange[1];
+	} else {
+		search.params['begin' + propName] = dateRange[0];
+		search.params['end' + propName] = dateRange[1];
+	}
+	return search
 }
 
 // 回显数据字典
@@ -133,7 +153,7 @@ export function selectDictLabel(datas, value) {
 export function selectDictLabels(datas, value, separator) {
 	let actions = [];
 	const currentSeparator = undefined === separator ? "," : separator;
-  const temp = value.split(currentSeparator);
+	const temp = value.split(currentSeparator);
 	Object.keys(value.split(currentSeparator)).some((val) => {
 		Object.keys(datas).some((key) => {
 			if (datas[key].dictValue == ('' + temp[val])) {
@@ -147,8 +167,10 @@ export function selectDictLabels(datas, value, separator) {
 
 // 字符串格式化(%s )
 export function sprintf(str) {
-	var args = arguments, flag = true, i = 1;
-	str = str.replace(/%s/g, function () {
+	var args = arguments,
+		flag = true,
+		i = 1;
+	str = str.replace(/%s/g, function() {
 		var arg = args[i++];
 		if (typeof arg === 'undefined') {
 			flag = false;
@@ -218,10 +240,10 @@ export function handleTree(data, id, parentId, children) {
 	return tree;
 }
 
-export function timeFix () {
-  const time = new Date();
-  const hour = time.getHours();
-  return hour < 9 ? '早上好' : hour <= 11 ? '上午好' : hour <= 13 ? '中午好' : hour < 20 ? '下午好' : '晚上好';
+export function timeFix() {
+	const time = new Date();
+	const hour = time.getHours();
+	return hour < 9 ? '早上好' : hour <= 11 ? '上午好' : hour <= 13 ? '中午好' : hour < 20 ? '下午好' : '晚上好';
 }
 
 /**
@@ -229,9 +251,9 @@ export function timeFix () {
  * @returns {{}}
  */
 export function getUrlParams() {
-  let varMap = {};
-  window.location.href.replace(/[?&]+([^=&]+)=([^&#]*)/gi,function (m, key, value) {
-    varMap[key] = value;
-   });
-  return varMap;
+	let varMap = {};
+	window.location.href.replace(/[?&]+([^=&]+)=([^&#]*)/gi, function(m, key, value) {
+		varMap[key] = value;
+	});
+	return varMap;
 }
