@@ -1,14 +1,28 @@
 import Cookies from 'js-cookie'
 import config from '@/config'
-import { getToken} from '@/utils/auth'
-import { Message } from 'element-ui';
-import TurndownService from'turndown'
+import {getToken} from '@/utils/auth'
+import {Message} from 'element-ui';
+import TurndownService from 'turndown'
 // 全局函数
 const globalFunction = {
-  previewPicture(url){
-    const index= url.lastIndexOf(".");
-   //获取后缀
-    const ext = url.substr(index+1);
+  formatVideoTime(timestamp) {
+    if (!timestamp){
+      return ''
+    }
+    let timeMs = timestamp/1000;
+    let hours = parseInt(timeMs/3600);
+    let mini = parseInt(timeMs%3600/60);
+    let second = Math.ceil(timeMs%60);
+    if (hours > 0){
+      return hours + ':' + mini + ':' + second;
+    } else {
+      return mini + ':' + second;
+    }
+  },
+  previewPicture(url) {
+    const index = url.lastIndexOf(".");
+    //获取后缀
+    const ext = url.substr(index + 1);
     const imageUrl = {
       fileUrl: url,
       downloadLink: url,
@@ -17,7 +31,7 @@ const globalFunction = {
     };
     let data = {
       imgPreviewVisible: true,
-      imgPreviewList: [ imageUrl ],
+      imgPreviewList: [imageUrl],
       activeIndex: 0
     };
     this.$store.commit('setImgPreviewData', data)
@@ -65,7 +79,7 @@ const globalFunction = {
     }
   },
   previewVideo(url) {
-    window.open( process.env.VUE_APP_FILE_UOLOAD_HOST + url);
+    window.open(process.env.VUE_APP_FILE_UOLOAD_HOST + url);
   },
 
 
@@ -75,7 +89,7 @@ const globalFunction = {
    * @returns {string} 图片缩略图路径
    */
   getImgMinPath: function (row) {
-    return  process.env.VUE_APP_BASE_API+`/filetransfer/preview?userFileId=${row.userFileId}&isMin=true&shareBatchNum=${row.shareBatchNum}&extractionCode=${row.extractionCode}&token=${getToken()}`
+    return process.env.VUE_APP_BASE_API + `/filetransfer/preview?userFileId=${row.userFileId}&isMin=true&shareBatchNum=${row.shareBatchNum}&extractionCode=${row.extractionCode}&token=${getToken()}`
   },
   /**
    * 获取文件查看路径
@@ -83,7 +97,7 @@ const globalFunction = {
    * @returns {string} 文件路径
    */
   getViewFilePath: function (row) {
-    return process.env.VUE_APP_BASE_API+`/filetransfer/preview?userFileId=${row.userFileId}&isMin=false&shareBatchNum=${row.shareBatchNum}&extractionCode=${row.extractionCode}&token=${getToken()}`
+    return process.env.VUE_APP_BASE_API + `/filetransfer/preview?userFileId=${row.userFileId}&isMin=false&shareBatchNum=${row.shareBatchNum}&extractionCode=${row.extractionCode}&token=${getToken()}`
   },
   /**
    * 获取文件下载路径
@@ -91,7 +105,7 @@ const globalFunction = {
    * @returns {string}  文件下载路径
    */
   getDownloadFilePath: function (row) {
-    return process.env.VUE_APP_BASE_API+`/filetransfer/downloadfile?userFileId=${row.userFileId}&token=${getToken()}`
+    return process.env.VUE_APP_BASE_API + `/filetransfer/downloadfile?userFileId=${row.userFileId}&token=${getToken()}`
   },
   /**
    * 获取 office 文件在线预览路径
@@ -110,7 +124,7 @@ const globalFunction = {
    * @param {object} others 域名、路径、有效期等，封装到对象中
    */
   setCookies: function (name, value, others = null) {
-    Cookies.set(name, value, { domain: config.domain, ...others })
+    Cookies.set(name, value, {domain: config.domain, ...others})
   },
   /**
    * 获取 Cookies
@@ -119,7 +133,7 @@ const globalFunction = {
    * @returns {string} Cookies 值
    */
   getCookies: function (name, others = null) {
-    return Cookies.get(name, { domain: config.domain, ...others })
+    return Cookies.get(name, {domain: config.domain, ...others})
   },
   /**
    * 移除 Cookies
@@ -127,7 +141,7 @@ const globalFunction = {
    * @param {object} others 域名、路径等，封装到对象中
    */
   removeCookies: function (name, others = null) {
-    Cookies.remove(name, { domain: config.domain, ...others })
+    Cookies.remove(name, {domain: config.domain, ...others})
   },
   /**
    * 获取分享链接
@@ -147,10 +161,10 @@ const globalFunction = {
     input.value =
       extractionCode === null
         ? `分享链接：${this.getShareLink(
-          shareBatchNum
+        shareBatchNum
         )}\n复制链接到浏览器中并输入提取码即可查看文件`
         : `分享链接：${this.getShareLink(shareBatchNum)}\n提取码：${extractionCode
-        }\n复制链接到浏览器中并输入提取码即可查看文件` // 设置内容
+          }\n复制链接到浏览器中并输入提取码即可查看文件` // 设置内容
     document.body.appendChild(input) // 添加临时实例
     input.select() // 选择实例内容
     document.execCommand('Copy') // 执行复制

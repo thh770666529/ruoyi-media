@@ -170,7 +170,7 @@
           <el-input v-model="form.remark" rows="6" type="textarea" placeholder="请输入内容" maxlength="1000" show-word-limit />
         </el-form-item>
 
-        <el-divider content-position="center">电影视频信息</el-divider>
+        <el-divider content-position="center">电影视频信息(总长度：{{formatVideoTime(form.totalVideoLength)}})</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddMovieVideo">添加</el-button>
@@ -195,8 +195,8 @@
           <el-table-column label="标题" show-overflow-tooltip prop="title"/>
           <el-table-column label="url"  show-overflow-tooltip width="200" prop="url" align="center"/>
           <el-table-column label="文件后缀" prop="ext"/>
-          <el-table-column label="播放长度" prop="length"/>
-          <el-table-column label="视频大小" :formatter="filesizeFormat" prop="length" align="center" />
+          <el-table-column label="播放长度" :formatter="formatVideoTimeFormat" prop="length"/>
+          <el-table-column label="视频大小" :formatter="filesizeFormat" prop="filesize" align="center" />
           <el-table-column label="视频状态" highlight-current-row  align="center">
             <template slot-scope="scope">
               <dict-tag :options="videoStatusOptions" :value="scope.row.status"/>
@@ -224,6 +224,10 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <el-divider content-position="center">剧照</el-divider>
+        <imageUpload :limit="8" v-model="form.stills"/>
+
 
         <el-row>
           <el-col :span="12">
@@ -324,14 +328,18 @@
         </el-form-item>
 
         <el-form-item label="文件后缀" prop="ext">
-          <el-input v-model="movieVideoForm.ext" placeholder="请输入文件后缀" />
+          <el-input v-model="movieVideoForm.ext"  placeholder="请输入文件后缀" />
         </el-form-item>
         <el-form-item label="播放长度" prop="length">
-          <el-input v-model="movieVideoForm.length" placeholder="请输入播放长度" />
+          <el-input v-model="movieVideoForm.length" disabled  placeholder="请输入播放长度">
+            <template slot="append">{{formatVideoTime(movieVideoForm.length)}}</template>
+          </el-input>
         </el-form-item>
 
-        <el-form-item label="文件大小" prop="length">
-          <el-input v-model="movieVideoForm.filesize" placeholder="文件大小" />
+        <el-form-item label="文件大小" prop="filesize">
+          <el-input v-model="movieVideoForm.filesize" disabled placeholder="文件大小" >
+            <template slot="append">{{calculateFileSize(movieVideoForm.filesize)}}</template>
+          </el-input>
         </el-form-item>
 
         <el-form-item label="上传视频" prop="url">
@@ -727,7 +735,9 @@ export default {
         rate:0,
         qrcodePath: undefined,
         openPassword: 1,
-        password: undefined
+        password: undefined,
+        stills: undefined,
+        totalVideoLength: 0
       }
     },
     /** 搜索按钮操作 */
@@ -811,11 +821,12 @@ export default {
     },
     /** 电影视频添加按钮操作 */
     handleAddMovieVideo() {
-      this.open = true;
+      this.movieVideoForm = {};
       this.title ="添加电影视频";
+      this.open = true;
     },
     submitVideoForm(){
-      this.$refs["movieVideoForm"].validate(valid => {
+      this.$refs['movieVideoForm'].validate(valid => {
         if (valid) {
           const videoId =  this.movieVideoForm.videoId;
           if (!videoId){
@@ -991,6 +1002,9 @@ export default {
         this.msgError('上传头像图片大小不能超过 1GB!');
       }
       return isVideo && isLt1G;
+    },
+    formatVideoTimeFormat(row, column) {
+      return this.formatVideoTime(row.length);
     },
     filesizeFormat(row, column) {
       return this.calculateFileSize(row.filesize);

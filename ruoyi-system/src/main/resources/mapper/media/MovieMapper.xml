@@ -38,6 +38,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="qrcodePath"   column="qrcode_path" />
         <result property="openPassword"   column="open_password" />
         <result property="password"   column="password" />
+        <result property="stills"   column="stills" />
+        <result property="totalVideoLength"   column="total_video_length" />
         <collection property="actorList" column="movie_id" select="selectMovieActorList"/>
         <collection property="directorList" column="movie_id" select="selectMovieDirectorList"/>
     </resultMap>
@@ -72,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
         m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
         m.open_comment, m.open_download, m.price, m.rate,
-        m.category_id,m.category_name,m.qrcode_path,m.open_password,m.password,
+        m.category_id,m.category_name,m.qrcode_path,m.open_password,m.password,m.stills,m.total_video_length,
         u.nick_name as publishUsername
         from wm_movie m
         left join sys_user u on m.publish_by = u.user_id
@@ -82,7 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
         m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
         m.open_comment, m.price, m.rate,
-        m.category_id,m.category_name,m.qrcode_path,m.open_password,
+        m.category_id,m.category_name,m.qrcode_path,m.open_password,stills,total_video_length,
         m.click_count, m.comment_count,m.follow_count,m.collection_count,m.support_count,m.oppose_count,m.share_count,
         u.nick_name as publishUsername
         from wm_movie m
@@ -95,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
         m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
         m.open_comment, m.price, m.rate,
-        m.category_id,m.category_name,m.qrcode_path,m.open_password,
+        m.category_id,m.category_name,m.qrcode_path,m.open_password,m.stills,m.total_video_length,
         m.click_count, m.comment_count,m.follow_count,m.collection_count,m.support_count,m.oppose_count,m.share_count,
         u.nick_name as publishUsername
         from wm_movie m
@@ -164,7 +166,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        select DISTINCT m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
         m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
         m.open_comment, m.open_download, m.price, m.rate,
-        m.category_id,m.category_name,m.qrcode_path,m.open_password
+        m.category_id,m.category_name,m.qrcode_path,m.open_password,m.stills,m.total_video_length
         from wm_movie m, wm_movie_actor ma
         where m.movie_id = ma.movie_id and ma.actor_id = #{actorId}
         order by m.create_time desc

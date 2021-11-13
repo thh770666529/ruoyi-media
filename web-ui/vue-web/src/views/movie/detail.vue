@@ -16,7 +16,7 @@
             <!-- <h2 class="othername" id="englishname">天気の子</h2>-->
             <p class="kind" id="kind">{{selectDictLabel(typeOptions, movie.type)}}</p>
             <p class="kind" id="category">{{ movie.categoryName ? movie.categoryName: '无' }}</p>
-            <p class="area" id="adress">{{selectDictLabel(countryOptions, movie.country)}} / {{totalLength}}</p>
+            <p class="area" id="adress">{{selectDictLabel(countryOptions, movie.country)}} / {{formatVideoTime(movie.totalVideoLength)}}</p>
             <p class="time" id="time"> {{ parseTime(movie.publishTime, '{y}-{m}-{d}') }}上映</p>
             <template v-for="(item, index) in tagOptions">
               <template v-if="getTagArray(movie.tagId).includes(String(item.tagId))">
@@ -72,7 +72,7 @@
             <span>剧集列表</span>
           </div>
           <el-row :gutter="24">
-            <el-col :xs="12" :sm="8" :md="6" :lg="4"  style="padding: 8px;" v-for="video in videoList" :key="video.videoId" >
+            <el-col :xs="12" :sm="6" :md="4" :lg="3"  style="padding: 5px;margin-right: 10px" v-for="video in videoList" :key="video.videoId" >
               <el-tooltip  :content="video.title" placement="top">
                 <el-button type="danger" v-if="video.title && video.title.length < 6" @click="play(video.videoId)"  style="margin-bottom: 20px" plain>{{ video.title | ellipsis(6)}}</el-button>
                 <el-button type="danger" v-else @click="play(video.videoId)"  style="margin-bottom: 20px" plain>{{ video.title | ellipsis(6)}}</el-button>
@@ -137,24 +137,8 @@
                         </span>
                 </div>
               </div>
-              <div class="images-main">
-                <a href="#">
-                  <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/95300ef2d49506fd68a2a56897bc5043315152.jpg@465w_258h_1e_1c">
-                </a>
-              </div>
-              <div class="images-aside">
-                <div class="aside-img1">
-                  <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/11e1b4c016551a5f8be80612f6062a7d131097.jpg@126w_126h_1e_1c">
-                </div>
-                <div class="aside-img2">
-                  <img class="default-img" alt="天气之子剧照图集" src="https://p1.meituan.net/movie/7172e7db970129838ebd068372a2bfb1152767.jpg@126w_126h_1e_1c">
-                </div>
-                <div class="aside-img3">
-                  <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/55e6794ea722a7a58b410e38ae4b7cd7156727.jpg@126w_126h_1e_1c">
-                </div>
-                <div class="aside-img4">
-                  <img class="default-img" alt="天气之子剧照图集" src="https://p0.meituan.net/movie/2b38aeed774ed7fefd72b47ff191cc9c116946.jpg@126w_126h_1e_1c">
-                </div>
+              <div class="images-aside"  >
+                <el-image  class="default-img" v-for="(file, index) in movieImagesList" :key="index" :src="`${fileUploadHost}${file.url}`" ></el-image>
               </div>
             </div>
           </el-tab-pane>
@@ -224,6 +208,7 @@ export default {
       videoList: [],
       actorList: [],
       directorList: [],
+      movieImagesList: [],// 剧照
       video: {},
       activeName: 'description',
       sameTypeMovieList: []
@@ -236,16 +221,6 @@ export default {
     });
     this.getDictList();
     this.getDetail();
-  },
-
-  computed:{
-    totalLength() {
-      if (this.videoList.length === 0){
-        return '无'
-      } else {
-        return this.videoList[0].length;
-      }
-    }
   },
   methods:{
     getDictList() {
@@ -267,10 +242,30 @@ export default {
         if (this.videoList.length > 0 ) {
           this.video = this.videoList[0]
         }
+        //获取剧照
+        this.getStills(this.movie.stills);
       });
       movieApi.getSameTypeMovieList(this.movieId).then(response => {
         this.sameTypeMovieList = response.data;
       });
+    },
+    getStills(val){
+      if (val) {
+        let temp = 1;
+        // 首先将值转为数组
+        const list = val.split(',');
+        // 然后将数组转为对象数组
+        this.movieImagesList = list.map(item => {
+          if (typeof item === "string") {
+            item = { name: item, url: item };
+          }
+          item.uid = item.uid || new Date().getTime() + temp++;
+          return item;
+        });
+      } else {
+        this.movieImagesList = [];
+        return [];
+      }
     },
     //播放
     play(videoId){

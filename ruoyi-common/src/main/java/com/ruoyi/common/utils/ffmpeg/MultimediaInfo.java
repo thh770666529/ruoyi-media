@@ -40,7 +40,8 @@ public class MultimediaInfo {
 
 
     public String getVideoTime() {
-        return stringForTime(duration);
+        //return stringForTime(duration);
+        return duration + "";
     }
 
     private String stringForTime(long timeMs) {

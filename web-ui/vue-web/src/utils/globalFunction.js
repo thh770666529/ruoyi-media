@@ -5,6 +5,20 @@ import { Message } from 'element-ui';
 
 // 全局函数
 const globalFunction = {
+  formatVideoTime(timestamp) {
+    if (!timestamp){
+      return '00:00'
+    }
+    let timeMs = timestamp/1000;
+    let hours = parseInt(timeMs/3600);
+    let mini = parseInt(timeMs%3600/60);
+    let second = Math.ceil(timeMs%60);
+    if (hours > 0){
+      return hours + ':' + mini + ':' + second;
+    } else {
+      return mini + ':' + second;
+    }
+  },
   previewPicture(url){
     const index= url.lastIndexOf(".");
    //获取后缀

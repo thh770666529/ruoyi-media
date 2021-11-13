@@ -140,4 +140,13 @@ public class Movie extends BaseEntity
     @TableField(exist = false)
     private String publishYear;
 
+
+    /** 剧照 */
+    @Excel(name = "剧照")
+    private String stills;
+
+
+    /** 视频总长度 */
+    @Excel(name = "视频总长度")
+    private long totalVideoLength;
 }

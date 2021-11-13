@@ -131,6 +131,8 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Override
     public int insertMovie(MovieVO movieVO)
     {
+        // 设置视频总长度
+        this.setTotalVideoLength(movieVO);
         int rows = movieMapper.insert(movieVO);
         if (rows > 0){
            this.insertVideo(movieVO);
@@ -138,6 +140,25 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
            this.insertActor(movieVO,MovieActorType.DIRECTOR);
         }
         return rows;
+    }
+
+    /**
+     * 设置视频总长度
+     * @param movieVO
+     */
+    private void setTotalVideoLength(MovieVO movieVO) {
+        List<Video> videoList = movieVO.getVideoList();
+        if (videoList == null || videoList.size() == 0){
+            return;
+        }
+        long totalVideoLength = 0;
+        for (Video video : videoList) {
+            String length = video.getLength();
+            if (StringUtils.isNotEmpty(length)){
+                totalVideoLength += Long.valueOf(length);
+            }
+        }
+        movieVO.setTotalVideoLength(totalVideoLength);
     }
 
     /**
@@ -183,6 +204,8 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     public int updateMovie(MovieVO movieVO)
     {
         videoMapper.deleteByMovieId(movieVO.getMovieId());
+        // 设置视频总长度
+        this.setTotalVideoLength(movieVO);
         this.insertVideo(movieVO);
         Map movieActorMap  = new HashMap<>();
         movieActorMap.put("movie_id",movieVO.getMovieId());
