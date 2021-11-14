@@ -159,7 +159,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="articleList" @selection-change="handleSelectionChange">
+    <el-table ref="tables" v-loading="loading" :data="articleList" :default-sort="defaultSort"  @sort-change="handleSortChange"  @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键" align="center" prop="articleId" />
       <el-table-column label="标题图" align="center" prop="images" width="100">
@@ -227,7 +227,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
+      <el-table-column label="更新时间" align="center" prop="updateTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
         </template>
@@ -248,6 +248,12 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['blog:article:remove']"
           >删除</el-button>
+          <el-button
+            type="text"
+            size="small"
+            icon="el-icon-view"
+            @click="previewArticle(scope.row)"
+          >预览</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -266,13 +272,13 @@
         <el-row>
           <el-col :span="16">
             <el-form-item label="博客标题" prop="title">
-              <el-input v-model="form.title" placeholder="请输入博客标题" />
+              <el-input v-model="form.title" placeholder="请输入博客标题"  @input="contentChange" />
             </el-form-item>
             <el-form-item label="文章简介" prop="summary">
-              <el-input v-model="form.summary" placeholder="请输入文章简介" />
+              <el-input v-model="form.summary" placeholder="请输入文章简介" @input="contentChange" />
             </el-form-item>
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" placeholder="请输入备注" />
+              <el-input v-model="form.remark" placeholder="请输入备注" @input="contentChange" />
             </el-form-item>
             <el-row>
               <el-col :span="12">
@@ -420,7 +426,7 @@
           <el-input v-model="form.password" placeholder="请输入文章私密访问时的密钥" />
         </el-form-item>
         <el-form-item label="文章内容">
-          <editor v-model="form.content" :min-height="192" :height="360"/>
+          <editor ref="editor" v-model="form.content" :min-height="192" :height="360" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -437,9 +443,43 @@
       <div class="tipBox">
         <div class="tip">导入须知</div>
         <div class="tipItem">1）如果你的Markdown文档里面的图片是本地，需要选择本地图片，然后提交到图片服务器</div>
+        <div class="tipItem">2）含有本地图片一定需要提前上传图片，否者会出现图片无法替换的问题</div>
+        <div class="tipItem">3）如果你的Markdown文档里面的图片不是本地，直接选择博客文件上传即可</div>
+        <div class="tipItem">4）目前支持Markdown文件批量上传，步骤是先提交所有图片，在提交全部的博客文件</div>
+        <div class="tipItem">5）因为网络或者服务器性能等不可抗拒的原因，因此不推荐一次上传太多</div>
       </div>
-      <fileUpload :fileType="['doc', 'xls', 'ppt', 'txt', 'pdf', 'png', 'jpg', 'jpeg']" v-model="localUploadFileUrl"/>
-
+      <el-row :gutter="24" class="mb8">
+        <el-col :span="12">
+          <el-upload
+            class="el-upload"
+            ref="localImagesUpload"
+            :before-upload="handleBeforeLocalImagesUpload"
+            :action="commonUploadFileListUrl"
+            :file-list="uploadLocalImageList"
+            :show-file-list="true"
+            :headers="headers"
+            :auto-upload="false"
+            multiple
+          >
+            <el-button slot="trigger" size="small" type="primary">选取本地图片</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitLocalImagesUpload">提交到图片服务器</el-button>
+          </el-upload>
+        </el-col>
+        <el-col :span="12">
+          <el-upload
+            class="el-upload"
+            ref="uploadMarkdownFile"
+            :headers="headers"
+            :action="uploadLocalArticleHost"
+            :auto-upload="false"
+            :show-file-list="true"
+            multiple
+          >
+            <el-button style="margin-left: 10px;" slot="trigger" size="small" type="primary">选取博客文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitLocalMarkdownUpload">提交到服务器</el-button>
+          </el-upload>
+        </el-col>
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -448,14 +488,22 @@
 import { listTag } from "@/api/blog/tag";
 import { listCategory } from "@/api/blog/category";
 import { listArticle, getArticle, delArticle, addArticle, updateArticle, exportArticle } from "@/api/blog/article";
-
+import { getToken } from "@/utils/auth";
 export default {
   name: "Article",
   data() {
     return {
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
+      uploadLocalArticleHost: process.env.VUE_APP_BASE_API + '/blog/article/uploadLocalFile',
+      uploadLocalImageList: [],
+      //上传多文件URL
+      commonUploadFileListUrl: process.env.VUE_APP_BASE_API + '/common/uploadFileList',
       localUploadFileUrl: '',
       localUploadVisible: false, // 是否显示本地上传弹出层
       multipleSelection: [], //多选，用于批量下载markDown
+      changeCount: 0, //文章编辑次数
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -510,7 +558,11 @@ export default {
         level: null,
         isPublish: null,
         type: null,
+        orderByColumn: 'updateTime',
+        isAsc: 'desc'
       },
+      // 默认排序
+      defaultSort: {prop: 'updateTime', order: 'descending'},
       // 表单参数
       form: {},
       // 表单校验
@@ -542,6 +594,12 @@ export default {
     // 查询字典
     this.getDictList();
   },
+  watch:{
+    // 内容改变备份
+    'form.content': function () {
+      this.contentChange();
+    }
+  },
   methods: {
     /** 查询博客文章列表 */
     getList() {
@@ -571,6 +629,13 @@ export default {
         }
       })
       return actions.join('');
+    },
+    previewArticle(row) {
+      if(row.isPublish == 0) {
+        this.msgError("文章暂未发布，无法进行浏览")
+        return;
+      }
+      window.open( process.env.VUE_APP_WEB_HOST + '/article/' + row.articleId);
     },
     // 是否原创字典翻译
     isOriginalFormat(row, column) {
@@ -604,6 +669,7 @@ export default {
     // 表单重置
     reset() {
       this.tagList = [];
+      this.changeCount = 0;
       this.form = {
         articleId: null,
         title: null,
@@ -648,6 +714,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
       this.handleQuery();
     },
     // 多选框选中数据
@@ -657,30 +724,83 @@ export default {
       this.multiple = !selection.length
       this.multipleSelection = selection
     },
+    /** 排序触发事件 */
+    handleSortChange(column, prop, order) {
+      this.queryParams.orderByColumn = column.prop;
+      this.queryParams.isAsc = column.order;
+      this.getList();
+    },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
       this.title = "添加博客文章";
+      let tempForm = localStorage.getItem("articleForm");
+
+      if(tempForm) {
+        tempForm = JSON.parse(tempForm);
+      }
+      if (tempForm != null && tempForm.title) {
+        this.$confirm('还有上次未完成的博客编辑，是否继续编辑?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let that = this
+          that.form = tempForm;
+          that.tagList = [];
+          if (this.form.tagId){
+            const dbTagList = this.form.tagId.split(",");
+            for (let index = 0; index < dbTagList.length; index++) {
+              if (dbTagList[index]) {
+                that.tagList.push(dbTagList[index]);
+              }
+            }
+          }
+        }).catch(() => {
+          localStorage.removeItem("articleForm");
+          this.reset();
+        });
+      } else {
+        this.reset();
+      }
+      this.open = true;
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      const loading = this.$loading({
+        lock: true,
+        text: '正在加载中...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       this.reset();
       const articleId = row.articleId || this.ids
       getArticle(articleId).then(response => {
+        loading.close();
         this.form = response.data;
         this.form.type = this.form.type + "";
         this.open = true;
         this.title = "修改博客文章";
         let that = this;
         that.tagList = [];
-        const dbTagList = this.form.tagId.split(",");
-        for (let index = 0; index < dbTagList.length; index++) {
-          if (dbTagList[index]) {
-            that.tagList.push(dbTagList[index]);
+        if (this.form.tagId){
+          const dbTagList = this.form.tagId.split(",");
+          for (let index = 0; index < dbTagList.length; index++) {
+            if (dbTagList[index]) {
+              that.tagList.push(dbTagList[index]);
+            }
           }
         }
       });
+    },
+    contentChange: function() {
+      let that = this;
+      if(that.changeCount > 1) {
+        this.setCategoryName( this.form.categoryId);
+        this.form.tagId = that.tagList.join(",");
+        // 将内容设置到 WebStorage中
+        localStorage.setItem("articleForm", JSON.stringify(that.form));
+      }
+      this.changeCount = this.changeCount + 1;
     },
     /** 提交按钮 */
     submitForm() {
@@ -697,6 +817,7 @@ export default {
             });
           } else {
             addArticle(this.form).then(response => {
+              localStorage.removeItem("articleForm");
               this.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -774,12 +895,6 @@ export default {
       });
     },
     /**
-     * 本地上传
-     */
-    handleLocalUpload() {
-      this.localUploadVisible = true;
-    },
-    /**
      * 赋值分类名称 冗余数据
      */
     setCategoryName(categoryId){
@@ -794,7 +909,117 @@ export default {
           break;
         }
       }
+    },
+    /**
+     * 本地上传
+     */
+    handleLocalUpload() {
+      this.localUploadVisible = true;
+    },
+    handleBeforeLocalImagesUpload(file) {
+      //this.uploadLocalImageList = []
+    },
+
+    // 本地图片上传
+    submitLocalImagesUpload() {
+      //this.$refs.localImagesUpload.submit();
+      let {uploadFiles, action, data} = this.$refs.localImagesUpload
+      this.commonUploadFileList({
+        uploadFiles,
+        action,
+        data,
+        success: (response) => {
+          let res = JSON.parse(response)
+          if(res.code === 200) {
+            this.msgSuccess('图片上传成功！');
+            let data = res.data;
+            this.uploadLocalImageList = data.map((file) => {
+              return {
+                fileName: file.fileName,
+                fileOldName: file.fileOldName,
+                filesize: file.filesize,
+                url: this.fileUploadHost + file.url
+              };
+            });
+          } else {
+            this.msgSuccess('图片上传失败！');
+          }
+        },
+        error: (error) => {
+          console.log('失败了', error)
+        }
+      })
+    },
+    // 本地markdown上传
+    submitLocalMarkdownUpload(){
+      const loading = this.$loading({
+        lock: true,
+        text: '正在导入markdown,请稍等...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      let {uploadFiles, action} = this.$refs.uploadMarkdownFile
+      let data = {}
+      data.imagesList = JSON.stringify(this.uploadLocalImageList)
+      this.commonUploadFileList({
+        uploadFiles,
+        data,
+        action,
+        success: (response) => {
+          loading.close();
+          let res = JSON.parse(response)
+          if(res.code === 200) {
+            this.msgSuccess('上传本地文件成功！');
+            this.getList();
+          } else {
+            this.msgError('上传本地文件失败！');
+          }
+          this.localUploadVisible = false
+          // 上传成功后，将里面的内容删除
+          this.$refs.uploadMarkdownFile.clearFiles();
+          this.$refs.localImagesUpload.clearFiles();
+        },error: (error) => {
+          console.log('失败了', error)
+          loading.close();
+        }
+      })
+    },
+    /**
+     * 自定义上传文件
+     * @param fileList 文件列表
+     * @param success 成功回调
+     * @param error 失败回调
+     */
+    commonUploadFileList({uploadFiles, headers, data, action, success, error}) {
+      let form = new FormData();
+      // 文件对象
+      uploadFiles.map(file => form.append("fileList", file.raw));
+      // 附件参数
+      for (let key in data) {
+        form.append(key, data[key])
+      }
+      // 附件参数
+      let xhr = new XMLHttpRequest();
+      // 异步请求
+      xhr.open("post", action, true);
+      // 设置请求头
+      xhr.setRequestHeader("Authorization", getToken());
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4){
+          if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304){
+            success && success(xhr.responseText)
+          } else {
+            error && error(xhr.status)
+          }
+        }
+      }
+      xhr.send(form)
     }
   }
 };
 </script>
+<style scoped>
+  .tipBox {
+    margin-bottom: 30px;
+  }
+</style>

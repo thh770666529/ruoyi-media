@@ -11,7 +11,9 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -93,5 +95,11 @@ public class ArticleController extends BaseController
     public AjaxResult remove(@PathVariable Long[] articleIds)
     {
         return toAjax(articleService.deleteArticleByArticleIds(articleIds));
+    }
+
+    @Log(title = "博客文章", businessType = BusinessType.INSERT)
+    @PostMapping("/uploadLocalFile")
+    public AjaxResult uploadPics(@RequestBody List<MultipartFile> fileList) throws IOException {
+        return toAjax(articleService.uploadLocalBlog(fileList));
     }
 }

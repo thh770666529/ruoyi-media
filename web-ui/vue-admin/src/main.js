@@ -42,7 +42,8 @@ import uploader from 'vue-simple-uploader'
 
 // 全局方法挂载
 Vue.prototype.fileUploadHost = process.env.VUE_APP_FILE_UOLOAD_HOST
-Vue.prototype.commonUploadImagesUrl = process.env.VUE_APP_BASE_API+"/common/uploadImage"
+Vue.prototype.commonUploadImagesUrl = process.env.VUE_APP_BASE_API + '/common/uploadImage'
+Vue.prototype.commonUploadUrl = process.env.VUE_APP_BASE_API + '/common/upload'
 Vue.prototype.getDicts = getDicts
 Vue.prototype.getDictsByTypeList = getDictsByTypeList
 Vue.prototype.getConfigKey = getConfigKey

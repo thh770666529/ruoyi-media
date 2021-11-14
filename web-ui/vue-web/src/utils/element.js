@@ -56,6 +56,9 @@ import {
 } from "element-ui";
 import Vue from 'vue'
 
+
+// loading
+let loadingInstance;
 const element = {
   install: function (Vue) {
     Vue.use(Dialog);
@@ -117,11 +120,11 @@ const element = {
     Vue.prototype.$message = Message;
     //消息
     Vue.prototype.msgSuccess = function (msg) {
-      this.$message({ showClose: true, message: msg, type: "success" });
+      this.$message({showClose: true, message: msg, type: "success"});
     }
 
     Vue.prototype.msgError = function (msg) {
-      this.$message({ showClose: true, message: msg, type: "error" });
+      this.$message({showClose: true, message: msg, type: "error"});
     }
 
     Vue.prototype.msgInfo = function (msg) {

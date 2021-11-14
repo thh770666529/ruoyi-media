@@ -158,10 +158,18 @@
             <artifactId>hutool-all</artifactId>
         </dependency>
 
+        <!--第三方登录-->
         <dependency>
             <groupId>me.zhyd.oauth</groupId>
             <artifactId>JustAuth</artifactId>
             <version>${JustAuth.version}</version>
+        </dependency>
+
+        <!--Markdown 转 Html-->
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>${flexmark.version}</version>
         </dependency>
     </dependencies>
 

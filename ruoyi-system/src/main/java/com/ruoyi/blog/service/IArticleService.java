@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.blog.domain.Article;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 博客文章Service接口
@@ -107,4 +108,6 @@ public interface IArticleService extends IService<Article>
      * @param articleId
      */
     List<Article> getSameArticleList(Long articleId);
+
+    int uploadLocalBlog(List<MultipartFile> fileList);
 }

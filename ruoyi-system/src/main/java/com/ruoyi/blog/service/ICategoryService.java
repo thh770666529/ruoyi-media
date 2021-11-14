@@ -1,6 +1,8 @@
 package com.ruoyi.blog.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.blog.domain.Category;
 
 /**
@@ -9,7 +11,7 @@ import com.ruoyi.blog.domain.Category;
  * @author thh
  * @date 2021-08-28
  */
-public interface ICategoryService
+public interface ICategoryService extends IService<Category>
 {
     /**
      * 查询博客分类
@@ -58,4 +60,11 @@ public interface ICategoryService
      * @return 结果
      */
     public int deleteCategoryByCategoryId(Long categoryId);
+
+    /**
+     * 查询最热门的分类
+     * @return 结果
+     */
+    public Category getTopOne();
+
 }

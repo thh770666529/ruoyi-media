@@ -43,6 +43,7 @@
         <xdocreport.version>2.0.2</xdocreport.version>
         <pdfbox.version>2.0.18</pdfbox.version>
         <JustAuth.version>1.16.4</JustAuth.version>
+        <flexmark.version>0.62.2</flexmark.version>
     </properties>
 
     <!-- 依赖声明 -->

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.file.MimeTypeUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +80,8 @@ public class CommonController
     public AjaxResult uploadFile(MultipartFile file) throws Exception
     {
         try
-        {
-            String url = FileUploadUtils.upload2(RuoYiConfig.getImagePath(), file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
+        {   String filePath = RuoYiConfig.getUploadPath();
+            String url = FileUploadUtils.upload2(filePath, file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
             AjaxResult ajax = AjaxResult.success();
             ajax.put("fileName", url);
             ajax.put("url", url);
@@ -91,6 +92,34 @@ public class CommonController
             return AjaxResult.error(e.getMessage());
         }
     }
+
+    /**
+     * 通用上传请求
+     */
+    @PostMapping("/common/uploadFileList")
+    public AjaxResult uploadFile(List<MultipartFile> fileList) throws Exception
+    {
+        try
+        {
+            String filePath = RuoYiConfig.getUploadPath();
+            List< Map<String, Object>> uploadFileList = new ArrayList<>();
+            for (MultipartFile file : fileList) {
+                String url = FileUploadUtils.upload2(filePath, file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
+                Map<String, Object> fileData = new HashMap<>();
+                fileData.put("fileName", FilenameUtils.getName(url));
+                fileData.put("fileOldName", file.getOriginalFilename());
+                fileData.put("filesize", file.getSize());
+                fileData.put("url", url);
+                uploadFileList.add(fileData);
+            }
+            return AjaxResult.success(uploadFileList);
+        }
+        catch (Exception e)
+        {
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
 
     /**
      * 通用上传请求

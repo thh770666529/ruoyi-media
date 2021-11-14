@@ -1,6 +1,9 @@
 package com.ruoyi.blog.service.impl;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +18,7 @@ import com.ruoyi.blog.service.ICategoryService;
  * @date 2021-08-28
  */
 @Service
-public class CategoryServiceImpl implements ICategoryService
+public class CategoryServiceImpl  extends ServiceImpl<CategoryMapper,Category> implements ICategoryService
 {
     @Autowired
     private CategoryMapper categoryMapper;
@@ -92,5 +95,14 @@ public class CategoryServiceImpl implements ICategoryService
     public int deleteCategoryByCategoryId(Long categoryId)
     {
         return categoryMapper.deleteById(categoryId);
+    }
+
+    @Override
+    public Category getTopOne() {
+        QueryWrapper<Category> categoryQueryWrapper = new QueryWrapper<>();
+        categoryQueryWrapper.eq("status", "1");
+        categoryQueryWrapper.last("limit 1");
+        categoryQueryWrapper.orderByDesc("sort");
+        return categoryMapper.selectOne(categoryQueryWrapper);
     }
 }
