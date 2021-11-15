@@ -1,13 +1,24 @@
 package com.ruoyi.media.service.impl;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
+import cn.hutool.extra.qrcode.QrConfig;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.config.JustAuthConfig;
+import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.MovieActorType;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.file.FileUploadUtils;
+import com.ruoyi.common.utils.spring.SpringUtils;
+import com.ruoyi.common.utils.uuid.IdUtils;
 import com.ruoyi.index.vo.SearchParamVO;
 import com.ruoyi.media.domain.MovieActor;
 import com.ruoyi.media.domain.vo.MovieActorVO;
@@ -17,6 +28,8 @@ import com.ruoyi.media.mapper.VideoMapper;
 import com.ruoyi.media.service.IVideoService;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.util.TokenUtil;
+import com.ruoyi.website.domain.WebConfig;
+import com.ruoyi.website.service.IWebConfigService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +47,7 @@ import com.ruoyi.media.service.IMovieService;
  * @date 2021-05-16
  */
 @Service
-public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements IMovieService
-{
+public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements IMovieService {
     @Autowired
     private MovieMapper movieMapper;
 
@@ -52,7 +64,14 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     private MovieActorMapper movieActorMapper;
 
     @Autowired
-    TokenUtil tokenUtil;
+    private TokenUtil tokenUtil;
+
+    @Autowired
+    private IWebConfigService webConfigService;
+
+    @Autowired
+    JustAuthConfig justAuthConfig;
+
     /**
      * 查询电影
      *
@@ -60,16 +79,15 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
      * @return 电影
      */
     @Override
-    public MovieVO selectMovieById(Long movieId)
-    {
+    public MovieVO selectMovieById(Long movieId) {
         Movie movie = movieMapper.selectById(movieId);
         MovieVO movieVO = new MovieVO();
-        if (movie!=null){
-            BeanUtils.copyProperties(movie,movieVO);
+        if (movie != null) {
+            BeanUtils.copyProperties(movie, movieVO);
             String publishBy = movieVO.getPublishBy();
-            if (StringUtils.isNotEmpty(publishBy)){
+            if (StringUtils.isNotEmpty(publishBy)) {
                 SysUser sysUser = sysUserMapper.selectUserById(Long.valueOf(publishBy));
-                movieVO.setPublishUsername(sysUser!=null?sysUser.getNickName():null);
+                movieVO.setPublishUsername(sysUser != null ? sysUser.getNickName() : null);
             }
             movieVO.setVideoList(videoService.selectVideoByMovieId(movieId));
             setMovieActor(MovieActorType.ACTOR, movieVO);
@@ -83,25 +101,26 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     public MovieVO selectWebMovieById(Long movieId) {
         MovieVO movieVO = movieMapper.selectWebMovieById(movieId);
         movieVO.setVideoList(videoService.selectVideoByMovieId(movieId));
-        return  movieVO;
+        return movieVO;
     }
 
     /**
      * 设置导演或者主演数据
+     *
      * @param movieActorType
      * @param movieVO
      */
-    private void setMovieActor(MovieActorType movieActorType,MovieVO movieVO){
-        if (movieVO == null || movieVO.getMovieId() == null){
+    private void setMovieActor(MovieActorType movieActorType, MovieVO movieVO) {
+        if (movieVO == null || movieVO.getMovieId() == null) {
             return;
         }
         MovieActorVO actorVO = new MovieActorVO();
         actorVO.setMovieId(movieVO.getMovieId());
-        if (movieActorType.getValue() == MovieActorType.ACTOR.getValue()){
+        if (movieActorType.getValue() == MovieActorType.ACTOR.getValue()) {
             actorVO.setType(MovieActorType.ACTOR.getValue());
             List<MovieActorVO> movieActorList = movieActorMapper.selectMovieActorList(actorVO);
             movieVO.setActorList(movieActorList);
-        }else {
+        } else {
             actorVO.setType(MovieActorType.DIRECTOR.getValue());
             List<MovieActorVO> directorList = movieActorMapper.selectMovieActorList(actorVO);
             movieVO.setDirectorList(directorList);
@@ -116,8 +135,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
      * @return 电影
      */
     @Override
-    public List<MovieVO> selectMovieList(Movie movie)
-    {
+    public List<MovieVO> selectMovieList(Movie movie) {
         return movieMapper.selectMovieList(movie);
     }
 
@@ -129,32 +147,36 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
      */
     @Transactional
     @Override
-    public int insertMovie(MovieVO movieVO)
-    {
+    public int insertMovie(MovieVO movieVO){
         // 设置视频总长度
         this.setTotalVideoLength(movieVO);
         int rows = movieMapper.insert(movieVO);
-        if (rows > 0){
-           this.insertVideo(movieVO);
-           this.insertActor(movieVO,MovieActorType.ACTOR);
-           this.insertActor(movieVO,MovieActorType.DIRECTOR);
+        if (rows > 0) {
+            this.insertVideo(movieVO);
+            this.insertActor(movieVO, MovieActorType.ACTOR);
+            this.insertActor(movieVO, MovieActorType.DIRECTOR);
+            String url = "movie/" + movieVO.getMovieId();
+            String qrcodePath = generateQr(url);
+            movieVO.setQrcodePath(qrcodePath);
+            movieMapper.updateById(movieVO);
         }
         return rows;
     }
 
     /**
      * 设置视频总长度
+     *
      * @param movieVO
      */
     private void setTotalVideoLength(MovieVO movieVO) {
         List<Video> videoList = movieVO.getVideoList();
-        if (videoList == null || videoList.size() == 0){
+        if (videoList == null || videoList.size() == 0) {
             return;
         }
         long totalVideoLength = 0;
         for (Video video : videoList) {
             String length = video.getLength();
-            if (StringUtils.isNotEmpty(length)){
+            if (StringUtils.isNotEmpty(length)) {
                 totalVideoLength += Long.valueOf(length);
             }
         }
@@ -162,30 +184,29 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     }
 
     /**
-     * @Desc 更新演员
      * @param movieVO
+     * @Desc 更新演员
      */
-    private void insertActor(MovieVO movieVO,MovieActorType movieActorType) {
+    private void insertActor(MovieVO movieVO, MovieActorType movieActorType) {
         Long movieId = movieVO.getMovieId();
         List<MovieActorVO> actorList = movieVO.getActorList();
         List<MovieActorVO> directorList = movieVO.getDirectorList();
 
         List<MovieActorVO> insertList = null;
-        switch (movieActorType){
-           case ACTOR:
-               insertList = actorList;
-               break;
-           case DIRECTOR:
-               insertList = directorList;
-               break;
-               default:
-                   return;
-       }
-        if (StringUtils.isNotNull(insertList))
-        {
+        switch (movieActorType) {
+            case ACTOR:
+                insertList = actorList;
+                break;
+            case DIRECTOR:
+                insertList = directorList;
+                break;
+            default:
+                return;
+        }
+        if (StringUtils.isNotNull(insertList)) {
             for (MovieActorVO movieActorVO : insertList) {
                 MovieActor movieActor = new MovieActor();
-                BeanUtils.copyProperties(movieActorVO,movieActor);
+                BeanUtils.copyProperties(movieActorVO, movieActor);
                 movieActor.setMovieId(movieId);
                 movieActor.setType(movieActorType.getValue());
                 movieActorMapper.insertMovieActor(movieActor);
@@ -201,18 +222,22 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
      */
     @Transactional
     @Override
-    public int updateMovie(MovieVO movieVO)
-    {
+    public int updateMovie(MovieVO movieVO) {
         videoMapper.deleteByMovieId(movieVO.getMovieId());
         // 设置视频总长度
         this.setTotalVideoLength(movieVO);
         this.insertVideo(movieVO);
-        Map movieActorMap  = new HashMap<>();
-        movieActorMap.put("movie_id",movieVO.getMovieId());
+        Map movieActorMap = new HashMap<>();
+        movieActorMap.put("movie_id", movieVO.getMovieId());
         movieActorMapper.deleteByMap(movieActorMap);
-        this.insertActor(movieVO,MovieActorType.ACTOR);
-        this.insertActor(movieVO,MovieActorType.DIRECTOR);
-        return  movieMapper.updateById(movieVO);
+        this.insertActor(movieVO, MovieActorType.ACTOR);
+        this.insertActor(movieVO, MovieActorType.DIRECTOR);
+        if (StringUtils.isBlank(movieVO.getQrcodePath())){
+            String url = "movie/" + movieVO.getMovieId();
+            String qrcodePath = generateQr(url);
+            movieVO.setQrcodePath(qrcodePath);
+        }
+        return movieMapper.updateById(movieVO);
     }
 
 
@@ -224,8 +249,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
      */
     @Override
     @Transactional
-    public int deleteMovieById(Long movieId)
-    {
+    public int deleteMovieById(Long movieId) {
         videoMapper.deleteByMovieId(movieId);
         return movieMapper.deleteById(movieId);
     }
@@ -264,20 +288,16 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
      *
      * @param movieVO 电影对象
      */
-    public void insertVideo(MovieVO movieVO)
-    {
+    public void insertVideo(MovieVO movieVO) {
         List<Video> videoList = movieVO.getVideoList();
         Long movieId = movieVO.getMovieId();
-        if (StringUtils.isNotNull(videoList))
-        {
+        if (StringUtils.isNotNull(videoList)) {
             List<Video> list = new ArrayList<Video>();
-            for (Video video : videoList)
-            {
+            for (Video video : videoList) {
                 video.setMovieId(movieId);
                 list.add(video);
             }
-            if (list.size() > 0)
-            {
+            if (list.size() > 0) {
                 videoMapper.batchVideo(list);
             }
         }
@@ -302,11 +322,10 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     }
 
 
-
-
     /**
      * 添加高亮
-     * @param str 截取字符串
+     *
+     * @param str     截取字符串
      * @param keyword 关键字
      * @return 返回添加了高亮的字符串
      */
@@ -373,5 +392,37 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
             }
         }
         return sb.toString();
+    }
+
+    private String generateQr(String url) {
+        String profile = RuoYiConfig.getProfile();
+        WebConfig webConfig = webConfigService.getWebConfig();
+        String logoURL = webConfig.getLogo();
+        String logoPath = profile + logoURL;
+        QrConfig qrConfig = QrConfig.create()
+                .setWidth(300)
+                .setHeight(300);
+        File logoFile = new File(logoPath);
+        if (logoFile.exists()){
+            qrConfig.setImg(logoFile);
+        }
+        String qrRootPath = RuoYiConfig.getQrPath();
+        String websiteUrl = justAuthConfig.getWebsiteUrl();
+        String fileName = DateUtils.datePath() + "/" + IdUtils.fastUUID().replace("-", "") + ".jpg";
+        String realQrPath = qrRootPath + File.separator + fileName;
+        File realQrFile = new File(realQrPath);
+        if (!realQrFile.exists()) {
+            if (!realQrFile.getParentFile().exists()) {
+                realQrFile.getParentFile().mkdirs();
+            }
+        }
+        File file = QrCodeUtil.generate(websiteUrl + url, qrConfig, FileUtil.file(realQrFile));
+        int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
+        String currentDir = StringUtils.substring(qrRootPath, dirLastIndex);
+        if (file.exists()) {
+            return  "/" + currentDir + "/" + fileName;
+        } else {
+            return "";
+        }
     }
 }

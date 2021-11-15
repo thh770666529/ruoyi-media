@@ -154,4 +154,12 @@ public class RuoYiConfig
     {
         return getProfile() + "/import";
     }
+
+    /**
+     * 获取QR地址
+     */
+    public static String getQrPath()
+    {
+        return getProfile() + "/qr";
+    }
 }

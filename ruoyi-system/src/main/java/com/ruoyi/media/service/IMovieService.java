@@ -1,5 +1,6 @@
 package com.ruoyi.media.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -47,7 +48,7 @@ public interface IMovieService extends IService<Movie>
      * @param movieVO 电影
      * @return 结果
      */
-    public int insertMovie(MovieVO movieVO);
+    public int insertMovie(MovieVO movieVO) throws IOException;
 
     /**
      * 修改电影

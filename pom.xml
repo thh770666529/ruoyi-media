@@ -44,6 +44,7 @@
         <pdfbox.version>2.0.18</pdfbox.version>
         <JustAuth.version>1.16.4</JustAuth.version>
         <flexmark.version>0.62.2</flexmark.version>
+        <zxing.version>3.4.1</zxing.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -300,6 +301,13 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
+            </dependency>
+
+            <!--二维码-->
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>${zxing.version}</version>
             </dependency>
 
         </dependencies>

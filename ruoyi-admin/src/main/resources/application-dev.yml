@@ -117,3 +117,18 @@ spring:
         max-active: 8
         # #连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1ms
+
+# 第三方登录，参考 https://justauth.wiki/guide/oauth
+just-auth:
+  gitee:
+    clientId: f7e32141f5c178ab24d7764a538f43131d40839037ce63eb1ca54159cca6ccda
+    clientSecret: e4005bf9763c288a184d87d05c8afbe426612d5563b4c47823ed1dab68955f5b
+  gihub:
+    clientId: e5cf90f79b02128d8f140d6898c480ea9dc5278e15a23617e38b58de8ebdc8be
+    clientSecret: c02d1df684909ba465cf521d94209e2a50e45f2199244f2af697b514efb38d60
+  qq:
+    clientId: e5cf90f79b02128d8f140d6898c480ea9dc5278e15a23617e38b58de8ebdc8be
+    clientSecret: c02d1df684909ba465cf521d94209e2a50e45f2199244f2af697b514efb38d60
+  redirectUri: http://127.0.0.1:7070/auth/callback/
+  defaultPwd: 123456
+  websiteUrl: http://localhost:9000/

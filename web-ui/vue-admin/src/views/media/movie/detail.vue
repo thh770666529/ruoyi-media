@@ -109,8 +109,12 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item  label="专属二维码" prop="qrcodePath">
-              <el-input v-model="form.qrcodePath" disabled  placeholder="请输入专属二维码地址" />
+            <el-form-item  label="专属二维码" v-if="form.qrcodePath" prop="qrcodePath">
+              <el-image
+                @click="previewPicture(fileUploadHost + form.qrcodePath)"
+                style="width: 100px; height: 100px"
+                :src="fileUploadHost + form.qrcodePath"
+                :fit="fit"></el-image>
             </el-form-item>
             <el-row>
               <el-col :span="7">

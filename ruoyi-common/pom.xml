@@ -158,6 +158,12 @@
             <artifactId>hutool-all</artifactId>
         </dependency>
 
+        <!--二维码-->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
         <!--第三方登录-->
         <dependency>
             <groupId>me.zhyd.oauth</groupId>
