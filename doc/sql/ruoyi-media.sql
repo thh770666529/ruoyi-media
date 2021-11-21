@@ -2177,14 +2177,6 @@ CREATE TABLE `wm_video`  (
   UNIQUE INDEX `wm_movie_video_pk_index`(`video_id`) USING BTREE COMMENT '主键唯一索引'
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '电影视频表' ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of wm_video
--- ----------------------------
-INSERT INTO `wm_video` VALUES (2, '01_前言闲聊和课程说明', '/movie/video/2021/09/26/10c14ef2dfd34be3a6431d2e4674cef9/10c14ef2dfd34be3a6431d2e4674cef9.mp4', 'mp4', '15:20', NULL, NULL, NULL, 'admin', NULL, 'admin', NULL, NULL, 135, 68871355, '4', '', '/movie\\video\\2021\\09\\26\\10c14ef2dfd34be3a6431d2e4674cef9/720/hls/10c14ef2dfd34be3a6431d2e4674cef9.m3u8', '/movie\\video\\2021\\09\\26\\10c14ef2dfd34be3a6431d2e4674cef9/360/hls/10c14ef2dfd34be3a6431d2e4674cef9.m3u8', NULL);
-INSERT INTO `wm_video` VALUES (3, '23_actuator微服务信息完善', '/movie/video/2021/09/26/684412bfb2d644d1b154dd6db898401b/684412bfb2d644d1b154dd6db898401b.mp4', 'mp4', '07:47', NULL, NULL, NULL, 'admin', NULL, 'admin', NULL, NULL, 135, 36553538, '4', '', '/movie\\video\\2021\\09\\26\\684412bfb2d644d1b154dd6db898401b/720/hls/684412bfb2d644d1b154dd6db898401b.m3u8', '/movie\\video\\2021\\09\\26\\684412bfb2d644d1b154dd6db898401b/360/hls/684412bfb2d644d1b154dd6db898401b.m3u8', NULL);
-INSERT INTO `wm_video` VALUES (4, '15_Eureka基础知识', '/movie/video/2021/10/01/109cd9d692324b6cbbf74e7f466d1895/109cd9d692324b6cbbf74e7f466d1895.mp4', 'mp4', '11:25', NULL, NULL, '2021-10-04 10:51:20', 'admin', '2021-10-04 10:51:20', 'admin', NULL, NULL, 128, 41229225, '4', '', '/movie\\video\\2021\\10\\01\\109cd9d692324b6cbbf74e7f466d1895/720/hls/109cd9d692324b6cbbf74e7f466d1895.m3u8', '/movie\\video\\2021\\10\\01\\109cd9d692324b6cbbf74e7f466d1895/360/hls/109cd9d692324b6cbbf74e7f466d1895.m3u8', NULL);
-INSERT INTO `wm_video` VALUES (6, '第一集', '/movie/video/2021/10/03/b846f93421f84454979da619879de15c/b846f93421f84454979da619879de15c.mp4', 'mp4', '11:25', NULL, NULL, NULL, 'admin', NULL, 'admin', NULL, NULL, 129, 41229225, '1', NULL, NULL, NULL, NULL);
-
 
 -- ----------------------------
 -- 第三方授权表
