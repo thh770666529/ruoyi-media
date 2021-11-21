@@ -48,7 +48,7 @@ public interface IMovieService extends IService<Movie>
      * @param movieVO 电影
      * @return 结果
      */
-    public int insertMovie(MovieVO movieVO) throws IOException;
+    public int insertMovie(MovieVO movieVO);
 
     /**
      * 修改电影

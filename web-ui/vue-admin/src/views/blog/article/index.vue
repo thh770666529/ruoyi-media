@@ -972,7 +972,7 @@ export default {
             this.msgSuccess('上传本地文件成功！');
             this.getList();
           } else {
-            this.msgError('上传本地文件失败！');
+            this.msgError(res.msg);
           }
           this.localUploadVisible = false
           // 上传成功后，将里面的内容删除

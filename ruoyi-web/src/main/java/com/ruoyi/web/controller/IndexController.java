@@ -113,6 +113,7 @@ public class IndexController extends BaseController {
         if (searchParamVO == null || StringUtils.isBlank(searchParamVO.getKeyword())){
             error("请输入关键字！");
         }
+        startPage();
         List<MovieVO> list = movieService.search(searchParamVO);
         return getDataTable(list);
     }
