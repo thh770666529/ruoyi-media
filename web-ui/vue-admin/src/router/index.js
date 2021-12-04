@@ -172,28 +172,6 @@ export const constantRoutes = [
     component: (resolve) => require(['@/views/resource/Share/index'], resolve),
     meta: { title: '分享文件',breadCrumbName: '分享文件', icon: 'table' },
     hidden: true
-  },
-
-  {
-    path: '/resource',
-    component: Layout,
-    name: '资源管理',
-    redirect: '/resource/file',
-    meta: { title: '资源管理', icon: 'documentation' },
-    children: [
-      {
-        path: 'file',
-        name: 'File',
-        component: () => import('@/views/resource/file/File'),
-        meta: { title: '网盘管理', icon: 'table' }
-      },
-      {
-        path: 'myshare',
-        name: 'MyShare',
-        component: () => import('@/views/resource/MyShare/index'),
-        meta: { title: '我的分享',breadCrumbName: '我的分享', icon: 'table' }
-      }
-    ]
   }
 ]
 

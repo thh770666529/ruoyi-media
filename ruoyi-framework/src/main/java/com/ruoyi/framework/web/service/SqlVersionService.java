@@ -31,7 +31,7 @@ public class SqlVersionService {
 
     private static String MEDIA_SQL_VERSION = "sql.version";
 
-    private static String[] sqlArray = {"V1.001.sql"};
+    private static String[] sqlArray = {"V1.001.sql", "V1.002.sql"};
 
     @Autowired
     private DataSource dataSource;

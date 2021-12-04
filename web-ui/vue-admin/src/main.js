@@ -31,6 +31,10 @@ import DictTag from '@/components/DictTag'
 // 头部标签组件
 import VueMeta from 'vue-meta'
 
+// markdown组件
+import leMarkdownEditor from 'le-markdown-editor'
+
+
 
 Vue.component(CollapseTransition.name, CollapseTransition)
 Vue.use(element);
@@ -62,6 +66,7 @@ Vue.component('RightToolbar', RightToolbar)
 Vue.component('Editor', Editor)
 Vue.component('FileUpload', FileUpload)
 Vue.component('ImageUpload', ImageUpload)
+Vue.use(leMarkdownEditor)
 Vue.use(directive)
 Vue.use(VueMeta)
 for(let key in globalFunction) {

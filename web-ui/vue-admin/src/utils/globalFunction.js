@@ -3,6 +3,8 @@ import config from '@/config'
 import {getToken} from '@/utils/auth'
 import {Message} from 'element-ui';
 import TurndownService from 'turndown'
+import showdown from 'showdown'
+import showdownKatex from 'showdown-katex'
 // 全局函数
 const globalFunction = {
   formatVideoTime(timestamp) {
@@ -35,6 +37,70 @@ const globalFunction = {
       activeIndex: 0
     };
     this.$store.commit('setImgPreviewData', data)
+  },
+  /**
+   * 将Markdown转成Html
+   * @param text
+   */
+  markdownToHtml: text => {
+    let converter = new showdown.Converter({
+      tables: true,
+      extensions: [
+        showdownKatex({
+          // maybe you want katex to throwOnError
+          throwOnError: true,
+          // disable displayMode
+          displayMode: false,
+          // change errorColor to blue
+          errorColor: '#1500ff',
+        }),
+      ],
+    });
+    let html = converter.makeHtml(text)
+    return html;
+  },
+  /**
+   * 将Html转成Markdown
+   * @param text
+   */
+  htmlToMarkdown: text => {
+    var turndownService = new TurndownService()
+    // 用于提取代码语言
+    turndownService.addRule('CodeBlock', {
+      filter: function (node, options) {
+        return (
+          node.nodeName === 'PRE' &&
+          node.firstChild &&
+          node.firstChild.nodeName === 'CODE'
+        )
+      },
+      replacement: function (content, node, options) {
+        var className = node.firstChild.getAttribute('class') || ''
+        var language = (className.match(/language-(\S+)/) || [null, ''])[1]
+        return (
+          '\n\n' + options.fence + language + '\n' +
+          node.firstChild.textContent +options.fence
+        )
+      }
+    })
+
+    // 提取数学公式进行转换
+    turndownService.addRule('multiplemath', {
+      filter (node, options) {
+        return node.classList.contains('vditor-math')
+      },
+      replacement (content, node, options) {
+        console.log("中间内容", node.firstChild.textContent)
+        return `$$ \n${node.firstChild.textContent}\n $$`
+      }
+    })
+    var turndownPluginGfm = require('turndown-plugin-gfm')
+    var gfm = turndownPluginGfm.gfm
+    var tables = turndownPluginGfm.tables
+    var strikethrough = turndownPluginGfm.strikethrough
+    turndownService.use(gfm)
+    turndownService.use([tables, strikethrough])
+    return turndownService.turndown(text)
   },
   /**
    * 将Html转成Markdown文件

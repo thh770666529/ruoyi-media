@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.*;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.extra.pinyin.PinyinUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -148,8 +149,8 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Transactional
     @Override
     public int insertMovie(MovieVO movieVO){
-        // 设置视频总长度
-        this.setTotalVideoLength(movieVO);
+        // 初始化数据
+        this.initData(movieVO);
         int rows = movieMapper.insert(movieVO);
         if (rows > 0) {
             this.insertVideo(movieVO);
@@ -164,11 +165,19 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     }
 
     /**
-     * 设置视频总长度
+     *初始化数据
      *
      * @param movieVO
      */
-    private void setTotalVideoLength(MovieVO movieVO) {
+    private void initData(MovieVO movieVO) {
+        String title = movieVO.getTitle();
+        if (StringUtils.isNotBlank(title)){
+            String en = PinyinUtil.getPinyin(title, "");
+            String letter = PinyinUtil.getFirstLetter(title, "");
+            movieVO.setEn(en);
+            movieVO.setLetter(letter.toUpperCase());
+        }
+        // 设置视频总长度
         List<Video> videoList = movieVO.getVideoList();
         if (videoList == null || videoList.size() == 0) {
             return;
@@ -224,8 +233,8 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Override
     public int updateMovie(MovieVO movieVO) {
         videoMapper.deleteByMovieId(movieVO.getMovieId());
-        // 设置视频总长度
-        this.setTotalVideoLength(movieVO);
+        // 初始化数据
+        this.initData(movieVO);
         this.insertVideo(movieVO);
         Map movieActorMap = new HashMap<>();
         movieActorMap.put("movie_id", movieVO.getMovieId());

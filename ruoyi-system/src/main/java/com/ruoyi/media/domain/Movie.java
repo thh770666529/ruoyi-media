@@ -149,4 +149,21 @@ public class Movie extends BaseEntity
     /** 视频总长度 */
     @Excel(name = "视频总长度")
     private long totalVideoLength;
+
+    /** 简介 */
+    @Excel(name = "简介")
+    private String summary;
+
+    /** 拼音 */
+    @Excel(name = "简介")
+    private String en;
+
+    /** 拼音 */
+    @Excel(name = "中文首字母")
+    private String letter;
+
+    /** 语言 */
+    @Excel(name = "语言")
+    private String lang;
+
 }

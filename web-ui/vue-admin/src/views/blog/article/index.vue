@@ -425,8 +425,19 @@
         <el-form-item v-if="form.openPassword == 1" label="文章私密密钥" prop="password">
           <el-input v-model="form.password" placeholder="请输入文章私密访问时的密钥" />
         </el-form-item>
+
+        <el-form-item label="编辑模式">
+          <el-radio-group v-model="editorMode">
+            <el-radio label="1">editor</el-radio>
+            <el-radio label="2">markdown</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
         <el-form-item label="文章内容">
-          <editor ref="editor" v-model="form.content" :min-height="192" :height="360" />
+          <editor ref="editor" v-if="editorMode === '1' " v-model="form.content" :min-height="192" :height="360" />
+          <div id="editor-main">
+            <le-editor ref="markdownEditor" v-if="editorMode === '2' " v-model="markdownValue" :hljs-css="hljsCss" :image-uploader="imageUploader" @save="save"></le-editor>
+          </div>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -544,6 +555,19 @@ export default {
       openPasswordOptions: [],
       //保存选中标签id(编辑时)
       tagList: [],
+      editorMode: "1", //编辑模式
+      // lemarkdown
+      hljsCss: 'agate',
+      markdownValue: '',
+      // 自定义
+      imageUploader: {
+        custom: false,
+        fileType: 'file',
+        fileNameType: '',
+        imagePrefix: this.fileUploadHost, // 图片上传成功后，预览地址前缀
+        type: 'server',
+        url: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      },
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -598,7 +622,15 @@ export default {
     // 内容改变备份
     'form.content': function () {
       this.contentChange();
-    }
+    },
+    'editorMode': function () {
+      if (this.editorMode === '2'){
+        this.markdownValue = this.htmlToMarkdown(this.form.content)
+      } else {
+        this.$refs.markdownEditor.savePreview()
+      }
+    },
+
   },
   methods: {
     /** 查询博客文章列表 */
@@ -668,6 +700,8 @@ export default {
     },
     // 表单重置
     reset() {
+      this.editorMode = '1'
+      this.markdownValue = ''
       this.tagList = [];
       this.changeCount = 0;
       this.form = {
@@ -808,6 +842,9 @@ export default {
       this.setCategoryName( this.form.categoryId);
       this.form.tagId = that.tagList.join(",");
       this.$refs["form"].validate(valid => {
+        if (this.editorMode === '2'){
+          this.$refs.markdownEditor.savePreview()
+        }
         if (valid) {
           if (this.form.articleId != null) {
             updateArticle(this.form).then(response => {
@@ -1003,7 +1040,7 @@ export default {
       // 异步请求
       xhr.open("post", action, true);
       // 设置请求头
-      xhr.setRequestHeader("Authorization", getToken());
+      xhr.setRequestHeader("Authorization", "Bearer " + getToken());
       xhr.onreadystatechange = function() {
         if (xhr.readyState === 4){
           if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304){
@@ -1014,6 +1051,19 @@ export default {
         }
       }
       xhr.send(form)
+    },
+    // 自定义图片上传
+    uploadImg: function ($vm, file, fileName) {
+      console.log($vm)
+      console.log(file)
+      console.log(fileName)
+      // 添加图片
+      // 两个参数 第一个是图片访问路径 第二个是文件名
+      $vm.insertImg(`${$vm.config.imageUploader.imagePrefix}${fileName}`, fileName)
+    },
+    save: function (val) {
+      // 获取预览文本
+      this.form.content = val
     }
   }
 };
@@ -1021,5 +1071,11 @@ export default {
 <style scoped>
   .tipBox {
     margin-bottom: 30px;
+  }
+
+  #editor-main {
+    color: #2c3e50;
+    width: 100%;
+    height: 600px;
   }
 </style>

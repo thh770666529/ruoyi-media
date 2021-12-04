@@ -3,9 +3,11 @@
     <el-divider content-position="center">{{this.$route.params && this.$route.params.movieId ? '修改' : '新增'}}电影信息</el-divider>
       <el-form ref="form" :model="form" :label-width="formLabelWidth" :rules="rules" >
         <el-row>
-          <el-col :span="17">
+          <el-col :span="16">
             <el-form-item label="标题"  prop="title">
-              <el-input v-model="form.title" placeholder="请输入标题"  auto-complete="off" ></el-input>
+              <el-input v-model="form.title" placeholder="请输入标题"  auto-complete="off" >
+                <template slot="append">{{form.en}}</template>
+              </el-input>
             </el-form-item>
             <el-row>
               <el-col :span="8">
@@ -47,10 +49,18 @@
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="发布人" prop="publishBy">
-                  {{form.publishUsername}}
+                <el-form-item label="语言" prop="lang">
+                  <el-select v-model="form.lang" placeholder="语言">
+                    <el-option
+                      v-for="dict in langOptions"
+                      :key="dict.dictValue"
+                      :label="dict.dictLabel"
+                      :value="dict.dictValue"
+                    ></el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
+
               <el-col :span="8">
                 <el-form-item label="发布时间" prop="publishTime">
                   <el-date-picker clearable size="small"
@@ -109,13 +119,23 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item  label="专属二维码" v-if="form.qrcodePath" prop="qrcodePath">
-              <el-image
-                @click="previewPicture(fileUploadHost + form.qrcodePath)"
-                style="width: 100px; height: 100px"
-                :src="fileUploadHost + form.qrcodePath"
-                :fit="fit"></el-image>
-            </el-form-item>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="发布人" prop="publishBy">
+                  {{form.publishUsername}}
+                </el-form-item>
+              </el-col>
+              <el-col :span="7">
+                <el-form-item  label="专属二维码" v-if="form.qrcodePath" prop="qrcodePath">
+                  <el-image
+                    @click="previewPicture(fileUploadHost + form.qrcodePath)"
+                    style="width: 100px; height: 100px"
+                    :src="fileUploadHost + form.qrcodePath"
+                    :fit="fit"></el-image>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
             <el-row>
               <el-col :span="7">
                 <el-form-item label="价格" prop="price" >
@@ -147,8 +167,11 @@
             <el-form-item v-if="form.openPassword == 1" label="私密密钥" prop="password">
               <el-input show-password v-model="form.password" minlength="6" maxlength="12" placeholder="请输入私密访问时的密钥" />
             </el-form-item>
+            <el-form-item  label="备注" prop="remark">
+              <el-input v-model="form.remark"  maxlength="30" placeholder="备注" />
+            </el-form-item>
           </el-col>
-          <el-col :span="7">
+          <el-col :span="6" :offset="1" >
             <el-form-item label="" class="images-uploader" prop="images">
               <el-upload
                 class="el-upload"
@@ -166,12 +189,12 @@
           </el-col>
         </el-row>
 
-        <el-form-item label="简介" prop="description">
-          <editor v-model="form.description" :height="200"></editor>
+        <el-form-item label="简介" prop="remark" >
+          <el-input v-model="form.summary" rows="6" type="textarea" placeholder="请输入内容" maxlength="1000" show-word-limit />
         </el-form-item>
 
-        <el-form-item label="备注" prop="remark" >
-          <el-input v-model="form.remark" rows="6" type="textarea" placeholder="请输入内容" maxlength="1000" show-word-limit />
+        <el-form-item label="介绍" prop="description">
+          <editor v-model="form.description" :height="200"></editor>
         </el-form-item>
 
         <el-divider content-position="center">电影视频信息(总长度：{{formatVideoTime(form.totalVideoLength)}})</el-divider>
@@ -509,6 +532,7 @@ export default {
       sysYesNoOptions: [],
       // 开关字典
       commonSwitchOptions: [],
+      langOptions: [],
       //标签字典
       tagOptions: [],
       //分类字典
@@ -610,7 +634,7 @@ export default {
       listTag({status: '1'}).then(response => {
         this.tagOptions = response.rows;
       });
-      const dictTypeList =  ['movie_country', 'movie_status', 'movie_type', 'sys_yes_no', 'actor_label', 'video_status', 'common_switch'];
+      const dictTypeList =  ['movie_country', 'movie_status', 'movie_type', 'sys_yes_no', 'actor_label', 'video_status', 'common_switch', 'lang'];
       this.getDictsByTypeList(dictTypeList).then(response => {
         this.countryOptions = response.data.movie_country;
         this.statusOptions = response.data.movie_status;
@@ -619,6 +643,8 @@ export default {
         this.actorLabelOptions = response.data.actor_label;
         this.videoStatusOptions = response.data.video_status;
         this.commonSwitchOptions = response.data.common_switch;
+        this.langOptions = response.data.lang;
+
       });
     },
     /**
@@ -725,7 +751,8 @@ export default {
         publishTime: undefined,
         status: "0",
         delFlag: null,
-        remark: null,
+        summary: undefined,
+        remark: undefined,
         clickCount: 0,
         commentCount: 0,
         followCount: 0,
