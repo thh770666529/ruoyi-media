@@ -39,7 +39,7 @@
 
 
       </div>
-      <div class="app-download">
+      <!--<div class="app-download">
         <a href="#">
           <span class="phone"></span> APP下载
           <span class="caret"></span>
@@ -50,7 +50,7 @@
             <p class="down-text">选座更优惠</p>
           </div>
         </a>
-      </div>
+      </div>-->
       <div class="search">
         <div type="text" class="searchinput">
           <input type="text" v-model="keyword" class="input" placeholder="找影视剧、影人、影院">

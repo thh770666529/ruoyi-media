@@ -17,7 +17,8 @@
               <el-tag
                 v-else
                 :key="item.tagId"
-                 size="mini"
+                size="mini"
+                effect="light"
                 :index="index"
                 :type="item.listClass === 'primary' ? '' : item.listClass"
                 :class="item.cssClass? item.cssClass: ''">
@@ -35,81 +36,107 @@
           <h3 class="art-title">
             <a href="javascript:void(0);" @click="toArticleDetail(item)">{{item.title}}</a>
           </h3>
+          <el-row :gutter="24">
+            <el-col :xs="24" :md="19" :lg="19">
+              <p class="art-text">{{item.summary}}</p>
+              <div class="art-info">
+                <ul>
+                  <li class="author">
+                    <span class="iconfont">&#xe60f; </span>
+                    <a href="javascript:void(0);">{{item.author}}</a>
+                  </li>
+                  <li class="lmname" v-if="item.categoryName">
+                    <span class="iconfont">&#xe603; </span>
+                    <a
+                      href="javascript:void(0);"
+                    >{{item.categoryName}}</a>
+                  </li>
+                  <li class="lmname">
+                    <template v-for="(tag, tagIndex) in tagOptions">
+                      <template v-if="getTagArray(item.tagId).includes(String(tag.tagId))">
+              <span
+                v-if="tag.listClass == 'default' || tag.listClass == ''"
+                :key="tag.tagId"
+                :index="tagIndex"
+                :class="tag.cssClass">{{ tag.content }}
+              </span>
+                        <el-tag
+                          v-else
+                          :key="tag.tagId"
+                          size="mini"
+                          effect="light"
+                          :index="tagIndex"
+                          :type="tag.listClass === 'primary' ? '' : tag.listClass"
+                          :class="tag.cssClass? tag.cssClass: ''">
+                          {{ tag.content }}
+                        </el-tag>
+                      </template>
+                    </template>
+                  </li>
 
-          <span class="art-image">
-          <a href="javascript:void(0);" @click="toArticleDetail(item)" title>
+                  <li class="view">
+                    <span class="iconfont">&#xe8c7; </span>
+                    <span>{{item.clickCount}}</span>
+                  </li>
+                  <li class="like">
+                    <span class="iconfont">&#xe663; </span>
+                    {{item.collectCount}}
+                  </li>
+                  <li class="createTime">
+                    <span class="iconfont">&#xe606; </span>
+                    {{item.createTime}}
+                  </li>
+                </ul>
+              </div>
+            </el-col>
+            <el-col :xs="0" :lg="5">
+            <span class="art-image">
+            <a href="javascript:void(0);" @click="toArticleDetail(item)" title>
             <el-image lazy class="art-banner" :src="fileUploadHost + item.images" :alt="item.title">
               <div slot="error" class="image-slot">
                  <img class="art-banner" src="../../assets/img/article/vue.jpg">
               </div>
             </el-image>
-          </a>
-        </span>
-
-          <p class="art-text">{{item.summary}}</p>
-          <div class="art-info">
-            <ul>
-              <li class="author">
-                <span class="iconfont">&#xe60f; </span>
-                <a href="javascript:void(0);">{{item.author}}</a>
-              </li>
-              <li class="lmname" v-if="item.categoryId">
-                <span class="iconfont">&#xe603; </span>
-                <a
-                  href="javascript:void(0);"
-                >{{item.categoryName}}</a>
-              </li>
-              <li class="view">
-                <span class="iconfont">&#xe8c7; </span>
-                <span>{{item.clickCount}}</span>
-              </li>
-              <li class="like">
-                <span class="iconfont">&#xe663; </span>
-                {{item.collectCount}}
-              </li>
-              <li class="createTime">
-                <span class="iconfont">&#xe606; </span>
-                {{item.createTime}}
-              </li>
-            </ul>
-          </div>
-          <img v-if="item.level === 1"  class="star" src="../../assets/img/article/star.png"/>
+            </a>
+          </span>
+            </el-col>
+          </el-row>
+          <img v-if="item.level === 1" class="star" src="../../assets/img/article/star.png"/>
         </div>
 
-
         <div class="block pagination">
-            <pagination
-              v-show="total>0"
-              :total="total"
-              :page.sync="queryParams.pageNum"
-              :limit.sync="queryParams.pageSize"
-              @pagination="getList"
-            />
-          </div>
+          <pagination
+            v-show="total>0"
+            :total="total"
+            :page.sync="queryParams.pageNum"
+            :limit.sync="queryParams.pageSize"
+            @pagination="getList"
+          />
+        </div>
       </el-col>
-        <el-col :span="6" class="hidden-sm-and-down mt20" id="side" :offset="1">
-          <!-- 标签 -->
-          <div class="item">
-            <tag @change="changeTagId" :tagId="queryParams.tagId"></tag>
-          </div>
-          <!-- 友情链接 -->
-          <!--<div class="item">
-            <friend></friend>
-          </div>-->
-          <!--热门文章-->
-          <div class="item">
-            <HotArticle></HotArticle>
-          </div>
-          <!--四级推荐-->
-          <div class="item">
-            <FourthRecommend></FourthRecommend>
-          </div>
-          <!--关注我们-->
-          <div class="item">
-            <About></About>
-          </div>
-        </el-col>
-      </el-row>
+      <el-col :span="6" class="hidden-sm-and-down mt20" id="side" :offset="1">
+        <!-- 标签 -->
+        <div class="item">
+          <tag @change="changeTagId" :tagId="queryParams.tagId"></tag>
+        </div>
+        <!-- 友情链接 -->
+        <!--<div class="item">
+          <friend></friend>
+        </div>-->
+        <!--热门文章-->
+        <div class="item">
+          <HotArticle></HotArticle>
+        </div>
+        <!--四级推荐-->
+        <div class="item">
+          <FourthRecommend></FourthRecommend>
+        </div>
+        <!--关注我们-->
+        <div class="item">
+          <About></About>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -117,7 +144,7 @@
   import tag from '@/components/article/tag'
   import {getArticleList} from '@/api/blog/article'
   import {listTag} from "@/api/blog/tag";
-  import { listCategory } from "@/api/blog/category";
+  import {listCategory} from "@/api/blog/category";
   import FirstRecommend from "@/components/FirstRecommend";
 
   export default {
@@ -143,7 +170,7 @@
     },
     created() {
       listCategory({status: '1'}).then(response => {
-        this.categoryOptions =  response.rows;
+        this.categoryOptions = response.rows;
       });
       listTag({status: '1'}).then(response => {
         this.tagOptions = response.rows;
@@ -170,10 +197,10 @@
         return tagId.split(',');
       },
       tagFormat(tagId) {
-        if(!tagId) {
+        if (!tagId) {
           return ''
         }
-        const datas =  this.tagOptions;
+        const datas = this.tagOptions;
         for (let i = 0; i < datas.length; i++) {
           const tag = datas[i];
           if (tag.tagId == tagId) {
@@ -230,6 +257,7 @@
     transition: all 0.6s ease;
   }
 
+
   .art-item .star {
     width: 50px;
     height: 50px;
@@ -239,9 +267,8 @@
   }
 
   .art-item .art-image {
-    height: 121px;
     float: left;
-    width: 30%;
+    max-height: 80px;
     margin-right: 20px;
     display: block;
     overflow: hidden;
@@ -250,12 +277,11 @@
   .art-item .art-image img {
     width: 100%;
     height: auto;
-    -webkit-transition: all 0.6s ease;
-    -moz-transition: all 0.6s ease;
-    -o-transition: all 0.6s ease;
-    transition: all 0.6s ease;
-    margin-bottom: 10px
+    transition: all .6s ease;
+    margin-bottom: 10px;
+
   }
+
 
   .art-item .art-image :hover img {
     transform: scale(1.4)
@@ -276,8 +302,13 @@
     margin: 0 0 10px 0;
     font-size: 20px;
     overflow: hidden;
+    font-weight: bold;
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
   }
-
   .art-item .art-title a:hover {
     color: #337ab7;
   }

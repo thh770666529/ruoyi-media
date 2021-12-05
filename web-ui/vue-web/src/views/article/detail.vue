@@ -11,36 +11,52 @@
               <span class="iconfont">&#xe60f; </span>
               <a href="javascript:void(0);" >{{article.author}}</a>
             </li>
-            <li class="lmname">
+           <li class="lmname">
               <span class="iconfont">&#xe603; </span>
               <a href="javascript:void(0);"
               >{{article.categoryData ? article.categoryData.name: ""}}</a>
             </li>
-            <li class="createTime">
-              <span class="iconfont">&#xe606; </span>
-              {{article.createTime}}
+            <li class="lmname">
+              <template v-for="(item, index) in article.tagList">
+              <span
+                style="margin-left: 3px"
+                v-if="item.listClass == 'default' || item.listClass == ''"
+                :key="item.tagId"
+                :index="index"
+                :class="item.cssClass">{{ item.content }}
+              </span>
+                  <el-tag
+                    v-else
+                    style="margin-left: 3px"
+                    size="mini"
+                    effect="light"
+                    :key="item.tagId"
+                    :index="index"
+                    :type="item.listClass === 'primary' ? '' : item.listClass"
+                    :class="item.cssClass? item.cssClass: ''">
+                    {{ item.content }}
+                  </el-tag>
+                </template>
             </li>
+
             <li class="view">
               <span class="iconfont">&#xe8c7; </span>
               {{article.clickCount}}
             </li>
             <li class="like">
-              <Collect :targetId="articleId" :tableName="tableName" :collectCount="article.collectCount">
+              <Collect :targetId="articleId" :tableName="tableName" :descFlag="descFlag" :collectCount="article.collectCount">
               </Collect>
+            </li>
+
+            <li class="createTime">
+              <span class="iconfont">&#xe606; </span>
+              {{article.createTime}}
             </li>
 
           </ul>
         </div>
-        <div class="tags">
-          <a
-            v-for="item in article.tagList"
-            :key="item.tagId"
-            href="javascript:void(0);"
-            target="_blank"
-          >{{item.content}}</a>
-        </div>
-        <div class="news_about">
-          <strong>版权</strong>
+        <div class="tip">
+          <strong>版权 </strong>
           <span v-html="article.copyright">
           </span>
         </div>
@@ -107,10 +123,12 @@
   import { getArticle, getSameArticleList, checkPassword } from '@/api/blog/article';
   import SideCatalog from '@/components/VueSideCatalog';
   import { checkCollectFlag, addCollect, cancelCollectByTargetId } from "@/api/website/collect";
+  import {listTag} from "@/api/blog/tag";
   export default {
     name: "articleDetail",
     data() {
       return {
+        descFlag: false,
         tableName: 'blog_article',
         catalogProps: {
           // 内容容器selector(必需)
@@ -118,6 +136,7 @@
           watch: true,
           levelList: ["h1", "h2", "h3"],
         },
+        tagOptions: [],
         articleId: '',
         sameBlogList: [],
         article: {},
@@ -160,9 +179,15 @@
     created() {
      this.articleId = this.$route.params && this.$route.params.articleId;
      this.initInfo();
+
     },
     methods: {
       initInfo() {
+         listTag({status: '1'}).then(response => {
+          this.tagOptions = response.rows;
+           console.log(this.tagOptions)
+         });
+
          getArticle(this.articleId).then(response => {
            this.article = response.data;
            const passwordFlag = this.getCookies(`article_password${this.article.articleId}`);
@@ -316,13 +341,13 @@
     font-weight: normal;
   }
 
-  .news_about {
-    color: #888888;
-    border: 1px solid #F3F3F3;
+  .tip {
     padding: 10px;
-    margin: 20px auto 15px auto;
-    line-height: 23px;
-    background: none repeat 0 0 #F6F6F6;
+    margin: 20px auto 15px;
+    background-color: #ecf8ff;
+    border-radius: 4px;
+    border-left: 5px solid #50bfff;
+    color: #888;
   }
 
   .news_about strong {
@@ -342,13 +367,6 @@
     padding-bottom: 4px;
     padding-top: 6px;
     word-wrap: break-word;
-  }
-
-  .tags a {
-    background: #F4650E;
-    padding: 3px 8px;
-    margin: 0 5px 0 0;
-    color: #fff;
   }
 
   .tags {
@@ -406,7 +424,7 @@
   .bloginfo ul li {
     float: left;
     font-size: 13px;
-    padding: 0 0 0 20px;
+    padding: 0 20px 0 0;
     margin: 0 15px 0 0;
     color: #748594;
     line-height: 1.5;

@@ -1,7 +1,7 @@
 <template>
   <div class="collect">
-    <span  @click="addCollect" v-if="!collectFlag" class="iconfont">&#xe663; &nbsp;{{collectCount}} 未收藏</span>
-    <span  v-else @click="cancelCollect" class="iconfont active">&#xe663; &nbsp;{{collectCount}} 已收藏</span>
+    <span  @click="addCollect" v-if="!collectFlag" class="iconfont">&#xe663; &nbsp;{{collectCount}} {{descFlag? `未收藏`: ``}}</span>
+    <span  v-else @click="cancelCollect" class="iconfont active">&#xe663; &nbsp;{{collectCount}}{{descFlag? `已收藏`: ``}} </span>
   </div>
 </template>
 
@@ -19,6 +19,10 @@
       collectCount: {
         type: [Number, String],
         default: '0'
+      },
+      descFlag: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
