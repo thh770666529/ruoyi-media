@@ -56,15 +56,15 @@ public class PlayLogsServiceImpl implements IPlayLogsService
     public int insertOrUpdatePalyLogs(PlayLogs playLogs)
     {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
-        String userId =  null;
-        if (loginUser!=null){
-            userId = loginUser.getUserId() + "";
-        }
-
         PlayLogs queryPlayLog = new PlayLogs();
         queryPlayLog.setVideoId(playLogs.getVideoId());
-        queryPlayLog.setUserId(userId);
-        setCurrentDeviceInfo(queryPlayLog);
+        String userId =  null;
+        if (loginUser != null){
+            userId = loginUser.getUserId() + "";
+            queryPlayLog.setUserId(userId);
+        } else {
+            setCurrentDeviceInfo(queryPlayLog);
+        }
         PlayLogs dbPlayLogs = playLogsMapper.selectPlayLogsByCondition(queryPlayLog);
         if (dbPlayLogs!= null){
             dbPlayLogs.setUserId(userId);
@@ -114,16 +114,16 @@ public class PlayLogsServiceImpl implements IPlayLogsService
         if (videoId == null){
             throw new RuntimeException("videoId不得为空");
         }
-        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
-        String userId =  null;
-        if (loginUser!=null){
-            userId = loginUser.getUserId() + "";
-        }
-
         PlayLogs playLogs = new PlayLogs();
         playLogs.setVideoId(videoId);
-        playLogs.setUserId(userId);
-        setCurrentDeviceInfo(playLogs);
+        LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+        String userId =  null;
+        if (loginUser!= null){
+            userId = loginUser.getUserId() + "";
+            playLogs.setUserId(userId);
+        } else {
+            setCurrentDeviceInfo(playLogs);
+        }
         return playLogsMapper.selectPlayLogsByCondition(playLogs);
     }
 }

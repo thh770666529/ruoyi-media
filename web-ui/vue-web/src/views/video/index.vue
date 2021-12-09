@@ -7,7 +7,7 @@
           <span class="fsize20">{{movie.title}}</span>
         </div>
         <div style="min-height: 529px">
-          <video-preview ref="player" :videoId="videoId" :currentDuration="currentDuration" :autoplay="!dialogVideoFile.visible"></video-preview>
+          <video-preview ref="player" :videoId="videoId" :autoplay="!dialogVideoFile.visible"></video-preview>
         </div>
 
         <!-- 评论 -->
@@ -77,7 +77,6 @@ import movieApi from '@/api/media/movie'
 import {getWebConfig} from '@/api/website/webConfig'
 import Comment from "@/components/Comment"
 import {videoPlayer} from 'vue-video-player'
-import { getPlayLogs } from "@/api/media/playLogs";
 
 export default {
   name: 'playVideo',
@@ -88,7 +87,6 @@ export default {
   computed: {},
   data() {
     return {
-      currentDuration: 0,
       activeName: 'description',
       video: {},
       movie: {},
@@ -132,11 +130,6 @@ export default {
         data.showList = [];
       }
       this.webConfig = data
-    });
-    const queryPlayParam = { videoId: this.videoId }
-    getPlayLogs(queryPlayParam).then(response => {
-      const playLogs = response.data;
-      this.currentDuration = playLogs.playPosition;
     });
     this.getVideoById(this.videoId);
   },

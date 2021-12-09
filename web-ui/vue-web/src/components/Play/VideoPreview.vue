@@ -55,7 +55,7 @@
   import 'video.js/dist/video-js.css'
   import 'vue-video-player/src/custom-theme.css'
   import 'videojs-contrib-hls';
-  import { insertOrUpdatePlayLogs } from "@/api/media/playLogs";
+  import { getPlayLogs, insertOrUpdatePlayLogs } from "@/api/media/playLogs";
 
   export default {
     name: 'VideoPreview',
@@ -67,10 +67,6 @@
         type: Boolean,
         default: true
       },
-      currentDuration: {
-        type: Number,
-        default: 0
-      },
       videoId: {
         type: [ Number,String],
         default: ''
@@ -78,6 +74,7 @@
     },
     data() {
       return {
+        currentDuration: 0,// 当前播放位置
         timerId: null,
         player: null,
         duration: 0,
@@ -143,6 +140,11 @@
       }
     },
     mounted() {
+      const queryPlayParam = { videoId: this.videoId }
+      getPlayLogs(queryPlayParam).then(response => {
+        const playLogs = response.data;
+        this.currentDuration = playLogs.playPosition;
+      });
       this.interval();
     },
     methods: {
@@ -178,13 +180,13 @@
         this.playerOptions.sources[0] = source
       },
       playerReadied(player) {
-        player.currentTime(this.currentDuration)
         if (this.openSteamMedia === '1') {
           var hls = player.tech({IWillNotUseThisInPlugins: true}).hls
           player.tech_.hls.xhr.beforeRequest = function (options) {
             return options
           }
         }
+        player.currentTime(this.currentDuration)
       }
     }
   }
