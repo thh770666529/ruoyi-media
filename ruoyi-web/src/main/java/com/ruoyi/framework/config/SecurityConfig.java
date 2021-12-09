@@ -118,6 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                               "/media/actor/**",
                               "/media/tag/**",
                               "/media/category/**",
+                              "/media/playLogs/**",
                               "/blog/category/**",
                               "/blog/article/**",
                               "/blog/tag/**",

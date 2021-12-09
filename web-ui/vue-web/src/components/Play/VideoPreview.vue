@@ -4,6 +4,9 @@
           <video-player
             class="video-player vjs-custom-skin"
             ref="videoPlayer"
+            @canplay="canplay($event)"
+            @play="play($event)"
+            @pause="pause($event)"
             :playsinline="true"
             :options="playerOptions"
             @ready="playerReadied"
@@ -13,8 +16,12 @@
           <video-player
             class="video-player vjs-custom-skin"
             ref="videoPlayer"
+            @canplay="canplay($event)"
+            @play="play($event)"
+            @pause="pause($event)"
             :playsinline="true"
             :options="playerOptions"
+            @ready="playerReadied"
             v-if="videoPreviewVisible&&openSteamMedia==='0'">
           </video-player>
 
@@ -48,6 +55,7 @@
   import 'video.js/dist/video-js.css'
   import 'vue-video-player/src/custom-theme.css'
   import 'videojs-contrib-hls';
+  import { insertOrUpdatePlayLogs } from "@/api/media/playLogs";
 
   export default {
     name: 'VideoPreview',
@@ -57,11 +65,22 @@
     props: {
       autoplay: {
         type: Boolean,
-        default: false
+        default: true
+      },
+      currentDuration: {
+        type: Number,
+        default: 0
+      },
+      videoId: {
+        type: [ Number,String],
+        default: ''
       }
     },
     data() {
       return {
+        timerId: null,
+        player: null,
+        duration: 0,
         activeIndex: 0, //  当前打开的视频索引  清晰度对应的文件索引和清晰度列表索引
       }
     },
@@ -89,7 +108,7 @@
       playerOptions() {
         return {
           playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
-          autoplay: this.autoplay, //  如果true,浏览器准备好时开始播放。
+          autoplay: true, //  如果true,浏览器准备好时开始播放。
           muted: false, // 默认情况下将会消除任何音频。
           loop: false, // 导致视频一结束就重新开始。
           preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
@@ -123,16 +142,48 @@
         }
       }
     },
+    mounted() {
+      this.interval();
+    },
     methods: {
+      //定时器
+      interval() {
+        this.timerId = setInterval(() => {
+          this.insertPlayLog();
+        }, 60000)
+      },
+      insertPlayLog() {
+        const insertPlayParam = { videoId: this.videoId, playDuration: this.duration, playPosition:  this.player.cache_.currentTime }
+        insertOrUpdatePlayLogs(insertPlayParam).then(response => {
+        })
+      },
+      //点击视频播放
+      play(player){
+        clearInterval(this.timerId);
+        this.interval();
+        this.insertPlayLog();
+      },
+      //点击暂停时触发
+      pause(){
+        clearInterval(this.timerId);
+      },
+      //默认加载之后，就会执行该函数
+      canplay(player){
+        this.duration = player.duration();
+        this.player = player;
+      },
       handleChangeClarity(index) {
         this.activeIndex = index //进行切换视频源的操作...
         const source = this.videoPreviewList[index]
         this.playerOptions.sources[0] = source
       },
       playerReadied(player) {
-        var hls = player.tech({IWillNotUseThisInPlugins: true}).hls
-        player.tech_.hls.xhr.beforeRequest = function (options) {
-          return options
+        player.currentTime(this.currentDuration)
+        if (this.openSteamMedia === '1') {
+          var hls = player.tech({IWillNotUseThisInPlugins: true}).hls
+          player.tech_.hls.xhr.beforeRequest = function (options) {
+            return options
+          }
         }
       }
     }
