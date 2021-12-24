@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 演示机
+ Source Server         : 5.7.31
  Source Server Type    : MySQL
- Source Server Version : 50735
- Source Host           : 8.129.13.79:3306
+ Source Server Version : 50731
+ Source Host           : localhost:3310
  Source Schema         : ruoyi-media
 
  Target Server Type    : MySQL
- Target Server Version : 50735
+ Target Server Version : 50731
  File Encoding         : 65001
 
- Date: 06/10/2021 22:30:43
+ Date: 24/12/2021 17:07:29
 */
 
 SET NAMES utf8mb4;
@@ -22,13 +22,13 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `blog_article`;
 CREATE TABLE `blog_article`  (
-  `article_id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `article_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `title` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '博客标题',
   `summary` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章简介',
   `content` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文章内容',
   `tag_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标签id',
   `images` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标题图片',
-  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态 正常 1 停用 0',
+  `status` tinyint(3) UNSIGNED NOT NULL COMMENT '状态 正常 1 停用 0',
   `admin_user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理员id',
   `is_original` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '1' COMMENT '是否原创（0:不是 1：是）',
   `author` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '作者',
@@ -52,20 +52,26 @@ CREATE TABLE `blog_article`  (
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '更新时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `support_count` bigint(11) NULL DEFAULT NULL COMMENT '支持数',
-  `oppose_count` bigint(11) NULL DEFAULT NULL COMMENT '反对数',
+  `support_count` bigint(20) NULL DEFAULT NULL COMMENT '支持数',
+  `oppose_count` bigint(20) NULL DEFAULT NULL COMMENT '反对数',
   `collect_count` int(11) NULL DEFAULT 0 COMMENT '收藏数',
   `click_count` int(11) NULL DEFAULT 0 COMMENT '点击数',
   PRIMARY KEY (`article_id`) USING BTREE,
   INDEX `pk_artitcle_id`(`article_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 206 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '博客文章表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 232 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '博客文章表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of blog_article
+-- ----------------------------
+INSERT INTO `blog_article` VALUES (230, '22121221', '1', '<p>12212121111111111</p>', '5,7', '/common/image/2021/12/24/013b5c73-b493-4b79-9e26-4b640e7c4a95.png', 1, NULL, '1', '若依', NULL, '5', '科学类', 0, NULL, '1', 1, 1, 0, NULL, NULL, 0, NULL, 1, '2121212', '1', '2021-12-24 14:31:13', '2021-12-24 15:46:07', '1', '1', 0, 0, 0, 1);
+INSERT INTO `blog_article` VALUES (231, '09、课堂笔记：SpringCloud第二天', '09、课堂笔记：SpringCloud第二天', '<h2>01、问题反馈</h2>\n<table>\n<thead>\n<tr><th>意见或建议</th></tr>\n</thead>\n<tbody>\n<tr><td>小飞飞是真的~好纯啊！是真的纯哟！微信给个呗！</td></tr>\n<tr><td>继续努力吧！！</td></tr>\n</tbody>\n</table>\n<h2>02、课程目标</h2>\n<p>目标1：能够使用Feign进行远程调用</p>\n<p>目标2：能够搭建Spring Cloud Gateway网关服务</p>\n<p>目标3：能够配置Spring Cloud Gateway路由过滤器</p>\n<p>目标4：能够编写Spring Cloud Gateway全局过滤器</p>\n<p>目标5：能够搭建Spring Cloud Config配置中心服务</p>\n<p>目标6：能够使用Spring Cloud Bus实时更新配置</p>\n<h2>03、Feign：介绍与使用</h2>\n<p>在前面的学习中，使用了Ribbon的负载均衡功能，大大简化了远程调用时的代码：</p>\n<pre><code class=\"language-java\">// 定义服务实例访问URL\nString url = &quot;http://user-service/user/&quot; + id;\nreturn restTemplate.getForObject(url, String.class);\n</code></pre>\n<p>如果就学到这里，你可能以后需要编写类似的大量重复代码，格式基本相同，无非参数不一样。有没有更优雅的方式，来对这些代码再次优化呢？</p>\n<p>这就是接下来要学的Feign的功能了。</p>\n<h3>3.1 介绍</h3>\n<p>Feign也叫伪装：</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/a8453007-a914-4585-b8fd-8c219a76652d.png\" alt=\"1572166999223\" /></p>\n<p>Feign可以把Rest的请求进行隐藏，伪装成类似SpringMVC的Controller一样。你不用再自己拼接url，拼接参数等等操作，一切都交给Feign去做。</p>\n<p>项目主页：<a href=\"https://github.com/OpenFeign/feign\">https://github.com/OpenFeign/feign</a></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/96901483-a776-41eb-a497-5657eeced365.png\" alt=\"1573006676151\" /></p>\n<h3>3.2 使用【掌握】</h3>\n<h4>目标</h4>\n<blockquote>\n<p>使用Feign进行远程调用</p>\n</blockquote>\n<h4>操作步骤</h4>\n<ul>\n<li>\n<p>配置依赖</p>\n<ul>\n<li>\n<p>在consumer中添加如下依赖：</p>\n<pre><code class=\"language-xml\">&lt;!-- 配置Feign启动器 --&gt;\n&lt;dependency&gt;\n    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\n    &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;\n&lt;/dependency&gt;\n</code></pre>\n</li>\n</ul>\n</li>\n<li>\n<p>编写Feign的客户端</p>\n<ul>\n<li>\n<p>在consumer中编写如下Feign客户端接口类：</p>\n<pre><code class=\"language-java\">package com.itheima.client;\n\nimport com.itheima.pojo.User;\nimport org.springframework.cloud.openfeign.FeignClient;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.PathVariable;\n\n@FeignClient(&quot;user-service&quot;)\npublic interface UserClient {\n\n    @GetMapping(&quot;/user/{id}&quot;)\n    User findOne(@PathVariable(&quot;id&quot;) Long id);\n}\n</code></pre>\n</li>\n<li>\n<p>首先这是一个接口，Feign会通过动态代理，帮我们生成实现类。这点跟mybatis的mapper很像。</p>\n</li>\n<li>\n<p>@FeignClient注解，声明这是一个Feign客户端，同时通过value属性指定服务名称。</p>\n</li>\n<li>\n<p>接口中的方法，完全采用SpringMVC的注解，Feign会根据注解帮我们生成URL，并访问获取结果</p>\n</li>\n<li>\n<p>@GetMapping中的/user，请不要忘记；因为Feign需要拼接可访问的地址。</p>\n</li>\n</ul>\n</li>\n<li>\n<p>编写控制器</p>\n<ul>\n<li>\n<p>定义新的控制器类ConsumerFeignController，使用UserClient访问：</p>\n<pre><code class=\"language-java\">package com.itheima.controller;\n\nimport com.itheima.client.UserClient;\nimport com.itheima.pojo.User;\nimport lombok.extern.slf4j.Slf4j;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\n@RequestMapping(&quot;/consumer&quot;)\n@Slf4j\npublic class ConsumerFeignController {\n    @Autowired(required = false)\n    private UserClient userClient;\n\n    @GetMapping(&quot;/{id}&quot;)\n    public User findOne(@PathVariable(&quot;id&quot;) Long id){\n        return userClient.findOne(id);\n    }\n}\n</code></pre>\n</li>\n</ul>\n</li>\n<li>\n<p>开启Feign的支持</p>\n<ul>\n<li>\n<p>在ConsumerApplication启动类上，添加注解，开启Feign功能</p>\n<pre><code class=\"language-java\">package com.itheima;\n\nimport org.springframework.boot.SpringApplication;\nimport org.springframework.cloud.client.SpringCloudApplication;\nimport org.springframework.cloud.client.loadbalancer.LoadBalanced;\nimport org.springframework.cloud.openfeign.EnableFeignClients;\nimport org.springframework.context.annotation.Bean;\nimport org.springframework.web.client.RestTemplate;\n\n/** @SpringBootApplication\n @EnableDiscoveryClient\n @EnableCircuitBreaker */\n@SpringCloudApplication\n@EnableFeignClients // 开启Feign的支持\npublic class ConsumerApplication {\n    public static void main(String[] args){\n        SpringApplication.run(ConsumerApplication.class, args);\n    }\n    @Bean\n    @LoadBalanced\n    public RestTemplate restTemplate(){\n        return new RestTemplate();\n    }\n}\n</code></pre>\n<blockquote>\n<p>说明：Feign中已经自动集成了Ribbon负载均衡，因此不需要自己定义RestTemplate进行负载均衡的配置。</p>\n</blockquote>\n</li>\n</ul>\n</li>\n<li>\n<p>启动测试</p>\n<ul>\n<li>\n<p>访问接口：<a href=\"http://localhost:8080/consumer/2\">http://localhost:8080/consumer/2</a></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/04c0b3b2-e345-452f-b22f-c775cda13eab.png\" alt=\"1573007125457\" /></p>\n</li>\n</ul>\n</li>\n</ul>\n<h2>04、Feign：Ribbon的支持【了解】</h2>\n<ul>\n<li>\n<p>Feign中本身已经集成了Ribbon依赖和自动配置:</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/a9f104b3-8e0a-4f10-af76-0379d41e4c69.png\" alt=\"1573006954818\" /></p>\n<p>因此我们不需要额外引入依赖，也不需要再注册<code>RestTemplate</code>对象。</p>\n</li>\n<li>\n<p>Fegin内置的Ribbon默认设置了请求超时时长，可以通过手动配置来修改这个超时时长：</p>\n<pre><code class=\"language-properties\">ribbon:\n  ConnectTimeout: 2000 # 建立链接的超时时长(默认)\n  ReadTimeout: 5000 # 读取响应数据超时时长(默认)\n</code></pre>\n</li>\n<li>\n<p>Ribbon内部有重试机制，一旦超时，会自动重新发起请求。如果不希望重试，可以添加配置：</p>\n<pre><code class=\"language-properties\">ribbon:\n  ConnectTimeout: 1000 # 建立连接超时时长\n  ReadTimeout: 2000 # 读取响应数据超时时长\n  MaxAutoRetries: 0 # 当前服务器的重试次数\n  MaxAutoRetriesNextServer: 1 # 重试多少个服务节点\n  OkToRetryOnAllOperations: false # 是否对所有的请求方式都重试(只对查询)\n</code></pre>\n<blockquote>\n<p>注意：Hystrix线程隔离的超时时间，应该比重试的总时间要大，比如当前案例中，应该配 大于或等于 3000*2 = 6000</p>\n</blockquote>\n<p>说明：com.netflix.client.config.DefaultClientConfigImpl.java类中的默认配置</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/1d4e88e2-aaf9-4d8b-988c-1885f85a0bce.png\" alt=\"1573007200216\" /></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/4b4281f5-1bd4-4b65-8c28-deeecaaa7fb0.png\" alt=\"1573007240593\" /></p>\n</li>\n</ul>\n<h2>05、Feign：Hystrix的支持【了解】</h2>\n<ul>\n<li>\n<p>Feign默认也有对Hystrix的集成:</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/ddb06a35-86dc-4020-9927-c05f99677f6e.png\" alt=\"1573007289622\" /></p>\n<blockquote>\n<p>说明：只不过，默认情况下是关闭的。</p>\n</blockquote>\n</li>\n<li>\n<p>需要通过下面的参数来开启:  application.yml</p>\n<pre><code class=\"language-properties\">feign:\n  hystrix:\n    enabled: true # 开启Feign的熔断功能\n</code></pre>\n<p>但是，Feign中的Fallback配置不像Ribbon中那样简单了。</p>\n</li>\n<li>\n<p>配置Feign中的Fallback</p>\n<ul>\n<li>\n<p>定义UserClientFallback类，实现刚才编写的UserClient，作为fallback的处理类</p>\n<pre><code class=\"language-java\">package com.itheima.client;\n\nimport com.itheima.client.UserClient;\nimport com.itheima.pojo.User;\nimport org.springframework.stereotype.Component;\n\n@Component\npublic class UserClientFallback implements UserClient {\n    @Override\n    public User findOne(Long id) {\n        User user = new User();\n        user.setId(id);\n        user.setName(&quot;用户异常&quot;);\n        return user;\n    }\n}\n</code></pre>\n</li>\n<li>\n<p>然后在UserClient中，指定刚才编写的实现类</p>\n<pre><code class=\"language-java\">@FeignClient(value = &quot;user-service&quot;, fallback = UserClientFallback.class)\npublic interface UserClient {\n    @GetMapping(&quot;/user/{id}&quot;)\n    User findOne(@PathVariable(&quot;id&quot;) Long id);\n}\n</code></pre>\n</li>\n<li>\n<p>重启测试</p>\n<p>关闭user-service服务，然后在页面访问：</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/0ed2af05-2ba1-4efa-830d-abd3776ed311.png\" alt=\"1573007348886\" /></p>\n</li>\n</ul>\n</li>\n</ul>\n<h2>06、Feign：请求压缩&amp;日志级别【了解】</h2>\n<h4>6.1 请求压缩</h4>\n<hr />\n<p>Spring Cloud Feign支持对请求和响应进行GZIP压缩，以减少通信过程中的性能损耗。通过下面的参数即可开启请求与响应的压缩功能(consumer中进行配置)：</p>\n<pre><code class=\"language-properties\">feign:\n  compression:\n    request:\n        enabled: true # 开启请求压缩\n    response:\n        enabled: true  # 开启响应压缩\n</code></pre>\n<h4>6.2 日志级别</h4>\n<hr />\n<p>前面讲过，通过 logging.level.xx=debug 来设置日志级别。然而这个对Fegin客户端而言不会产生效果。因为 @FeignClient 注解修改的客户端在被代理时，都会创建一个新的Fegin.Logger实例。我们需要额外指定这个日志的级别才可以。</p>\n<ul>\n<li>\n<p>在consumer的配置文件中设置com.itheima包下的日志级别都为debug</p>\n<pre><code class=\"language-properties\">logging:\n  level:\n    com.itheima: debug\n</code></pre>\n</li>\n<li>\n<p>在consumer编写配置类，定义日志级别</p>\n<pre><code class=\"language-java\">package com.itheima.config;\n\nimport feign.Logger;\nimport org.springframework.context.annotation.Bean;\nimport org.springframework.context.annotation.Configuration;\n\n@Configuration\npublic class FeignConfig {\n    @Bean\n    public Logger.Level feignLoggerLevel(){\n        // 记录所有请求和响应的明细，包括头信息、请求体、元数据\n        return Logger.Level.FULL;\n    }\n}\n</code></pre>\n<p>这里指定的Level级别是FULL，Feign支持4种级别：</p>\n<ul>\n<li>NONE：不记录任何日志信息，这是默认值。</li>\n<li>BASIC：仅记录请求的方法，URL以及响应状态码和执行时间</li>\n<li>HEADERS：在BASIC的基础上，额外记录了请求和响应的头信息</li>\n<li>FULL：记录所有请求和响应的明细，包括头信息、请求体、元数据。</li>\n</ul>\n</li>\n<li>\n<p>在consumer的UserClient中指定配置类</p>\n<pre><code class=\"language-java\">package com.itheima.client;\n\nimport com.itheima.client.fallback.UserClientFallback;\nimport com.itheima.config.FeignConfig;\nimport com.itheima.pojo.User;\nimport org.springframework.cloud.openfeign.FeignClient;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.PathVariable;\n\n@FeignClient(value = &quot;user-service&quot;,\n        fallback = UserClientFallback.class,\n        configuration = FeignConfig.class)\npublic interface UserClient {\n\n    @GetMapping(&quot;/user/{id}&quot;)\n    User findOne(@PathVariable(&quot;id&quot;) Long id);\n}\n</code></pre>\n</li>\n<li>\n<p>重启项目，即可看到每次访问的日志：</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/c934dcc5-7e77-45bd-9e3f-413061b20f04.png\" alt=\"1573009332972\" /></p>\n</li>\n</ul>\n<h2>07、Gateway：网关介绍</h2>\n<p>官网学习地址：<a href=\"https://spring.io/projects/spring-cloud-gateway#learn\">https://spring.io/projects/spring-cloud-gateway#learn</a></p>\n<blockquote>\n<p>Spring Cloud Gateway简介</p>\n</blockquote>\n<ul>\n<li>Spring Cloud Gateway是Spring官网基于Spring 5.0、 Spring Boot 2.0、Project Reactor等技术开发的网关服务。</li>\n<li>Spring Cloud Gateway基于Filter链提供网关基本功能：安全、监控／埋点、限流等。</li>\n<li>Spring Cloud Gateway为微服务架构提供简单、有效且统一的API路由管理方式。</li>\n<li>Spring Cloud Gateway是替代Netflflix Zuul的一套解决方案。</li>\n</ul>\n<p>Spring Cloud Gateway组件的核心是一系列的过滤器，通过这些过滤器可以将客户端发送的请求转发（路由）到对应的微服务。 Spring Cloud Gateway是加在整个微服务最前沿的防火墙和代理器，隐藏微服务结点IP端口信息，从而加强安全保护。Spring Cloud Gateway本身也是一个微服务，需要注册到Eureka服务注册中心。</p>\n<p>Geteway网关的核心功能是：<strong>过滤和路由</strong></p>\n<blockquote>\n<p>Geteway加入后的架构</p>\n</blockquote>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/940f067b-6a65-4281-b942-ab852be86490.png\" alt=\"1573007783793\" /></p>\n<p>说明：不管是来自于客户端（PC或移动端）的请求，还是服务内部调用。一切对服务的请求都可经过网关，然后再由网关来实现鉴权、动态路由等等操作。Gateway就是我们服务的统一入口。</p>\n<blockquote>\n<p>Gateway核心概念</p>\n</blockquote>\n<ul>\n<li>**路由（route）**路由信息的组成：由一个ID、一个目的URL、一组断言工厂、一组Filter组成。如果路由断言为真，说明请求URL和配置路由匹配。</li>\n<li>**断言（Predicate）**Spring Cloud Gateway中的断言函数输入类型是Spring 5.0框架中的 ServerWebExchange。Spring Cloud Gateway的断言函数允许开发者去定义匹配来自于Http Request中的任何信息比如请求头和参数。</li>\n<li>**过滤器（Filter）**一个标准的Spring WebFilter。 Spring Cloud Gateway中的Filter分为两种类型的Filter，分别是Gateway Filter和Global Filter。过滤器Filter将会对请求和响应进行修改处理。</li>\n</ul>\n<h2>08、Gateway：快速入门</h2>\n<h4>8.1 创建模块</h4>\n<ul>\n<li>\n<p>填写基本信息</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/0c2f495b-cc4c-4614-8cd5-525770b45dca.png\" alt=\"1573009434598\" /></p>\n</li>\n<li>\n<p>添加依赖</p>\n<pre><code class=\"language-xml\">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;\n         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;\n         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0\n         http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;\n    &lt;parent&gt;\n        &lt;artifactId&gt;springcloud-demo&lt;/artifactId&gt;\n        &lt;groupId&gt;com.itheima&lt;/groupId&gt;\n        &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;\n    &lt;/parent&gt;\n    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;\n    &lt;artifactId&gt;gateway-server&lt;/artifactId&gt;\n\n    &lt;dependencies&gt;\n        &lt;!-- 配置gateway启动器 --&gt;\n        &lt;dependency&gt;\n            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\n            &lt;artifactId&gt;spring-cloud-starter-gateway&lt;/artifactId&gt;\n        &lt;/dependency&gt;\n    &lt;/dependencies&gt;\n&lt;/project&gt;\n</code></pre>\n</li>\n</ul>\n<h4>8.2 编写启动类</h4>\n<p>在gateway-server中创建com.itheima.GatewayApplication启动类</p>\n<pre><code class=\"language-java\">package com.itheima;\n\nimport org.springframework.boot.SpringApplication;\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\nimport org.springframework.cloud.client.discovery.EnableDiscoveryClient;\n\n@SpringBootApplication\npublic class GatewayApplication {\n    public static void main(String[] args){\n        SpringApplication.run(GatewayApplication.class, args);\n    }\n}\n</code></pre>\n<h4>8.3 编写配置</h4>\n<p>在gateway-server中创建application.yml文件，内容如下：</p>\n<pre><code class=\"language-properties\">server:\n  port: 10010\nspring:\n  application:\n    name: api-gateway\n</code></pre>\n<h4>8.4 编写路由规则</h4>\n<ul>\n<li>\n<p>启动三个Spring Boot应用:</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/a5594da0-9c7c-4291-bf0f-c4aecf85ea3a.png\" alt=\"1573009769268\" /></p>\n</li>\n<li>\n<p>需要用网关来代理user-service服务，先看一下控制面板中的服务状态:</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/41e74e33-1c18-4716-9502-186202ad9742.png\" alt=\"1573009946136\" /></p>\n<ul>\n<li>ip为：127.0.0.1</li>\n<li>端口为：8082</li>\n</ul>\n</li>\n<li>\n<p>修改gateway-server的application.yml文件为:</p>\n<pre><code class=\"language-properties\">server:\n  port: 10010\nspring:\n  application:\n    name: api-gateway\n  cloud:\n    gateway:\n      routes:\n        # 路由id,可以随意写\n        - id: user-service-route\n          # 代理的服务地址\n          uri: http://127.0.0.1:8082\n          # 路由断言，可以配置映射路径\n          predicates:\n            - Path=/user/**\n</code></pre>\n<ul>\n<li>将符合 Path 规则的一切请求，都代理到 uri 参数指定的地址</li>\n<li>本例中，我们将路径中包含有 /user/** 开头的请求，代理到<a href=\"http://127.0.0.1:9001\">http://127.0.0.1:9001</a></li>\n</ul>\n</li>\n</ul>\n<h4>8.5 启动测试</h4>\n<p>访问的路径中需要加上配置规则的映射路径，我们访问：<a href=\"http://localhost:10010/user/1\">http://localhost:10010/user/1</a></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/6507b7a4-c37c-47d9-938e-5df954f43439.png\" alt=\"1573022239096\" /></p>\n<h2>09、Gateway：面向服务的路由</h2>\n<p>在刚才的路由规则中，把路径对应的服务地址写死了！如果同一服务有多个实例的话，这样做显然不合理。 应该根据服务的名称，去Eureka注册中心查找服务对应的所有实例列表，然后进行动态路由！</p>\n<ul>\n<li>先把当前服务注册到Eureka中，三步走：添加起步依赖、引导类中开启使用、配置文件中加入配置</li>\n</ul>\n<p>1、加入起步依赖</p>\n<pre><code class=\"language-xml\">&lt;!-- 配置eureka客户端启动器 --&gt;\n&lt;dependency&gt;\n	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\n	&lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;\n&lt;/dependency&gt;\n</code></pre>\n<p>2、引导类中开启使用</p>\n<pre><code class=\"language-java\">@EnableDiscoveryClient //开启服务发现\n</code></pre>\n<p>3、配置文件中加入配置</p>\n<pre><code class=\"language-yaml\">eureka:\n  client:\n    service-url:\n      defaultZone: http://localhost:10086/eureka/,http://localhost:10087/eureka/\n</code></pre>\n<ul>\n<li>\n<p>修改映射配置，通过服务名称获取</p>\n<p>因为已经配置了Eureka客户端，可以从Eureka获取服务的地址信息。修改application.yml文件：</p>\n<pre><code class=\"language-properties\">server:\n  port: 10010\nspring:\n  application:\n    name: api-gateway\n  cloud:\n    gateway:\n      routes:\n        # 路由id,可以随意写\n        - id: user-service-route\n          # 代理的服务地址；lb表示负载均衡(从eureka中获取具体服务)\n          uri: lb://user-service\n          # 路由断言，可以配置映射路径\n          predicates:\n            - Path=/user/**\n\neureka:\n  client:\n    service-url:\n      defaultZone: http://localhost:10086/eureka,http://localhost:10087/eureka\n</code></pre>\n<blockquote>\n<p>路由配置中uri所用的协议为lb时（以uri: <a href=\"lb://user-service为例），gateway将使用\">lb://user-service为例），gateway将使用</a> LoadBalancerClient把user-service通过eureka解析为实际的主机和端口，并进行ribbon负载均衡。</p>\n</blockquote>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/7361bda8-4b96-4b64-bfdb-3edc427d6ec4.png\" alt=\"1573023051723\" /></p>\n</li>\n<li>\n<p>启动测试</p>\n<p>再次启动，这次gateway进行代理时，会利用Ribbon进行负载均衡访问：</p>\n<p>日志中可以看到使用了负载均衡器：</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/2b4a9d3d-21cb-42c8-9f4f-241ac7847a21.png\" alt=\"1573023163846\" /></p>\n</li>\n</ul>\n<h2>10、Gateway：路由前缀</h2>\n<h4>10.1 添加前缀</h4>\n<p>在gateway中可以通过配置路由的过滤器PrefixPath，实现映射路径中的地址添加前缀，修改application.yml文件：</p>\n<pre><code class=\"language-properties\">server:\n  port: 10010\nspring:\n  application:\n    name: api-gateway\n  cloud:\n    gateway:\n      routes:\n        # 路由id,可以随意写\n        - id: user-service-route\n          # 代理的服务地址；lb表示负载均衡(从eureka中获取具体服务)\n          uri: lb://user-service\n          # 路由断言，可以配置映射路径\n          predicates:\n            - Path=/**\n          filters:\n            # 添加请求路径的前缀\n            - PrefixPath=/user\n\neureka:\n  client:\n    service-url:\n      defaultZone: http://localhost:8761/eureka,http://localhost:8762/eureka\n</code></pre>\n<p>通过 <strong>PrefixPath=/xxx</strong> 来指定了路由要添加的前缀。</p>\n<ul>\n<li>\n<p>PrefixPath=/user <a href=\"http://localhost:10010/1\">http://localhost:10010/1</a> =&gt; <a href=\"http://localhost:9001/user/1\">http://localhost:9001/user/1</a></p>\n</li>\n<li>\n<p>PrefixPath=/user/abc <a href=\"http://localhost:10010/1\">http://localhost:10010/1</a> =&gt; <a href=\"http://localhost:9001/user/abc/1\">http://localhost:9001/user/abc/1</a></p>\n<p>以此类推。</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/e03b07b5-85dd-47a7-b6a6-dbedc96863b1.png\" alt=\"1573023784710\" /></p>\n</li>\n</ul>\n<h4>10.2 去除前缀</h4>\n<p>在gateway中可以通过配置路由的过滤器StripPrefix，实现映射路径中的地址去除前缀，修改application.yml文件：</p>\n<pre><code class=\"language-properties\">server:\n  port: 10010\nspring:\n  application:\n    name: api-gateway\n  cloud:\n    gateway:\n      routes:\n        # 路由id,可以随意写\n        - id: user-service-route\n          # 代理的服务地址；lb表示负载均衡(从eureka中获取具体服务)\n          uri: lb://user-service\n          # 路由断言，可以配置映射路径\n          predicates:\n            - Path=/api/user/**\n          filters:\n            # 表示过滤1个路径，2表示两个路径，以此类推\n            - StripPrefix=1\n\neureka:\n  client:\n    service-url:\n      defaultZone: http://localhost:8761/eureka,http://localhost:8762/eureka\n</code></pre>\n<p>通过 StripPrefix=1 来指定了路由要去掉的前缀个数。如：路径 /api/user/1 将会被代理到 /user/1。</p>\n<ul>\n<li>StripPrefix=1 <a href=\"http://localhost:10010/api/user/1\">http://localhost:10010/api/user/1</a> =&gt; <a href=\"http://localhost:9001/user/1\">http://localhost:9001/user/1</a></li>\n<li>StripPrefix=2 <a href=\"http://localhost:10010/api/user/1\">http://localhost:10010/api/user/1</a> =&gt; <a href=\"http://localhost:9001/1\">http://localhost:9001/1</a></li>\n</ul>\n<p>以此类推。</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/f10ef061-5e18-4b3c-9b8f-c25ab7157b6a.png\" alt=\"1573024121960\" /></p>\n<h2>11、Gateway：过滤器介绍</h2>\n<blockquote>\n<p>过滤器简介</p>\n</blockquote>\n<p>Gateway作为网关的其中一个重要功能，就是实现请求的鉴权。而这个动作往往是通过网关提供的过滤器来实现的。前面的 路由前缀 章节中的功能也是使用过滤器实现的。</p>\n<ul>\n<li>\n<p>Gateway自带过滤器有几十个，常见自带过滤器有：</p>\n<table>\n<thead>\n<tr><th align=\"left\">过滤器名称</th><th align=\"left\">说明</th></tr>\n</thead>\n<tbody>\n<tr><td align=\"left\">AddRequestHeader</td><td align=\"left\">对匹配上的请求添加Header</td></tr>\n<tr><td align=\"left\">AddRequestParameters</td><td align=\"left\">对匹配上的请求添加参数</td></tr>\n<tr><td align=\"left\">AddResponseHeader</td><td align=\"left\">对从网关返回的响应添加Header</td></tr>\n<tr><td align=\"left\">StripPrefix</td><td align=\"left\">对匹配上的请求路径去除前缀</td></tr>\n</tbody>\n</table>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/c3a6d6c0-7106-40fd-aca4-086806f90d9e.png\" alt=\"1573024240670\" /></p>\n<p>详细的说明在: <a href=\'https://cloud.spring.io/spring-cloud-static/spring-cloud-gateway/2.2.0.RC1/reference/html/#gatewayfilter-factories\'>官网链接</a></p>\n</li>\n<li>\n<p>过滤器类型: Gateway有两种类型的过滤器</p>\n<ul>\n<li>全局过滤器：自定义全局过滤器，不需要在配置文件中配置，作用在所有的路由上，实现 GlobalFilter 接口即可。</li>\n<li>局部过滤器：通过spring.cloud.routes.fifilters 配置在具体路由下，只作用在当前路由上；自带的过滤器都可以配置或者自定义按照自带过滤器的方式。</li>\n</ul>\n</li>\n</ul>\n<blockquote>\n<p>过滤器执行生命周期</p>\n</blockquote>\n<p>Spring Cloud Gateway 的 Filter 的生命周期也类似有两个：“pre” 和 “post”。“pre”和 “post” 分别会在请求被执行前调用和被执行后调用。</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/93942c76-c5eb-4ba5-abf6-d002bded0f4c.png\" alt=\"1573024303043\" /></p>\n<p>这里的 pre 和 post 可以通过过滤器的 GatewayFilterChain 执行fifilter方法前后来实现。</p>\n<blockquote>\n<p>过滤器使用场景</p>\n</blockquote>\n<p>场景非常多(例举):</p>\n<ul>\n<li>请求鉴权: 一般 GatewayFilterChain 执行fifilter方法前，如果发现没有访问权限，直接就返回空。</li>\n<li>异常处理: 一般 GatewayFilterChain 执行fifilter方法后，记录异常并返回。</li>\n<li>服务调用时长统计: GatewayFilterChain 执行fifilter方法前后根据时间统计。</li>\n</ul>\n<h2>12、Gateway：全局默认过滤器</h2>\n<p>我们也可以将Spring Cloud Gateway自带的过滤器配置成: 不只是针对某个路由；而是可以对所有路由生效，也就是配置默认过滤器。</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/34a5db8b-cfc4-4f4b-99ba-4d895cdca903.png\" alt=\"1573098719510\" /></p>\n<pre><code class=\"language-properties\">server:\n  port: 10010\nspring:\n  application:\n    name: api-gateway\n  cloud:\n    gateway:\n      # 默认过滤器，对所有路由生效\n      default-filters:\n        # 添加响应头过滤器，添中一个响应头为name，值为admin\n        - AddResponseHeader=name,admin\n      routes:\n        # 路由id,可以随意写\n        - id: user-service-route\n          # 代理的服务地址；lb表示负载均衡(从eureka中获取具体服务)\n          uri: lb://user-service\n          # 路由断言，可以配置映射路径\n          predicates:\n            - Path=/api/user/**\n          filters:\n            # 表示过滤1个路径，2表示两个路径，以此类推\n            - StripPrefix=1\n\neureka:\n  client:\n    service-url:\n      defaultZone: http://localhost:10086/eureka,http://localhost:10087/eureka\n</code></pre>\n<p>运行测试:</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/c69b3dc0-896e-4f2b-b48e-39721f9bc227.png\" alt=\"1573024603518\" /></p>\n<h2>13、Gateway：自定义过滤器</h2>\n<h4>13.1 自定义局部过滤器</h4>\n<blockquote>\n<p>需求：在application.yml中对某个路由配置过滤器，该过滤器可以在控制台输出配置文件中指定名称的请求参数的值。</p>\n</blockquote>\n<ul>\n<li>\n<p>在gateway-server模块中编写过滤器工厂类MyParamGatewayFilterFactory</p>\n<pre><code class=\"language-java\">package com.itheima.filter;\n\nimport org.springframework.cloud.gateway.filter.GatewayFilter;\nimport org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;\nimport org.springframework.http.server.reactive.ServerHttpRequest;\nimport org.springframework.stereotype.Component;\n\nimport java.util.Arrays;\nimport java.util.List;\n\n/** 自定义局部过滤器 */\n@Component\npublic class MyParamGatewayFilterFactory extends\n        AbstractGatewayFilterFactory&lt;MyParamGatewayFilterFactory.Config&gt; {\n\n    private static final String PARAM_KEY = &quot;param&quot;;\n\n    /** 定义构造器(必须) */\n    public MyParamGatewayFilterFactory(){\n        super(Config.class);\n    }\n\n    /** 接收过滤器传进来的字段集合(可选) */\n    @Override\n    public List&lt;String&gt; shortcutFieldOrder() {\n        return Arrays.asList(PARAM_KEY);\n    }\n\n    /** 重写拦截方法(必须) */\n    @Override\n    public GatewayFilter apply(Config config) {\n        return (exchange, chain) -&gt; {\n            // 获取请求对象\n            ServerHttpRequest request = exchange.getRequest();\n            // 获取请求参数\n            if (request.getQueryParams().containsKey(config.param)){\n                request.getQueryParams().get(config.param).forEach(value -&gt; {\n                    System.out.println(config.param + &quot; = &quot; + value);\n                });\n            }\n            // 放行\n            return chain.filter(exchange);\n        };\n    }\n\n    /** 定义配置类，接收配置文件中的属性(必须) */\n    public static class Config {\n        private String param;\n        public String getParam() {\n            return param;\n        }\n        public void setParam(String param) {\n            this.param = param;\n        }\n    }\n}\n</code></pre>\n</li>\n<li>\n<p>在gateway-server模块中修改application.yml配置文件</p>\n<pre><code class=\"language-properties\">server:\n  port: 10010\nspring:\n  application:\n    name: api-gateway\n  cloud:\n    gateway:\n      # 默认过滤器，对所有路由生效\n      default-filters:\n        # 添加响应头过滤器，添加一个响应头为name，值为admin\n        - AddResponseHeader=name,admin\n      routes:\n        # 路由id,可以随意写\n        - id: user-service-route\n          # 代理的服务地址；lb表示负载均衡(从eureka中获取具体服务)\n          uri: lb://user-service\n          # 路由断言，可以配置映射路径\n          predicates:\n            - Path=/api/user/**\n          filters:\n            # 表示过滤1个路径，2表示两个路径，以此类推\n            - StripPrefix=1\n            # 自定义过滤器\n            - MyParam=name\n\neureka:\n  client:\n    service-url:\n      defaultZone: http://localhost:8761/eureka,http://localhost:8762/eureka\n</code></pre>\n</li>\n<li>\n<p>测试访问</p>\n<p><a href=\"http://localhost:10010/api/user/1?name=admin\">http://localhost:10010/api/user/1?name=admin</a> 检查后台是否输出name和admin</p>\n<p><a href=\"http://localhost:10010/api/user/1?name2=admin\">http://localhost:10010/api/user/1?name2=admin</a> 则是不会输出的。</p>\n</li>\n</ul>\n<h4>13.2 自定义全局过滤器</h4>\n<blockquote>\n<p>需求：模拟一个登录的校验。基本逻辑：如果请求中有token参数，则认为请求有效，放行。</p>\n</blockquote>\n<ul>\n<li>在gateway-server模块中编写全局过滤器类MyGlobalFilter</li>\n</ul>\n<p>课堂代码：</p>\n<pre><code class=\"language-java\">package com.itheima.filter;\n\nimport org.apache.commons.lang.StringUtils;\nimport org.springframework.cloud.gateway.filter.GatewayFilterChain;\nimport org.springframework.cloud.gateway.filter.GlobalFilter;\nimport org.springframework.core.Ordered;\nimport org.springframework.core.annotation.Order;\nimport org.springframework.http.HttpStatus;\nimport org.springframework.stereotype.Component;\nimport org.springframework.web.server.ServerWebExchange;\nimport reactor.core.publisher.Mono;\n\n/**\n * 全局过滤器\n */\n@Component\n// @Order(1)    ：  Ordered这个接口也可以使用注解来排序\npublic class MyGlobalFilter implements GlobalFilter, Ordered {\n\n    /*如果你有token就让他们访问，如果没有token，不让访问*/\n    @Override\n    public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {\n        System.out.println(&quot;全局过滤器执行了。。。。。。。&quot;);\n        //获取参数\n        String token = exchange.getRequest().getQueryParams().getFirst(&quot;token&quot;);\n        /*\n        *  String aa = &quot;&quot;;\n        *  String bb = &quot;          &quot;;\n        *  String cc = null;\n        *\n        *   如果是isBlank 都是返回true\n        *\n        * */\n        if(StringUtils.isBlank(token)){\n            //为空，token没有值，阻止往下执行\n            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED); //设置返回的状态码\n            //不会继续往下执行了！\n            return exchange.getResponse().setComplete();\n        }\n\n        //放行\n        return chain.filter(exchange);\n    }\n\n    /*数值越小越先执行*/\n    @Override\n    public int getOrder() {\n        return 5;\n    }\n}\n\n</code></pre>\n<pre><code class=\"language-java\">package com.itheima.filter;\n\nimport org.apache.commons.lang.StringUtils;\nimport org.springframework.cloud.gateway.filter.GatewayFilterChain;\nimport org.springframework.cloud.gateway.filter.GlobalFilter;\nimport org.springframework.core.Ordered;\nimport org.springframework.http.HttpStatus;\nimport org.springframework.stereotype.Component;\nimport org.springframework.web.server.ServerWebExchange;\nimport reactor.core.publisher.Mono;\n\n/** 自定义全局过滤器 */\n@Component\npublic class MyGlobalFilter implements GlobalFilter, Ordered {\n    @Override\n    public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {\n        System.out.println(&quot;==全局过滤器MyGlobalFilter==&quot;);\n        String token = exchange.getRequest().getQueryParams().getFirst(&quot;token&quot;);\n        if (StringUtils.isBlank(token)){\n            // 设置响应状态码: 401 未授权\n            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);\n            // 返回响应完成\n            return exchange.getResponse().setComplete();\n        }\n        // 放行\n        return chain.filter(exchange);\n    }\n    @Override\n    public int getOrder() {\n        // 值越小越先执行\n        return 1;\n    }\n}\n</code></pre>\n<ul>\n<li>\n<p>测试访问</p>\n<ul>\n<li>\n<p>访问 <a href=\"http://localhost:10010/api/user/1\">http://localhost:10010/api/user/1</a></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/815fd90b-2260-46a6-9f3b-29c3bc2ec195.png\" alt=\"1573026283541\" /></p>\n</li>\n<li>\n<p>访问 <a href=\"http://localhost:10010/api/user/1?token=admin\">http://localhost:10010/api/user/1?token=admin</a></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/79b7fde9-4404-48bd-b5a1-320f7acd3f87.png\" alt=\"1573026488210\" /></p>\n</li>\n</ul>\n</li>\n</ul>\n<h2>14、Gateway：负载均衡&amp;熔断【了解】</h2>\n<p>Gateway中默认就已经集成了Ribbon负载均衡和Hystrix熔断机制。所有的超时策略都是走的默认值，比如熔断超时时间只有1S，很容易就触发了。(一般都走默认值)</p>\n<pre><code class=\"language-properties\"># 线程隔离\nhystrix:\n  command:\n    default:\n      execution:\n        isolation:\n          thread:\n            timeoutInMilliseconds: 6000\n# 负载均衡\nribbon:\n  ConnectTimeout: 1000 # 建立连接超时时长\n  ReadTimeout: 2000 # 读取响应数据超时时长\n  MaxAutoRetries: 0 # 当前服务器的重试次数\n  MaxAutoRetriesNextServer: 1 # 重试多少个服务节点\n  OkToRetryOnAllOperations: false # 是否对所有的请求方式都重试(只对查询)\n</code></pre>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/cf5ba109-f1e2-4e50-b8a1-5b9d1c882176.png\" alt=\"1573111015362\" /></p>\n<h2>15、Gateway：高可用【了解】</h2>\n<ul>\n<li>\n<p>启动多个Gateway服务，自动注册到Eureka，形成集群。如果是服务内部访问，访问Gateway，自动负载均衡，没问题。</p>\n</li>\n<li>\n<p>Gateway更多是外部访问，PC端、移动端等。它们无法通过Eureka进行负载均衡，那么该怎么办？</p>\n<p>此时，可以使用其它的服务网关，来对Gateway进行代理。比如：Nginx、Apache</p>\n<p>Eureka(注册中心)、Ribbon(负载均衡)、Hystrix(熔断)、Feign(客户端调用)、Gateway(网关)</p>\n</li>\n<li>\n<p>Gateway与Feign的区别</p>\n<ul>\n<li>Gateway 作为整个应用的流量入口，接收所有的请求，如PC、移动端等，并且将不同的请求转发至不同的处理微服务模块，其作用可视为nginx；大部分情况下用作权限鉴定、服务端流量控制。</li>\n<li>Feign 则是将当前微服务的部分服务接口暴露出来，并且主要用于各个微服务之间的服务调用。</li>\n</ul>\n</li>\n</ul>\n<pre><code class=\"language-properties\">\n#user  nobody;\nworker_processes  1;\n\n#error_log  logs/error.log;\n#error_log  logs/error.log  notice;\n#error_log  logs/error.log  info;\n\n#pid        logs/nginx.pid;\n\n\nevents {\n    worker_connections  1024;\n}\n\n\nhttp {\n    include       mime.types;\n    default_type  application/octet-stream;\n\n    #log_format  main  \'$remote_addr - $remote_user [$time_local] &quot;$request&quot; \'\n    #                  \'$status $body_bytes_sent &quot;$http_referer&quot; \'\n    #                  \'&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;\';\n\n    #access_log  logs/access.log  main;\n\n    sendfile        on;\n    #tcp_nopush     on;\n\n    #keepalive_timeout  0;\n    keepalive_timeout  65;\n\n    #gzip  on;\n	\n	upstream feifeiServer {\n	 	#权重配置\n		server localhost:10000 weight=5;  \n		server localhost:10010;\n	}\n	\n	server {\n		listen		 80;\n		server_name	 localhost;\n		\n		location /api {\n            proxy_pass   http://feifeiServer;\n        }\n	}\n\n\n}\n\n</code></pre>\n<h2>16、Config：配置中心介绍</h2>\n<p>在分布式系统中，由于服务数量非常多，配置文件分散在不同的微服务项目中，管理不方便。为了方便配置文件集中管理，需要分布式配置中心组件。在Spring Cloud中，提供了Spring Cloud Config，它支持配置文件放在配置服务的本地，也支持放在远程Git仓库（GitHub、码云）。</p>\n<p>使用Spring Cloud Config配置中心后的架构如下图：</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/442016f7-f056-4f52-a3bb-905d6327e182.png\" alt=\"1573027756995\" /></p>\n<p>官网学习文档：<a href=\"https://cloud.spring.io/spring-cloud-static/spring-cloud-config/2.2.0.RC1/reference/html/\">https://cloud.spring.io/spring-cloud-static/spring-cloud-config/2.2.0.RC1/reference/html/</a></p>\n<blockquote>\n<p>配置中心本质上也是一个微服务，同样需要注册到Eureka服务注册中心！</p>\n</blockquote>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/ae13cd18-254e-45c6-8d8a-ff848a56ce9f.png\" alt=\"1573113307416\" /></p>\n<h2>17、Config：Git配置管理</h2>\n<h4>17.1 远程Git仓库</h4>\n<ul>\n<li>知名的Git远程仓库有国外的GitHub和国内的码云（gitee）；但是使用GitHub时，国内的用户经常遇到的问题是访问速度太慢，有时候还会出现无法连接的情况。如果希望体验更好一些，可以使用国内的Git托管服务——码云（gitee.com）。</li>\n<li>与GitHub相比，码云也提供免费的Git仓库。此外，还集成了代码质量检测、项目演示等功能。对于团队协作开发，码云还提供了项目管理、代码托管、文档管理的服务。本章中使用的远程Git仓库是码云。</li>\n<li>码云访问地址：<a href=\"https://gitee.com/\">https://gitee.com/</a></li>\n</ul>\n<h4>17.2 创建远程仓库</h4>\n<p>首先要使用码云上的私有远程git仓库需要先注册帐号；请先自行访问网站并注册帐号，然后使用帐号登录码云控制台并创建公开仓库。</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/28196fde-8b09-4aa7-981b-87bff38f63f2.png\" alt=\"1573027982266\" /></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/19f76f8a-da20-47f0-8985-7f80c3f8c6c3.png\" alt=\"1573028111028\" /></p>\n<p>注意：==去掉上面的√，需要使用命令，从本地 把文件推送上去，如果勾上，则可以在该页面创建文件==</p>\n<h4>17.3 创建配置文件</h4>\n<p>在新建的仓库中创建需要被统一配置管理的配置文件。</p>\n<p><strong>配置文件的命名方式：</strong></p>\n<p>{application}-{profile}.yml 或 {application}-{profile}.properties</p>\n<ul>\n<li>application为应用名称</li>\n<li>profile用于区分开发环境，测试环境、生产环境等</li>\n</ul>\n<p>如user-dev.yml，表示用户微服务开发环境下使用的配置文件。这里将user-service工程的配置文件application.yml文件的内容复制作为user-dev.yml文件的内容，具体配置如下：</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/483e9e46-1350-42dc-81ef-8b902bd29a5e.png\" alt=\"1573028350283\" /></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/4b9ec33b-6749-47ff-8a46-b1edb8633bc6.png\" alt=\"1573028547571\" /></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/35dec4b3-9944-4bb7-aaf5-29b2a5b26f75.png\" alt=\"1573028606334\" /></p>\n<p>创建完user-dev.yml配置文件之后，gitee中的仓库如下：</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/2b05c87f-6c28-4591-8271-06cf652886ad.png\" alt=\"1573028676294\" /></p>\n<p>==细节：仓库中不要有application.yml或者application.yaml的文件==</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/084f42d7-0a6b-431b-a1d0-a00b05abe27a.png\" alt=\"1573113840392\" /></p>\n<h2>18、Config：搭建配置中心微服务</h2>\n<h4>18.1 创建模块</h4>\n<ul>\n<li>创建配置中心微服务模块</li>\n</ul>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/79739e4f-b13d-4973-ab62-10c13b42e1c0.png\" alt=\"1573028767093\" /></p>\n<ul>\n<li>\n<p>添加依赖，修改pom.xml</p>\n<pre><code class=\"language-xml\">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;\n         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;\n         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0\n         http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;\n    &lt;parent&gt;\n        &lt;artifactId&gt;springcloud-demo&lt;/artifactId&gt;\n        &lt;groupId&gt;cn.itcast&lt;/groupId&gt;\n        &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;\n    &lt;/parent&gt;\n    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;\n    &lt;artifactId&gt;config-server&lt;/artifactId&gt;\n\n    &lt;dependencies&gt;\n        &lt;!-- 配置eureka客户端 --&gt;\n        &lt;dependency&gt;\n            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\n            &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;\n        &lt;/dependency&gt;\n        &lt;!-- 配置config服务端 --&gt;\n        &lt;dependency&gt;\n            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\n            &lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;\n        &lt;/dependency&gt;\n    &lt;/dependencies&gt;\n&lt;/project&gt;\n</code></pre>\n</li>\n</ul>\n<h4>18.2 启动类</h4>\n<p>创建配置中心模块config-server启动类ConfigServerApplication.java:</p>\n<pre><code class=\"language-java\">package com.itheima;\n\nimport org.springframework.boot.SpringApplication;\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\nimport org.springframework.cloud.config.server.EnableConfigServer;\n\n@SpringBootApplication\n@EnableConfigServer\npublic class ConfigServerApplication {\n    \n    public static void main(String[] args){\n        SpringApplication.run(ConfigServerApplication.class, args);\n    }\n}\n</code></pre>\n<h4>18.3 配置文件</h4>\n<p>创建配置中心工程config-server的配置文件application.yml:</p>\n<pre><code class=\"language-properties\">server:\n  port: 12000\n  \nspring:\n  application:\n    name: config-server\n  cloud:\n    config:\n      server:\n        git:\n          uri: https://gitee.com/cfei_net/config.git\neureka:\n  client:\n    service-url:\n      defaultZone: http://localhost:10086/eureka,http://localhost:10087/eureka\n</code></pre>\n<blockquote>\n<p>注意上面的 spring.cloud.confifig.server.git.uri 则是在码云创建的仓库地址</p>\n</blockquote>\n<h4>18.4 启动测试</h4>\n<p>启动eureka注册中心和配置中心，然后访问<a href=\"http://localhost:12000/user-dev.yml\">http://localhost:12000/user-dev.yml</a> ，查看能否输出在码云存储管理的user-dev.yml文件。并且可以在gitee上修改user-dev.yml然后刷新上述测试地址也能及时到最新数据。</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/0be3c3ea-cee7-4a52-be3f-ff4b12625c5e.png\" alt=\"1573029273142\" /></p>\n<h2>19、Config：获取配置中心配置</h2>\n<p>前面已经完成了配置中心微服务的搭建，下面我们就需要改造一下用户微服务user-service，配置文件信息不再由微服务项目提供，而是从配置中心获取。如下对user-service工程进行改造。</p>\n<h4>19.1 添加依赖</h4>\n<p>在user-service模块中，添加如下依赖:</p>\n<pre><code class=\"language-xml\">&lt;!-- 配置config启动器  --&gt;\n&lt;dependency&gt;\n  	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\n  	&lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;\n&lt;/dependency&gt;\n</code></pre>\n<h4>19.2 修改配置</h4>\n<ul>\n<li>\n<p>删除user-service模块中的application.yml文件（因为该文件从配置中心获取）</p>\n<p>说明：暂保留application.yml 更名为 temp.yml</p>\n</li>\n<li>\n<p>创建user-service模块bootstrap.yml配置文件</p>\n<pre><code class=\"language-properties\">spring:\n  cloud:\n    config:\n      # 与远程仓库中的配置文件的application保持一致\n      name: user\n      # 与远程仓库中的配置文件的profile保持一致\n      profile: dev\n      # 与远程仓库中的版本保持一致\n      label: master\n      discovery:\n        # 启用配置中心\n        enabled: true\n        # 配置中心服务id\n        service-id: config-server\neureka:\n  client:\n    service-url:\n      defaultZone: http://localhost:10086/eureka/,http://localhost:10087/eureka/\n</code></pre>\n</li>\n</ul>\n<p>user-service模块，修改后的结构:</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/7a9c2ce1-9ce2-48ff-9afe-ed77ae89adad.png\" alt=\"1573029766192\" /></p>\n<ul>\n<li>bootstrap.yml文件也是Spring Boot的默认配置文件，而且其加载的时间相比于application.yml更早。\n<ul>\n<li>application.yml和bootstrap.yml虽然都是Spring Boot的默认配置文件，但是定位却不相同。bootstrap.yml可以理解成系统级别的一些参数配置，这些参数一般是不会变动的。application.yml可以用来定义应用级别的参数，如果搭配 spring cloud config 使用，application.yml里面定义的文件可以实现动态替换。</li>\n<li>总结就是：bootstrap.yml文件相当于项目启动时的引导文件，内容相对固定。application.yml文件是微服务的一些常规配置参数，变化比较频繁。</li>\n</ul>\n</li>\n</ul>\n<h4>19.3 启动测试</h4>\n<p>启动注册中心、配置中心、用户服务user-service，如果启动没有报错其实已经使用上配置中心内容，可以到注册中心查看，也可以检验user-service的服务。</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/79fe099c-2477-4cb6-8bc1-c50a9391d75c.png\" alt=\"1573030303004\" /></p>\n<p>还有第二种配置：直接指定配置中心的地址url</p>\n<pre><code class=\"language-yaml\">\n#配置配置中心的地址\nspring:\n  cloud:\n    config:\n      # 与远程仓库中的配置文件的application保持一致\n      name: user\n      # 与远程仓库中的配置文件的profile保持一致\n      profile: test\n      # 与远程仓库中的版本保持一致\n      label: master\n	  #配置中心的uri\n      uri: http://localhost:12000\n\n</code></pre>\n<h2>20、Spring Cloud Bus：消息总线介绍</h2>\n<blockquote>\n<p>存在问题</p>\n</blockquote>\n<ul>\n<li>前面已经完成了将微服务中的配置文件集中存储在远程Git仓库，并且通过配置中心微服务从Git仓库拉取配置文件，当用户微服务启动时会连接配置中心获取配置信息从而启动用户微服务。</li>\n<li>如果我们更新Git仓库中的配置文件，那用户微服务是否可以及时接收到新的配置信息并更新呢？</li>\n</ul>\n<blockquote>\n<p>测试是否更新Git仓库中的配置文件</p>\n</blockquote>\n<ul>\n<li>\n<p>修改在码云上的user-dev.yml文件，添加一个属性test.name</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/5e098532-6926-4d6d-ad24-829cf4d96dfb.png\" alt=\"1573030643704\" /></p>\n</li>\n<li>\n<p>修改user-service工程中的UserController.java</p>\n<pre><code class=\"language-java\">package com.itheima.user.controller;\n\nimport com.itheima.user.pojo.User;\nimport com.itheima.user.service.UserService;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.beans.factory.annotation.Value;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\n@RequestMapping(&quot;/user&quot;)\npublic class UserController {\n\n    @Autowired\n    private UserService userService;\n\n    @Value(&quot;${test.name}&quot;)\n    private String name;\n\n    /** 根据主键id查询用户 */\n    @GetMapping(&quot;/{id}&quot;)\n    public User findOne(@PathVariable(&quot;id&quot;)Long id){\n        System.out.println(&quot;配置文件中的test.name = &quot; + name);\n        return userService.findOne(id);\n    }\n}\n</code></pre>\n</li>\n<li>\n<p>启动测试</p>\n<ul>\n<li>\n<p>依次启动Eureka、配置中心微服务、用户微服务、然后修改Git仓库中的配置信息，访问用户微服务，查看输出内容。<a href=\"http://localhost:9001/user/1\">http://localhost:9001/user/1</a></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/5e098532-6926-4d6d-ad24-829cf4d96dfb.png\" alt=\"1573030643704\" /></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/95fa574d-e2c8-414f-a21a-303454c317df.png\" alt=\"1573030681747\" /></p>\n</li>\n<li>\n<p>结论：通过查看用户微服务控制台的输出结果可以发现，我们对于Git仓库中配置文件的修改并没有及时更新到订单微服务，只有重启用户微服务才能生效。</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/0a9a2a52-5058-4180-ab6d-821f82717c7c.png\" alt=\"1573030759731\" /></p>\n</li>\n<li>\n<p>如果想在不重启微服务的情况下更新配置该如何实现呢? 可以使用Spring Cloud Bus来实现配置的自动更新。需要注意的是Spring Cloud Bus底层是基于RabbitMQ实现的，默认使用本地的消息队列服务，所以需要提前启动本地RabbitMQ服务。</p>\n</li>\n</ul>\n</li>\n</ul>\n<blockquote>\n<p>Spring Cloud Bus 消息总线介绍</p>\n</blockquote>\n<p>Spring Cloud Bus是用轻量的消息代理将分布式的节点连接起来,可以用于广播配置文件的更改或者服务的监控管理。一个关键的思想就是,消息总线可以为微服务做监控,也可以实现应用程序之间相互通信。Spring Cloud Bus可选的消息代理有RabbitMQ和Kfaka。</p>\n<p>使用了Bus之后:</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/265b18b8-641f-4913-a0c9-9be7eddd7b40.png\" alt=\"1573030993005\" /></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/85e7a44e-1d19-4d95-a682-c845be4cdd14.png\" alt=\"1573031047972\" /></p>\n<h2>21、Spring Cloud Bus：改造配置中心</h2>\n<ul>\n<li>\n<p>在config-server模块的pom.xml文件中加入Spring Cloud Bus相关依赖</p>\n<pre><code class=\"language-xml\">&lt;!-- 配置spring-cloud-bus --&gt;\n&lt;dependency&gt;\n    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\n    &lt;artifactId&gt;spring-cloud-bus&lt;/artifactId&gt;\n&lt;/dependency&gt;\n&lt;!-- 配置rabbit --&gt;\n&lt;dependency&gt;\n    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\n    &lt;artifactId&gt;spring-cloud-stream-binder-rabbit&lt;/artifactId&gt;\n&lt;/dependency&gt;\n</code></pre>\n</li>\n<li>\n<p>在config-server模块中修改application.yml文件</p>\n<pre><code class=\"language-properties\">server:\n  port: 12000\n\nspring:\n  application:\n    name: config-server\n  cloud:\n    config:\n      server:\n        git:\n          uri: https://gitee.com/cfei_net/config.git\n\n  # rabbitmq的配置信息；如下配置的rabbit都是默认值，其实可以完全不配置\n  rabbitmq:\n    host: localhost\n    port: 5672\n    username: guest\n    password: guest\n\neureka:\n  client:\n    service-url:\n      defaultZone: http://localhost:8761/eureka,http://localhost:8762/eureka\n\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        # 暴露触发消息总线的地址\n        include: bus-refresh\n</code></pre>\n</li>\n<li>\n<p>重启配置中心，查看RabbitMQ管理员界面    <img src=\"http://192.168.17.92:8600/upload/2021/12/24/c33077c8-eecf-44d2-ab2b-c006dce58a5f.png\" alt=\"1573031337485\" /></p>\n</li>\n</ul>\n<h2>22、Spring Cloud Bus：改造用户服务</h2>\n<ul>\n<li>\n<p>在user-service模块的pom.xml中加入Spring Cloud Bus相关依赖</p>\n<pre><code class=\"language-xml\">&lt;!-- 配置spring-cloud-bus --&gt;\n&lt;dependency&gt;\n    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\n    &lt;artifactId&gt;spring-cloud-bus&lt;/artifactId&gt;\n&lt;/dependency&gt;\n&lt;!-- 配置rabbit --&gt;\n&lt;dependency&gt;\n    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\n    &lt;artifactId&gt;spring-cloud-stream-binder-rabbit&lt;/artifactId&gt;\n&lt;/dependency&gt;\n&lt;!-- 配置actuator启动器 --&gt;\n&lt;dependency&gt;\n    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;\n    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;\n&lt;/dependency&gt;\n</code></pre>\n</li>\n<li>\n<p>修改user-service模块的bootstrap.yml</p>\n<pre><code class=\"language-properties\">spring:\n  cloud:\n    config:\n      # 与远程仓库中的配置文件的application保持一致\n      name: user\n      # 与远程仓库中的配置文件的profile保持一致\n      profile: dev\n      # 与远程仓库中的版本保持一致\n      label: master\n      discovery:\n        # 启用配置中心\n        enabled: true\n        # 配置中心服务id\n        service-id: config-server\n  # rabbitmq的配置信息；如下配置的rabbit都是默认值，其实可以完全不配置\n  rabbitmq:\n    host: localhost\n    port: 5672\n    username: guest\n    password: guest\n\n# 配置eureka\neureka:\n  client:\n    service-url: # EurekaServer地址,多个地址以\',\'隔开\n      defaultZone: http://localhost:10086/eureka,http://localhost:10087/eureka\n</code></pre>\n</li>\n<li>\n<p>改造user-service模块的UserController.java</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/9f51f98f-d386-48f0-9c20-986aa8b47252.png\" alt=\"1573031555949\" /></p>\n</li>\n<li>\n<p>启动测试</p>\n<p>前面已经完成了配置中心微服务和用户微服务的改造，下面来测试一下，当我们修改了Git仓库中的配置文件，用户微服务是否能够在不重启的情况下自动更新配置信息。</p>\n<h4>测试步骤</h4>\n<ul>\n<li>\n<p>第一步：依次启动Eureka、配置中心微服务、用户微服务</p>\n</li>\n<li>\n<p>第二步：访问用户微服务查看输出结果</p>\n</li>\n<li>\n<p>第三步：修改Git仓库中配置文件内容</p>\n</li>\n<li>\n<p>第四步：使用Postman或者RESTClient工具发送POST方式，请求访问地址</p>\n<p>​       <a href=\"http://127.0.0.1:12000/actuator/bus-refresh\">http://127.0.0.1:12000/actuator/bus-refresh</a></p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/efe6788e-d106-4488-8c57-3546b3de0e1a.png\" alt=\"1573031767362\" /></p>\n</li>\n<li>\n<p>第五步：访问用户微服务系统控制台查看输出结果</p>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/9d3c61ec-6b6e-4f2f-a890-1c5de1408d01.png\" alt=\"1573031837610\" /></p>\n</li>\n</ul>\n<h4>说明</h4>\n<ul>\n<li>Postman或者Insomnia是一个可以模拟浏览器发送各种请求（POST、GET、PUT、DELETE等）的工具。</li>\n<li>请求地址<a href=\"http://127.0.0.1:12000/actuator/bus-refresh中\">http://127.0.0.1:12000/actuator/bus-refresh中</a> /actuator是固定的,/bus-refresh对应的是配置中心config-server中的application.yml文件的配置项include的内容。</li>\n<li>请求<a href=\"http://127.0.0.1:12000/actuator/bus-refresh地址的作用是访问配置中心的消息总线服务，消息总线服务接收到请求后会向消息队列中发送消息，订单微服务会监听消息队列。当订单微服务接收到队列中的消息后，会重新从配置中心获取最新的配置信息。\">http://127.0.0.1:12000/actuator/bus-refresh地址的作用是访问配置中心的消息总线服务，消息总线服务接收到请求后会向消息队列中发送消息，订单微服务会监听消息队列。当订单微服务接收到队列中的消息后，会重新从配置中心获取最新的配置信息。</a></li>\n</ul>\n</li>\n</ul>\n<h2>23、Spring Cloud：技术体系综合应用概览</h2>\n<p><img src=\"http://192.168.17.92:8600/upload/2021/12/24/f21b8387-e95e-47a8-a70e-06080b25989f.png\" alt=\"1573031949671\" /></p>\n<h2>24、课程总结</h2>\n<ul>\n<li>\n<p>Eureka： 服务注册中心</p>\n</li>\n<li>\n<p>Ribbon： 负载均衡器</p>\n</li>\n<li>\n<p>Hystrix： 熔断器</p>\n</li>\n<li>\n<p>Feign： 服务调用(调用微服务)</p>\n</li>\n<li>\n<p>Spring Cloud Gateway： 服务网关(路由到微服务)</p>\n</li>\n<li>\n<p>Spring Cloud Config： 配置中心(配置文件统一管理)</p>\n</li>\n<li>\n<p>Spring Cloud Bus： 消息总线(服务之间数据同步)</p>\n</li>\n</ul>\n<p>今天的内容都是重点：多练</p>\n', '', NULL, 1, NULL, '1', '若依', '辉皇影院', '5', '科学类', 4, NULL, '1', 0, 1, 0, NULL, NULL, 0, NULL, 0, NULL, '1', '2021-12-24 14:40:03', '2021-12-24 16:09:43', '1', NULL, 0, 0, 0, 2);
 
 -- ----------------------------
 -- Table structure for blog_article_subject
 -- ----------------------------
 DROP TABLE IF EXISTS `blog_article_subject`;
 CREATE TABLE `blog_article_subject`  (
-  `article_suject_id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `article_suject_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `subject_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '专题id',
   `article_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '博客id',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
@@ -83,10 +89,10 @@ CREATE TABLE `blog_article_subject`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `blog_category`;
 CREATE TABLE `blog_category`  (
-  `category_id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '唯一id',
+  `category_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类内容',
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类简介',
-  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
+  `status` tinyint(3) UNSIGNED NOT NULL COMMENT '状态',
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
   `click_count` int(11) NULL DEFAULT 0 COMMENT '点击数',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
@@ -108,7 +114,7 @@ INSERT INTO `blog_category` VALUES (7, 'IT类', '', 1, 0, 0, 'admin', '2021-09-1
 -- ----------------------------
 DROP TABLE IF EXISTS `blog_subject`;
 CREATE TABLE `blog_subject`  (
-  `subject_id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `subject_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '专题名称',
   `summary` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '简介',
   `images` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '封面图片',
@@ -137,11 +143,11 @@ INSERT INTO `blog_subject` VALUES (3, '323223', '32323232', NULL, NULL, 0, 0, 0,
 -- ----------------------------
 DROP TABLE IF EXISTS `blog_tag`;
 CREATE TABLE `blog_tag`  (
-  `tag_id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tag_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `content` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标签内容',
   `click_count` int(11) NULL DEFAULT 0 COMMENT '标签点击数',
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
-  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
+  `status` tinyint(3) UNSIGNED NOT NULL COMMENT '状态',
   `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '更新时间',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人',
@@ -188,20 +194,7 @@ CREATE TABLE `gen_table`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`table_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成业务表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of gen_table
--- ----------------------------
-INSERT INTO `gen_table` VALUES (9, 'blog_article', '博客文章表', NULL, NULL, 'Article', 'crud', 'com.ruoyi.blog', 'blog', 'article', '博客文章', 'thh', '0', '/', '{\"parentMenuId\":\"2036\"}', 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34', NULL);
-INSERT INTO `gen_table` VALUES (11, 'blog_article_subject', '文章专题Item表', NULL, NULL, 'ArticleSubject', 'sub', 'com.ruoyi.blog', 'blog', 'articleSubject', '文章专题Item', 'thh', '0', '/', '{}', 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57', NULL);
-INSERT INTO `gen_table` VALUES (12, 'blog_sort', '博客分类表', NULL, NULL, 'Sort', 'crud', 'com.ruoyi.blog', 'blog', 'sort', '博客分类', 'thh', '0', '/', '{\"parentMenuId\":\"2036\"}', 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24', NULL);
-INSERT INTO `gen_table` VALUES (13, 'blog_subject', '文章专题表', 'blog_article_subject', 'subject_id', 'Subject', 'sub', 'com.ruoyi.blog', 'blog', 'subject', '文章专题', 'thh', '0', '/', '{\"parentMenuId\":\"2036\"}', 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38', NULL);
-INSERT INTO `gen_table` VALUES (14, 'blog_tag', '文章标签表', NULL, NULL, 'Tag', 'crud', 'com.ruoyi.blog', 'blog', 'tag', '文章标签', 'thh', '0', '/', '{\"parentMenuId\":\"2036\"}', 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49', NULL);
-INSERT INTO `gen_table` VALUES (15, 'wm_media_category', '电影分类', NULL, NULL, 'MediaCategory', 'crud', 'com.ruoyi.media', 'media', 'category', '电影分类', 'thh', '0', '/', '{\"parentMenuId\":\"2000\"}', 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52', '电影分类');
-INSERT INTO `gen_table` VALUES (16, 'wm_media_tag', '电影标签表', NULL, NULL, 'MediaTag', 'crud', 'com.ruoyi.media', 'media', 'tag', '电影标签', 'thh', '0', '/', '{\"parentMenuId\":\"2000\"}', 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17', '电影标签');
-INSERT INTO `gen_table` VALUES (24, 'website_collect', '收藏表', NULL, NULL, 'Collect', 'crud', 'com.ruoyi.website', 'website', 'collect', '收藏', 'thh', '0', '/', '{\"parentMenuId\":\"2026\"}', 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:28', NULL);
-INSERT INTO `gen_table` VALUES (25, 'website_collect_folder', '收藏夹表', NULL, NULL, 'CollectFolder', 'crud', 'com.ruoyi.website', 'website', 'collectFolder', '收藏夹', 'thh', '0', '/', '{\"parentMenuId\":\"2026\"}', 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53', NULL);
+) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成业务表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for gen_table_column
@@ -231,139 +224,20 @@ CREATE TABLE `gen_table_column`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`column_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 379 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成业务表字段' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of gen_table_column
--- ----------------------------
-INSERT INTO `gen_table_column` VALUES (106, '9', 'article_id', '主键', 'bigint(32)', 'Long', 'articleId', '1', '1', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (107, '9', 'title', '博客标题', 'varchar(200)', 'String', 'title', '0', '0', '1', '1', '1', '1', '1', 'LIKE', 'input', '', 2, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (108, '9', 'summary', '文章简介', 'varchar(200)', 'String', 'summary', '0', '0', NULL, '1', '1', '1', '1', 'LIKE', 'input', '', 3, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (109, '9', 'content', '文章内容', 'longtext', 'String', 'content', '0', '0', NULL, '1', '1', '1', '1', 'LIKE', 'editor', '', 4, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (110, '9', 'tag_id', '标签', 'varchar(255)', 'String', 'tagId', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'select', 'movie_label', 5, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (111, '9', 'click_count', '博客点击数', 'int(11)', 'Long', 'clickCount', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 6, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (112, '9', 'collect_count', '博客收藏数', 'int(11)', 'Long', 'collectCount', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 7, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (113, '9', 'images', '标题图片', 'varchar(255)', 'String', 'images', '0', '0', NULL, '1', '1', '1', NULL, 'EQ', 'imageUpload', '', 8, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (114, '9', 'status', '状态', 'tinyint(1) unsigned', 'Integer', 'status', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'radio', 'article_publish_status', 9, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (115, '9', 'create_time', '创建时间', 'timestamp', 'Date', 'createTime', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 10, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (116, '9', 'create_by', '创建人', 'varchar(64)', 'String', 'createBy', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 11, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (117, '9', 'update_time', '更新时间', 'timestamp', 'Date', 'updateTime', '0', '0', '1', NULL, NULL, '1', NULL, 'EQ', 'datetime', '', 12, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (118, '9', 'update_by', '更新人', 'varchar(64)', 'String', 'updateBy', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 13, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (119, '9', 'admin_user_id', '管理员', 'varchar(32)', 'String', 'adminUserId', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 14, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (120, '9', 'is_original', '是否原创', 'varchar(1)', 'String', 'isOriginal', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'radio', 'article_original', 15, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (121, '9', 'author', '作者', 'varchar(255)', 'String', 'author', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 16, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (122, '9', 'articles_part', '文章出处', 'varchar(255)', 'String', 'articlesPart', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 17, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (123, '9', 'sort_id', '博客分类', 'varchar(32)', 'String', 'sortId', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'select', '', 18, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (124, '9', 'level', '推荐等级', 'tinyint(1)', 'Integer', 'level', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'select', 'article_level', 19, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (125, '9', 'del_flag', '删除标志', 'char(1)', 'String', 'delFlag', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 20, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (126, '9', 'is_publish', '是否发布', 'varchar(1)', 'String', 'isPublish', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'radio', 'article_status', 21, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (127, '9', 'sort', '排序字段', 'int(11)', 'Integer', 'sort', '0', '0', '1', '1', '1', '1', NULL, 'EQ', 'input', '', 22, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (128, '9', 'open_comment', '是否开启评论', 'tinyint(1)', 'Integer', 'openComment', '0', '0', '1', '1', '1', '1', NULL, 'EQ', 'radio', 'common_switch', 23, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (129, '9', 'type', '类型', 'tinyint(1)', 'Integer', 'type', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'select', 'article_type', 24, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (130, '9', 'outside_link', '外链', 'varchar(1024)', 'String', 'outsideLink', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'textarea', '', 25, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (131, '9', 'user_id', '投稿用户', 'varchar(32)', 'String', 'userId', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 26, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (132, '9', 'article_source', '文章来源', 'tinyint(1)', 'Integer', 'articleSource', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'input', '', 27, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (133, '9', 'qrcode_path', '文章专属二维码地址', 'varchar(255)', 'String', 'qrcodePath', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 28, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (134, '9', 'open_password', '是否开启密钥模式', 'tinyint(1)', 'Integer', 'openPassword', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'radio', 'common_switch', 29, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (135, '9', 'password', '文章私密访问时的密钥', 'varchar(255)', 'String', 'password', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 30, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (136, '9', 'remark', '备注', 'varchar(255)', 'String', 'remark', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 31, 'admin', '2021-08-27 20:36:17', '', '2021-08-28 13:21:34');
-INSERT INTO `gen_table_column` VALUES (147, '11', 'article_suject_id', '主键', 'bigint(32)', 'Long', 'articleSujectId', '1', '1', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57');
-INSERT INTO `gen_table_column` VALUES (148, '11', 'subject_id', '专题id', 'varchar(32)', 'String', 'subjectId', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'input', '', 2, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57');
-INSERT INTO `gen_table_column` VALUES (149, '11', 'article_id', '博客id', 'varchar(32)', 'String', 'articleId', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'input', '', 3, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57');
-INSERT INTO `gen_table_column` VALUES (150, '11', 'status', '状态', 'tinyint(1)', 'Integer', 'status', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'radio', '', 4, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57');
-INSERT INTO `gen_table_column` VALUES (151, '11', 'sort', '排序字段', 'int(11)', 'Long', 'sort', '0', '0', '1', '1', '1', '1', NULL, 'EQ', 'input', '', 5, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57');
-INSERT INTO `gen_table_column` VALUES (152, '11', 'create_time', '创建时间', 'timestamp', 'Date', 'createTime', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 6, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57');
-INSERT INTO `gen_table_column` VALUES (153, '11', 'update_time', '更新时间', 'timestamp', 'Date', 'updateTime', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 7, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57');
-INSERT INTO `gen_table_column` VALUES (154, '11', 'create_by', '创建人', 'varchar(64)', 'String', 'createBy', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 8, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57');
-INSERT INTO `gen_table_column` VALUES (155, '11', 'update_by', '更新人', 'varchar(64)', 'String', 'updateBy', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 9, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57');
-INSERT INTO `gen_table_column` VALUES (156, '11', 'remark', 'remark', 'varchar(255)', 'String', 'remark', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 10, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:18:57');
-INSERT INTO `gen_table_column` VALUES (157, '12', 'sort_id', '唯一id', 'bigint(32)', 'Long', 'sortId', '1', '1', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (158, '12', 'name', '分类内容', 'varchar(255)', 'String', 'name', '0', '0', NULL, '1', '1', '1', '1', 'LIKE', 'input', '', 2, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (159, '12', 'content', '分类简介', 'varchar(255)', 'String', 'content', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'editor', '', 3, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (160, '12', 'status', '状态', 'tinyint(1) unsigned', 'Integer', 'status', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'radio', '', 4, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (161, '12', 'sort', '排序字段，越大越靠前', 'int(11)', 'Long', 'sort', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'input', '', 5, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (162, '12', 'click_count', '点击数', 'int(11)', 'Long', 'clickCount', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'input', '', 6, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (163, '12', 'create_by', '创建人', 'varchar(64)', 'String', 'createBy', '0', '0', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 7, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (164, '12', 'create_time', '创建时间', 'timestamp', 'Date', 'createTime', '0', '0', '1', '1', NULL, NULL, NULL, 'EQ', 'datetime', '', 8, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (165, '12', 'update_by', '更新人', 'varchar(64)', 'String', 'updateBy', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 9, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (166, '12', 'update_time', '更新时间', 'timestamp', 'Date', 'updateTime', '0', '0', '1', '1', '1', NULL, NULL, 'EQ', 'datetime', '', 10, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (167, '12', 'remark', '备注', 'varchar(255)', 'String', 'remark', '0', '0', NULL, '1', '1', '1', NULL, 'EQ', 'input', '', 11, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:24');
-INSERT INTO `gen_table_column` VALUES (168, '13', 'subject_id', '主键', 'bigint(32)', 'Long', 'subjectId', '1', '1', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (169, '13', 'name', '专题名称', 'varchar(255)', 'String', 'name', '0', '0', NULL, '1', '1', '1', '1', 'LIKE', 'input', '', 2, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (170, '13', 'summary', '简介', 'varchar(255)', 'String', 'summary', '0', '0', NULL, '1', '1', '1', '1', 'LIKE', 'input', '', 3, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (171, '13', 'images', '封面图片', 'varchar(32)', 'String', 'images', '0', '0', NULL, '1', '1', '1', NULL, 'EQ', 'imageUpload', '', 4, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (172, '13', 'icon', '图标', 'varchar(255)', 'String', 'icon', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 5, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (173, '13', 'click_count', '专题点击数', 'int(11)', 'Long', 'clickCount', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'input', '', 6, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (174, '13', 'collect_count', '专题收藏数', 'int(11)', 'Long', 'collectCount', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'input', '', 7, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (175, '13', 'sort', '排序字段', 'int(11)', 'Long', 'sort', '0', '0', '1', '1', '1', '1', NULL, 'EQ', 'input', '', 8, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (176, '13', 'status', '状态', 'tinyint(1)', 'Integer', 'status', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'radio', 'article_status', 9, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (177, '13', 'create_time', '创建时间', 'timestamp', 'Date', 'createTime', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 10, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (178, '13', 'update_time', '更新时间', 'timestamp', 'Date', 'updateTime', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 11, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (179, '13', 'create_by', '创建人', 'varchar(64)', 'String', 'createBy', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'input', '', 12, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (180, '13', 'update_by', '更新人', 'varchar(0)', 'String', 'updateBy', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 13, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (181, '13', 'remark', '备注', 'varchar(255)', 'String', 'remark', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 14, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:38');
-INSERT INTO `gen_table_column` VALUES (182, '14', 'tag_id', '主键', 'bigint(32)', 'Long', 'tagId', '1', '1', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49');
-INSERT INTO `gen_table_column` VALUES (183, '14', 'content', '标签内容', 'varchar(1000)', 'String', 'content', '0', '0', NULL, '1', '1', '1', '1', 'LIKE', 'editor', '', 2, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49');
-INSERT INTO `gen_table_column` VALUES (184, '14', 'status', '状态', 'tinyint(1) unsigned', 'Integer', 'status', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'radio', 'article_status', 3, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49');
-INSERT INTO `gen_table_column` VALUES (185, '14', 'click_count', '标签点击数', 'int(11)', 'Long', 'clickCount', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 4, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49');
-INSERT INTO `gen_table_column` VALUES (186, '14', 'sort', '排序字段，越大越靠前', 'int(11)', 'Long', 'sort', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'input', '', 5, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49');
-INSERT INTO `gen_table_column` VALUES (187, '14', 'create_time', '创建时间', 'timestamp', 'Date', 'createTime', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 6, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49');
-INSERT INTO `gen_table_column` VALUES (188, '14', 'update_time', '更新时间', 'timestamp', 'Date', 'updateTime', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 7, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49');
-INSERT INTO `gen_table_column` VALUES (189, '14', 'create_by', '创建人', 'varchar(64)', 'String', 'createBy', '0', '0', '1', NULL, NULL, NULL, NULL, 'EQ', 'input', '', 8, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49');
-INSERT INTO `gen_table_column` VALUES (190, '14', 'update_by', '更新人', 'datetime', 'Date', 'updateBy', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 9, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49');
-INSERT INTO `gen_table_column` VALUES (191, '14', 'remark', '备注', 'varchar(255)', 'String', 'remark', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 10, 'admin', '2021-08-28 13:05:41', '', '2021-08-28 13:22:49');
-INSERT INTO `gen_table_column` VALUES (192, '15', 'category_id', '主键', 'int(32)', 'Long', 'categoryId', '1', '1', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52');
-INSERT INTO `gen_table_column` VALUES (193, '15', 'name', '分类名称', 'varchar(255)', 'String', 'name', '0', '0', '1', '1', '1', '1', '1', 'LIKE', 'input', '', 2, 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52');
-INSERT INTO `gen_table_column` VALUES (194, '15', 'content', '分类简介', 'varchar(255)', 'String', 'content', '0', '0', '1', '1', '1', '1', '1', 'LIKE', 'textarea', '', 3, 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52');
-INSERT INTO `gen_table_column` VALUES (195, '15', 'status', '状态', 'tinyint(1) unsigned', 'Integer', 'status', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'radio', 'common_switch', 4, 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52');
-INSERT INTO `gen_table_column` VALUES (196, '15', 'sort', '排序', 'int(11)', 'Long', 'sort', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'input', '', 5, 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52');
-INSERT INTO `gen_table_column` VALUES (197, '15', 'create_by', '创建人', 'varchar(64)', 'String', 'createBy', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 6, 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52');
-INSERT INTO `gen_table_column` VALUES (198, '15', 'create_time', '创建时间', 'timestamp', 'Date', 'createTime', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 7, 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52');
-INSERT INTO `gen_table_column` VALUES (199, '15', 'update_by', '更新人', 'varchar(64)', 'String', 'updateBy', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 8, 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52');
-INSERT INTO `gen_table_column` VALUES (200, '15', 'update_time', '更新时间', 'timestamp', 'Date', 'updateTime', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 9, 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52');
-INSERT INTO `gen_table_column` VALUES (201, '15', 'remark', '备注', 'varchar(255)', 'String', 'remark', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'textarea', '', 10, 'admin', '2021-09-11 14:30:15', '', '2021-09-11 16:22:52');
-INSERT INTO `gen_table_column` VALUES (202, '16', 'tag_id', '主键', 'bigint(32)', 'Long', 'tagId', '1', '1', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17');
-INSERT INTO `gen_table_column` VALUES (203, '16', 'content', '标签内容', 'varchar(1000)', 'String', 'content', '0', '0', '1', '1', '1', '1', '1', 'LIKE', 'textarea', '', 2, 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17');
-INSERT INTO `gen_table_column` VALUES (204, '16', 'status', '状态', 'tinyint(1) unsigned', 'Integer', 'status', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'radio', 'common_switch', 3, 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17');
-INSERT INTO `gen_table_column` VALUES (205, '16', 'click_count', '标签点击数', 'int(11)', 'Long', 'clickCount', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 4, 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17');
-INSERT INTO `gen_table_column` VALUES (206, '16', 'sort', '排序', 'int(11)', 'Long', 'sort', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'input', '', 5, 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17');
-INSERT INTO `gen_table_column` VALUES (207, '16', 'create_time', '创建时间', 'timestamp', 'Date', 'createTime', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 6, 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17');
-INSERT INTO `gen_table_column` VALUES (208, '16', 'update_time', '更新时间', 'timestamp', 'Date', 'updateTime', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 7, 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17');
-INSERT INTO `gen_table_column` VALUES (209, '16', 'create_by', '创建人', 'varchar(64)', 'String', 'createBy', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 8, 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17');
-INSERT INTO `gen_table_column` VALUES (210, '16', 'update_by', '更新人', 'varchar(64)', 'String', 'updateBy', '0', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 9, 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17');
-INSERT INTO `gen_table_column` VALUES (211, '16', 'remark', '备注', 'varchar(255)', 'String', 'remark', '0', '0', NULL, '1', '1', '1', NULL, 'EQ', 'textarea', '', 10, 'admin', '2021-09-11 14:35:36', '', '2021-09-11 16:23:17');
-INSERT INTO `gen_table_column` VALUES (360, '24', 'collect_id', '主键', 'bigint(20)', 'Long', 'collectId', '1', '1', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:28');
-INSERT INTO `gen_table_column` VALUES (361, '24', 'user_id', '用户', 'varchar(32)', 'String', 'userId', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'input', '', 2, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:28');
-INSERT INTO `gen_table_column` VALUES (362, '24', 'target_id', '目标ID', 'varchar(32)', 'String', 'targetId', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'input', '', 3, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:28');
-INSERT INTO `gen_table_column` VALUES (363, '24', 'status', '状态', 'tinyint(3) unsigned', 'Integer', 'status', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'select', 'common_switch', 4, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:28');
-INSERT INTO `gen_table_column` VALUES (364, '24', 'create_time', '创建时间', 'timestamp', 'Date', 'createTime', '0', '0', NULL, '1', NULL, NULL, NULL, 'EQ', 'datetime', '', 5, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:28');
-INSERT INTO `gen_table_column` VALUES (365, '24', 'update_time', '更新时间', 'timestamp', 'Date', 'updateTime', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'datetime', '', 6, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:28');
-INSERT INTO `gen_table_column` VALUES (366, '24', 'table_name', '表名称', 'varchar(20)', 'String', 'tableName', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'select', 'website_table_name', 7, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:28');
-INSERT INTO `gen_table_column` VALUES (367, '24', 'create_by', '创建人', 'varchar(32)', 'String', 'createBy', '0', '0', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 8, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:28');
-INSERT INTO `gen_table_column` VALUES (368, '24', 'update_by', '更新人', 'varchar(32)', 'String', 'updateBy', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 9, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:28');
-INSERT INTO `gen_table_column` VALUES (369, '25', 'collect_folder_id', '主键', 'bigint(20)', 'Long', 'collectFolderId', '1', '1', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53');
-INSERT INTO `gen_table_column` VALUES (370, '25', 'user_id', '用户的id', 'varchar(32)', 'String', 'userId', '0', '0', '1', '1', '1', NULL, NULL, 'EQ', 'input', '', 2, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53');
-INSERT INTO `gen_table_column` VALUES (371, '25', 'table_name', '表名称', 'varchar(20)', 'String', 'tableName', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'select', 'website_table_name', 3, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53');
-INSERT INTO `gen_table_column` VALUES (372, '25', 'name', '收藏夹名称', 'varchar(32)', 'String', 'name', '0', '0', '1', '1', '1', '1', '1', 'LIKE', 'input', '', 4, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53');
-INSERT INTO `gen_table_column` VALUES (373, '25', 'status', '状态', 'tinyint(3) unsigned', 'Integer', 'status', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'select', 'common_switch', 5, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53');
-INSERT INTO `gen_table_column` VALUES (374, '25', 'create_time', '创建时间', 'timestamp', 'Date', 'createTime', '0', '0', NULL, '1', NULL, NULL, NULL, 'EQ', 'datetime', '', 6, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53');
-INSERT INTO `gen_table_column` VALUES (375, '25', 'update_time', '更新时间', 'timestamp', 'Date', 'updateTime', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'datetime', '', 7, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53');
-INSERT INTO `gen_table_column` VALUES (376, '25', 'create_by', '创建人', 'varchar(32)', 'String', 'createBy', '0', '0', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 8, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53');
-INSERT INTO `gen_table_column` VALUES (377, '25', 'update_by', '更新人', 'varchar(32)', 'String', 'updateBy', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 9, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53');
-INSERT INTO `gen_table_column` VALUES (378, '25', 'remark', '备注', 'varchar(255)', 'String', 'remark', '0', '0', NULL, '1', '1', '1', NULL, 'EQ', 'input', '', 10, 'admin', '2021-10-05 09:27:42', '', '2021-10-05 10:11:53');
+) ENGINE = InnoDB AUTO_INCREMENT = 648 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成业务表字段' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for qa_question
 -- ----------------------------
 DROP TABLE IF EXISTS `qa_question`;
 CREATE TABLE `qa_question`  (
-  `question_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `question_id` bigint(20) UNSIGNED NOT NULL COMMENT '主键',
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '标题',
   `content` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '内容',
   `images` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '封面',
-  `category_id` int(10) NULL DEFAULT NULL COMMENT '分类id',
+  `category_id` int(11) NULL DEFAULT NULL COMMENT '分类id',
   `category_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分类名称',
-  `sort` int(10) NULL DEFAULT NULL COMMENT '排序',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
   `user_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '用户ID',
   `qq` varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'QQ（登录用户）',
   `nickname` varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '昵称（登录用户）',
@@ -379,9 +253,9 @@ CREATE TABLE `qa_question`  (
   `os_short_name` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '系统的简称',
   `browser` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '浏览器类型',
   `browser_short_name` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '浏览器的简称',
-  `support_count` bigint(12) UNSIGNED NULL DEFAULT NULL COMMENT '支持（赞）',
-  `click_count` bigint(12) NULL DEFAULT NULL COMMENT '点击数',
-  `oppose_count` bigint(12) UNSIGNED NULL DEFAULT NULL COMMENT '反对（踩）',
+  `support_count` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '支持（赞）',
+  `click_count` bigint(20) NULL DEFAULT NULL COMMENT '点击数',
+  `oppose_count` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '反对（踩）',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
   `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '创建人',
@@ -389,7 +263,7 @@ CREATE TABLE `qa_question`  (
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注（审核不通过时添加）',
   `score` double(10, 2) NULL DEFAULT NULL COMMENT '分数',
   PRIMARY KEY (`question_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 168 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '问答表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '问答表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of qa_question
@@ -401,10 +275,10 @@ INSERT INTO `qa_question` VALUES (167, '问答标题号', '<p class=\"ql-align-r
 -- ----------------------------
 DROP TABLE IF EXISTS `qa_question_category`;
 CREATE TABLE `qa_question_category`  (
-  `category_id` int(10) NOT NULL AUTO_INCREMENT COMMENT '唯一id',
+  `category_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类内容',
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类简介',
-  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
+  `status` tinyint(3) UNSIGNED NOT NULL COMMENT '状态',
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
   `click_count` int(11) NULL DEFAULT 0 COMMENT '点击数',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
@@ -413,7 +287,7 @@ CREATE TABLE `qa_question_category`  (
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`category_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '问答分类表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '问答分类表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for qiwen_file
@@ -421,32 +295,14 @@ CREATE TABLE `qa_question_category`  (
 DROP TABLE IF EXISTS `qiwen_file`;
 CREATE TABLE `qiwen_file`  (
   `file_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `file_size` bigint(10) NULL DEFAULT NULL,
+  `file_size` bigint(20) NULL DEFAULT NULL,
   `file_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `identifier` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `point_count` int(11) NULL DEFAULT NULL,
-  `storage_type` int(1) NULL DEFAULT NULL,
+  `storage_type` int(11) NULL DEFAULT NULL,
   `time_stamp_name` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`file_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 171 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of qiwen_file
--- ----------------------------
-INSERT INTO `qiwen_file` VALUES (16, 8108, '\\upload\\20210607\\Tank2019V2-master\\src\\audio\\explode.wav', NULL, 1, 0, 'explode');
-INSERT INTO `qiwen_file` VALUES (19, 488714, '\\upload\\20210607\\Tank2019V2-master\\src\\audio\\tank_fire.wav', NULL, 1, 0, 'tank_fire');
-INSERT INTO `qiwen_file` VALUES (22, 12358946, '\\upload\\20210607\\Tank2019V2-master\\src\\audio\\war1.wav', NULL, 1, 0, 'war1');
-INSERT INTO `qiwen_file` VALUES (58, 32334, '\\upload\\20210607\\Tank2019V2-master\\src\\audio\\tank_move.wav', NULL, 1, 0, 'tank_move');
-INSERT INTO `qiwen_file` VALUES (137, 3820291, '/upload/20210613/5d838a0862332ec8864009cac186877e.jpg', '5d838a0862332ec8864009cac186877e', 4, 0, '5d838a0862332ec8864009cac186877e');
-INSERT INTO `qiwen_file` VALUES (139, 4622503, '/upload/20210620/305dba791f107deb10a56490da7c200f.png', '305dba791f107deb10a56490da7c200f', 1, 0, '305dba791f107deb10a56490da7c200f');
-INSERT INTO `qiwen_file` VALUES (152, 2401524, '/upload/20210620/dc099106d3ad3bff20ddc13ce390671a.jpg', 'dc099106d3ad3bff20ddc13ce390671a', 1, 0, 'dc099106d3ad3bff20ddc13ce390671a');
-INSERT INTO `qiwen_file` VALUES (160, 52426123, '/upload/20210818/dd5a0c3c499d8dab4cebc51842e33581.mp4', 'dd5a0c3c499d8dab4cebc51842e33581', 1, 0, 'dd5a0c3c499d8dab4cebc51842e33581');
-INSERT INTO `qiwen_file` VALUES (161, 54554850, '/upload/20210818/9e11d41b2d74ce6e4e18da7769a00e57.mp4', '9e11d41b2d74ce6e4e18da7769a00e57', 1, 0, '9e11d41b2d74ce6e4e18da7769a00e57');
-INSERT INTO `qiwen_file` VALUES (166, 2588463, '/upload/20210926/60f6e7c3345ef9c6e0d3db45c60263c7.jpg', '60f6e7c3345ef9c6e0d3db45c60263c7', 1, 0, '60f6e7c3345ef9c6e0d3db45c60263c7');
-INSERT INTO `qiwen_file` VALUES (167, 2788104, '/upload/20210926/9330cfa5a4b909571612a326029ff1a0.jpg', '9330cfa5a4b909571612a326029ff1a0', 1, 0, '9330cfa5a4b909571612a326029ff1a0');
-INSERT INTO `qiwen_file` VALUES (168, 148267788, '/upload/20210926/2fbb52a8eba53c73a47338d3abfd773a.mp4', '2fbb52a8eba53c73a47338d3abfd773a', 1, 0, '2fbb52a8eba53c73a47338d3abfd773a');
-INSERT INTO `qiwen_file` VALUES (169, 2579671, '/upload/20210926/068c3ebb144871b689bbc8b7faa4ec14.jpg', '068c3ebb144871b689bbc8b7faa4ec14', 1, 0, '068c3ebb144871b689bbc8b7faa4ec14');
-INSERT INTO `qiwen_file` VALUES (170, 41229225, '/upload/20210926/6280d774c3e9310d650d9c61541905f0.mp4', '6280d774c3e9310d650d9c61541905f0', 1, 0, '6280d774c3e9310d650d9c61541905f0');
+) ENGINE = InnoDB AUTO_INCREMENT = 172 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for qiwen_recovery_file
@@ -458,15 +314,7 @@ CREATE TABLE `qiwen_recovery_file`  (
   `delete_time` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `user_file_id` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`recovery_file_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 248 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of qiwen_recovery_file
--- ----------------------------
-INSERT INTO `qiwen_recovery_file` VALUES (244, '1863c634-625b-4707-a946-9ea6533dd860', '2021-08-18 19:50:44', 262);
-INSERT INTO `qiwen_recovery_file` VALUES (245, '50c1c323-37d9-40d7-aac3-5889ead9a47d', '2021-09-26 20:56:55', 271);
-INSERT INTO `qiwen_recovery_file` VALUES (246, 'd5b50a44-331a-402a-9e41-471260465486', '2021-09-26 20:56:55', 270);
-INSERT INTO `qiwen_recovery_file` VALUES (247, '0d5a9b5c-414a-4649-b1d3-ddd60fdf7625', '2021-09-26 20:56:55', 268);
+) ENGINE = InnoDB AUTO_INCREMENT = 252 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for qiwen_share
@@ -482,7 +330,7 @@ CREATE TABLE `qiwen_share`  (
   `share_type` int(11) NULL DEFAULT NULL,
   `user_id` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`share_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of qiwen_share
@@ -499,6 +347,7 @@ INSERT INTO `qiwen_share` VALUES (9, '2021-07-15 00:00:00', NULL, '8d2cfd5b75ac4
 INSERT INTO `qiwen_share` VALUES (10, '2021-09-27 00:00:00', NULL, 'fa878707765c4f169542dcd215db1bcb', 0, '2021-09-26 19:51:51', 0, 1);
 INSERT INTO `qiwen_share` VALUES (11, '2021-09-27 20:03:25', NULL, 'd1b67b8e5a474bb287ab2165734a00f3', 0, '2021-09-26 20:03:26', 0, 1);
 INSERT INTO `qiwen_share` VALUES (12, '2021-10-14 00:00:00', '024177', 'a04e46efc6604a71bfc7313610799d50', 0, '2021-10-03 16:06:53', 1, 1);
+INSERT INTO `qiwen_share` VALUES (13, '2021-12-23 00:00:00', NULL, '84e7b7a0cbe24b249fd87f8b0beaf44c', 0, '2021-12-04 12:05:10', 0, 1);
 
 -- ----------------------------
 -- Table structure for qiwen_share_file
@@ -510,89 +359,7 @@ CREATE TABLE `qiwen_share_file`  (
   `share_file_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `user_file_id` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`share_file_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 79 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of qiwen_share_file
--- ----------------------------
-INSERT INTO `qiwen_share_file` VALUES (1, '2e5fc16b476e4e3099ba201167e3cd11', '/', 1);
-INSERT INTO `qiwen_share_file` VALUES (2, '5c61e23a92a044f989498f2d147e7391', '/', 147);
-INSERT INTO `qiwen_share_file` VALUES (3, '165e4744958a4b5097ac61190ea45e82', '/', 1);
-INSERT INTO `qiwen_share_file` VALUES (4, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/', 1);
-INSERT INTO `qiwen_share_file` VALUES (5, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/com/mashibing/tank/', 3);
-INSERT INTO `qiwen_share_file` VALUES (6, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 4);
-INSERT INTO `qiwen_share_file` VALUES (7, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 5);
-INSERT INTO `qiwen_share_file` VALUES (8, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/', 8);
-INSERT INTO `qiwen_share_file` VALUES (9, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 9);
-INSERT INTO `qiwen_share_file` VALUES (10, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/test/com/mashibing/', 10);
-INSERT INTO `qiwen_share_file` VALUES (11, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/test/com/mashibing/tank/', 13);
-INSERT INTO `qiwen_share_file` VALUES (12, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/test/com/mashibing/', 14);
-INSERT INTO `qiwen_share_file` VALUES (13, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 15);
-INSERT INTO `qiwen_share_file` VALUES (14, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/test/com/mashibing/', 19);
-INSERT INTO `qiwen_share_file` VALUES (15, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/', 22);
-INSERT INTO `qiwen_share_file` VALUES (16, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/test/com/mashibing/', 23);
-INSERT INTO `qiwen_share_file` VALUES (17, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/audio/', 24);
-INSERT INTO `qiwen_share_file` VALUES (18, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/', 25);
-INSERT INTO `qiwen_share_file` VALUES (19, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/audio/', 26);
-INSERT INTO `qiwen_share_file` VALUES (20, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/audio/', 27);
-INSERT INTO `qiwen_share_file` VALUES (21, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 37);
-INSERT INTO `qiwen_share_file` VALUES (22, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 41);
-INSERT INTO `qiwen_share_file` VALUES (23, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 43);
-INSERT INTO `qiwen_share_file` VALUES (24, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/com/mashibing/tank/', 45);
-INSERT INTO `qiwen_share_file` VALUES (25, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 46);
-INSERT INTO `qiwen_share_file` VALUES (26, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 50);
-INSERT INTO `qiwen_share_file` VALUES (27, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 52);
-INSERT INTO `qiwen_share_file` VALUES (28, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/', 53);
-INSERT INTO `qiwen_share_file` VALUES (29, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/test/', 56);
-INSERT INTO `qiwen_share_file` VALUES (30, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 57);
-INSERT INTO `qiwen_share_file` VALUES (31, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 58);
-INSERT INTO `qiwen_share_file` VALUES (32, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 60);
-INSERT INTO `qiwen_share_file` VALUES (33, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 63);
-INSERT INTO `qiwen_share_file` VALUES (34, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/com/mashibing/tank/', 68);
-INSERT INTO `qiwen_share_file` VALUES (35, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 69);
-INSERT INTO `qiwen_share_file` VALUES (36, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/audio/', 70);
-INSERT INTO `qiwen_share_file` VALUES (37, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 71);
-INSERT INTO `qiwen_share_file` VALUES (38, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 74);
-INSERT INTO `qiwen_share_file` VALUES (39, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 75);
-INSERT INTO `qiwen_share_file` VALUES (40, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/test/com/mashibing/net/', 80);
-INSERT INTO `qiwen_share_file` VALUES (41, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 82);
-INSERT INTO `qiwen_share_file` VALUES (42, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/', 86);
-INSERT INTO `qiwen_share_file` VALUES (43, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 87);
-INSERT INTO `qiwen_share_file` VALUES (44, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 89);
-INSERT INTO `qiwen_share_file` VALUES (45, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 90);
-INSERT INTO `qiwen_share_file` VALUES (46, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 92);
-INSERT INTO `qiwen_share_file` VALUES (47, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 94);
-INSERT INTO `qiwen_share_file` VALUES (48, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/test/com/mashibing/net/', 96);
-INSERT INTO `qiwen_share_file` VALUES (49, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/', 98);
-INSERT INTO `qiwen_share_file` VALUES (50, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 100);
-INSERT INTO `qiwen_share_file` VALUES (51, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 102);
-INSERT INTO `qiwen_share_file` VALUES (52, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/com/mashibing/', 103);
-INSERT INTO `qiwen_share_file` VALUES (53, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/.idea/', 104);
-INSERT INTO `qiwen_share_file` VALUES (54, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 105);
-INSERT INTO `qiwen_share_file` VALUES (55, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/test/com/mashibing/', 107);
-INSERT INTO `qiwen_share_file` VALUES (56, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 111);
-INSERT INTO `qiwen_share_file` VALUES (57, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 114);
-INSERT INTO `qiwen_share_file` VALUES (58, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 119);
-INSERT INTO `qiwen_share_file` VALUES (59, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 120);
-INSERT INTO `qiwen_share_file` VALUES (60, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/com/', 121);
-INSERT INTO `qiwen_share_file` VALUES (61, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 122);
-INSERT INTO `qiwen_share_file` VALUES (62, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 125);
-INSERT INTO `qiwen_share_file` VALUES (63, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 126);
-INSERT INTO `qiwen_share_file` VALUES (64, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/test/com/', 128);
-INSERT INTO `qiwen_share_file` VALUES (65, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 132);
-INSERT INTO `qiwen_share_file` VALUES (66, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 133);
-INSERT INTO `qiwen_share_file` VALUES (67, '15bb157d5457491e9067bc011c961484', '/Tank2019V2-master/src/images/', 136);
-INSERT INTO `qiwen_share_file` VALUES (68, '15bb157d5457491e9067bc011c961484', '/', 116);
-INSERT INTO `qiwen_share_file` VALUES (69, 'ae338177097b41d2bfae9d86fb5a7f96', '/', 165);
-INSERT INTO `qiwen_share_file` VALUES (70, '2b82e4cbfb8447c6831d0dc45940afa0', '/3423232/', 231);
-INSERT INTO `qiwen_share_file` VALUES (71, '2b82e4cbfb8447c6831d0dc45940afa0', '/', 140);
-INSERT INTO `qiwen_share_file` VALUES (72, '05de6f6b1f4d4f79b04c23883ff99df6', '/', 165);
-INSERT INTO `qiwen_share_file` VALUES (73, '873bcb98f0414590ba8b7ecf30d69d8a', '/', 243);
-INSERT INTO `qiwen_share_file` VALUES (74, '8d2cfd5b75ac44a4b233efd63c7c9ec3', '/3423232/', 243);
-INSERT INTO `qiwen_share_file` VALUES (75, '8d2cfd5b75ac44a4b233efd63c7c9ec3', '/', 236);
-INSERT INTO `qiwen_share_file` VALUES (76, 'fa878707765c4f169542dcd215db1bcb', '/', 268);
-INSERT INTO `qiwen_share_file` VALUES (77, 'd1b67b8e5a474bb287ab2165734a00f3', '/', 271);
-INSERT INTO `qiwen_share_file` VALUES (78, 'a04e46efc6604a71bfc7313610799d50', '/', 273);
+) ENGINE = InnoDB AUTO_INCREMENT = 80 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for qiwen_storage
@@ -625,56 +392,12 @@ CREATE TABLE `qiwen_user_file`  (
   `file_id` bigint(20) NULL DEFAULT NULL,
   `file_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `file_path` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `is_dir` int(1) NULL DEFAULT NULL,
+  `is_dir` int(11) NULL DEFAULT NULL,
   `upload_time` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `user_id` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`user_file_id`) USING BTREE,
   UNIQUE INDEX `fileindex`(`file_name`, `file_path`, `extend_name`, `delete_flag`, `user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 274 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of qiwen_user_file
--- ----------------------------
-INSERT INTO `qiwen_user_file` VALUES (167, NULL, 0, NULL, NULL, NULL, 'chainofresponsibility', 'Tank2019V2-master/src/com/mashibing/tank/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (170, NULL, 0, NULL, NULL, NULL, 'com', 'Tank2019V2-master/src/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (172, NULL, 0, NULL, NULL, NULL, 'tank', 'Tank2019V2-master/test/com/mashibing/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (173, NULL, 0, NULL, NULL, NULL, 'net', 'Tank2019V2-master/test/com/mashibing/tank/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (174, NULL, 0, NULL, NULL, NULL, 'nettychat', 'Tank2019V2-master/test/com/mashibing/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (176, NULL, 0, NULL, NULL, NULL, 'net', 'Tank2019V2-master/test/com/mashibing/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (177, NULL, 0, NULL, NULL, NULL, 'audio', 'Tank2019V2-master/src/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (178, NULL, 0, NULL, NULL, NULL, 'callable', 'Tank2019V2-master/test/com/mashibing/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (179, NULL, 0, NULL, 'wav', 19, 'tank_fire', 'Tank2019V2-master/src/audio/', 0, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (180, NULL, 0, NULL, NULL, NULL, '.idea', 'Tank2019V2-master/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (181, NULL, 0, NULL, 'wav', 16, 'explode', 'Tank2019V2-master/src/audio/', 0, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (182, NULL, 0, NULL, 'wav', 22, 'war1', 'Tank2019V2-master/src/audio/', 0, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (186, NULL, 0, NULL, NULL, NULL, 'strategy', 'Tank2019V2-master/src/com/mashibing/tank/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (190, NULL, 0, NULL, NULL, NULL, 'src', 'Tank2019V2-master/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (191, NULL, 0, NULL, NULL, NULL, 'com', 'Tank2019V2-master/test/', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (196, NULL, 0, NULL, NULL, NULL, 'net', 'Tank2019V2-master/src/com/mashibing/tank/', 1, '2021-06-07 20:01:22', 1);
-INSERT INTO `qiwen_user_file` VALUES (198, NULL, 0, NULL, 'wav', 58, 'tank_move', 'Tank2019V2-master/src/audio/', 0, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (202, NULL, 0, NULL, NULL, NULL, 'bio', 'Tank2019V2-master/test/com/mashibing/net/', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (204, NULL, 0, NULL, NULL, NULL, 'images', 'Tank2019V2-master/src/', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (210, NULL, 0, NULL, NULL, NULL, 'netty', 'Tank2019V2-master/test/com/mashibing/net/', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (211, NULL, 0, NULL, NULL, NULL, 'test', 'Tank2019V2-master/', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (214, NULL, 0, NULL, NULL, NULL, 'tank', 'Tank2019V2-master/src/com/mashibing/', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (215, NULL, 0, NULL, NULL, NULL, 'libraries', 'Tank2019V2-master/.idea/', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (217, NULL, 0, NULL, NULL, NULL, 'nettycodec', 'Tank2019V2-master/test/com/mashibing/', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (222, NULL, 0, NULL, NULL, NULL, 'mashibing', 'Tank2019V2-master/src/com/', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (226, NULL, 0, NULL, NULL, NULL, 'mashibing', 'Tank2019V2-master/test/com/', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (230, NULL, 0, NULL, NULL, NULL, 'Tank2019V2-master', '', 1, '2021-06-07 20:01:23', 1);
-INSERT INTO `qiwen_user_file` VALUES (238, NULL, NULL, NULL, 'jpg', 137, '《辐射4》（Fallout 4）4k桌面壁纸_彼岸图网 (1)', '/', 0, '2021-06-20 10:31:24', 1);
-INSERT INTO `qiwen_user_file` VALUES (239, NULL, NULL, NULL, 'jpg', 137, '《辐射4》（Fallout 4）4k桌面壁纸_彼岸图网 (1)', '/', 0, '2021-06-20 10:31:37', 1);
-INSERT INTO `qiwen_user_file` VALUES (240, NULL, NULL, NULL, 'jpg', 137, '《辐射4》（Fallout 4）4k桌面壁纸_彼岸图网', '/', 0, '2021-06-20 10:32:21', 1);
-INSERT INTO `qiwen_user_file` VALUES (245, NULL, NULL, NULL, 'png', 139, '1 (19)', '/', 0, '2021-06-20 10:35:19', 1);
-INSERT INTO `qiwen_user_file` VALUES (252, NULL, NULL, NULL, 'jpg', 137, '《辐射4》（Fallout 4）4k桌面壁纸_彼岸图网', '/', 0, '2021-06-20 10:40:03', 1);
-INSERT INTO `qiwen_user_file` VALUES (255, NULL, NULL, NULL, 'jpg', 152, '《Control》4k游戏壁纸3840x2160_彼岸图网', '/', 0, '2021-06-20 11:01:41', 1);
-INSERT INTO `qiwen_user_file` VALUES (262, '1863c634-625b-4707-a946-9ea6533dd860', 690578, '2021-08-18 19:50:44', 'mp4', 160, '05_父工程Project空间新建', '/', 0, '2021-08-18 19:49:51', 3);
-INSERT INTO `qiwen_user_file` VALUES (264, NULL, 0, NULL, 'mp4', 161, '136_Sentinel服务熔断OpenFeign', '/', 0, '2021-08-18 19:50:24', 3);
-INSERT INTO `qiwen_user_file` VALUES (268, '0d5a9b5c-414a-4649-b1d3-ddd60fdf7625', 509020, '2021-09-26 20:56:55', 'jpg', 166, '《光环5》3440x1440带鱼屏壁纸_彼岸图网', '/', 0, '2021-09-26 19:11:15', 1);
-INSERT INTO `qiwen_user_file` VALUES (270, 'd5b50a44-331a-402a-9e41-471260465486', 51627, '2021-09-26 20:56:55', 'jpg', 167, '《看门狗2》3440x1440高清壁纸_彼岸图网', '/', 0, '2021-09-26 19:14:47', 1);
-INSERT INTO `qiwen_user_file` VALUES (271, '50c1c323-37d9-40d7-aac3-5889ead9a47d', 436673, '2021-09-26 20:56:55', 'mp4', 168, '09_支付模块构建(中)', '/', 0, '2021-09-26 20:03:06', 1);
-INSERT INTO `qiwen_user_file` VALUES (272, NULL, 0, NULL, 'jpg', 169, '《Eternal Magic》4k游戏壁纸3840x2160_彼岸图网', '/', 0, '2021-09-26 20:55:05', 1);
-INSERT INTO `qiwen_user_file` VALUES (273, NULL, 0, NULL, 'mp4', 170, '15_Eureka基础知识', '/', 0, '2021-09-26 20:57:04', 1);
+) ENGINE = InnoDB AUTO_INCREMENT = 276 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for qrtz_blob_triggers
@@ -721,6 +444,7 @@ INSERT INTO `qrtz_cron_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME1', '
 INSERT INTO `qrtz_cron_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME2', 'DEFAULT', '0/15 * * * * ?', 'Asia/Shanghai');
 INSERT INTO `qrtz_cron_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME3', 'DEFAULT', '0/20 * * * * ?', 'Asia/Shanghai');
 INSERT INTO `qrtz_cron_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME4', 'DEFAULT', '0/59 * * * * ?', 'Asia/Shanghai');
+INSERT INTO `qrtz_cron_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME5', 'DEFAULT', '0 0 0 * * ?', 'Asia/Shanghai');
 
 -- ----------------------------
 -- Table structure for qrtz_fired_triggers
@@ -732,8 +456,8 @@ CREATE TABLE `qrtz_fired_triggers`  (
   `trigger_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
   `trigger_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
   `instance_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度器实例名',
-  `fired_time` bigint(13) NOT NULL COMMENT '触发的时间',
-  `sched_time` bigint(13) NOT NULL COMMENT '定时器制定的时间',
+  `fired_time` bigint(20) NOT NULL COMMENT '触发的时间',
+  `sched_time` bigint(20) NOT NULL COMMENT '定时器制定的时间',
   `priority` int(11) NOT NULL COMMENT '优先级',
   `state` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '状态',
   `job_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务名称',
@@ -768,6 +492,7 @@ INSERT INTO `qrtz_job_details` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME1', 'DE
 INSERT INTO `qrtz_job_details` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME2', 'DEFAULT', NULL, 'com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F504552544945537372001E636F6D2E72756F79692E71756172747A2E646F6D61696E2E5379734A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00056A6F6249647400104C6A6176612F6C616E672F4C6F6E673B4C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978720027636F6D2E72756F79692E636F6D6D6F6E2E636F72652E646F6D61696E2E42617365456E7469747900000000000000010200074C0008637265617465427971007E00094C000A63726561746554696D657400104C6A6176612F7574696C2F446174653B4C0006706172616D7371007E00034C000672656D61726B71007E00094C000B73656172636856616C756571007E00094C0008757064617465427971007E00094C000A75706461746554696D6571007E000C787074000561646D696E7372000E6A6176612E7574696C2E44617465686A81014B59741903000078707708000001791DD0D58078707400007070707400013174000E302F3135202A202A202A202A203F74001572795461736B2E7279506172616D7328277279272974000744454641554C547372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B02000078700000000000000002740018E7B3BBE7BB9FE9BB98E8AEA4EFBC88E69C89E58F82EFBC8974000133740001317800);
 INSERT INTO `qrtz_job_details` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME3', 'DEFAULT', NULL, 'com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F504552544945537372001E636F6D2E72756F79692E71756172747A2E646F6D61696E2E5379734A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00056A6F6249647400104C6A6176612F6C616E672F4C6F6E673B4C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978720027636F6D2E72756F79692E636F6D6D6F6E2E636F72652E646F6D61696E2E42617365456E7469747900000000000000010200074C0008637265617465427971007E00094C000A63726561746554696D657400104C6A6176612F7574696C2F446174653B4C0006706172616D7371007E00034C000672656D61726B71007E00094C000B73656172636856616C756571007E00094C0008757064617465427971007E00094C000A75706461746554696D6571007E000C787074000561646D696E7372000E6A6176612E7574696C2E44617465686A81014B59741903000078707708000001791DD0D58078707400007070707400013174000E302F3230202A202A202A202A203F74003872795461736B2E72794D756C7469706C65506172616D7328277279272C20747275652C20323030304C2C203331362E3530442C203130302974000744454641554C547372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B02000078700000000000000003740018E7B3BBE7BB9FE9BB98E8AEA4EFBC88E5A49AE58F82EFBC8974000133740001317800);
 INSERT INTO `qrtz_job_details` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME4', 'DEFAULT', NULL, 'com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F504552544945537372001E636F6D2E72756F79692E71756172747A2E646F6D61696E2E5379734A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00056A6F6249647400104C6A6176612F6C616E672F4C6F6E673B4C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978720027636F6D2E72756F79692E636F6D6D6F6E2E636F72652E646F6D61696E2E42617365456E7469747900000000000000010200074C0008637265617465427971007E00094C000A63726561746554696D657400104C6A6176612F7574696C2F446174653B4C0006706172616D7371007E00034C000672656D61726B71007E00094C000B73656172636856616C756571007E00094C0008757064617465427971007E00094C000A75706461746554696D6571007E000C787074000561646D696E7372000E6A6176612E7574696C2E44617465686A81014B597419030000787077080000017A76ABC33078707400007070707400013174000E302F3539202A202A202A202A203F74001A6D656469615461736B2E636F6E76657274566964656F4C69737474000744454641554C547372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B02000078700000000000000004740015E8BDACE68DA2E6B581E5AA92E4BD93E69687E4BBB674000131740001317800);
+INSERT INTO `qrtz_job_details` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME5', 'DEFAULT', NULL, 'com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F504552544945537372001E636F6D2E72756F79692E71756172747A2E646F6D61696E2E5379734A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00056A6F6249647400104C6A6176612F6C616E672F4C6F6E673B4C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978720027636F6D2E72756F79692E636F6D6D6F6E2E636F72652E646F6D61696E2E42617365456E7469747900000000000000010200074C0008637265617465427971007E00094C000A63726561746554696D657400104C6A6176612F7574696C2F446174653B4C0006706172616D7371007E00034C000672656D61726B71007E00094C000B73656172636856616C756571007E00094C0008757064617465427971007E00094C000A75706461746554696D6571007E000C787074000561646D696E7372000E6A6176612E7574696C2E44617465686A81014B597419030000787077080000017DEACCFB5078707400007070707400013174000B3020302030202A202A203F74001B776562736974655461736B2E696E69744163636F756E744C69737474000744454641554C547372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B02000078700000000000000005740015E5889DE5A78BE58C96E8B4A6E688B7E4BFA1E681AF74000131740001307800);
 
 -- ----------------------------
 -- Table structure for qrtz_locks
@@ -802,15 +527,15 @@ DROP TABLE IF EXISTS `qrtz_scheduler_state`;
 CREATE TABLE `qrtz_scheduler_state`  (
   `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
   `instance_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '实例名称',
-  `last_checkin_time` bigint(13) NOT NULL COMMENT '上次检查时间',
-  `checkin_interval` bigint(13) NOT NULL COMMENT '检查间隔时间',
+  `last_checkin_time` bigint(20) NOT NULL COMMENT '上次检查时间',
+  `checkin_interval` bigint(20) NOT NULL COMMENT '检查间隔时间',
   PRIMARY KEY (`sched_name`, `instance_name`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '调度器状态表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('RuoyiScheduler', 'DESKTOP-MJHPK561633504634949', 1633508361531, 15000);
+INSERT INTO `qrtz_scheduler_state` VALUES ('RuoyiScheduler', 'DESKTOP-MJHPK561640327936763', 1640336839991, 15000);
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -820,9 +545,9 @@ CREATE TABLE `qrtz_simple_triggers`  (
   `sched_name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '调度名称',
   `trigger_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
   `trigger_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
-  `repeat_count` bigint(7) NOT NULL COMMENT '重复的次数统计',
-  `repeat_interval` bigint(12) NOT NULL COMMENT '重复的间隔时间',
-  `times_triggered` bigint(10) NOT NULL COMMENT '已经触发的次数',
+  `repeat_count` bigint(20) NOT NULL COMMENT '重复的次数统计',
+  `repeat_interval` bigint(20) NOT NULL COMMENT '重复的间隔时间',
+  `times_triggered` bigint(20) NOT NULL COMMENT '已经触发的次数',
   PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
   CONSTRAINT `qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`sched_name`, `trigger_name`, `trigger_group`) REFERENCES `qrtz_triggers` (`sched_name`, `trigger_name`, `trigger_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '简单触发器的信息表' ROW_FORMAT = Dynamic;
@@ -861,15 +586,15 @@ CREATE TABLE `qrtz_triggers`  (
   `job_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_job_details表job_name的外键',
   `job_group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'qrtz_job_details表job_group的外键',
   `description` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '相关介绍',
-  `next_fire_time` bigint(13) NULL DEFAULT NULL COMMENT '上一次触发时间（毫秒）',
-  `prev_fire_time` bigint(13) NULL DEFAULT NULL COMMENT '下一次触发时间（默认为-1表示不触发）',
+  `next_fire_time` bigint(20) NULL DEFAULT NULL COMMENT '上一次触发时间（毫秒）',
+  `prev_fire_time` bigint(20) NULL DEFAULT NULL COMMENT '下一次触发时间（默认为-1表示不触发）',
   `priority` int(11) NULL DEFAULT NULL COMMENT '优先级',
   `trigger_state` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '触发器状态',
   `trigger_type` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '触发器的类型',
-  `start_time` bigint(13) NOT NULL COMMENT '开始时间',
-  `end_time` bigint(13) NULL DEFAULT NULL COMMENT '结束时间',
+  `start_time` bigint(20) NOT NULL COMMENT '开始时间',
+  `end_time` bigint(20) NULL DEFAULT NULL COMMENT '结束时间',
   `calendar_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '日程表名称',
-  `misfire_instr` smallint(2) NULL DEFAULT NULL COMMENT '补偿执行的策略',
+  `misfire_instr` smallint(6) NULL DEFAULT NULL COMMENT '补偿执行的策略',
   `job_data` blob NULL COMMENT '存放持久化job对象',
   PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
   INDEX `sched_name`(`sched_name`, `job_name`, `job_group`) USING BTREE,
@@ -879,10 +604,33 @@ CREATE TABLE `qrtz_triggers`  (
 -- ----------------------------
 -- Records of qrtz_triggers
 -- ----------------------------
-INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME1', 'DEFAULT', 'TASK_CLASS_NAME1', 'DEFAULT', NULL, 1633504640000, -1, 5, 'PAUSED', 'CRON', 1633504635000, 0, NULL, 2, '');
-INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME2', 'DEFAULT', 'TASK_CLASS_NAME2', 'DEFAULT', NULL, 1633504650000, -1, 5, 'PAUSED', 'CRON', 1633504636000, 0, NULL, 2, '');
-INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME3', 'DEFAULT', 'TASK_CLASS_NAME3', 'DEFAULT', NULL, 1633504640000, -1, 5, 'PAUSED', 'CRON', 1633504636000, 0, NULL, 2, '');
-INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME4', 'DEFAULT', 'TASK_CLASS_NAME4', 'DEFAULT', NULL, 1633504679000, -1, 5, 'PAUSED', 'CRON', 1633504636000, 0, NULL, -1, '');
+INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME1', 'DEFAULT', 'TASK_CLASS_NAME1', 'DEFAULT', NULL, 1640327940000, -1, 5, 'PAUSED', 'CRON', 1640327937000, 0, NULL, 2, '');
+INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME2', 'DEFAULT', 'TASK_CLASS_NAME2', 'DEFAULT', NULL, 1640327940000, -1, 5, 'PAUSED', 'CRON', 1640327937000, 0, NULL, 2, '');
+INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME3', 'DEFAULT', 'TASK_CLASS_NAME3', 'DEFAULT', NULL, 1640327940000, -1, 5, 'PAUSED', 'CRON', 1640327937000, 0, NULL, 2, '');
+INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME4', 'DEFAULT', 'TASK_CLASS_NAME4', 'DEFAULT', NULL, 1640327939000, -1, 5, 'PAUSED', 'CRON', 1640327937000, 0, NULL, -1, '');
+INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME5', 'DEFAULT', 'TASK_CLASS_NAME5', 'DEFAULT', NULL, 1640361600000, -1, 5, 'WAITING', 'CRON', 1640327937000, 0, NULL, -1, '');
+
+-- ----------------------------
+-- Table structure for sys_auth_user
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_auth_user`;
+CREATE TABLE `sys_auth_user`  (
+  `auth_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '授权ID',
+  `uuid` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '第三方平台用户唯一ID',
+  `user_id` bigint(20) NOT NULL COMMENT '系统用户ID',
+  `login_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '登录账号',
+  `user_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '用户昵称',
+  `avatar` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '头像地址',
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '用户邮箱',
+  `source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '用户来源',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`auth_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 111 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '第三方授权表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_auth_user
+-- ----------------------------
+INSERT INTO `sys_auth_user` VALUES (110, 'gitee4965669', 19, 'tanhuihuang', 'king', '/avatar/2021/10/10/daf1495e-c9a9-4c74-bf62-d9223e5191a3.png', '', 'gitee', '2021-10-10 15:32:27');
 
 -- ----------------------------
 -- Table structure for sys_config
@@ -900,7 +648,7 @@ CREATE TABLE `sys_config`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`config_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '参数配置表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '参数配置表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_config
@@ -911,6 +659,7 @@ INSERT INTO `sys_config` VALUES (3, '主框架页-侧边栏主题', 'sys.index.s
 INSERT INTO `sys_config` VALUES (4, '账号自助-验证码开关', 'sys.account.captchaOnOff', 'true', 'Y', 'admin', '2021-08-14 17:40:25', '', NULL, '是否开启验证码功能（true开启，false关闭）');
 INSERT INTO `sys_config` VALUES (5, '账号自助-是否开启用户注册功能', 'sys.account.registerUser', 'true', 'Y', 'admin', '2021-08-14 17:40:25', 'admin', '2021-08-14 19:09:05', '是否开启注册用户功能（true开启，false关闭）');
 INSERT INTO `sys_config` VALUES (6, '网盘初始化存储大小(单位M)', 'file.initStorageSize', '1024', 'Y', 'admin', '2021-04-29 21:28:15', '', NULL, '网盘初始化存储大小(单位M)');
+INSERT INTO `sys_config` VALUES (7, 'sql版本号', 'sql.version', 'V1.002', 'Y', '', '2021-11-14 00:05:22', '', '2021-12-04 13:59:58', 'sql版本号');
 
 -- ----------------------------
 -- Table structure for sys_dept
@@ -968,7 +717,7 @@ CREATE TABLE `sys_dict_data`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 179 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 195 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict_data
@@ -1080,6 +829,21 @@ INSERT INTO `sys_dict_data` VALUES (175, 0, '发布', '1', 'article_publish_stat
 INSERT INTO `sys_dict_data` VALUES (176, 2, '博客', 'blog_article', 'website_table_name', NULL, 'default', 'N', '0', 'admin', '2021-10-05 09:34:58', 'admin', '2021-10-05 09:35:56', NULL);
 INSERT INTO `sys_dict_data` VALUES (177, 1, '电影', 'wm_movie', 'website_table_name', NULL, 'default', 'N', '0', 'admin', '2021-10-05 09:35:13', 'admin', '2021-10-05 09:35:46', NULL);
 INSERT INTO `sys_dict_data` VALUES (178, 3, '问答', 'qa_question', 'website_table_name', NULL, 'default', 'N', '0', 'admin', '2021-10-05 09:35:36', 'admin', '2021-10-05 09:36:00', NULL);
+INSERT INTO `sys_dict_data` VALUES (179, 4, '日语', '日语', 'lang', NULL, 'default', 'N', '0', 'admin', '2021-12-04 11:33:47', 'admin', '2021-12-04 11:49:45', NULL);
+INSERT INTO `sys_dict_data` VALUES (180, 0, '国语', '国语', 'lang', NULL, 'default', 'N', '0', 'admin', '2021-12-04 11:34:04', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (182, 1, '粤语', '粤语', 'lang', NULL, 'default', 'N', '0', 'admin', '2021-12-04 11:34:23', 'admin', '2021-12-04 11:49:25', NULL);
+INSERT INTO `sys_dict_data` VALUES (183, 0, '英语', '英语', 'lang', NULL, 'default', 'N', '0', 'admin', '2021-12-04 11:34:30', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (184, 3, '韩语', '韩语', 'lang', NULL, 'default', 'N', '0', 'admin', '2021-12-04 11:34:41', 'admin', '2021-12-04 11:49:35', NULL);
+INSERT INTO `sys_dict_data` VALUES (185, 9, '其他', '其他', 'lang', NULL, 'default', 'N', '0', 'admin', '2021-12-04 11:34:51', 'admin', '2021-12-04 11:49:53', NULL);
+INSERT INTO `sys_dict_data` VALUES (186, 0, '闽南语', '闽南语', 'lang', NULL, 'default', 'N', '0', 'admin', '2021-12-04 13:02:34', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (187, 0, '正常', '0', 'website_status', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:25:13', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (188, 0, '停用', '1', 'website_status', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:25:24', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (189, 0, '减少', 'decrease', 'credits_type', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:31:26', 'admin', '2021-12-11 18:32:50', NULL);
+INSERT INTO `sys_dict_data` VALUES (190, 0, '增加', 'increase', 'credits_type', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:32:14', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (191, 0, '积分', '1', 'sign_type', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:36:24', 'admin', '2021-12-11 19:11:29', NULL);
+INSERT INTO `sys_dict_data` VALUES (192, 0, '金币', '2', 'sign_type', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:36:41', 'admin', '2021-12-11 19:11:32', NULL);
+INSERT INTO `sys_dict_data` VALUES (193, 0, '单次', '1', 'sign_set', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:39:42', 'admin', '2021-12-11 19:08:20', NULL);
+INSERT INTO `sys_dict_data` VALUES (194, 0, '循环', '2', 'sign_set', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:40:21', 'admin', '2021-12-11 19:08:23', NULL);
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -1097,7 +861,7 @@ CREATE TABLE `sys_dict_type`  (
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_id`) USING BTREE,
   UNIQUE INDEX `dict_type`(`dict_type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 118 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 123 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict_type
@@ -1130,6 +894,11 @@ INSERT INTO `sys_dict_type` VALUES (114, '文章是否原创', 'article_original
 INSERT INTO `sys_dict_type` VALUES (115, '文章来源', 'article_source', '0', 'admin', '2021-08-26 21:21:12', '', NULL, '文章来源【0 后台添加，1 用户投稿】');
 INSERT INTO `sys_dict_type` VALUES (116, '文章发布状态', 'article_publish_status', '0', 'admin', '2021-08-27 20:39:56', 'admin', '2021-08-27 20:40:14', '文章发布状态 0 未发布 1发布');
 INSERT INTO `sys_dict_type` VALUES (117, '表名称类型', 'website_table_name', '0', 'admin', '2021-10-05 09:34:11', 'admin', '2021-10-05 09:34:21', '表名称类型');
+INSERT INTO `sys_dict_type` VALUES (118, '语言', 'lang', '0', 'admin', '2021-12-04 11:32:24', '', NULL, '语言');
+INSERT INTO `sys_dict_type` VALUES (119, '站点状态', 'website_status', '0', 'admin', '2021-12-11 18:24:47', '', NULL, '站点状态');
+INSERT INTO `sys_dict_type` VALUES (120, '积分类型', 'credits_type', '0', 'admin', '2021-12-11 18:29:14', '', NULL, 'credits_type');
+INSERT INTO `sys_dict_type` VALUES (121, '签到类型', 'sign_type', '0', 'admin', '2021-12-11 18:36:06', 'admin', '2021-12-11 19:11:21', NULL);
+INSERT INTO `sys_dict_type` VALUES (122, '签到配置', 'sign_set', '0', 'admin', '2021-12-11 18:38:20', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -1150,7 +919,7 @@ CREATE TABLE `sys_job`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注信息',
   PRIMARY KEY (`job_id`, `job_name`, `job_group`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_job
@@ -1159,6 +928,7 @@ INSERT INTO `sys_job` VALUES (1, '系统默认（无参）', 'DEFAULT', 'ryTask.
 INSERT INTO `sys_job` VALUES (2, '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'ry\')', '0/15 * * * * ?', '3', '1', '1', 'admin', '2021-04-29 21:28:16', '', NULL, '');
 INSERT INTO `sys_job` VALUES (3, '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'ry\', true, 2000L, 316.50D, 100)', '0/20 * * * * ?', '3', '1', '1', 'admin', '2021-04-29 21:28:16', '', NULL, '');
 INSERT INTO `sys_job` VALUES (4, '转换流媒体文件', 'DEFAULT', 'mediaTask.convertVideoList', '0/59 * * * * ?', '1', '1', '1', 'admin', '2021-07-05 20:36:46', 'admin', '2021-10-02 20:08:41', '');
+INSERT INTO `sys_job` VALUES (5, '初始化账户信息', 'DEFAULT', 'websiteTask.initAccountList', '0 0 0 * * ?', '1', '1', '0', 'admin', '2021-12-24 12:57:22', '', '2021-12-24 12:57:29', '');
 
 -- ----------------------------
 -- Table structure for sys_job_log
@@ -1174,7 +944,7 @@ CREATE TABLE `sys_job_log`  (
   `exception_info` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '异常信息',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`job_log_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16030 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_logininfor
@@ -1191,7 +961,302 @@ CREATE TABLE `sys_logininfor`  (
   `msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '提示消息',
   `login_time` datetime(0) NULL DEFAULT NULL COMMENT '访问时间',
   PRIMARY KEY (`info_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 914 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1205 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_logininfor
+-- ----------------------------
+INSERT INTO `sys_logininfor` VALUES (914, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-10-07 10:29:42');
+INSERT INTO `sys_logininfor` VALUES (915, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2021-10-07 10:52:42');
+INSERT INTO `sys_logininfor` VALUES (916, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 10:52:45');
+INSERT INTO `sys_logininfor` VALUES (917, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 10:54:14');
+INSERT INTO `sys_logininfor` VALUES (918, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 11:10:07');
+INSERT INTO `sys_logininfor` VALUES (919, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 11:10:14');
+INSERT INTO `sys_logininfor` VALUES (920, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 11:10:21');
+INSERT INTO `sys_logininfor` VALUES (921, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 11:13:28');
+INSERT INTO `sys_logininfor` VALUES (922, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 11:41:59');
+INSERT INTO `sys_logininfor` VALUES (923, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 11:42:11');
+INSERT INTO `sys_logininfor` VALUES (924, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2021-10-07 11:43:29');
+INSERT INTO `sys_logininfor` VALUES (925, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 11:43:32');
+INSERT INTO `sys_logininfor` VALUES (926, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 11:45:59');
+INSERT INTO `sys_logininfor` VALUES (927, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 11:46:02');
+INSERT INTO `sys_logininfor` VALUES (928, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 11:48:47');
+INSERT INTO `sys_logininfor` VALUES (929, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 11:48:52');
+INSERT INTO `sys_logininfor` VALUES (930, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 12:13:04');
+INSERT INTO `sys_logininfor` VALUES (931, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 12:13:06');
+INSERT INTO `sys_logininfor` VALUES (932, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 12:23:28');
+INSERT INTO `sys_logininfor` VALUES (933, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2021-10-07 12:23:33');
+INSERT INTO `sys_logininfor` VALUES (934, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 12:23:40');
+INSERT INTO `sys_logininfor` VALUES (935, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 12:23:45');
+INSERT INTO `sys_logininfor` VALUES (936, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 12:24:05');
+INSERT INTO `sys_logininfor` VALUES (937, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 12:59:16');
+INSERT INTO `sys_logininfor` VALUES (938, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 13:05:27');
+INSERT INTO `sys_logininfor` VALUES (939, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 13:05:29');
+INSERT INTO `sys_logininfor` VALUES (940, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 13:10:04');
+INSERT INTO `sys_logininfor` VALUES (941, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 13:10:10');
+INSERT INTO `sys_logininfor` VALUES (942, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 13:10:15');
+INSERT INTO `sys_logininfor` VALUES (943, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 13:10:17');
+INSERT INTO `sys_logininfor` VALUES (944, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 13:14:03');
+INSERT INTO `sys_logininfor` VALUES (945, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 13:36:50');
+INSERT INTO `sys_logininfor` VALUES (946, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 14:31:46');
+INSERT INTO `sys_logininfor` VALUES (947, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 14:32:10');
+INSERT INTO `sys_logininfor` VALUES (948, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 14:36:08');
+INSERT INTO `sys_logininfor` VALUES (949, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 14:37:08');
+INSERT INTO `sys_logininfor` VALUES (950, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 14:43:17');
+INSERT INTO `sys_logininfor` VALUES (951, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 14:52:18');
+INSERT INTO `sys_logininfor` VALUES (952, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-10-07 15:27:48');
+INSERT INTO `sys_logininfor` VALUES (953, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 15:28:28');
+INSERT INTO `sys_logininfor` VALUES (954, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 15:34:55');
+INSERT INTO `sys_logininfor` VALUES (955, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 15:37:07');
+INSERT INTO `sys_logininfor` VALUES (956, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-07 15:37:08');
+INSERT INTO `sys_logininfor` VALUES (957, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-07 22:39:54');
+INSERT INTO `sys_logininfor` VALUES (958, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 22:39:54');
+INSERT INTO `sys_logininfor` VALUES (959, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-07 22:40:01');
+INSERT INTO `sys_logininfor` VALUES (960, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', 'nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 2', '2021-10-07 22:40:03');
+INSERT INTO `sys_logininfor` VALUES (961, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-07 22:43:31');
+INSERT INTO `sys_logininfor` VALUES (962, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 22:44:03');
+INSERT INTO `sys_logininfor` VALUES (963, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-07 22:46:32');
+INSERT INTO `sys_logininfor` VALUES (964, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 22:46:32');
+INSERT INTO `sys_logininfor` VALUES (965, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-07 22:49:48');
+INSERT INTO `sys_logininfor` VALUES (966, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 22:49:51');
+INSERT INTO `sys_logininfor` VALUES (967, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-07 23:18:49');
+INSERT INTO `sys_logininfor` VALUES (968, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 23:18:49');
+INSERT INTO `sys_logininfor` VALUES (969, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-07 23:18:55');
+INSERT INTO `sys_logininfor` VALUES (970, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', 'nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 2', '2021-10-07 23:19:04');
+INSERT INTO `sys_logininfor` VALUES (971, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-07 23:31:08');
+INSERT INTO `sys_logininfor` VALUES (972, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 23:31:15');
+INSERT INTO `sys_logininfor` VALUES (973, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 23:43:49');
+INSERT INTO `sys_logininfor` VALUES (974, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 23:43:49');
+INSERT INTO `sys_logininfor` VALUES (975, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 23:58:07');
+INSERT INTO `sys_logininfor` VALUES (976, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-07 23:58:07');
+INSERT INTO `sys_logininfor` VALUES (977, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:00:27');
+INSERT INTO `sys_logininfor` VALUES (978, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-08 00:01:07');
+INSERT INTO `sys_logininfor` VALUES (979, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:01:08');
+INSERT INTO `sys_logininfor` VALUES (980, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:02:16');
+INSERT INTO `sys_logininfor` VALUES (981, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:05:19');
+INSERT INTO `sys_logininfor` VALUES (982, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:05:19');
+INSERT INTO `sys_logininfor` VALUES (983, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:05:37');
+INSERT INTO `sys_logininfor` VALUES (984, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:05:42');
+INSERT INTO `sys_logininfor` VALUES (985, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:05:50');
+INSERT INTO `sys_logininfor` VALUES (986, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:08:40');
+INSERT INTO `sys_logininfor` VALUES (987, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:19:26');
+INSERT INTO `sys_logininfor` VALUES (988, 'tan-huihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-08 00:21:21');
+INSERT INTO `sys_logininfor` VALUES (989, 'tan-huihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 00:21:21');
+INSERT INTO `sys_logininfor` VALUES (990, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-08 18:48:58');
+INSERT INTO `sys_logininfor` VALUES (991, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-09 18:39:39');
+INSERT INTO `sys_logininfor` VALUES (992, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 11:13:01');
+INSERT INTO `sys_logininfor` VALUES (993, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 11:32:45');
+INSERT INTO `sys_logininfor` VALUES (994, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 11:35:54');
+INSERT INTO `sys_logininfor` VALUES (995, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 11:38:35');
+INSERT INTO `sys_logininfor` VALUES (996, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 11:56:30');
+INSERT INTO `sys_logininfor` VALUES (997, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 11:58:55');
+INSERT INTO `sys_logininfor` VALUES (998, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 11:59:01');
+INSERT INTO `sys_logininfor` VALUES (999, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 11:59:48');
+INSERT INTO `sys_logininfor` VALUES (1000, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:15:20');
+INSERT INTO `sys_logininfor` VALUES (1001, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:21:10');
+INSERT INTO `sys_logininfor` VALUES (1002, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:21:23');
+INSERT INTO `sys_logininfor` VALUES (1003, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:25:37');
+INSERT INTO `sys_logininfor` VALUES (1004, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:39:30');
+INSERT INTO `sys_logininfor` VALUES (1005, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 12:39:52');
+INSERT INTO `sys_logininfor` VALUES (1006, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:39:55');
+INSERT INTO `sys_logininfor` VALUES (1007, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:40:14');
+INSERT INTO `sys_logininfor` VALUES (1008, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:42:39');
+INSERT INTO `sys_logininfor` VALUES (1009, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 12:44:36');
+INSERT INTO `sys_logininfor` VALUES (1010, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:44:39');
+INSERT INTO `sys_logininfor` VALUES (1011, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:44:46');
+INSERT INTO `sys_logininfor` VALUES (1012, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 12:45:22');
+INSERT INTO `sys_logininfor` VALUES (1013, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:45:25');
+INSERT INTO `sys_logininfor` VALUES (1014, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 12:45:41');
+INSERT INTO `sys_logininfor` VALUES (1015, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:45:44');
+INSERT INTO `sys_logininfor` VALUES (1016, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 12:48:48');
+INSERT INTO `sys_logininfor` VALUES (1017, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:48:51');
+INSERT INTO `sys_logininfor` VALUES (1018, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:49:15');
+INSERT INTO `sys_logininfor` VALUES (1019, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 12:49:23');
+INSERT INTO `sys_logininfor` VALUES (1020, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:49:25');
+INSERT INTO `sys_logininfor` VALUES (1021, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 12:49:58');
+INSERT INTO `sys_logininfor` VALUES (1022, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:50:00');
+INSERT INTO `sys_logininfor` VALUES (1023, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 12:50:07');
+INSERT INTO `sys_logininfor` VALUES (1024, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:50:11');
+INSERT INTO `sys_logininfor` VALUES (1025, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 12:50:14');
+INSERT INTO `sys_logininfor` VALUES (1026, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:50:18');
+INSERT INTO `sys_logininfor` VALUES (1027, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 12:52:25');
+INSERT INTO `sys_logininfor` VALUES (1028, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:52:28');
+INSERT INTO `sys_logininfor` VALUES (1029, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:55:22');
+INSERT INTO `sys_logininfor` VALUES (1030, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 12:57:30');
+INSERT INTO `sys_logininfor` VALUES (1031, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 14:32:55');
+INSERT INTO `sys_logininfor` VALUES (1032, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 14:32:58');
+INSERT INTO `sys_logininfor` VALUES (1033, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 14:33:06');
+INSERT INTO `sys_logininfor` VALUES (1034, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 14:33:23');
+INSERT INTO `sys_logininfor` VALUES (1035, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 14:36:08');
+INSERT INTO `sys_logininfor` VALUES (1036, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 14:36:20');
+INSERT INTO `sys_logininfor` VALUES (1037, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 14:37:48');
+INSERT INTO `sys_logininfor` VALUES (1038, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 14:38:29');
+INSERT INTO `sys_logininfor` VALUES (1039, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 14:45:37');
+INSERT INTO `sys_logininfor` VALUES (1040, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 14:45:51');
+INSERT INTO `sys_logininfor` VALUES (1041, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 14:45:54');
+INSERT INTO `sys_logininfor` VALUES (1042, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-10 15:21:47');
+INSERT INTO `sys_logininfor` VALUES (1043, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 15:21:47');
+INSERT INTO `sys_logininfor` VALUES (1044, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 15:24:00');
+INSERT INTO `sys_logininfor` VALUES (1045, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-10 15:24:04');
+INSERT INTO `sys_logininfor` VALUES (1046, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 15:24:04');
+INSERT INTO `sys_logininfor` VALUES (1047, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 15:24:11');
+INSERT INTO `sys_logininfor` VALUES (1048, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-10 15:24:29');
+INSERT INTO `sys_logininfor` VALUES (1049, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 15:24:29');
+INSERT INTO `sys_logininfor` VALUES (1050, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 15:24:44');
+INSERT INTO `sys_logininfor` VALUES (1051, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 15:25:43');
+INSERT INTO `sys_logininfor` VALUES (1052, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-10 15:25:43');
+INSERT INTO `sys_logininfor` VALUES (1053, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 15:28:26');
+INSERT INTO `sys_logininfor` VALUES (1054, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-10 15:28:50');
+INSERT INTO `sys_logininfor` VALUES (1055, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 15:28:50');
+INSERT INTO `sys_logininfor` VALUES (1056, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-10 15:32:15');
+INSERT INTO `sys_logininfor` VALUES (1057, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-10-10 15:32:27');
+INSERT INTO `sys_logininfor` VALUES (1058, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-10 15:32:27');
+INSERT INTO `sys_logininfor` VALUES (1059, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-14 20:08:40');
+INSERT INTO `sys_logininfor` VALUES (1060, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-14 20:22:55');
+INSERT INTO `sys_logininfor` VALUES (1061, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '1', '验证码已失效', '2021-10-16 10:49:46');
+INSERT INTO `sys_logininfor` VALUES (1062, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-10-16 10:49:49');
+INSERT INTO `sys_logininfor` VALUES (1063, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-16 11:49:12');
+INSERT INTO `sys_logininfor` VALUES (1064, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-16 11:49:47');
+INSERT INTO `sys_logininfor` VALUES (1065, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-16 11:56:21');
+INSERT INTO `sys_logininfor` VALUES (1066, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-17 10:14:19');
+INSERT INTO `sys_logininfor` VALUES (1067, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-10-17 10:47:17');
+INSERT INTO `sys_logininfor` VALUES (1068, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-17 11:10:39');
+INSERT INTO `sys_logininfor` VALUES (1069, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-10-17 11:41:56');
+INSERT INTO `sys_logininfor` VALUES (1070, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-26 21:26:51');
+INSERT INTO `sys_logininfor` VALUES (1071, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-26 22:45:58');
+INSERT INTO `sys_logininfor` VALUES (1072, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-10-28 18:24:28');
+INSERT INTO `sys_logininfor` VALUES (1073, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-10-29 18:55:28');
+INSERT INTO `sys_logininfor` VALUES (1074, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '退出成功', '2021-10-29 19:01:06');
+INSERT INTO `sys_logininfor` VALUES (1075, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-29 19:45:00');
+INSERT INTO `sys_logininfor` VALUES (1076, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-10-31 18:42:55');
+INSERT INTO `sys_logininfor` VALUES (1077, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2021-10-31 18:44:28');
+INSERT INTO `sys_logininfor` VALUES (1078, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-31 18:44:32');
+INSERT INTO `sys_logininfor` VALUES (1079, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-10-31 19:23:49');
+INSERT INTO `sys_logininfor` VALUES (1080, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-01 19:06:52');
+INSERT INTO `sys_logininfor` VALUES (1081, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-11-01 19:15:30');
+INSERT INTO `sys_logininfor` VALUES (1082, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-01 19:45:36');
+INSERT INTO `sys_logininfor` VALUES (1083, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-11-01 19:45:48');
+INSERT INTO `sys_logininfor` VALUES (1084, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-01 19:56:06');
+INSERT INTO `sys_logininfor` VALUES (1085, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-11-01 20:31:46');
+INSERT INTO `sys_logininfor` VALUES (1086, 'thh', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '用户不存在/密码错误', '2021-11-01 20:31:57');
+INSERT INTO `sys_logininfor` VALUES (1087, 'ry', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-01 20:32:27');
+INSERT INTO `sys_logininfor` VALUES (1088, 'ry', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-11-01 20:45:21');
+INSERT INTO `sys_logininfor` VALUES (1089, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-01 20:45:24');
+INSERT INTO `sys_logininfor` VALUES (1090, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-11-01 21:44:21');
+INSERT INTO `sys_logininfor` VALUES (1091, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-06 10:58:23');
+INSERT INTO `sys_logininfor` VALUES (1092, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-11-06 11:53:41');
+INSERT INTO `sys_logininfor` VALUES (1093, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-06 12:12:31');
+INSERT INTO `sys_logininfor` VALUES (1094, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-11-06 13:13:16');
+INSERT INTO `sys_logininfor` VALUES (1095, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-06 13:31:52');
+INSERT INTO `sys_logininfor` VALUES (1096, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-11 21:03:48');
+INSERT INTO `sys_logininfor` VALUES (1097, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-11 21:13:02');
+INSERT INTO `sys_logininfor` VALUES (1098, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-11-13 10:00:32');
+INSERT INTO `sys_logininfor` VALUES (1099, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2021-11-13 10:01:00');
+INSERT INTO `sys_logininfor` VALUES (1100, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-13 10:01:03');
+INSERT INTO `sys_logininfor` VALUES (1101, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-13 10:47:35');
+INSERT INTO `sys_logininfor` VALUES (1102, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-11-13 11:06:59');
+INSERT INTO `sys_logininfor` VALUES (1103, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-14 09:05:33');
+INSERT INTO `sys_logininfor` VALUES (1104, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-14 10:08:57');
+INSERT INTO `sys_logininfor` VALUES (1105, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-14 12:38:56');
+INSERT INTO `sys_logininfor` VALUES (1106, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-14 13:27:59');
+INSERT INTO `sys_logininfor` VALUES (1107, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-11-14 14:03:12');
+INSERT INTO `sys_logininfor` VALUES (1108, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-11-14 14:07:47');
+INSERT INTO `sys_logininfor` VALUES (1109, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-11-14 16:14:25');
+INSERT INTO `sys_logininfor` VALUES (1110, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-14 16:14:51');
+INSERT INTO `sys_logininfor` VALUES (1111, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-15 20:41:17');
+INSERT INTO `sys_logininfor` VALUES (1112, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-11-15 21:35:35');
+INSERT INTO `sys_logininfor` VALUES (1113, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-15 21:40:33');
+INSERT INTO `sys_logininfor` VALUES (1114, 'admin', '192.168.17.92', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-16 18:35:15');
+INSERT INTO `sys_logininfor` VALUES (1115, 'admin', '192.168.17.92', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码已失效', '2021-11-16 20:32:44');
+INSERT INTO `sys_logininfor` VALUES (1116, 'admin', '192.168.17.92', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-16 20:52:17');
+INSERT INTO `sys_logininfor` VALUES (1117, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-11-21 09:00:48');
+INSERT INTO `sys_logininfor` VALUES (1118, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-11-21 09:10:59');
+INSERT INTO `sys_logininfor` VALUES (1119, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '退出成功', '2021-11-21 09:11:02');
+INSERT INTO `sys_logininfor` VALUES (1120, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-21 09:11:40');
+INSERT INTO `sys_logininfor` VALUES (1121, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2021-11-21 09:26:02');
+INSERT INTO `sys_logininfor` VALUES (1122, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-21 09:26:04');
+INSERT INTO `sys_logininfor` VALUES (1123, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-11-21 10:36:38');
+INSERT INTO `sys_logininfor` VALUES (1124, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-21 10:36:58');
+INSERT INTO `sys_logininfor` VALUES (1125, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-11-21 11:36:16');
+INSERT INTO `sys_logininfor` VALUES (1126, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '1', '验证码错误', '2021-11-21 12:37:09');
+INSERT INTO `sys_logininfor` VALUES (1127, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-11-21 12:37:12');
+INSERT INTO `sys_logininfor` VALUES (1128, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-04 10:33:59');
+INSERT INTO `sys_logininfor` VALUES (1129, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-04 12:06:12');
+INSERT INTO `sys_logininfor` VALUES (1130, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2021-12-04 12:49:41');
+INSERT INTO `sys_logininfor` VALUES (1131, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-04 12:49:45');
+INSERT INTO `sys_logininfor` VALUES (1132, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-04 13:33:24');
+INSERT INTO `sys_logininfor` VALUES (1133, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-05 09:34:26');
+INSERT INTO `sys_logininfor` VALUES (1134, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-05 10:32:50');
+INSERT INTO `sys_logininfor` VALUES (1135, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-05 11:50:24');
+INSERT INTO `sys_logininfor` VALUES (1136, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-05 12:06:48');
+INSERT INTO `sys_logininfor` VALUES (1137, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-05 12:06:51');
+INSERT INTO `sys_logininfor` VALUES (1138, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-09 20:27:06');
+INSERT INTO `sys_logininfor` VALUES (1139, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-09 21:31:03');
+INSERT INTO `sys_logininfor` VALUES (1140, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-09 21:32:18');
+INSERT INTO `sys_logininfor` VALUES (1141, 'admin', '192.168.17.229', '内网IP', 'Mobile Safari', 'Mac OS X (iPhone)', '0', '登录成功', '2021-12-09 21:57:38');
+INSERT INTO `sys_logininfor` VALUES (1142, 'admin', '192.168.17.92', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-09 22:20:47');
+INSERT INTO `sys_logininfor` VALUES (1143, 'admin', '192.168.17.229', '内网IP', 'Chrome Mobile', 'Mac OS X (iPhone)', '0', '登录成功', '2021-12-09 22:42:19');
+INSERT INTO `sys_logininfor` VALUES (1144, 'admin', '192.168.17.22', '内网IP', 'Chrome Mobile', 'Android 1.x', '0', '登录成功', '2021-12-09 22:42:57');
+INSERT INTO `sys_logininfor` VALUES (1145, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-11 10:34:47');
+INSERT INTO `sys_logininfor` VALUES (1146, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-11 11:05:53');
+INSERT INTO `sys_logininfor` VALUES (1147, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-11 11:08:42');
+INSERT INTO `sys_logininfor` VALUES (1148, 'admin', '192.168.17.229', '内网IP', 'Mobile Safari', 'Mac OS X (iPhone)', '0', '登录成功', '2021-12-11 12:38:01');
+INSERT INTO `sys_logininfor` VALUES (1149, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-11 18:19:54');
+INSERT INTO `sys_logininfor` VALUES (1150, 'admin', '192.168.17.229', '内网IP', 'Mobile Safari', 'Mac OS X (iPhone)', '0', '登录成功', '2021-12-12 10:14:15');
+INSERT INTO `sys_logininfor` VALUES (1151, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 11:57:48');
+INSERT INTO `sys_logininfor` VALUES (1152, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-12 14:34:16');
+INSERT INTO `sys_logininfor` VALUES (1153, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 14:34:52');
+INSERT INTO `sys_logininfor` VALUES (1154, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-12 14:51:22');
+INSERT INTO `sys_logininfor` VALUES (1155, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 14:51:26');
+INSERT INTO `sys_logininfor` VALUES (1156, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-12 15:05:09');
+INSERT INTO `sys_logininfor` VALUES (1157, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 15:09:35');
+INSERT INTO `sys_logininfor` VALUES (1158, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-12 15:33:21');
+INSERT INTO `sys_logininfor` VALUES (1159, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 15:39:08');
+INSERT INTO `sys_logininfor` VALUES (1160, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-12 15:41:31');
+INSERT INTO `sys_logininfor` VALUES (1161, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 15:41:40');
+INSERT INTO `sys_logininfor` VALUES (1162, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-12 15:42:04');
+INSERT INTO `sys_logininfor` VALUES (1163, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码已失效', '2021-12-12 15:42:12');
+INSERT INTO `sys_logininfor` VALUES (1164, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 15:42:16');
+INSERT INTO `sys_logininfor` VALUES (1165, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-12 15:42:23');
+INSERT INTO `sys_logininfor` VALUES (1166, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 15:42:33');
+INSERT INTO `sys_logininfor` VALUES (1167, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 17:59:59');
+INSERT INTO `sys_logininfor` VALUES (1168, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-12 18:05:06');
+INSERT INTO `sys_logininfor` VALUES (1169, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 18:05:10');
+INSERT INTO `sys_logininfor` VALUES (1170, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-12 18:05:12');
+INSERT INTO `sys_logininfor` VALUES (1171, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码已失效', '2021-12-12 18:05:15');
+INSERT INTO `sys_logininfor` VALUES (1172, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 18:05:18');
+INSERT INTO `sys_logininfor` VALUES (1173, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-12 18:18:34');
+INSERT INTO `sys_logininfor` VALUES (1174, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-12 18:19:53');
+INSERT INTO `sys_logininfor` VALUES (1175, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-13 21:47:26');
+INSERT INTO `sys_logininfor` VALUES (1176, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-14 18:36:21');
+INSERT INTO `sys_logininfor` VALUES (1177, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2021-12-23 16:43:26');
+INSERT INTO `sys_logininfor` VALUES (1178, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-23 16:43:29');
+INSERT INTO `sys_logininfor` VALUES (1179, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-12-24 09:47:55');
+INSERT INTO `sys_logininfor` VALUES (1180, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '退出成功', '2021-12-24 10:05:03');
+INSERT INTO `sys_logininfor` VALUES (1181, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-12-24 10:05:11');
+INSERT INTO `sys_logininfor` VALUES (1182, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '退出成功', '2021-12-24 10:11:46');
+INSERT INTO `sys_logininfor` VALUES (1183, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-12-24 10:14:28');
+INSERT INTO `sys_logininfor` VALUES (1184, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '退出成功', '2021-12-24 10:14:38');
+INSERT INTO `sys_logininfor` VALUES (1185, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '1', '验证码已失效', '2021-12-24 10:14:44');
+INSERT INTO `sys_logininfor` VALUES (1186, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-12-24 10:14:49');
+INSERT INTO `sys_logininfor` VALUES (1187, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '退出成功', '2021-12-24 10:24:30');
+INSERT INTO `sys_logininfor` VALUES (1188, 'admin', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2021-12-24 10:27:56');
+INSERT INTO `sys_logininfor` VALUES (1189, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-24 10:44:15');
+INSERT INTO `sys_logininfor` VALUES (1190, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-24 12:05:22');
+INSERT INTO `sys_logininfor` VALUES (1191, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-24 12:08:18');
+INSERT INTO `sys_logininfor` VALUES (1192, 'test1', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '注册成功', '2021-12-24 12:08:43');
+INSERT INTO `sys_logininfor` VALUES (1193, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码已失效', '2021-12-24 12:53:43');
+INSERT INTO `sys_logininfor` VALUES (1194, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码已失效', '2021-12-24 12:53:44');
+INSERT INTO `sys_logininfor` VALUES (1195, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-24 12:53:47');
+INSERT INTO `sys_logininfor` VALUES (1196, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-24 13:08:53');
+INSERT INTO `sys_logininfor` VALUES (1197, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', 'nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 3', '2021-12-24 13:09:12');
+INSERT INTO `sys_logininfor` VALUES (1198, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2021-12-24 13:09:16');
+INSERT INTO `sys_logininfor` VALUES (1199, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2021-12-24 13:09:54');
+INSERT INTO `sys_logininfor` VALUES (1200, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-24 13:09:58');
+INSERT INTO `sys_logininfor` VALUES (1201, 'tanhuihuang', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2021-12-24 13:10:45');
+INSERT INTO `sys_logininfor` VALUES (1202, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-24 13:10:48');
+INSERT INTO `sys_logininfor` VALUES (1203, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-24 13:44:48');
+INSERT INTO `sys_logininfor` VALUES (1204, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2021-12-24 14:30:26');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -1218,7 +1283,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2106 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2145 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -1386,18 +1451,45 @@ INSERT INTO `sys_menu` VALUES (2090, '问答新增', 2088, 2, '#', '', NULL, 1, 
 INSERT INTO `sys_menu` VALUES (2091, '问答修改', 2088, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'question:question:edit', '#', 'admin', '2021-09-12 02:11:08', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2092, '问答删除', 2088, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'question:question:remove', '#', 'admin', '2021-09-12 02:11:08', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2093, '问答导出', 2088, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'question:question:export', '#', 'admin', '2021-09-12 02:11:08', '', NULL, '');
-INSERT INTO `sys_menu` VALUES (2094, '收藏', 2026, 1, 'collect', 'website/collect/index', NULL, 1, 0, 'C', '0', '0', 'website:collect:list', '#', 'admin', '2021-10-05 10:03:37', '', NULL, '收藏菜单');
+INSERT INTO `sys_menu` VALUES (2094, '收藏', 2026, 1, 'collect', 'website/collect/index', NULL, 1, 0, 'C', '0', '0', 'website:collect:list', 'component', 'admin', '2021-10-05 10:03:37', 'admin', '2021-12-24 13:46:35', '收藏菜单');
 INSERT INTO `sys_menu` VALUES (2095, '收藏查询', 2094, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:collect:query', '#', 'admin', '2021-10-05 10:03:37', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2096, '收藏新增', 2094, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:collect:add', '#', 'admin', '2021-10-05 10:03:37', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2097, '收藏修改', 2094, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:collect:edit', '#', 'admin', '2021-10-05 10:03:37', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2098, '收藏删除', 2094, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:collect:remove', '#', 'admin', '2021-10-05 10:03:37', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2099, '收藏导出', 2094, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:collect:export', '#', 'admin', '2021-10-05 10:03:37', '', NULL, '');
-INSERT INTO `sys_menu` VALUES (2100, '收藏夹', 2026, 1, 'collectFolder', 'website/collectFolder/index', NULL, 1, 0, 'C', '0', '0', 'website:collectFolder:list', '#', 'admin', '2021-10-05 10:03:49', '', NULL, '收藏夹菜单');
+INSERT INTO `sys_menu` VALUES (2100, '收藏夹', 2026, 1, 'collectFolder', 'website/collectFolder/index', NULL, 1, 0, 'C', '0', '0', 'website:collectFolder:list', 'component', 'admin', '2021-10-05 10:03:49', 'admin', '2021-12-24 13:46:56', '收藏夹菜单');
 INSERT INTO `sys_menu` VALUES (2101, '收藏夹查询', 2100, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:collectFolder:query', '#', 'admin', '2021-10-05 10:03:49', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2102, '收藏夹新增', 2100, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:collectFolder:add', '#', 'admin', '2021-10-05 10:03:49', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2103, '收藏夹修改', 2100, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:collectFolder:edit', '#', 'admin', '2021-10-05 10:03:49', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2104, '收藏夹删除', 2100, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:collectFolder:remove', '#', 'admin', '2021-10-05 10:03:49', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2105, '收藏夹导出', 2100, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:collectFolder:export', '#', 'admin', '2021-10-05 10:03:49', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2106, '资源管理', 0, 11, 'resource', NULL, NULL, 1, 0, 'M', '0', '0', '', 'documentation', 'admin', '2021-12-04 13:34:50', 'admin', '2021-12-04 13:35:01', '');
+INSERT INTO `sys_menu` VALUES (2107, '网盘管理', 2106, 1, 'file', 'resource/file/File', NULL, 1, 0, 'C', '0', '0', 'resource:file:list', 'table', 'admin', '2021-12-04 13:36:33', 'admin', '2021-12-04 13:42:56', '');
+INSERT INTO `sys_menu` VALUES (2108, '我的分享', 2106, 2, 'myshare', 'resource/MyShare/index', NULL, 1, 0, 'C', '0', '0', 'resource:myshare:list', 'table', 'admin', '2021-12-04 13:39:48', 'admin', '2021-12-04 13:43:05', '');
+INSERT INTO `sys_menu` VALUES (2109, '用户账户', 2026, 1, 'account', 'website/account/index', NULL, 1, 0, 'C', '0', '0', 'website:account:list', 'user', 'admin', '2021-12-11 18:48:07', 'admin', '2021-12-11 19:12:45', '用户账户菜单');
+INSERT INTO `sys_menu` VALUES (2110, '用户账户查询', 2109, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:account:query', '#', 'admin', '2021-12-11 18:48:07', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2111, '用户账户新增', 2109, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:account:add', '#', 'admin', '2021-12-11 18:48:07', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2112, '用户账户修改', 2109, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:account:edit', '#', 'admin', '2021-12-11 18:48:07', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2113, '用户账户删除', 2109, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:account:remove', '#', 'admin', '2021-12-11 18:48:07', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2114, '用户账户导出', 2109, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:account:export', '#', 'admin', '2021-12-11 18:48:07', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2115, '积分流水', 2026, 1, 'creditsFlow', 'website/creditsFlow/index', NULL, 1, 0, 'C', '0', '0', 'website:creditsFlow:list', 'slider', 'admin', '2021-12-11 18:48:14', 'admin', '2021-12-11 19:13:03', '积分流水菜单');
+INSERT INTO `sys_menu` VALUES (2116, '积分流水查询', 2115, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:creditsFlow:query', '#', 'admin', '2021-12-11 18:48:14', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2117, '积分流水新增', 2115, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:creditsFlow:add', '#', 'admin', '2021-12-11 18:48:14', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2118, '积分流水修改', 2115, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:creditsFlow:edit', '#', 'admin', '2021-12-11 18:48:14', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2119, '积分流水删除', 2115, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:creditsFlow:remove', '#', 'admin', '2021-12-11 18:48:14', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2120, '积分流水导出', 2115, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:creditsFlow:export', '#', 'admin', '2021-12-11 18:48:14', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2133, '签到配置', 2026, 1, 'signConfig', 'website/signConfig/index', NULL, 1, 0, 'C', '0', '0', 'website:signConfig:list', 'code', 'admin', '2021-12-11 19:02:23', 'admin', '2021-12-11 19:13:17', '签到配置菜单');
+INSERT INTO `sys_menu` VALUES (2134, '签到配置查询', 2133, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:signConfig:query', '#', 'admin', '2021-12-11 19:02:23', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2135, '签到配置新增', 2133, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:signConfig:add', '#', 'admin', '2021-12-11 19:02:23', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2136, '签到配置修改', 2133, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:signConfig:edit', '#', 'admin', '2021-12-11 19:02:23', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2137, '签到配置删除', 2133, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:signConfig:remove', '#', 'admin', '2021-12-11 19:02:23', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2138, '签到配置导出', 2133, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:signConfig:export', '#', 'admin', '2021-12-11 19:02:23', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2139, '签到日志', 2026, 1, 'signRecord', 'website/signRecord/index', NULL, 1, 0, 'C', '0', '0', 'website:signRecord:list', 'log', 'admin', '2021-12-11 19:02:31', 'admin', '2021-12-11 19:13:25', '签到日志菜单');
+INSERT INTO `sys_menu` VALUES (2140, '签到日志查询', 2139, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:signRecord:query', '#', 'admin', '2021-12-11 19:02:31', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2141, '签到日志新增', 2139, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:signRecord:add', '#', 'admin', '2021-12-11 19:02:31', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2142, '签到日志修改', 2139, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:signRecord:edit', '#', 'admin', '2021-12-11 19:02:31', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2143, '签到日志删除', 2139, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:signRecord:remove', '#', 'admin', '2021-12-11 19:02:31', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2144, '签到日志导出', 2139, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'website:signRecord:export', '#', 'admin', '2021-12-11 19:02:31', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -1445,7 +1537,17 @@ CREATE TABLE `sys_oper_log`  (
   `error_msg` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '错误消息',
   `oper_time` datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`oper_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1718 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2518 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_oper_log
+-- ----------------------------
+INSERT INTO `sys_oper_log` VALUES (2512, '上传头像', 2, 'com.ruoyi.web.controller.common.CommonController.uploadImage()', 'POST', 1, 'admin', NULL, '/common/uploadImage', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"code\":200,\"url\":\"/common/image/2021/12/24/013b5c73-b493-4b79-9e26-4b640e7c4a95.png\"}', 0, NULL, '2021-12-24 14:30:53');
+INSERT INTO `sys_oper_log` VALUES (2513, '博客文章', 1, 'com.ruoyi.web.controller.blog.ArticleController.add()', 'POST', 1, 'admin', NULL, '/blog/article', '127.0.0.1', '内网IP', '{\"clickCount\":0,\"tagId\":\"5,7\",\"remark\":\"1\",\"title\":\"22121221\",\"type\":0,\"categoryName\":\"科学类\",\"content\":\"<p>12212121111111111</p>\",\"password\":\"2121212\",\"updateBy\":\"1\",\"openComment\":1,\"openPassword\":1,\"summary\":\"1\",\"images\":\"/common/image/2021/12/24/013b5c73-b493-4b79-9e26-4b640e7c4a95.png\",\"supportCount\":0,\"level\":0,\"author\":\"若依\",\"articleId\":230,\"collectCount\":0,\"updateTime\":1640327472547,\"sort\":1,\"isPublish\":\"1\",\"params\":{},\"isOriginal\":\"1\",\"createBy\":\"1\",\"createTime\":1640327472519,\"opposeCount\":0,\"categoryId\":\"5\",\"status\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2021-12-24 14:31:12');
+INSERT INTO `sys_oper_log` VALUES (2514, '博客文章', 1, 'com.ruoyi.web.controller.blog.ArticleController.uploadPics()', 'POST', 1, 'admin', NULL, '/blog/article/uploadLocalFile', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作失败\",\"code\":500}', 0, NULL, '2021-12-24 14:32:42');
+INSERT INTO `sys_oper_log` VALUES (2515, '博客文章', 1, 'com.ruoyi.web.controller.blog.ArticleController.uploadPics()', 'POST', 1, 'admin', NULL, '/blog/article/uploadLocalFile', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作失败\",\"code\":500}', 0, NULL, '2021-12-24 14:37:13');
+INSERT INTO `sys_oper_log` VALUES (2516, '博客文章', 1, 'com.ruoyi.web.controller.blog.ArticleController.uploadPics()', 'POST', 1, 'admin', NULL, '/blog/article/uploadLocalFile', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2021-12-24 14:40:03');
+INSERT INTO `sys_oper_log` VALUES (2517, '博客文章', 2, 'com.ruoyi.web.controller.blog.ArticleController.edit()', 'PUT', 1, 'admin', NULL, '/blog/article', '127.0.0.1', '内网IP', '{\"clickCount\":0,\"tagId\":\"\",\"title\":\"09、课堂笔记：SpringCloud第二天\",\"type\":0,\"categoryName\":\"科学类\",\"content\":\"<h2>01、问题反馈</h2>\\n<table>\\n<thead>\\n<tr><th>意见或建议</th></tr>\\n</thead>\\n<tbody>\\n<tr><td>小飞飞是真的~好纯啊！是真的纯哟！微信给个呗！</td></tr>\\n<tr><td>继续努力吧！！</td></tr>\\n</tbody>\\n</table>\\n<h2>02、课程目标</h2>\\n<p>目标1：能够使用Feign进行远程调用</p>\\n<p>目标2：能够搭建Spring Cloud Gateway网关服务</p>\\n<p>目标3：能够配置Spring Cloud Gateway路由过滤器</p>\\n<p>目标4：能够编写Spring Cloud Gateway全局过滤器</p>\\n<p>目标5：能够搭建Spring Cloud Config配置中心服务</p>\\n<p>目标6：能够使用Spring Cloud Bus实时更新配置</p>\\n<h2>03、Feign：介绍与使用</h2>\\n<p>在前面的学习中，使用了Ribbon的负载均衡功能，大大简化了远程调用时的代码：</p>\\n<pre><code class=\\\"language-java\\\">// 定义服务实例访问URL\\nString url = &quot;http://user-service/user/&quot; + id;\\nreturn restTemplate.getForObject(url, String.class);\\n</code></pre>\\n<p>如果就学到这里，你可能以后需要编写类似的大量重复代码，格式基本相同，无非参数不一样。有没有更优雅的方式，来对这些代码再次优化呢？</p>\\n<p>这就是接下来要学的Feign的功能了。</p>\\n<h3>3.1 介绍</h3>\\n<p>Feign也叫伪装：</p>\\n<p><img src=\\\"http://localhost:8600/upload/2021/12/24/a8453007-a914-4585-b8fd-8c219a76652d.png\\\" alt=\\\"1572166999223\\\" /></p>\\n<p>Feign可以把Rest的请求进行隐藏，伪装成类似SpringMVC的Controller一样。你不用再自己拼接url，拼接参数等等操作，一切都交给Feign去做。</p>\\n<p>项目主页：<a href=\\\"https://github.com/OpenFeign/feign\\\">https://github.com/OpenFeign/feign</a></p>\\n<p><img src=\\\"http://localhost:8600/upload/2021/12/24/96901483-a776-41eb-a497-5657eeced365.png\\\" alt=\\\"1573006676151\\\" /></p>\\n<h3>3.2 使用【掌握】</h3>\\n<h4>目标</h4>\\n<blockquote>\\n<p>使用Feign进行远程调用</p>\\n</blockquote>\\n<h4>操作步骤</h4>\\n<ul>\\n<li>\\n<p>配置依赖</p>\\n<ul>\\n<li>\\n<p>在consumer中添加如下依赖：</p>\\n<pre><code class=\\\"language-xml\\\">&lt;!-- 配置Feign启动器 --&gt;\\n&lt;dependency&gt;\\n    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;\\n    &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;\\n&lt;/dependency&gt;\\n</code></pre>\\n</li>\\n</ul>\\n</li>\\n<li>\\n<p>编写Feign的客户端</p>\\n<ul>\\n<li>\\n<p>在consumer中编写如下Feign客户端接口类：</p>\\n<pre><code class=\\\"language-java\\\">package com.itheima.client;\\n\\nimport com.itheima.pojo.User;\\nimport org.springframework.cloud.openfe', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2021-12-24 14:40:21');
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1641,14 +1743,17 @@ CREATE TABLE `sys_user`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '0', '/avatar/2021/10/04/d900c1b1-4f34-4b86-b245-1667d6005380.jpeg', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2021-10-06 20:19:18', 'admin', '2021-04-29 21:28:12', '', '2021-10-06 20:19:18', '管理员');
-INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '/avatar/defaul/avatar.jpg', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2021-04-29 21:28:12', 'admin', '2021-04-29 21:28:12', '', NULL, '测试员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '0', '/avatar/2021/10/07/1ba530bd-39f7-4847-9d5d-904831c04adb.jpeg', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2021-12-24 14:30:27', 'admin', '2021-04-29 21:28:12', '', '2021-12-24 14:30:26', '管理员');
+INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '/avatar/defaul/avatar.jpg', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2021-11-01 20:32:28', 'admin', '2021-04-29 21:28:12', '', '2021-11-01 20:32:27', '测试员');
 INSERT INTO `sys_user` VALUES (3, NULL, 'thh', 'thh', '00', '', '', '0', '', '$2a$10$/tqZwA5yVUhhP64Q3i2hWe37pMhprCPh7RePysI6az9IZ2ND3NXii', '0', '0', '127.0.0.1', '2021-08-18 19:49:31', '', '2021-08-18 19:48:56', '', '2021-08-18 19:49:30', NULL);
+INSERT INTO `sys_user` VALUES (17, NULL, 'tanhuihuang', 'king', '00', '', '', '0', '/avatar/2021/10/10/17bbf673-8de9-4b90-a534-8f3d0b37deb1.jpeg', '$2a$10$sTJgIOZrGey6ug94sSb3p.vdsCd5L.Xe.5HaFFyjY6w1xakNESFRK', '0', '0', '127.0.0.1', '2021-12-24 13:09:58', '', '2021-10-10 15:25:43', '', '2021-12-24 13:09:58', NULL);
+INSERT INTO `sys_user` VALUES (21, 100, 'test', 'test', '00', '18776050775@163.com', '18776050775', '0', '', '$2a$10$0bjgJUSo..TvRzLDbjZg8ut/87bGUkr/QD/W/4VaoDzRa.AKVF3Gm', '0', '0', '', NULL, 'admin', '2021-12-24 12:07:29', '', NULL, '1');
+INSERT INTO `sys_user` VALUES (22, NULL, 'test1', 'test1', '00', '', '', '0', '', '$2a$10$OREHlIe8wPSa1gATxZZntuKuWF5VTMveuCEnITq1m6NTYl8xg9V7O', '0', '0', '', NULL, '', '2021-12-24 12:08:43', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post
@@ -1665,6 +1770,8 @@ CREATE TABLE `sys_user_post`  (
 -- ----------------------------
 INSERT INTO `sys_user_post` VALUES (1, 1);
 INSERT INTO `sys_user_post` VALUES (2, 2);
+INSERT INTO `sys_user_post` VALUES (20, 1);
+INSERT INTO `sys_user_post` VALUES (21, 1);
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -1681,6 +1788,41 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (2, 2);
+INSERT INTO `sys_user_role` VALUES (20, 2);
+INSERT INTO `sys_user_role` VALUES (21, 2);
+
+-- ----------------------------
+-- Table structure for website_account
+-- ----------------------------
+DROP TABLE IF EXISTS `website_account`;
+CREATE TABLE `website_account`  (
+  `account_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户id',
+  `account_amount` bigint(20) NULL DEFAULT NULL COMMENT '账户积分',
+  `account_desc` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '账户描述',
+  `status` int(11) NULL DEFAULT NULL COMMENT '状态',
+  `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `del_flag` int(11) NULL DEFAULT NULL COMMENT '删除标志',
+  `series_days` int(11) NULL DEFAULT NULL COMMENT '累计签到天数',
+  `continuity_days` int(11) NULL DEFAULT NULL COMMENT '连续签到天数',
+  `last_sign_time` datetime(0) NULL DEFAULT NULL COMMENT '最后签到时间',
+  `sign_nums` int(11) NULL DEFAULT NULL COMMENT '可补签次数',
+  `sign_data_update_time` datetime(0) NULL DEFAULT NULL COMMENT '签到数据更新时间',
+  PRIMARY KEY (`account_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户账户表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of website_account
+-- ----------------------------
+INSERT INTO `website_account` VALUES (4, '1', 0, NULL, 1, '2021-12-24 13:07:34', '2021-12-24 13:07:34', NULL, 4, NULL, '2021-12-24 13:08:49', 0, '2021-12-24 13:08:49');
+INSERT INTO `website_account` VALUES (5, '2', 0, NULL, 1, '2021-12-24 13:07:36', '2021-12-24 13:07:36', NULL, 0, 0, NULL, 0, NULL);
+INSERT INTO `website_account` VALUES (6, '3', 0, NULL, 1, '2021-12-24 13:07:36', '2021-12-24 13:07:36', NULL, 0, 0, NULL, 0, NULL);
+INSERT INTO `website_account` VALUES (7, '17', 0, NULL, 1, '2021-12-24 13:07:36', '2021-12-24 13:07:36', NULL, 1, NULL, '2021-12-24 13:10:01', 0, '2021-12-24 13:10:01');
+INSERT INTO `website_account` VALUES (8, '18', 0, NULL, 1, '2021-12-24 13:07:36', '2021-12-24 13:07:36', NULL, 0, 0, NULL, 0, NULL);
+INSERT INTO `website_account` VALUES (9, '19', 0, NULL, 1, '2021-12-24 13:07:36', '2021-12-24 13:07:36', NULL, 0, 0, NULL, 0, NULL);
+INSERT INTO `website_account` VALUES (10, '21', 0, NULL, 1, '2021-12-24 13:07:36', '2021-12-24 13:07:36', NULL, 0, 0, NULL, 0, NULL);
+INSERT INTO `website_account` VALUES (11, '22', 0, NULL, 1, '2021-12-24 13:07:37', '2021-12-24 13:07:37', NULL, 0, 0, NULL, 0, NULL);
 
 -- ----------------------------
 -- Table structure for website_banner
@@ -1725,14 +1867,7 @@ CREATE TABLE `website_collect`  (
   `create_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `update_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`collect_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 255 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收藏表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of website_collect
--- ----------------------------
-INSERT INTO `website_collect` VALUES (225, '1', '139', 1, '2021-10-06 20:00:04', '2021-10-06 20:00:04', 'wm_movie', '1', '1');
-INSERT INTO `website_collect` VALUES (229, '1', '129', 1, '2021-10-06 20:14:33', '2021-10-06 20:14:33', 'wm_movie', '1', '1');
-INSERT INTO `website_collect` VALUES (233, '1', '128', 1, '2021-10-06 20:19:23', '2021-10-06 20:19:23', 'wm_movie', '1', '1');
+) ENGINE = InnoDB AUTO_INCREMENT = 305 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收藏表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for website_collect_folder
@@ -1757,7 +1892,7 @@ CREATE TABLE `website_collect_folder`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `website_comment`;
 CREATE TABLE `website_comment`  (
-  `comment_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `comment_id` bigint(20) UNSIGNED NOT NULL,
   `target_id` bigint(20) NULL DEFAULT NULL COMMENT '被评论的文章电影或者页面的ID',
   `user_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '评论人的ID',
   `parent_comment_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '父级评论的id',
@@ -1783,7 +1918,29 @@ CREATE TABLE `website_comment`  (
   `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `table_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '评论表名称 有电影表和文章表',
   PRIMARY KEY (`comment_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 218 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for website_credits_flow
+-- ----------------------------
+DROP TABLE IF EXISTS `website_credits_flow`;
+CREATE TABLE `website_credits_flow`  (
+  `credits_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `credits_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '积分编号',
+  `user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户id',
+  `account_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '账户id',
+  `account` bigint(20) NULL DEFAULT NULL COMMENT '账户积分',
+  `pre_account` bigint(20) NULL DEFAULT NULL COMMENT '消耗前的账号积分',
+  `post_acount` bigint(20) NULL DEFAULT NULL COMMENT '消耗积分',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `status` int(11) NULL DEFAULT NULL COMMENT '账号',
+  `credits_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '积分类型',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `del_flag` int(11) NULL DEFAULT NULL COMMENT '删除标志',
+  `credits_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+  PRIMARY KEY (`credits_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '积分流水表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for website_link
@@ -1813,22 +1970,88 @@ INSERT INTO `website_link` VALUES (3, '2020-04-09 21:36:12', '2021-08-24 19:16:1
 INSERT INTO `website_link` VALUES (5, '2021-05-15 10:15:51', '2021-08-16 19:51:45', 0, 999, '若依', 'http://ruoyi.vip/', '_blank', NULL, NULL, NULL);
 
 -- ----------------------------
--- Table structure for website_message
+-- Table structure for website_msg
 -- ----------------------------
-DROP TABLE IF EXISTS `website_message`;
-CREATE TABLE `website_message`  (
-  `message_id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_id` int(11) NULL DEFAULT NULL,
-  `to_id` int(11) NULL DEFAULT NULL,
-  `conversation_id` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `status` int(11) NULL DEFAULT NULL COMMENT '0-未读;1-已读;2-删除;',
-  `create_time` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`message_id`) USING BTREE,
-  INDEX `index_from_id`(`from_id`) USING BTREE,
-  INDEX `index_to_id`(`to_id`) USING BTREE,
-  INDEX `index_conversation_id`(`conversation_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+DROP TABLE IF EXISTS `website_msg`;
+CREATE TABLE `website_msg`  (
+  `msg_id` int(10) UNSIGNED NOT NULL,
+  `user_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '用户id',
+  `msg_type` tinyint(3) UNSIGNED NOT NULL,
+  `msg_status` tinyint(3) UNSIGNED NOT NULL COMMENT '0-未读;1-已读;2-删除;',
+  `msg_to` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `msg_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `msg_content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `msg_time` datetime(0) NOT NULL COMMENT '时间',
+  PRIMARY KEY (`msg_id`) USING BTREE,
+  INDEX `msg_code`(`msg_code`) USING BTREE,
+  INDEX `msg_time`(`msg_time`) USING BTREE,
+  INDEX `user_id`(`user_id`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for website_search_log
+-- ----------------------------
+DROP TABLE IF EXISTS `website_search_log`;
+CREATE TABLE `website_search_log`  (
+  `search_log_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户id',
+  `equ_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '设备id',
+  `keyword` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '关键字',
+  `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip地址',
+  `province` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '省份名称',
+  `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '城市名称',
+  `referer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来源域名',
+  `device` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '设备类型',
+  `operating_system` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
+  `browser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器类型',
+  `terminal` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端类型',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`search_log_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 255 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '搜索日志表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for website_sign_config
+-- ----------------------------
+DROP TABLE IF EXISTS `website_sign_config`;
+CREATE TABLE `website_sign_config`  (
+  `sign_config_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `sign_day` int(11) NULL DEFAULT NULL COMMENT '签到天数',
+  `type` int(11) NULL DEFAULT NULL COMMENT '明细种类1积分 现金....',
+  `number` int(11) NULL DEFAULT NULL COMMENT '数量',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `sign_set` tinyint(4) NULL DEFAULT NULL COMMENT '奖励方式：1单次2循环',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`sign_config_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '签到配置表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of website_sign_config
+-- ----------------------------
+INSERT INTO `website_sign_config` VALUES (1, 1, 1, 111, '1111', 2, '2021-12-11 19:05:02', '2021-12-11 19:11:52');
+
+-- ----------------------------
+-- Table structure for website_sign_record
+-- ----------------------------
+DROP TABLE IF EXISTS `website_sign_record`;
+CREATE TABLE `website_sign_record`  (
+  `sign_record_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户id',
+  `sign_reward` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '奖励',
+  `sign_date` date NULL DEFAULT NULL COMMENT '签到日期',
+  `sign_type` tinyint(4) NULL DEFAULT NULL COMMENT '签到类型1=签到2=补签',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`sign_record_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '签到日志表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of website_sign_record
+-- ----------------------------
+INSERT INTO `website_sign_record` VALUES (1, '1', NULL, '2021-12-10', 1, '2021-12-12 10:48:39');
+INSERT INTO `website_sign_record` VALUES (2, '1', NULL, '2021-12-11', 1, '2021-12-12 10:49:41');
+INSERT INTO `website_sign_record` VALUES (3, '1', NULL, '2021-12-08', 1, '2021-12-12 10:53:14');
+INSERT INTO `website_sign_record` VALUES (21, '1', '1', '2021-12-24', 1, '2021-12-24 13:08:49');
+INSERT INTO `website_sign_record` VALUES (22, '17', '1', '2021-12-24', 1, '2021-12-24 13:10:01');
 
 -- ----------------------------
 -- Table structure for website_web_config
@@ -1872,7 +2095,7 @@ CREATE TABLE `website_web_config`  (
   `smtp_address` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'SMTP地址',
   `smtp_port` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'SMTP端口',
   `start_email_notification` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否开启邮件通知(0:否， 1:是)',
-  `editor_model` tinyint(255) NULL DEFAULT NULL COMMENT '编辑器模式，(0：富文本编辑器CKEditor，1：markdown编辑器Veditor)',
+  `editor_model` tinyint(4) NULL DEFAULT NULL COMMENT '编辑器模式，(0：富文本编辑器CKEditor，1：markdown编辑器Veditor)',
   `minio_end_point` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Minio远程连接地址',
   `minio_access_key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Minio公钥',
   `minio_secret_key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Minio私钥',
@@ -1891,7 +2114,7 @@ CREATE TABLE `website_web_config`  (
 -- ----------------------------
 -- Records of website_web_config
 -- ----------------------------
-INSERT INTO `website_web_config` VALUES ('web_config', '/common/image/2021/08/24/6bc541e4538f4e019b6e82285433c06f/6bc541e4538f4e019b6e82285433c06f.jpg', '辉皇影院', '一个专注于技术分享的博客平台，大家以共同学习，乐于分享，拥抱开源的价值观进行学习交流', '辉皇影院,辉皇社区,开发者社区', '灰灰', '赣ICP备18014504号', 1, '2021-06-08 22:25:55', '2021-10-03 21:48:14', '一个专注于技术分享的博客平台', '/common/image/2021/10/02/d1ee1336dc9549c2ac94f8b4052dcef0/d1ee1336dc9549c2ac94f8b4052dcef0.jpg', '/common/image/2021/10/02/ebfea8a70abf4ac2987e57708a882dec/ebfea8a70abf4ac2987e57708a882dec.jpg', 'https://gitee.com/tanhuihuang/ruoyi-media.git', 'https://gitee.com/tanhuihuang/ruoyi-media.git', '770666529', '864499414', 'tan770666529', '[\"2\",\"1\",\"4\",\"5\",\"3\",\"6\"]', '[\"4\",\"2\",\"1\",\"5\",\"3\"]', '1', 0, 1, 0, '22', '3', '4', 'na0', '0', '111', 'image.ithhit.cn', '770666529@qq.com', '22', '333', '222', '111', NULL, NULL, '1', '1', '1', '1', 1, NULL, NULL, '1', 'admin', NULL, NULL, '0');
+INSERT INTO `website_web_config` VALUES ('web_config', '/common/image/2021/08/24/6bc541e4538f4e019b6e82285433c06f/6bc541e4538f4e019b6e82285433c06f.jpg', '辉皇影院', '一个专注于技术分享的博客平台，大家以共同学习，乐于分享，拥抱开源的价值观进行学习交流', '辉皇影院,辉皇社区,开发者社区', '灰灰', '', 1, '2021-12-24 14:16:06', '2021-10-16 11:49:42', '一个专注于技术分享的博客平台', '/common/image/2021/10/02/d1ee1336dc9549c2ac94f8b4052dcef0/d1ee1336dc9549c2ac94f8b4052dcef0.jpg', '/common/image/2021/10/02/ebfea8a70abf4ac2987e57708a882dec/ebfea8a70abf4ac2987e57708a882dec.jpg', 'https://gitee.com/tanhuihuang/ruoyi-media.git', 'https://gitee.com/tanhuihuang/ruoyi-media.git', '770666529', '864499414', 'tan770666529', '[\"2\",\"1\",\"4\",\"5\",\"3\",\"6\"]', '[\"1\",\"2\"]', '1', 0, 1, 0, '22', '3', '4', 'na0', '0', '111', 'image.ithhit.cn', '770666529@qq.com', '22', '333', '222', '111', NULL, NULL, '1', '1', '1', '1', 1, NULL, NULL, '1', 'admin', NULL, NULL, '0');
 
 -- ----------------------------
 -- Table structure for wm_actor
@@ -1909,20 +2132,20 @@ CREATE TABLE `wm_actor`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `collect_count` bigint(19) NULL DEFAULT NULL COMMENT '收藏数',
-  `click_count` bigint(19) NULL DEFAULT NULL COMMENT '点击数',
+  `collect_count` bigint(20) NULL DEFAULT NULL COMMENT '收藏数',
+  `click_count` bigint(20) NULL DEFAULT NULL COMMENT '点击数',
   PRIMARY KEY (`actor_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 113 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '演员表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of wm_actor
 -- ----------------------------
-INSERT INTO `wm_actor` VALUES (1, '小张', '/actor/avatar/2021/05/19/e680c8c5-0d53-4618-ba15-904a535dea42.jpg', '托德·菲利普斯，好莱坞著名导演，以性喜剧《宿醉》成名。', '<p>测试测试123333333333333336666666666666666666</p>', 'artist,musician,director,actor', '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 1);
-INSERT INTO `wm_actor` VALUES (3, '小李', '/avatar/2021/05/15/2b7e937a-5cd2-4329-a79e-34b91f7a6e0c.jpg', '杰昆·菲尼克斯，是90年代最出名的童星瑞凡·菲尼克斯的亲弟弟，三十出头的他戏龄已经高达二十几年。杰昆出道的第一部片子叫《spacecamp》，后来又在《Russkies》 (1987)和《Parenthood 》(1989)中演出，他表演相当不错。</p><p>　　不像一般的美国家庭，杰昆的家庭教育严格，但父母却十分鼓励孩子们从事表演，很自然的，杰昆就像父母希望的那样做了，他紧紧跟随他的哥哥瑞凡·菲尼克斯和瑞恩·菲尼克斯步入了演艺圈。那时候，他叫做Leaf，直到九十年代初他才改名叫Joaquin　在2005年的新片《一往无前》里，杰昆又带给银幕更个人化与风格化的表演，为这部传记电影打上了菲尼克斯式的表演烙印。凭借在《一往无前》中的出色演出,他获得第78届奥斯卡最佳男主角提名及第63届金球奖喜剧/音乐类最佳男演员提名', '<p>2019年 第34届美国独立精神奖 最佳男主角(提名) 你从未在此/</p><p>2018年 第21届英国独立电影奖 最佳男主角(提名) 你从未在此/</p><p>2017年 第70届戛纳电影节 主竞赛单元 最佳男演员 你从未在此/				</p>', 'director', '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 1);
-INSERT INTO `wm_actor` VALUES (4, '罗伯特·德尼罗 Robert De Niro', '/avatar/2021/05/15/0b77e62a-d191-4e01-b2ee-7b247dbf54d9.jpg', '　　奥斯卡影帝罗伯特·德尼罗塑造过的所有角色中，最著名的当属《教父2》中年轻的唐·科莱昂和《愤怒的公牛》中的拳击手杰克·拉莫塔，他最经典的一句台词则是《出租汽车司机》中“你在跟我讲话？”凭借马丁·斯科塞斯1973年影片《穷街陋巷》一举成名的德尼罗，既可以扮演心狠手辣的黑帮分子，又能在《午夜狂奔》、《摇尾狗》、《老大靠边闪》和《拜见岳父岳母》等喜剧中尽现搞笑天份。\r\n　　1943年8月，罗伯特·德尼罗出生在纽约一个艺术家家庭，两岁时父母离异，他跟着母亲生活在格林威治村。16岁高中毕业后他跟着路瑟·詹姆斯（Luther James）和李·斯特拉斯伯格（Lee Strasberg）学习表演，参演了几部外百老汇剧，1965年在法国影片《Trois chambres à Manhattan》中饰演一个小角色，60年代后期他在《帅气逃兵》、《嗨，妈妈》、《婚礼舞会》等影片中担任主演。进入70年代，德尼罗的事业开始绽放异彩，出演了《血腥妈妈》、《我的子弹会转弯》和《天生大赢家》等影片后，与马丁·斯科塞斯首度合作的《穷街陋巷》为他赢得了纽约影评人协会奖和美国国家影评人协会奖，此后他又凭借《战鼓轻悄》获得奥斯卡提名，1974年的《教父2》让他如愿捧得奥斯卡影帝桂冠，两年后的《出租汽车司机》更是好评如潮，获得多项最佳男演员奖。此后他的主要作品有《愤怒的公牛》、《不可触犯》、《午夜狂奔》、《我们不是天使》、《盗亦有道》、《疯狗马子》等。1993年他首执导棒，自导自演了《布鲁克斯故事》。2003年罗伯特·德尼罗被美国电影学会授予终生成就奖，以表彰他对电影事业的杰出贡献。', '2019年 第71届黄金时段艾美奖 喜剧类 最佳客串男演员(提名) 周六夜现场/ 第四十四季\r\n\r\n2018年 第75届金球奖 电视类 迷你剧/电视电影最佳男主角(提名) 欺诈圣手/\r\n\r\n2017年 第69届黄金时段艾美奖 迷你剧/电视电影 最佳男主角(提名) 欺诈圣手				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 1);
-INSERT INTO `wm_actor` VALUES (5, '新海诚 Makoto Shinkai', '/avatar/2021/05/15/8c8d3ee6-b72b-40ca-96c7-8c4a61fe2f85.jpg', '　　新海 诚（Makoto Shinkai，まこと しんかい，1973年2月9日－），男，居住在东京。日本长野县野泽北高等学校、日本中央大学文学部国文学专攻毕业。1996-2001年就职于Falcom游戏会社，目前自由职业，以制作个人动画为主。绚丽的2D动画效果配合近乎完美的节奏感，给人以强烈的感官震撼。这就是新海诚在职F社5年间的代表作之一。 1996年，新海诚在大学结业后加入日本Falcom游戏会社（通常在相关仕事中以新津诚名义出现），负责程序、美工、动画与宣传影片制作。在职Falcom期间，新海氏开始了个人动画短片创作。包括1997年的黑白短片《遥远世界》（1分30秒）、1998年的3D短片《被包围的世界》（30秒）、1999-2000年的黑白短片《她和她的猫》（5分钟）。 2000年初夏，新海氏开始制作个人映像动画《星之声》。但由于工作的繁忙，导致《星之声》一度停滞不前。2001年5月，新海氏向Falcom提交辞职。之后《星之声》的制作步上正轨，2002年1月宣告完工，历时共计7个月。此外，新海氏也曾外注参与制作Minori游戏会社游戏《Bittersweet Fools》（2001）、《Wind·a breath of heart》（2002）片头动画。 2003年新海诚新作《云的彼端，约定的地方》（预定片长50分钟）。在背景设定与情节方面，与架空感十足的《星之声》相比更加的平稳自然。由田泽潮担任人设更是弥补了新海人设较苍白的缺陷。担任Minori游戏会社游戏《EF - the first tale》(2006)的动画监制(Animation Movie Director)。', '2017年 第40届日本电影学院奖 最佳导演(提名) 你的名字。\r\n2016年 第41届报知映画赏 特别奖 你的名字。\r\n2005年 第8届上海国际电影节 亚洲新人奖 最佳影片(提名) 云的彼端，约定的地方				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
-INSERT INTO `wm_actor` VALUES (7, '森七菜 Nana Mori', '/avatar/2021/05/15/bc6132fb-df68-4220-850d-c28001787822.jpg', '00后新生代日本女演员。', '<p>测试测试111</p>', 'actor,director', '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
-INSERT INTO `wm_actor` VALUES (9, '神木隆之介 Ryûnosuke Kamiki', '/avatar/2021/05/15/128555fc-7d5b-4546-953b-6baae079dfc0.jpg', '　　神木隆之介，日本男演员、声优。出生时身患救治率仅为1%的感染症，却奇迹般地获救，并被小心翼翼地养大。童年时期非常漂亮和可爱的样貌，导致他曾经常被误以为是女孩子，并成为动漫大国日本的漫画作家、动画制作人创作人物形象时的灵感的源泉。日本畅销漫画《投捕手》（的画作者柚庭千景曾在该系列作品的第六卷后记中承认青波的形象设计灵感源自演员神木隆之介。吉卜力工作室作品中的《买下星星的日子》的主人公诺那、《借物少女阿丽埃蒂》中的少年翔的形象也都是以他为原型创作的。进入变声期后，终于变得像男孩子了，但秀美帅气的外形、透明纯真的气质与丰富的演艺经历、精致迫真的演技令其在同代人中始终是一个特别的存在。', '2013年 第77届日剧学院赏 最佳男配角 家族游戏。\r\n2007年 第54届日剧学院赏 最佳男主角(提名) 侦探学园Q。\r\n2006年 第29届日本电影学院奖 最佳新人 妖怪大战争。				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
+INSERT INTO `wm_actor` VALUES (1, '小张', '/actor/avatar/2021/05/19/e680c8c5-0d53-4618-ba15-904a535dea42.jpg', '托德·菲利普斯，好莱坞著名导演，以性喜剧《宿醉》成名。', '<p>测试测试123333333333333336666666666666666666</p>', 'artist,musician,director,actor', '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 1, 6);
+INSERT INTO `wm_actor` VALUES (3, '小李', '/avatar/2021/05/15/2b7e937a-5cd2-4329-a79e-34b91f7a6e0c.jpg', '杰昆·菲尼克斯，是90年代最出名的童星瑞凡·菲尼克斯的亲弟弟，三十出头的他戏龄已经高达二十几年。杰昆出道的第一部片子叫《spacecamp》，后来又在《Russkies》 (1987)和《Parenthood 》(1989)中演出，他表演相当不错。</p><p>　　不像一般的美国家庭，杰昆的家庭教育严格，但父母却十分鼓励孩子们从事表演，很自然的，杰昆就像父母希望的那样做了，他紧紧跟随他的哥哥瑞凡·菲尼克斯和瑞恩·菲尼克斯步入了演艺圈。那时候，他叫做Leaf，直到九十年代初他才改名叫Joaquin　在2005年的新片《一往无前》里，杰昆又带给银幕更个人化与风格化的表演，为这部传记电影打上了菲尼克斯式的表演烙印。凭借在《一往无前》中的出色演出,他获得第78届奥斯卡最佳男主角提名及第63届金球奖喜剧/音乐类最佳男演员提名', '<p>2019年 第34届美国独立精神奖 最佳男主角(提名) 你从未在此/</p><p>2018年 第21届英国独立电影奖 最佳男主角(提名) 你从未在此/</p><p>2017年 第70届戛纳电影节 主竞赛单元 最佳男演员 你从未在此/				</p>', 'director', '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 3);
+INSERT INTO `wm_actor` VALUES (4, '罗伯特·德尼罗 Robert De Niro', '/avatar/2021/05/15/0b77e62a-d191-4e01-b2ee-7b247dbf54d9.jpg', '　　奥斯卡影帝罗伯特·德尼罗塑造过的所有角色中，最著名的当属《教父2》中年轻的唐·科莱昂和《愤怒的公牛》中的拳击手杰克·拉莫塔，他最经典的一句台词则是《出租汽车司机》中“你在跟我讲话？”凭借马丁·斯科塞斯1973年影片《穷街陋巷》一举成名的德尼罗，既可以扮演心狠手辣的黑帮分子，又能在《午夜狂奔》、《摇尾狗》、《老大靠边闪》和《拜见岳父岳母》等喜剧中尽现搞笑天份。\r\n　　1943年8月，罗伯特·德尼罗出生在纽约一个艺术家家庭，两岁时父母离异，他跟着母亲生活在格林威治村。16岁高中毕业后他跟着路瑟·詹姆斯（Luther James）和李·斯特拉斯伯格（Lee Strasberg）学习表演，参演了几部外百老汇剧，1965年在法国影片《Trois chambres à Manhattan》中饰演一个小角色，60年代后期他在《帅气逃兵》、《嗨，妈妈》、《婚礼舞会》等影片中担任主演。进入70年代，德尼罗的事业开始绽放异彩，出演了《血腥妈妈》、《我的子弹会转弯》和《天生大赢家》等影片后，与马丁·斯科塞斯首度合作的《穷街陋巷》为他赢得了纽约影评人协会奖和美国国家影评人协会奖，此后他又凭借《战鼓轻悄》获得奥斯卡提名，1974年的《教父2》让他如愿捧得奥斯卡影帝桂冠，两年后的《出租汽车司机》更是好评如潮，获得多项最佳男演员奖。此后他的主要作品有《愤怒的公牛》、《不可触犯》、《午夜狂奔》、《我们不是天使》、《盗亦有道》、《疯狗马子》等。1993年他首执导棒，自导自演了《布鲁克斯故事》。2003年罗伯特·德尼罗被美国电影学会授予终生成就奖，以表彰他对电影事业的杰出贡献。', '2019年 第71届黄金时段艾美奖 喜剧类 最佳客串男演员(提名) 周六夜现场/ 第四十四季\r\n\r\n2018年 第75届金球奖 电视类 迷你剧/电视电影最佳男主角(提名) 欺诈圣手/\r\n\r\n2017年 第69届黄金时段艾美奖 迷你剧/电视电影 最佳男主角(提名) 欺诈圣手				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 2);
+INSERT INTO `wm_actor` VALUES (5, '新海诚 Makoto Shinkai', '/avatar/2021/05/15/8c8d3ee6-b72b-40ca-96c7-8c4a61fe2f85.jpg', '　　新海 诚（Makoto Shinkai，まこと しんかい，1973年2月9日－），男，居住在东京。日本长野县野泽北高等学校、日本中央大学文学部国文学专攻毕业。1996-2001年就职于Falcom游戏会社，目前自由职业，以制作个人动画为主。绚丽的2D动画效果配合近乎完美的节奏感，给人以强烈的感官震撼。这就是新海诚在职F社5年间的代表作之一。 1996年，新海诚在大学结业后加入日本Falcom游戏会社（通常在相关仕事中以新津诚名义出现），负责程序、美工、动画与宣传影片制作。在职Falcom期间，新海氏开始了个人动画短片创作。包括1997年的黑白短片《遥远世界》（1分30秒）、1998年的3D短片《被包围的世界》（30秒）、1999-2000年的黑白短片《她和她的猫》（5分钟）。 2000年初夏，新海氏开始制作个人映像动画《星之声》。但由于工作的繁忙，导致《星之声》一度停滞不前。2001年5月，新海氏向Falcom提交辞职。之后《星之声》的制作步上正轨，2002年1月宣告完工，历时共计7个月。此外，新海氏也曾外注参与制作Minori游戏会社游戏《Bittersweet Fools》（2001）、《Wind·a breath of heart》（2002）片头动画。 2003年新海诚新作《云的彼端，约定的地方》（预定片长50分钟）。在背景设定与情节方面，与架空感十足的《星之声》相比更加的平稳自然。由田泽潮担任人设更是弥补了新海人设较苍白的缺陷。担任Minori游戏会社游戏《EF - the first tale》(2006)的动画监制(Animation Movie Director)。', '2017年 第40届日本电影学院奖 最佳导演(提名) 你的名字。\r\n2016年 第41届报知映画赏 特别奖 你的名字。\r\n2005年 第8届上海国际电影节 亚洲新人奖 最佳影片(提名) 云的彼端，约定的地方				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 1);
+INSERT INTO `wm_actor` VALUES (7, '森七菜 Nana Mori', '/avatar/2021/05/15/bc6132fb-df68-4220-850d-c28001787822.jpg', '00后新生代日本女演员。', '<p>测试测试111</p>', 'actor,director', '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 1);
+INSERT INTO `wm_actor` VALUES (9, '神木隆之介 Ryûnosuke Kamiki', '/avatar/2021/05/15/128555fc-7d5b-4546-953b-6baae079dfc0.jpg', '　　神木隆之介，日本男演员、声优。出生时身患救治率仅为1%的感染症，却奇迹般地获救，并被小心翼翼地养大。童年时期非常漂亮和可爱的样貌，导致他曾经常被误以为是女孩子，并成为动漫大国日本的漫画作家、动画制作人创作人物形象时的灵感的源泉。日本畅销漫画《投捕手》（的画作者柚庭千景曾在该系列作品的第六卷后记中承认青波的形象设计灵感源自演员神木隆之介。吉卜力工作室作品中的《买下星星的日子》的主人公诺那、《借物少女阿丽埃蒂》中的少年翔的形象也都是以他为原型创作的。进入变声期后，终于变得像男孩子了，但秀美帅气的外形、透明纯真的气质与丰富的演艺经历、精致迫真的演技令其在同代人中始终是一个特别的存在。', '2013年 第77届日剧学院赏 最佳男配角 家族游戏。\r\n2007年 第54届日剧学院赏 最佳男主角(提名) 侦探学园Q。\r\n2006年 第29届日本电影学院奖 最佳新人 妖怪大战争。				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 1);
 INSERT INTO `wm_actor` VALUES (10, '上白石萌音 Mone Kamishiraishi', '/avatar/2021/05/15/09150bc7-90bc-43da-ac82-f7ca36fa6f35.jpg', '　　上白石萌音，日本童星。东宝芸能旗下艺人。 ', '2015年 第38届日本电影学院奖 最佳新人 窈窕舞妓				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 1);
 INSERT INTO `wm_actor` VALUES (11, '弗兰克·德拉邦特 Frank Darabont', '/avatar/2021/05/15/bef1ebf7-36a2-44a8-8b6b-884908b0ca8f.jpg', '　　弗兰克·达拉邦特为数极少的导演作品却为他赢得了全世界影迷的爱戴：比如《肖申克的救赎》和《绿里奇迹》。\r\n　　比起导演这个工作，弗兰克·达拉邦特更适合被称为编剧，然而他为数极少的导演作品却为他赢得了全世界影迷的爱戴：比如《肖申克的救赎》和《绿里奇迹》。而2001年，他的奥斯卡野心之作《忘了我是谁》让金·凯瑞在正剧上演足了瘾，却票房、口碑双双失利。2007年的作品是根据斯蒂芬·金小说改编的《迷雾》。', '2000年 第72届奥斯卡金像奖 最佳影片(提名) 绿里奇迹\r\n2000年 第72届奥斯卡金像奖 最佳改编剧本(提名) 绿里奇迹\r\n1995年 第67届奥斯卡金像奖 最佳改编剧本(提名) 肖申克的救赎				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
 INSERT INTO `wm_actor` VALUES (12, '蒂姆·罗宾斯 Tim Robbins', '/avatar/2021/05/15/25c9b8e5-a745-4167-bcfb-f514e612e5ee.jpg', '　　 蒂姆·罗宾斯，原名蒂莫西·佛朗西斯·罗宾斯（Timothy Francis Robbins），生于美国加利福尼亚州西科维纳市，中学就读于 Stuyvesant High School，后升到 University of New York at Plattsburgh，就读两年后再转升到 U.C.L.A.，于 1980年毕业及取得戏剧学位。曾是专业棒球运动员，对演戏情有独钟。\r\n　　他还是一位导演、编剧以及制片人。作为演员，他于1992年凭借《超级大玩家》（The Player）荣获戛纳电影节和金球奖的双料影帝，在2004年又凭借《神秘河》（Mystic River）荣获第76届奥斯卡最佳男配角奖。作为导演和编剧，他1995年的作品《死囚上路》（Dead Man Walking）在1996年获得了奥斯卡的三项提名并且在同年的柏林电影节上获得四项大奖。在各个影片中，罗宾斯以精湛的演技，塑造了一个个知性、沉静的银幕形象，为蒂姆·罗宾斯在影坛奠定了结实的基础，被称为好莱坞真正电影艺术家。', '2016年 第30届西班牙戈雅奖 最佳男配角(提名) 美好的一天\r\n2012年 第69届金球奖 电视类 最佳男配角(提名) 真实电影\r\n2004年 第76届奥斯卡金像奖 最佳男配角 神秘河				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
@@ -1937,7 +2160,7 @@ INSERT INTO `wm_actor` VALUES (20, '詹姆斯·卡梅隆 James Cameron', '/avata
 INSERT INTO `wm_actor` VALUES (21, '莱昂纳多·迪卡普里奥 Leonardo DiCaprio', '/avatar/2021/05/15/ecf1c369-3716-4d86-af9a-df21ef3b24f4.jpg', '莱昂纳多·迪卡普里奥（Leonardo DiCaprio），1974年11月11日出生于美国加利福尼亚州洛杉矶，美国影视演员、制作人。\r\n1990年，16岁的他参加了电视剧《成长的烦恼》的拍摄。1993年，他凭借《不一样的天空》中的表演获得了第66届奥斯卡金像奖最佳男配角奖和第51届美国电影电视金球奖最佳男配角的提名  。1995年，拍摄电影《罗密欧与朱丽叶》，荣膺第47届柏林国际电影节最佳男主角。1997年，莱昂纳多主演了《泰坦尼克号》。2002年，莱昂纳多出演了史蒂文斯皮尔伯格导演的《逍遥法外》，并因此获得了金球奖男主角的提名。2004年，和马丁西科塞斯合作的《飞行家》为莱昂迎来一个美国金球奖最佳男演员奖。2006年，凭借《无间道风云》和《血钻》获得金球奖最佳男主角的双提名。2010，他出演了《盗梦空间》。2013年，他主演了电影《了不起的盖茨比》。2014年1月，他凭借《华尔街之狼》中的表演获得了金球奖最佳男主角奖；9月17日，被联合国授予联合国“和平使者”，关注气候变化  。2015年，莱昂纳多·迪卡普里奥收入2900万美元，居福布斯全球演员富豪榜排名第13位。\r\n2016年，凭借电影《荒野猎人》获得第73届金球奖最佳男主角奖和第88届奥斯卡金像奖最佳男主角奖 。', '2016年 第88届奥斯卡金像奖 最佳男主角 荒野猎人\r\n2015年 第14届华盛顿影评人协会奖 最佳男主角 荒野猎人\r\n2014年 第86届奥斯卡金像奖 最佳影片(提名) 华尔街之狼				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
 INSERT INTO `wm_actor` VALUES (22, '凯特·温丝莱特 Kate Winslet', '/avatar/2021/05/15/ad0690d1-66a0-4368-99cc-aa766a4ff1b4.jpg', '　　凯特·温斯莱特，英国著名女演员与歌手。曾获得演员工会奖与英国电影学院奖，并在第66届金球奖中以《革命之路》获戏剧类最佳女主角奖，并同时以《生死朗读》获戏剧类最佳女配角奖。凯特·温斯莱特也曾获得格莱美奖，并6次入围奥斯卡奖与艾美奖，最终以《生死朗读》获得奥斯卡最佳女主角奖。她于22岁时第2次入围奥斯卡奖，成为史上最年轻就获得2次入围的演员。《纽约杂志》称赞凯特·温斯莱特是“她的世代中最杰出的英语电影演员”。\r\n　　凯特·温斯莱特从电视上开始演员生涯，并在1991年英国广播公司的儿童科幻小说电视系列剧《Dark Season》中演出。然后她在1992年的电视电影《Anglo-Saxon Attitudes》与1993年的电视系列剧《急诊室》中演出。她在电影中的首次演出是彼得·杰克森所执导的《梦幻天堂》，并饰演女主角茱丽叶·休姆，凯特·温斯莱特这次演出受到许多正面的评价。\r\n　　之后，凯特·温斯莱特与艾玛·汤普逊演出李安执导的《理智与情感》，并且因此成名（尤其在英国）。凯特·温斯莱特也因这次演出获得英国电影学院奖（最佳女配角奖），并首次入围奥斯卡奖。她在1997年卖座电影《泰坦尼克号》中担任女主角萝丝·道森-卡维特，并因此闻名全球。', '2017年 第21届好莱坞电影奖 年度女主角 摩天轮\r\n2016年 第88届奥斯卡金像奖 最佳女配角(提名) 史蒂夫·乔布斯\r\n2015年 第18届英国独立电影奖 综艺奖				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
 INSERT INTO `wm_actor` VALUES (23, '宫崎骏 Hayao Miyazaki', '/avatar/2021/05/15/e396dd02-4772-4d23-a750-f5e9c6060382.jpg', '　　1922年，法国影评家埃利·福尔满含感情的预言：“终有一天动画片会具有纵深感，造型高超，色彩有层次……会有德拉克洛瓦的心灵、鲁本斯的魅力、戈雅的激情、米开朗基罗的活力。一种视觉交响乐，较之最伟大的音乐家创作的有声交响乐更为令人激动。”八十年后，世界动画界最接近埃利·福尔梦想的，首推宫崎骏。\r\n　　宫崎骏可以说是日本动画界的一个传奇，可以说没有他的话日本的动画事业会大大的逊色。他是第一位将动画上升到人文高度的思想者，同时也是日本三代动画家中，承前启后的精神支柱人物。宫崎骏在打破手冢治虫巨人阴影的同时，用自己坚毅的性格和永不妥协的奋斗又为后代动画家做出了榜样。\r\n　　宫崎骏的动画片是能够和迪斯尼、梦工厂共分天下的一支重要的东方力量。宫崎骏的每部作品，题材虽然不同，但却将梦想、环保、人生、生存这些令人反思的讯息，融合其中。他这份执著，不单令全球人产生共鸣，更受到全世界所重视，连美国动画王国迪斯尼，都要斟介宫崎骏的动画电影发行版权(亚洲地区除外)。', '2018年 第44届洛杉矶影评人协会奖 终身成就奖\r\n2015年 第87届奥斯卡金像奖 终身成就奖\r\n2014年 第86届奥斯卡金像奖 最佳动画长片(提名) 起风了				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
-INSERT INTO `wm_actor` VALUES (24, '柊瑠美 Rumi Hiiragi', '/avatar/2021/05/15/21d80c5e-2661-4aeb-8278-c8ee4588fce1.jpg', '　　柊 瑠美（非原名）（ひいらぎ るみ、1987年8月1日 - ）\r\n　　出生地：东京都葛饰区\r\n　　身高：155cm\r\n　　血型：A型\r\n　　星座：狮子座\r\n　　东京都立九段高等学校、日本大学文艺系毕业。\r\n　　自从6岁作为儿童角色开始工作，多数以CM演出。\r\n　　2001年公开电影『千与千寻』被担当主人公荻野千寻配音。', '...				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
+INSERT INTO `wm_actor` VALUES (24, '柊瑠美 Rumi Hiiragi', '/avatar/2021/05/15/21d80c5e-2661-4aeb-8278-c8ee4588fce1.jpg', '　　柊 瑠美（非原名）（ひいらぎ るみ、1987年8月1日 - ）\r\n　　出生地：东京都葛饰区\r\n　　身高：155cm\r\n　　血型：A型\r\n　　星座：狮子座\r\n　　东京都立九段高等学校、日本大学文艺系毕业。\r\n　　自从6岁作为儿童角色开始工作，多数以CM演出。\r\n　　2001年公开电影『千与千寻』被担当主人公荻野千寻配音。', '...				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 1, 1);
 INSERT INTO `wm_actor` VALUES (25, '入野自由 Miyu Irino', '/avatar/2021/05/15/f8107a94-7bd9-474c-b6ad-941693f75fa1.jpg', '　　入野自由，日本男性声优，隶属日本junction公司旗下。代表作品：《我们仍未知道那天所看见的花的名字》宿海仁太 、《翼·年代记》小狼、《千与千寻》赈早见琥珀主、《天使怪盗》丹羽大助等。\r\n　　曾参加电视剧テレビドラマ「3年B组金八先生」。1999年出演过电影《ウルトラマンティガ&ウルトラマンダイナ&ウルトラマンガイア》，后来又客串演出了电视系列《ウルトラマンガイア》。在儿童时代，他就已参加过TV版动画《逮捕令》的配音工作。\r\n　　2001年，年仅13岁的入野自由开始了自己的声优生涯，在《千与千寻的神隐》，虽然声调平静，但干净透明的童音已经博得不少人的好感。入野自由2003年在《D.N.ANGEL》中担纲主角，更加引人注目，清亮而未经雕琢的嗓音，令人回味。\r\n　　由于在人气动画《D.N.ANGEL》中担纲主角，他更加引人注目了。丹羽大助是可爱的孩子，14岁的孩子，象水果一样漂亮，天空一样明朗。小自由软软的声音象棉花糖一样，演技也不错，当然不能跟中生代的各位著名的声优前辈们同日而语，但是入野的经验已是颇为丰富了，声线的变化也很自然。\r\n　　现在在《翼·年代记》与广播剧《私立堀镡学园》担任小狼与小龙（堀镡学园）的声优，使入野的人气更高。《翼》中的小狼更是给人一种亲切的感觉。\r\n　　最近还在PS2游戏《王国之心》为主角Sora配音，仍然表现的十分出色。不管怎样，清亮而未经雕琢的嗓音，就是这孩子的最大魅力吧！', '...				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
 INSERT INTO `wm_actor` VALUES (26, '加布里埃莱·穆奇诺 Gabriele Muccino', '/avatar/2021/05/15/e59054de-0cc8-4da5-8aa9-149953fb63dc.jpg', '　　加布里尔·穆奇诺，意大利导演，1967年5月20日出生于罗马。成名作有《最后一吻》、《同床异梦》等。', '2016年 第73届威尼斯电影节 酷儿狮奖(提名) 夏日光年\r\n2010年 第13届上海国际电影节 金爵奖 最佳影片 再吻我一次\r\n2002年 第18届圣丹斯电影节 观众奖 世界电影单元剧情片 最后一吻				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
 INSERT INTO `wm_actor` VALUES (27, '威尔·史密斯 Will Smith', '/avatar/2021/05/15/849029fa-7850-40e1-a70a-6c97acd84c49.jpg', '　　美国演员，高中毕业后痴心于歌唱事业，遂决定放弃上大学，做全职的艺人。1989年首次获得葛莱美奖“最佳饶舌歌演唱奖”。进而成为NBC电视影集《活力王子》(The Fresh Prince of Bel Air)的男主角。\r\n　　1993年以主角身份跃登大银幕，在一部讽刺纽约知识分子的文艺片《六度分离》之中，扮演一个自称是黑人巨星薜尼鲍迪儿子的老千。1995年主演警匪动作片《绝地战警》，大获成功。威尔·史密斯的片酬也由此升到五百万美金一部，大量的片商纷纷找上门来。1996年威尔·史密斯拍了一部科幻片《独立日》，大爆票房纪录，成为当年的票房冠军。之后，威尔·史密斯主演了《黑衣人》、《黑超特警组》，全球票房奏捷后，身价飙到巅峰。近几年接拍了许多卖座的动作片，始终为影迷爱戴。威尔·史密斯接替丹佐尔·华盛顿成为好莱坞最炙手可热的黑人男星。', '2016年 第73届金球奖 电影类 剧情片最佳男主角(提名) 震荡效应\r\n2015年 第19届好莱坞电影奖 年度男主角 震荡效应\r\n2014年 第34届金酸莓奖 最差男配角 重返地球				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
@@ -2023,10 +2246,10 @@ INSERT INTO `wm_actor` VALUES (112, '111', '/actor/avatar/2021/05/20/4cb1d6b6-67
 -- ----------------------------
 DROP TABLE IF EXISTS `wm_media_category`;
 CREATE TABLE `wm_media_category`  (
-  `category_id` int(32) NOT NULL AUTO_INCREMENT COMMENT '唯一id',
+  `category_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类内容',
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类简介',
-  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
+  `status` tinyint(3) UNSIGNED NOT NULL COMMENT '状态',
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -2047,9 +2270,9 @@ INSERT INTO `wm_media_category` VALUES (10, '爱情剧', '爱情剧', 1, 6, '1',
 -- ----------------------------
 DROP TABLE IF EXISTS `wm_media_tag`;
 CREATE TABLE `wm_media_tag`  (
-  `tag_id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tag_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `content` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标签内容',
-  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
+  `status` tinyint(3) UNSIGNED NOT NULL COMMENT '状态',
   `click_count` int(11) NULL DEFAULT 0 COMMENT '标签点击数',
   `sort` int(11) NULL DEFAULT 0 COMMENT '排序字段，越大越靠前',
   `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
@@ -2106,25 +2329,30 @@ CREATE TABLE `wm_movie`  (
   `qrcode_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '电影专属二维码',
   `open_password` tinyint(1) NULL DEFAULT NULL COMMENT '是否开启二维码 0 关闭 1开启',
   `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文章私密访问时的秘钥',
+  `stills` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '剧照',
+  `total_video_length` bigint(20) NULL DEFAULT NULL COMMENT '视频总长度',
+  `summary` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '简介',
+  `en` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '拼音',
+  `letter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '首字母大写',
+  `lang` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '语言',
   PRIMARY KEY (`movie_id`) USING BTREE,
   UNIQUE INDEX `wm_movie_pk_index`(`movie_id`) USING BTREE COMMENT '主键唯一索引'
-) ENGINE = InnoDB AUTO_INCREMENT = 143 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '电影表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 156 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '电影表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of wm_movie
 -- ----------------------------
-INSERT INTO `wm_movie` VALUES (128, '/common/image/2021/09/18/84ef73aa7d334077bb5d7c1834f48082/84ef73aa7d334077bb5d7c1834f48082.png', '天龙八部', 'teleplay', 'china', '9', '<p>天龙八部是一部动作片类型的电影，于1997在香港上映，目前的语言版本有汉语普通话。大理国王子段誉（汤镇业 饰）生性善良，喜文厌武，为逃避父皇严加管教，段誉时常杳无踪影，却在一山洞身受，天龙八部播放地址获取自网路，如有侵权请联系...</p>', '1', '2021-08-01 00:00:00', '0', 'admin', NULL, 'admin', '2021-10-04 10:51:20', NULL, '稻田影视每日更新大量最新电影电视剧，为喜爱影视的朋友提供在线观影的平台 动作片天龙八部是萧笙的一部作品，由徐少强,汤镇业,黄日华,陈玉莲参演，当前被点击了1438次，平均评分4.9。大家有什么好的影视作品欢迎留言投稿！\n大理国王子段誉（汤镇业 饰）生性善良，喜文厌武，为逃避父皇严加管教，段誉时常杳无踪影，却在一山洞身受巨毒，平添功力无限，还在一仙女塑像前得武功密笈一本　　为完成复国大计，慕容复（惠天赐 饰）已掌握除《降龙十八掌》、《六脉神剑》之外的所有武功绝学在曼陀山庄见到慕容公子的表妹王语嫣（陈玉莲 饰）时，段誉以为王姑娘就是自己在山洞见到的那个仙女，…大理国王子段誉（汤镇业 饰）生性善良，喜文厌武，为逃避父皇严加管教，段誉时常杳无踪影，却在一山洞身受巨毒，平添功力无限，还在一仙女塑像前得武功密笈一本　　为完成复国大计，慕容复（惠天赐 饰）已掌握除《降龙十八掌》、《六脉神剑》之外的所有武功绝学。在曼陀山庄见到慕容公子的表妹王语嫣（陈玉莲 饰）时，段誉以为王姑娘就是自己在山洞见到的那个仙女，顿生爱慕之情。另一边，段誉偶遇天下仁义名侠丐帮帮主乔峰（徐少强 饰）。后来乔峰才知自己是契丹人，回到契丹的乔峰因阻止国王进兵大宋身陷囹圄。为救乔峰，段誉、虚竹（黄日华 饰）前往契丹，救乔峰至契丹与大宋的边界雁门关。乔峰没有与中原继续为敌，而是为阻止契丹与大宋交兵殃及百姓，自行了断性命，为契丹和中原的安宁留下一段佳话。', 2, 0, 0, 1, 0, 0, 0, 1, 0, 0.00, 4.6, 9, '悍匪', NULL, 1, '123456');
-INSERT INTO `wm_movie` VALUES (129, '/common/image/2021/09/18/acdbd94920514a8b9a59636ee0537dad/acdbd94920514a8b9a59636ee0537dad.png', '除暴', ' film', 'HongKong', '5,7', '<p>除暴是一部动作片类型的电影，于2020在香港上映，目前的语言版本有国语。上世纪90年代，刑警钟诚受命追捕悍匪集团老鹰帮活下去的诀窍是：保持愚蠢，又不能知道自己有多蠢。 --，除暴播放地址获取自网路，如有侵权请联系...</p>', '1', '2020-08-01 00:00:00', '0', 'admin', NULL, 'admin', '2021-10-06 16:24:59', NULL, '辉皇影视每日更新大量最新电影电视剧，为喜爱影视的朋友提供在线观影的平台 动作片除暴是刘浩良的一部作品，由王千源,吴彦祖,春夏,卫诗雅,大力,于笑,胡子程,李晓川参演，当前被点击了15851次，平均评分3.0。大家有什么好的影视作品欢迎留言投稿！\n上世纪90年代，刑警钟诚受命追捕悍匪集团老鹰帮活下去的诀窍是：保持愚蠢，又不能知道自己有多蠢。 ----王小波这群悍匪犯下惊天连环劫案，训练有素且纪律严明，首领张隼更屡次恶意挑衅，矛头直指钟诚。为将老鹰帮捉拿归案，钟诚带领刑警小队咬死不放，誓与恶势力斗争到底。数年间，警匪上演了一次次紧张刺激的较量，悍匪愈加猖獗，警方步步逼近，双方展开殊死对决……\n', 3, 0, 0, 1, 0, 0, 0, 1, 1, 0.00, 3.0, 10, '爱情剧', NULL, 1, '123456');
-INSERT INTO `wm_movie` VALUES (131, '/common/image/2021/09/18/bcf57d268cab4ebfa75bbbde46cd1477/bcf57d268cab4ebfa75bbbde46cd1477.png', '你是我的荣耀', 'teleplay', 'china', '5,6,7', '<p>你是我的荣耀是一部国产剧类型的电视剧，于2021在中国大陆上映，目前的语言版本有国语。《你是我的荣耀》讲述了人气女星“乔晶晶”与高中时单恋的学神“于途”，在阔别十年后，于线上再度重逢，开，你是我的荣耀播放地址获取自网路，如有侵权请联系...</p>', '1', '2021-08-24 00:00:00', '0', 'admin', NULL, 'admin', '2021-10-04 22:42:58', NULL, '你是我的荣耀是王之的一部作品，由迪丽热巴,杨洋,潘粤明,胡可,王彦霖,郑合惠子,金晨,吴倩,高露,涂松岩,季肖冰,孙雅丽参演，当前被点击了1251次，平均评分2.0。大家有什么好的影视作品欢迎留言投稿！\n《你是我的荣耀》讲述了人气女星“乔晶晶”与高中时单恋的学神“于途”，在阔别十年后，于线上再度重逢，开启了一段浪漫治愈的暖爱之实际上这个世界上没有好人和坏人，只有做了好事的人，和做了坏事的人。 ----柴静。时光匆匆，此时“于途”已成为心怀梦想的航天设计师，“乔晶晶”也成为星光闪耀的当红女演员，二人在追梦路上努力坚守，在浪漫奇遇中相互鼓励，终成彼此荣耀！\n', 2, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 2.0, 9, '悍匪', NULL, NULL, NULL);
-INSERT INTO `wm_movie` VALUES (132, '/common/image/2021/09/18/a24d858d4531430d8aec6e604ed7c296/a24d858d4531430d8aec6e604ed7c296.png', '天下无贼', ' film', 'china', '5,6,7', '<p>天下无贼是一部爱情片类型的电影，于2004在大陆上映，目前的语言版本有。男贼王薄和女贼王丽是一对扒窃搭档，也是一对浪迹天涯的亡命恋人他们在一列火车上遇到了一个名叫傻根的农民，天下无贼播放地址获取自网路，如有侵权请联系...</p>', '1', '2021-08-25 00:00:00', '0', 'admin', NULL, 'admin', '2021-10-04 10:50:50', NULL, '天下无贼是冯小刚的一部作品，由刘若英,王宝强,刘德华参演，当前被点击了1020次，平均评分4.0。大家有什么好的影视作品欢迎留言投稿！\n男贼王薄和女贼王丽是一对扒窃搭档，也是一对浪迹天涯的亡命恋人他们在一列火车上遇到了一个名叫傻根的农民，他刚刚从城市里挣了一笔钱要回老家盖房子娶媳妇。傻根不相信天下有贼，王薄和王丽最初想对他下手，后来却被他的纯朴所打动，决定保护傻根，圆他一个天下无贼的梦想，并由此与另一个扒窃团伙引发了一系列的明争暗斗。该团伙头目黎叔意欲收服王薄遭拒，该团伙其他成员与王薄比试皆败下阵来...', 2, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 4.7, 9, '悍匪', NULL, NULL, NULL);
-INSERT INTO `wm_movie` VALUES (135, NULL, '12212121', 'teleplay', NULL, '9', '<p>11212</p>', NULL, NULL, '0', 'admin', NULL, 'admin', NULL, NULL, '1211', 0, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 9, '悍匪', NULL, 1, '21212121');
-INSERT INTO `wm_movie` VALUES (136, NULL, '1', 'teleplay', 'china', '9', '<p>1212</p>', NULL, NULL, '0', 'admin', NULL, 'admin', '2021-10-04 22:54:56', NULL, NULL, 2, 0, 0, 1, 0, 0, 0, 1, 1, 0.00, 0.0, 9, '悍匪', NULL, 1, '2121');
-INSERT INTO `wm_movie` VALUES (137, NULL, '121221', 'teleplay', 'HongKong', '9', '<p>121212121212</p>', NULL, '2021-09-21 00:00:00', '0', 'admin', NULL, 'admin', '2021-10-04 22:54:52', NULL, NULL, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 10, '爱情剧', NULL, 1, NULL);
-INSERT INTO `wm_movie` VALUES (138, NULL, '12121', 'teleplay', 'HongKong', '9,10', '<p>12212121</p>', NULL, NULL, '0', 'admin', NULL, 'admin', '2021-10-06 19:08:08', NULL, '12', 1, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 9, '悍匪', NULL, 1, NULL);
-INSERT INTO `wm_movie` VALUES (139, NULL, '122121', 'variety', 'china', '9', '<p>1221</p>', NULL, '2021-09-22 00:00:00', '0', 'admin', NULL, 'admin', '2021-10-06 20:00:03', NULL, '2112', 1, 0, 0, 1, 0, 0, 0, 1, 1, 0.00, 0.0, 9, '悍匪', NULL, 1, NULL);
-INSERT INTO `wm_movie` VALUES (140, NULL, '12212121', ' film', 'china', '9,10', '<p>21212121</p>', NULL, '2021-09-15 00:00:00', '0', 'admin', NULL, 'admin', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 10, '爱情剧', NULL, 1, NULL);
-INSERT INTO `wm_movie` VALUES (141, NULL, '122112', ' film', 'china', '10', '<p>213212121321</p>', NULL, NULL, '0', 'admin', NULL, 'admin', NULL, NULL, '213321213', 0, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 10, '爱情剧', NULL, 1, NULL);
-INSERT INTO `wm_movie` VALUES (142, NULL, '1221', 'teleplay', 'china', '9', '<p>211221</p>', NULL, '2021-09-29 00:00:00', '0', 'admin', NULL, 'admin', '2021-10-04 22:55:16', NULL, '2112', 2, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 10, '爱情剧', NULL, 1, NULL);
+INSERT INTO `wm_movie` VALUES (128, '/showFile/movie/image/天龙八部.png', '天龙八部', 'teleplay', 'china', '9', '<p>天龙八部是一部动作片类型的电影，于1997在香港上映，目前的语言版本有汉语普通话。大理国王子段誉（汤镇业 饰）生性善良，喜文厌武，为逃避父皇严加管教，段誉时常杳无踪影，却在一山洞身受，天龙八部播放地址获取自网路，如有侵权请联系...</p>', '1', '2021-08-01 00:00:00', '0', '1', NULL, '1', '2021-10-08 18:50:54', NULL, '更新到30集', 34, 0, 0, 1, 0, 0, 0, 1, 0, 0.00, 4.6, 9, '悍匪', '/qr/2021/11/15/4da2dad093e746809deb430213d76d0e.jpg', 1, '123456', NULL, 2057100, NULL, NULL, NULL, NULL);
+INSERT INTO `wm_movie` VALUES (129, '/showFile/movie/image/除暴.png', '除暴', ' film', 'HongKong', '5,7', '<p>除暴是一部动作片类型的电影，于2020在香港上映，目前的语言版本有国语。上世纪90年代，刑警钟诚受命追捕悍匪集团老鹰帮活下去的诀窍是：保持愚蠢，又不能知道自己有多蠢。 --，除暴播放地址获取自网路，如有侵权请联系...</p>', '1', '2020-08-01 00:00:00', '0', '1', NULL, '1', '2021-10-06 16:24:59', NULL, '辉皇影视每日更新大量最新电影电视剧，为喜爱影视的朋友提供在线观影的平台 动作片除暴是刘浩良的一部作品，由王千源,吴彦祖,春夏,卫诗雅,大力,于笑,胡子程,李晓川参演，当前被点击了15851次，平均评分3.0。大家有什么好的影视作品欢迎留言投稿！\n上世纪90年代，刑警钟诚受命追捕悍匪集团老鹰帮活下去的诀窍是：保持愚蠢，又不能知道自己有多蠢。 ----王小波这群悍匪犯下惊天连环劫案，训练有素且纪律严明，首领张隼更屡次恶意挑衅，矛头直指钟诚。为将老鹰帮捉拿归案，钟诚带领刑警小队咬死不放，誓与恶势力斗争到底。数年间，警匪上演了一次次紧张刺激的较量，悍匪愈加猖獗，警方步步逼近，双方展开殊死对决……\n', 13, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 3.0, 10, '爱情剧', NULL, 1, '123456', NULL, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `wm_movie` VALUES (131, '/showFile/movie/image/你是我的荣耀.png', '你是我的荣耀', 'teleplay', 'china', '5,6,7', '<p>你是我的荣耀是一部国产剧类型的电视剧，于2021在中国大陆上映，目前的语言版本有国语。《你是我的荣耀》讲述了人气女星“乔晶晶”与高中时单恋的学神“于途”，在阔别十年后，于线上再度重逢，开，你是我的荣耀播放地址获取自网路，如有侵权请联系...</p>', '1', '2021-08-24 00:00:00', '0', '1', NULL, '1', '2021-10-04 22:42:58', NULL, '你是我的荣耀是王之的一部作品，由迪丽热巴,杨洋,潘粤明,胡可,王彦霖,郑合惠子,金晨,吴倩,高露,涂松岩,季肖冰,孙雅丽参演，当前被点击了1251次，平均评分2.0。大家有什么好的影视作品欢迎留言投稿！\n《你是我的荣耀》讲述了人气女星“乔晶晶”与高中时单恋的学神“于途”，在阔别十年后，于线上再度重逢，开启了一段浪漫治愈的暖爱之实际上这个世界上没有好人和坏人，只有做了好事的人，和做了坏事的人。 ----柴静。时光匆匆，此时“于途”已成为心怀梦想的航天设计师，“乔晶晶”也成为星光闪耀的当红女演员，二人在追梦路上努力坚守，在浪漫奇遇中相互鼓励，终成彼此荣耀！\n', 11, 0, 0, 1, 0, 0, 0, 1, 1, 0.00, 2.0, 9, '悍匪', NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `wm_movie` VALUES (132, '/showFile/movie/image/天下无贼.png', '天下无贼', ' film', 'china', '5,6,7', '<p>天下无贼是一部爱情片类型的电影，于2004在大陆上映，目前的语言版本有。男贼王薄和女贼王丽是一对扒窃搭档，也是一对浪迹天涯的亡命恋人他们在一列火车上遇到了一个名叫傻根的农民，天下无贼播放地址获取自网路，如有侵权请联系...</p>', '1', '2021-08-25 00:00:00', '0', '1', NULL, '1', '2021-10-04 10:50:50', NULL, '天下无贼是冯小刚的一部作品，由刘若英,王宝强,刘德华参演，当前被点击了1020次，平均评分4.0。大家有什么好的影视作品欢迎留言投稿！\n男贼王薄和女贼王丽是一对扒窃搭档，也是一对浪迹天涯的亡命恋人他们在一列火车上遇到了一个名叫傻根的农民，他刚刚从城市里挣了一笔钱要回老家盖房子娶媳妇。傻根不相信天下有贼，王薄和王丽最初想对他下手，后来却被他的纯朴所打动，决定保护傻根，圆他一个天下无贼的梦想，并由此与另一个扒窃团伙引发了一系列的明争暗斗。该团伙头目黎叔意欲收服王薄遭拒，该团伙其他成员与王薄比试皆败下阵来...', 11, 0, 0, 1, 0, 0, 0, 1, 1, 0.00, 4.7, 9, '悍匪', NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `wm_movie` VALUES (135, NULL, '12212121', 'teleplay', NULL, '9', '<p>11212</p>', '1', NULL, '0', '1', NULL, '1', '2021-10-07 13:10:29', NULL, '1211', 1, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 9, '悍匪', NULL, 1, '21212121', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `wm_movie` VALUES (136, NULL, '98889', 'teleplay', 'china', '9', '<p>1212</p>', '1', '2021-12-22 00:00:00', '0', '1', NULL, '1', '2021-10-04 22:54:56', NULL, NULL, 3, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 9, '悍匪', '/qr/2021/12/04/01088ed55de84d03ac9bea5c1777f6fa.jpg', 1, '000000000', NULL, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `wm_movie` VALUES (137, NULL, '121221', 'teleplay', 'HongKong', '9', '<p>121212121212</p>', '1', '2021-09-21 00:00:00', '0', '1', NULL, '1', '2021-10-04 22:54:52', NULL, NULL, 6, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 10, '爱情剧', NULL, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `wm_movie` VALUES (138, NULL, '12121', 'teleplay', 'HongKong', '9,10', '<p>12212121</p>', '1', NULL, '0', '1', NULL, '1', '2021-10-06 19:08:08', NULL, '12', 4, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 9, '悍匪', NULL, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `wm_movie` VALUES (139, NULL, '122121', 'variety', 'china', '9', '<p>1221</p>', '1', '2021-09-22 00:00:00', '0', '1', NULL, '1', '2021-10-06 20:00:03', NULL, '2112', 3, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 9, '悍匪', NULL, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `wm_movie` VALUES (140, NULL, '12212121', ' film', 'china', '9,10', '<p>21212121</p>', '1', '2021-09-15 00:00:00', '0', '1', NULL, '1', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 10, '爱情剧', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `wm_movie` VALUES (154, '/common/image/2021/12/24/fe346b2c-5b20-4ff6-ab2c-2740541b89ef.png', '天龙天威', 'teleplay', 'china', '9', '<p>121212</p>', '1', '2021-12-24 00:00:00', '0', '1', '2021-12-24 11:09:07', '1', '2021-12-24 11:09:07', NULL, '11', 1, 0, 0, 0, 0, 0, 0, 1, 1, 0.00, 0.0, 9, '悍匪', '/qr/2021/12/24/486a8a6cf2ba43ec8b7ee0e51a8d98a6.jpg', 1, '123456', '/common/image/2021/12/24/6f1e26e4-08bb-47cb-838a-5e96a0423cd2.png', 0, '111', 'tianlongtianwei', 'TLTW', '闽南语');
 
 -- ----------------------------
 -- Table structure for wm_movie_actor
@@ -2139,14 +2367,30 @@ CREATE TABLE `wm_movie_actor`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '电影演员关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of wm_movie_actor
+-- Table structure for wm_play_logs
 -- ----------------------------
-INSERT INTO `wm_movie_actor` VALUES (1, 133, 'actor');
-INSERT INTO `wm_movie_actor` VALUES (3, 131, 'actor');
-INSERT INTO `wm_movie_actor` VALUES (4, 131, 'actor');
-INSERT INTO `wm_movie_actor` VALUES (1, 128, 'actor');
-INSERT INTO `wm_movie_actor` VALUES (5, 128, 'actor');
-INSERT INTO `wm_movie_actor` VALUES (7, 128, 'actor');
+DROP TABLE IF EXISTS `wm_play_logs`;
+CREATE TABLE `wm_play_logs`  (
+  `play_log_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 随机数',
+  `user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户id',
+  `video_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '视频id',
+  `custom_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义id',
+  `play_duration` bigint(20) NULL DEFAULT NULL COMMENT '播放时长',
+  `play_position` bigint(20) NULL DEFAULT NULL COMMENT '最后播放位置',
+  `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip地址',
+  `province` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '省份名称',
+  `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '城市名称',
+  `referer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来源域名',
+  `device` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '设备类型',
+  `operating_system` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
+  `browser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器类型',
+  `terminal` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端类型',
+  `start_time` datetime(0) NULL DEFAULT NULL COMMENT '开始播放时间',
+  `end_time` datetime(0) NULL DEFAULT NULL COMMENT '结束播放时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`play_log_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '播放记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for wm_video
@@ -2175,50 +2419,49 @@ CREATE TABLE `wm_video`  (
   `error_msg` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '转换错误信息',
   PRIMARY KEY (`video_id`) USING BTREE,
   UNIQUE INDEX `wm_movie_video_pk_index`(`video_id`) USING BTREE COMMENT '主键唯一索引'
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '电影视频表' ROW_FORMAT = Dynamic;
-
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '电影视频表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- 第三方授权表
+-- Procedure structure for proc_sign_continue_times
 -- ----------------------------
-drop table if exists sys_auth_user;
-create table sys_auth_user (
-  auth_id           bigint(20)      not null auto_increment    comment '授权ID',
-  uuid              varchar(500)    not null                   comment '第三方平台用户唯一ID',
-  user_id           bigint(20)      not null                   comment '系统用户ID',
-  login_name        varchar(30)     not null                   comment '登录账号',
-  user_name         varchar(30)     default ''                 comment '用户昵称',
-  avatar            varchar(500)    default ''                 comment '头像地址',
-  email             varchar(255)    default ''                 comment '用户邮箱',
-  source            varchar(255)    default ''                 comment '用户来源',
-  create_time       datetime                                   comment '创建时间',
-  primary key (auth_id)
-) engine=innodb auto_increment=100 comment = '第三方授权表';
+DROP PROCEDURE IF EXISTS `proc_sign_continue_times`;
+delimiter ;;
+CREATE DEFINER=`mysql`@`%` PROCEDURE `proc_sign_continue_times`(IN in_user_id VARCHAR(64), OUT signinTodayFlag Integer, OUT continuityDays Integer,OUT series_days Integer, OUT signDataUpdateTime datetime)
+BEGIN
+	
+  SET @now = CURRENT_DATE(); 
+	SET @count = 0;
+	SET @isSigninToday = 0;
+	set @row_number = 0;
+  set @totalcount = 0;
+	SET @signDataUpdateTime = now(); 
+		
+	select count(1) into @count from (
+		select  ABS(datediff(sign_date, @now))  aa ,  -- 签到时间对比今天的差值
+				(@row_number:=@row_number + 1) bb    -- 排序字段 
+		from  website_sign_record
+		where user_id  = in_user_id   and  ABS(datediff(sign_date, @now))  > 0  -- 条件排除今天的签到记录
+		ORDER BY aa asc
+	) T where aa = bb ;
+	
+	
+	
+	select COUNT(*) into @isSigninToday from  website_sign_record where user_id  = in_user_id  and DATEDIFF(sign_date , @now ) = 0 ;-- 今天是否登录
+		
+	select count(1) into @totalcount from website_sign_record where user_id  = in_user_id;
+	
+    -- 更新连续签到次数
+	update website_account set continuity_days = (select @count + @isSinginToday), series_days = (select @totalcount), sign_data_update_time =(select @signDataUpdateTime) where user_id  = in_user_id ;
+		
+	
 
-
-
-DROP TABLE IF EXISTS `wm_play_logs`;
-CREATE TABLE `wm_play_logs`  (
-  `play_log_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 随机数',
-  `user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户id',
-  `video_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '视频id',
-  `custom_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义id',
-  `play_duration` bigint(20) NULL DEFAULT NULL COMMENT '播放时长',
-  `play_position` bigint(20) NULL DEFAULT NULL COMMENT '最后播放位置',
-  `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip地址',
-  `province` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '省份名称',
-  `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '城市名称',
-  `referer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来源域名',
-  `device` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '设备类型',
-  `operating_system` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
-  `browser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器类型',
-  `terminal` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终端类型',
-  `start_time` datetime(0) NULL DEFAULT NULL COMMENT '开始播放时间',
-  `end_time` datetime(0) NULL DEFAULT NULL COMMENT '结束播放时间',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`play_log_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 206 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '播放记录表' ROW_FORMAT = Dynamic;
-
+	select  @isSigninToday as signinTodayFlag, -- 当天是否签到
+	        @count + @isSigninToday as continuityDays,  -- 连续签到n天
+         @totalcount as seriesDays, -- 签到总天数
+				 @signDataUpdateTime as signDataUpdateTime; -- 最后更新签到数据
+				
+END
+;;
+delimiter ;
 
 SET FOREIGN_KEY_CHECKS = 1;

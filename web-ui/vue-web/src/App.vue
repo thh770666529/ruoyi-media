@@ -2,17 +2,20 @@
   <div id="vue_web">
     <router-view />
     <loginForm></loginForm>
+    <img-preview></img-preview>
   </div>
 </template>
 <script>
   import loginForm from '@/components/LoginForm'
+  import imgPreview from '@/components/ImgPreview'
   export default  {
     data() {
       return {
       }
     },
     components: {
-      loginForm
+      loginForm,
+      imgPreview
     },
     computed: {
     }

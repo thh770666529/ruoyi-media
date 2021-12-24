@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.website.mapper.SearchLogMapper">
+    
+    <resultMap type="SearchLog" id="SearchLogResult">
+        <result property="searchLogId"    column="search_log_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="equId"    column="equ_id"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="ip"    column="ip"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="referer"    column="referer"    />
+        <result property="device"    column="device"    />
+        <result property="operatingSystem"    column="operating_system"    />
+        <result property="browser"    column="browser"    />
+        <result property="terminal"    column="terminal"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectSearchLogVo">
+        select search_log_id, user_id, equ_id, keyword, ip, province, city, referer, device, operating_system, browser, terminal, create_time from website_search_log
+    </sql>
+
+    <select id="selectSearchLogList" parameterType="SearchLog" resultMap="SearchLogResult">
+        <include refid="selectSearchLogVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="equId != null  and equId != ''"> and equ_id = #{equId}</if>
+            <if test="keyword != null  and keyword != ''"> and keyword = #{keyword}</if>
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="referer != null  and referer != ''"> and referer = #{referer}</if>
+            <if test="device != null  and device != ''"> and device = #{device}</if>
+            <if test="operatingSystem != null  and operatingSystem != ''"> and operating_system = #{operatingSystem}</if>
+            <if test="browser != null  and browser != ''"> and browser = #{browser}</if>
+            <if test="terminal != null  and terminal != ''"> and terminal = #{terminal}</if>
+        </where>
+    </select>
+    
+    <select id="selectSearchLogBySearchLogId" parameterType="Long" resultMap="SearchLogResult">
+        <include refid="selectSearchLogVo"/>
+        where search_log_id = #{searchLogId}
+    </select>
+        
+    <insert id="insertSearchLog" parameterType="SearchLog" useGeneratedKeys="true" keyProperty="searchLogId">
+        insert into website_search_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="equId != null">equ_id,</if>
+            <if test="keyword != null and keyword != ''">keyword,</if>
+            <if test="ip != null">ip,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="referer != null">referer,</if>
+            <if test="device != null">device,</if>
+            <if test="operatingSystem != null">operating_system,</if>
+            <if test="browser != null">browser,</if>
+            <if test="terminal != null">terminal,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="equId != null">#{equId},</if>
+            <if test="keyword != null and keyword != ''">#{keyword},</if>
+            <if test="ip != null">#{ip},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="referer != null">#{referer},</if>
+            <if test="device != null">#{device},</if>
+            <if test="operatingSystem != null">#{operatingSystem},</if>
+            <if test="browser != null">#{browser},</if>
+            <if test="terminal != null">#{terminal},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSearchLog" parameterType="SearchLog">
+        update website_search_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="equId != null">equ_id = #{equId},</if>
+            <if test="keyword != null and keyword != ''">keyword = #{keyword},</if>
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="referer != null">referer = #{referer},</if>
+            <if test="device != null">device = #{device},</if>
+            <if test="operatingSystem != null">operating_system = #{operatingSystem},</if>
+            <if test="browser != null">browser = #{browser},</if>
+            <if test="terminal != null">terminal = #{terminal},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where search_log_id = #{searchLogId}
+    </update>
+
+    <delete id="deleteSearchLogBySearchLogId" parameterType="Long">
+        delete from website_search_log where search_log_id = #{searchLogId}
+    </delete>
+
+    <delete id="deleteSearchLogBySearchLogIds" parameterType="String">
+        delete from website_search_log where search_log_id in 
+        <foreach item="searchLogId" collection="array" open="(" separator="," close=")">
+            #{searchLogId}
+        </foreach>
+    </delete>
+</mapper>

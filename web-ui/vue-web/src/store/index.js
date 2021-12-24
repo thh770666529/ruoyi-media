@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import root from './root'
 import videoPreview from './videoPreview'
+import imgPreview from './imgPreview'
 import getters from './getters'
 import user from './user'
 Vue.use(Vuex)
@@ -17,6 +18,7 @@ export const store = new Vuex.Store({
   /* module 应该启用命名空间，即 namespaced: true */
   modules: {
     videoPreview,
+    imgPreview,
     user
   },
   getters

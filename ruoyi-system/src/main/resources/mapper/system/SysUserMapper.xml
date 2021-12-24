@@ -273,4 +273,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		delete from sys_auth_user where auth_id = #{authId}
  	</delete>
 
+	<!-- 查询没有账户的用户列表 -->
+	<select id="selectNotAccountList"  resultMap="SysUserResult">
+		select u.* from sys_user u
+			left join website_account a  on u.user_id = a.user_id
+		where a.account_id is null
+	</select>
 </mapper>

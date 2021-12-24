@@ -227,6 +227,7 @@
               Cookies.remove('rememberMe');
             }
             this.$store.dispatch("Login", this.loginForm).then(() => {
+              this.$store.dispatch('GetSignData').then(() => { }).catch(err => {});
               this.$store.dispatch('GetInfo').then(() => {
                 this.loading = false;
               }).catch(err => {

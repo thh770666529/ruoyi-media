@@ -192,6 +192,39 @@
     margin-left: 20%;
   }
 
+  @media only screen and (max-width: 479px) {
+    .diggit {
+      cursor: pointer;
+      float: left;
+      width: 50px;
+      margin: auto;
+      background: #E2523A no-repeat center left 5px;
+      color: #fff !important;
+      box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, .2);
+      border-radius: 3px;
+      line-height: 40px;
+      text-align: center;
+      padding-left: 10px;
+      margin-left: 10%;
+    }
+
+    .diggit2 {
+      cursor: pointer;
+      float: left;
+      width: 80px;
+      margin: auto;
+      background: #909399 no-repeat center left 5px;
+      color: #fff !important;
+      box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, .2);
+      border-radius: 3px;
+      line-height: 40px;
+      text-align: center;
+      padding-left: 10px;
+      margin-left: 10%;
+    }
+  }
+
+
   /*share*/
   .share {
     overflow: hidden;

@@ -168,4 +168,11 @@ public interface SysUserMapper
      * @return 结果
      */
     public int deleteAuthUser(Long authId);
+
+    /**
+     * 查找没有账户表的用户数据
+     * @return
+     */
+    List<SysUser> selectNotAccountList();
+
 }
