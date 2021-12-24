@@ -347,13 +347,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
                 article.setIsPublish("0");
                 article.setOpenComment(1);
                 article.setType(0);
+                article.setStatus(1);
                 article.setOpenPassword(0);
                 article.setCategoryId(category.getCategoryId() + "");
                 article.setCategoryName(category.getName());
                 this.insertArticle(article);
                 count++;
             }catch (Exception e){
-                log.error("本地上传文档失败（替换图片文件失败）");
+                e.printStackTrace();
+                log.error("本地上传文档失败（替换图片文件失败）" + e.getMessage());
             }
         }
         return count;

@@ -1,23 +1,26 @@
 <template>
   <div class="article-container">
-    <el-row type="flex" class="mt20"  v-if="!dialogArticle.visible">
-      <el-col :span="17">
-      <el-card class="box-card">
-      <div class="newsview">
-        <h3 class="news_title" v-if="article.title">{{article.title}}</h3>
-        <div class="bloginfo">
-          <ul>
-            <li class="author">
-              <span class="iconfont">&#xe60f; </span>
-              <a href="javascript:void(0);" >{{article.author}}</a>
-            </li>
-           <li class="lmname">
-              <span class="iconfont">&#xe603; </span>
-              <a href="javascript:void(0);"
-              >{{article.categoryData ? article.categoryData.name: ""}}</a>
-            </li>
-            <li class="lmname">
-              <template v-for="(item, index) in article.tagList">
+    <el-dialog :visible.sync="dialogPictureVisible" fullscreen>
+      <img :src="dialogImageUrl" alt="dialogImageUrl" style="margin: 0 auto;" />
+    </el-dialog>
+    <el-row type="flex" class="mt20" v-if="!dialogArticle.visible" :gutter="24">
+      <el-col :xs="24" :sm="17" :md="17" :lg="17">
+        <el-card class="box-card">
+          <div class="newsview">
+            <h3 class="news_title" v-if="article.title">{{article.title}}</h3>
+            <div class="bloginfo">
+              <ul>
+                <li class="author">
+                  <span class="iconfont">&#xe60f; </span>
+                  <a href="javascript:void(0);">{{article.author}}</a>
+                </li>
+                <li class="lmname">
+                  <span class="iconfont">&#xe603; </span>
+                  <a href="javascript:void(0);"
+                  >{{article.categoryData ? article.categoryData.name: ""}}</a>
+                </li>
+                <li class="lmname">
+                  <template v-for="(item, index) in article.tagList">
               <span
                 style="margin-left: 3px"
                 v-if="item.listClass == 'default' || item.listClass == ''"
@@ -25,74 +28,77 @@
                 :index="index"
                 :class="item.cssClass">{{ item.content }}
               </span>
-                  <el-tag
-                    v-else
-                    style="margin-left: 3px"
-                    size="mini"
-                    effect="light"
-                    :key="item.tagId"
-                    :index="index"
-                    :type="item.listClass === 'primary' ? '' : item.listClass"
-                    :class="item.cssClass? item.cssClass: ''">
-                    {{ item.content }}
-                  </el-tag>
-                </template>
-            </li>
+                    <el-tag
+                      v-else
+                      style="margin-left: 3px"
+                      size="mini"
+                      effect="light"
+                      :key="item.tagId"
+                      :index="index"
+                      :type="item.listClass === 'primary' ? '' : item.listClass"
+                      :class="item.cssClass? item.cssClass: ''">
+                      {{ item.content }}
+                    </el-tag>
+                  </template>
+                </li>
 
-            <li class="view">
-              <span class="iconfont">&#xe8c7; </span>
-              {{article.clickCount}}
-            </li>
-            <li class="like">
-              <Collect :targetId="articleId" :tableName="tableName" :descFlag="descFlag" :collectCount="article.collectCount">
-              </Collect>
-            </li>
+                <li class="view">
+                  <span class="iconfont">&#xe8c7; </span>
+                  {{article.clickCount}}
+                </li>
+                <li class="like">
+                  <Collect :targetId="articleId" :tableName="tableName" :descFlag="descFlag"
+                           :collectCount="article.collectCount">
+                  </Collect>
+                </li>
 
-            <li class="createTime">
-              <span class="iconfont">&#xe606; </span>
-              {{article.createTime}}
-            </li>
+                <li class="createTime">
+                  <span class="iconfont">&#xe606; </span>
+                  {{article.createTime}}
+                </li>
 
-          </ul>
-        </div>
-        <div class="tip">
-          <strong>版权 </strong>
-          <span v-html="article.copyright">
+              </ul>
+            </div>
+            <div class="tip">
+              <strong>版权 </strong>
+              <span v-html="article.copyright">
           </span>
-        </div>
-        <div
-          class="news_con ck-content"
-          v-html="article.content"
-          v-highlight
-        ></div>
-      </div>
-        <!--付款码和点赞-->
-        <PayCode :thumbFlag.sync="article.thumbFlag" :articleId="articleId" :supportCount.sync="article.supportCount"></PayCode>
-      </el-card>
-      <el-card class="box-card mt20">
-        <div class="intro">
-          <div class="intro-text">
-            <span>文章短評</span>
+            </div>
+            <div
+              class="news_con ck-content"
+              v-html="article.content"
+              v-highlight
+              @click="preViewArticleImage"
+            ></div>
           </div>
-        </div>
-        <Comment :targetId="articleId" :tableName="tableName" :createBy="article.createBy"></Comment>
+          <!--付款码和点赞-->
+          <PayCode :thumbFlag.sync="article.thumbFlag" :articleId="articleId"
+                   :supportCount.sync="article.supportCount"></PayCode>
+        </el-card>
+        <el-card class="box-card mt20">
+          <div class="intro">
+            <div class="intro-text">
+              <span>文章短評</span>
+            </div>
+          </div>
+          <Comment :targetId="articleId" :tableName="tableName" :createBy="article.createBy"></Comment>
           <div class="otherlink" v-if="sameBlogList.length > 0">
             <h2>相关文章</h2>
             <ul>
               <li v-for="item in sameBlogList" :key="item.articleId">
-              <a href="javascript:void(0);"
-                @click="toArticleDetail(item)"
-                :title="item.title">{{item.title | ellipsis(18)}}</a>
-            </li>
-          </ul>
-        </div>
-      </el-card>
+                <a href="javascript:void(0);"
+                   @click="toArticleDetail(item)"
+                   :title="item.title">{{item.title | ellipsis(18)}}</a>
+              </li>
+            </ul>
+          </div>
+        </el-card>
       </el-col>
-      <el-col  class="hidden-sm-and-down" :offset="1" :span="6">
-          <side-catalog
-            class="catalog"
-            v-bind="catalogProps">
-          </side-catalog>
+      <el-col class="hidden-sm-and-down" :xs="0" :sm="7" :md="7" :lg="7">
+        <side-catalog
+          class="catalog"
+          v-bind="catalogProps">
+        </side-catalog>
       </el-col>
     </el-row>
     <!-- 文章秘钥对话框 -->
@@ -109,7 +115,9 @@
         :rules="dialogArticle.passwordFormRules"
         label-width="80px">
         <el-form-item label="密码" prop="password">
-          <el-input type="password" show-password placeholder="密码" minlength="6" maxlength="12" @keyup.enter.native="handleSubmitBtnClick('passwordForm')" v-model="dialogArticle.passwordForm.password"></el-input>
+          <el-input type="password" show-password placeholder="密码" minlength="6" maxlength="12"
+                    @keyup.enter.native="handleSubmitBtnClick('passwordForm')"
+                    v-model="dialogArticle.passwordForm.password"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -120,10 +128,11 @@
   </div>
 </template>
 <script>
-  import { getArticle, getSameArticleList, checkPassword } from '@/api/blog/article';
+  import {getArticle, getSameArticleList, checkPassword} from '@/api/blog/article';
   import SideCatalog from '@/components/VueSideCatalog';
-  import { checkCollectFlag, addCollect, cancelCollectByTargetId } from "@/api/website/collect";
+  import {checkCollectFlag, addCollect, cancelCollectByTargetId} from "@/api/website/collect";
   import {listTag} from "@/api/blog/tag";
+
   export default {
     name: "articleDetail",
     data() {
@@ -134,7 +143,7 @@
           // 内容容器selector(必需)
           container: '.ck-content',
           watch: true,
-          levelList: ["h1", "h2", "h3"],
+          levelList: ["h2", "h3"],
         },
         tagOptions: [],
         articleId: '',
@@ -153,7 +162,8 @@
                 message: '请输入密码',
                 trigger: 'blur'
               },
-              { min: 6,
+              {
+                min: 6,
                 max: 12,
                 message:
                   '密码长度必须介于 6 和 12 之间',
@@ -161,11 +171,13 @@
               }
             ]
           }
-        }
+        },
+
+        dialogPictureVisible: false,
+        dialogImageUrl: ''
       }
     },
-    computed: {
-    },
+    computed: {},
     components: {
       SideCatalog
     },
@@ -174,29 +186,29 @@
         location.reload()
       }
     },
-    mounted () {
+    mounted() {
     },
     created() {
-     this.articleId = this.$route.params && this.$route.params.articleId;
-     this.initInfo();
+      this.articleId = this.$route.params && this.$route.params.articleId;
+      this.initInfo();
 
     },
     methods: {
       initInfo() {
-         listTag({status: '1'}).then(response => {
+        listTag({status: '1'}).then(response => {
           this.tagOptions = response.rows;
-           console.log(this.tagOptions)
-         });
+          console.log(this.tagOptions)
+        });
 
-         getArticle(this.articleId).then(response => {
-           this.article = response.data;
-           const passwordFlag = this.getCookies(`article_password${this.article.articleId}`);
-           this.getOtherData();
-           if (passwordFlag  === 'true'){
-             this.dialogArticle.visible = false;
-           }else if (this.article.openPassword == 1){
-             this.dialogArticle.visible = true;
-           }
+        getArticle(this.articleId).then(response => {
+          this.article = response.data;
+          const passwordFlag = this.getCookies(`article_password${this.article.articleId}`);
+          this.getOtherData();
+          if (passwordFlag === 'true') {
+            this.dialogArticle.visible = false;
+          } else if (this.article.openPassword == 1) {
+            this.dialogArticle.visible = true;
+          }
         });
       },
       getOtherData() {
@@ -211,11 +223,11 @@
               password: this.dialogArticle.passwordForm.password,
               articleId: this.articleId
             }).then(res => {
-              if (res.code === 200){
+              if (res.code === 200) {
                 this.resetForm(formName);//  清空表单
                 this.dialogArticle.visible = false;
                 this.setCookies(`article_password${this.articleId}`, true);
-              }else {
+              } else {
                 this.msgError(res.msg)
               }
             });
@@ -226,13 +238,27 @@
       },
       handleCloseBtnClick() {
         this.dialogArticle.visible = false
-        this.$router.push({ path: '/article', query: {} })
+        this.$router.push({path: '/article', query: {}})
+      },
+      preViewArticleImage(e){
+        const clickType = e.target.localName;
+        if (clickType  == 'img'){
+          this.previewPicture(e.target.currentSrc);
+          //this.dialogPictureVisible = true
+          //this.dialogImageUrl = e.target.currentSrc;
+        }
       }
     }
   };
 </script>
 
-<style scoped>
+<style lang="less">
+
+  .article-container {
+    width: 1280px;
+    margin: 0 auto;
+  }
+
   .emoji-panel-wrap {
     box-sizing: border-box;
     border: 1px solid #cccccc;
@@ -244,32 +270,38 @@
     z-index: 999;
     top: 10px;
   }
+
   .emoji-size-small {
     zoom: 0.3;
     margin: 5px;
     vertical-align: middle;
   }
+
   .emoji-size-large {
     zoom: 0.5;
     margin: 5px;
   }
+
   .iconfont {
     font-size: 14px;
     margin-right: 3px;
   }
+
   .message_infos {
     width: 96%;
     margin-left: 10px;
   }
+
   .noComment {
     width: 100%;
     text-align: center;
   }
+
   .catalog {
     position: fixed;
     margin-left: 20px;
     max-height: 400px;
-    overflow:auto;
+    overflow: auto;
     /*border:1px solid #0f74ff*/
   }
 
@@ -280,13 +312,11 @@
     width: 3px;
     background: transparent;
   }
+
   .line-style--active {
     background: currentColor;
   }
-  .article-container {
-    width: 1300px;
-    margin: auto;
-  }
+
 
   .infosbox {
     float: left;
@@ -315,10 +345,10 @@
   }
 
   .news_title {
-    font-size: 24px;
     font-weight: normal;
     padding: 30px 0 0 0;
     color: #333;
+    font-size: 1.8em;
   }
 
   .news_author {
@@ -384,7 +414,7 @@
   }
 
   .news_con img {
-    max-width: 650px;
+    max-width: 750px;
     height: auto;
   }
 
@@ -474,5 +504,57 @@
   .otherlink li a:hover {
     text-decoration: underline;
     color: #000
+  }
+
+
+  @media only screen and (max-width: 479px) {
+    .article-container {
+      width: 96%;
+    }
+
+    .language-xshe {
+      max-width: 100%;
+    }
+
+    .newsview {
+      padding: 0 1px;
+    }
+
+    .newsview {
+      padding: 0 30px;
+    }
+
+    .newsview {
+      background-image: linear-gradient(
+        90deg, rgba(50, 0, 0, .05) 3%, transparent 0), linear-gradient(
+        1turn, rgba(50, 0, 0, .05) 3%, transparent 0);
+      background-size: 20px 20px;
+      background-position: 50%;
+    }
+
+    .newsview {
+      min-height: 400px;
+    }
+
+    div {
+      display: block;
+    }
+
+    .news_con {
+      line-height: 1.2;
+      font-size: 14px;
+      text-align: justify;
+    }
+
+    .news_con p {
+      margin-bottom: 25px
+    }
+
+    .news_con img {
+      vertical-align: middle;
+      width: 270px;
+      text-align: center;
+      border: 1px solid #eee;
+    }
   }
 </style>

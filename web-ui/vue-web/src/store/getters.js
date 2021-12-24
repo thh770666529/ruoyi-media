@@ -10,6 +10,8 @@ const getters = {
   // 用户ID
   userId: (state) => state.user.userId,
   // 登录弹出框
-  loginFormVisible: (state) => state.user.loginFormVisible
+  loginFormVisible: (state) => state.user.loginFormVisible,
+  //签到数据
+  signRecord: (state) => state.user.signRecord
 }
 export default getters

@@ -1,7 +1,8 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;;
+import com.ruoyi.website.service.IAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,8 @@ public class SysUserServiceImpl implements ISysUserService
     @Autowired
     private ISysConfigService configService;
 
+    @Autowired
+    private IAccountService accountService;
     /**
      * 根据条件分页查询用户列表
      * 
@@ -260,6 +263,8 @@ public class SysUserServiceImpl implements ISysUserService
     {
         // 新增用户信息
         int rows = userMapper.insertUser(user);
+        // 新增用户账户
+        accountService.insertUserAccount(user);
         // 新增用户岗位关联
         insertUserPost(user);
         // 新增用户与角色管理
@@ -276,7 +281,7 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public boolean registerUser(SysUser user)
     {
-        return userMapper.insertUser(user) > 0;
+        return userMapper.insertUser(user) > 0 && accountService.insertUserAccount(user);
     }
 
     /**

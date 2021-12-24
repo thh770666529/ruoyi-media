@@ -1,5 +1,6 @@
-import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login, logout, getInfo } from '@/api/login';
+import { getToken, setToken, removeToken } from '@/utils/auth';
+import {getSignRecord, signIn} from "@/api/website/signRecord";
 
 const user = {
   state: {
@@ -9,7 +10,12 @@ const user = {
     roles: [],
     userId: '',
     permissions: [],
-    loginFormVisible: false  //  登录框显隐状态
+    loginFormVisible: false,  //  登录框显隐状态
+    signRecord: {             //签到数据
+      signinTodayFlag: 0,
+      seriesDays: 0,
+      continuityDays: 0
+    }
   },
 
   mutations: {
@@ -33,6 +39,9 @@ const user = {
     },
     SET_LOGINFORMVISIBLE: (state, loginFormVisible) => {
       state.loginFormVisible = loginFormVisible
+    },
+    SET_SIGNRECORD: (state, signRecord) =>{
+      state.signRecord = signRecord
     }
   },
 
@@ -52,6 +61,18 @@ const user = {
         }).catch(error => {
           reject(error)
         })
+      })
+    },
+    //签到
+    SignIn({ commit }){
+      signIn().then(response => {
+        commit('SET_SIGNRECORD', response.data);
+      })
+    },
+    // 获取签到数据
+    GetSignData({ commit }){
+      getSignRecord().then(response => {
+        commit('SET_SIGNRECORD', response.data);
       })
     },
 
@@ -92,7 +113,12 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           commit('SET_PERMISSIONS', [])
-          removeToken()
+          removeToken();
+          commit('SET_SIGNRECORD', {
+            signinTodayFlag: 0,
+            seriesDays: 0,
+            continuityDays: 0
+          });
           resolve()
         }).catch(error => {
           reject(error)
@@ -104,7 +130,12 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
-        removeToken()
+        removeToken();
+        commit('SET_SIGNRECORD', {
+          signinTodayFlag: 0,
+          seriesDays: 0,
+          continuityDays: 0
+        });
         resolve()
       })
     }

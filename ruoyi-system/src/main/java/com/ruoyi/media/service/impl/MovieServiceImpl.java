@@ -91,8 +91,16 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
                 movieVO.setPublishUsername(sysUser != null ? sysUser.getNickName() : null);
             }
             movieVO.setVideoList(videoService.selectVideoByMovieId(movieId));
-            setMovieActor(MovieActorType.ACTOR, movieVO);
-            setMovieActor(MovieActorType.DIRECTOR, movieVO);
+
+            //查询演员和导演信息
+            MovieActorVO movieActorQuery = new MovieActorVO();
+            movieActorQuery.setMovieId(movieVO.getMovieId());
+            movieActorQuery.setType(MovieActorType.ACTOR.getValue());
+            List<MovieActorVO> actorList = movieActorMapper.selectMovieActorList(movieActorQuery);
+            movieActorQuery.setType(MovieActorType.DIRECTOR.getValue());
+            List<MovieActorVO> directorList = movieActorMapper.selectMovieActorList(movieActorQuery);
+            movieVO.setDirectorList(directorList);
+            movieVO.setActorList(actorList);
 
         }
         return movieVO;
@@ -103,30 +111,6 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         MovieVO movieVO = movieMapper.selectWebMovieById(movieId);
         movieVO.setVideoList(videoService.selectVideoByMovieId(movieId));
         return movieVO;
-    }
-
-    /**
-     * 设置导演或者主演数据
-     *
-     * @param movieActorType
-     * @param movieVO
-     */
-    private void setMovieActor(MovieActorType movieActorType, MovieVO movieVO) {
-        if (movieVO == null || movieVO.getMovieId() == null) {
-            return;
-        }
-        MovieActorVO actorVO = new MovieActorVO();
-        actorVO.setMovieId(movieVO.getMovieId());
-        if (movieActorType.getValue() == MovieActorType.ACTOR.getValue()) {
-            actorVO.setType(MovieActorType.ACTOR.getValue());
-            List<MovieActorVO> movieActorList = movieActorMapper.selectMovieActorList(actorVO);
-            movieVO.setActorList(movieActorList);
-        } else {
-            actorVO.setType(MovieActorType.DIRECTOR.getValue());
-            List<MovieActorVO> directorList = movieActorMapper.selectMovieActorList(actorVO);
-            movieVO.setDirectorList(directorList);
-        }
-
     }
 
     /**
@@ -331,6 +315,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     }
 
 
+
     /**
      * 添加高亮
      *
@@ -403,6 +388,11 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         return sb.toString();
     }
 
+    /**
+     * 生成二维码
+     * @param url
+     * @return
+     */
     private String generateQr(String url) {
         String profile = RuoYiConfig.getProfile();
         WebConfig webConfig = webConfigService.getWebConfig();

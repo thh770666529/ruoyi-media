@@ -14,8 +14,10 @@ import com.ruoyi.index.vo.SearchParamVO;
 import com.ruoyi.media.domain.vo.MovieVO;
 import com.ruoyi.media.service.IActorService;
 import com.ruoyi.media.service.IMovieService;
+import com.ruoyi.website.domain.SearchLog;
 import com.ruoyi.website.domain.WebsiteBanner;
 import com.ruoyi.website.domain.WebsiteLink;
+import com.ruoyi.website.service.ISearchLogService;
 import com.ruoyi.website.service.IWebsiteBannerService;
 import com.ruoyi.website.service.IWebsiteLinkService;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +56,9 @@ public class IndexController extends BaseController {
 
     @Autowired
     private ITagService tagService;
+
+    @Autowired
+    private ISearchLogService searchLogService;
 
     @GetMapping("/getHotActorList")
     public AjaxResult getHotActorList(){
@@ -113,6 +118,7 @@ public class IndexController extends BaseController {
         if (searchParamVO == null || StringUtils.isBlank(searchParamVO.getKeyword())){
             error("请输入关键字！");
         }
+        searchLogService.insertSearchLog(searchParamVO.getKeyword());
         startPage();
         List<MovieVO> list = movieService.search(searchParamVO);
         return getDataTable(list);

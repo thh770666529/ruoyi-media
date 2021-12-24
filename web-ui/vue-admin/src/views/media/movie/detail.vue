@@ -24,7 +24,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="分类" prop="categoryId">
-                  <el-select v-model="form.categoryId" placeholder="请选择博客分类">
+                  <el-select v-model="form.categoryId" placeholder="请选择电影分类">
                     <el-option
                       v-for="category in categoryOptions"
                       :key="category.categoryId"
@@ -364,7 +364,7 @@
         </el-form-item>
 
         <el-form-item label="文件大小" prop="filesize">
-          <el-input v-model="movieVideoForm.filesize" disabled placeholder="文件大小" >
+          <el-input v-model="movieVideoForm.filesize"  placeholder="文件大小" >
             <template slot="append">{{calculateFileSize(movieVideoForm.filesize)}}</template>
           </el-input>
         </el-form-item>
@@ -703,7 +703,10 @@ export default {
         this.directorList = response.data.directorList;
         let that = this;
         that.tagList = [];
-        const dbTagList = that.form.tagId.split(",");
+        let dbTagList = []
+        if (that.form.tagId){
+          dbTagList = that.form.tagId.split(",");
+        }
         for (let index = 0; index < dbTagList.length; index++) {
           if (dbTagList[index] != null && dbTagList[index] !== "") {
             that.tagList.push(dbTagList[index]);
@@ -908,7 +911,7 @@ export default {
     },
     submitActorForm(){
       if (!this.selectedActorList || this.selectedActorList.length === 0){
-        this.msgError("请选择要添加的演员！");
+        this.msgError("请选择要添加的演员/导演！");
       }
       for (let index = 0; index < this.selectedActorList.length; index++) {
         if (this.selectedActorList[index] != null && this.selectedActorList[index] !== "") {
@@ -1027,10 +1030,10 @@ export default {
       const isVideo  = file.type === 'video/mp4';
       const isLt1G = file.size / 1024 / 1024 / 1024 < 1;
       if (!isVideo) {
-        this.msgError('上传头像图片只能是 video格式!');
+        this.msgError('上传视频文件只能是 video格式!');
       }
       if (!isLt1G) {
-        this.msgError('上传头像图片大小不能超过 1GB!');
+        this.msgError('上传视频文件大小不能超过 1GB!');
       }
       return isVideo && isLt1G;
     },
