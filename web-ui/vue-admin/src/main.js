@@ -9,11 +9,13 @@ import store from './store'
 import router from './router'
 import directive from './directive' //directive
 import * as filters from '@/filters/index'
+import { download } from '@/utils/request'
+import plugins from './plugins' // plugins
 import './assets/icons' // icon
 import './permission' // permission control
 import { getDicts, getDictsByTypeList } from "@/api/system/dict/data";
 import { getConfigKey } from "@/api/system/config";
-import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree } from "@/utils/ruoyi";
+import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
 
 // 自定义表格工具扩展
@@ -26,10 +28,14 @@ import Editor from "@/components/Editor"
 import FileUpload from "@/components/FileUpload"
 // 图片上传组件
 import ImageUpload from "@/components/ImageUpload"
+// 图片预览组件
+import ImagePreview from "@/components/ImagePreview"
 // 字典标签组件
 import DictTag from '@/components/DictTag'
 // 头部标签组件
 import VueMeta from 'vue-meta'
+// 字典数据组件
+import DictData from '@/components/DictData'
 
 // markdown组件
 import leMarkdownEditor from 'le-markdown-editor'
@@ -66,9 +72,12 @@ Vue.component('RightToolbar', RightToolbar)
 Vue.component('Editor', Editor)
 Vue.component('FileUpload', FileUpload)
 Vue.component('ImageUpload', ImageUpload)
+Vue.component('ImagePreview', ImagePreview)
 Vue.use(leMarkdownEditor)
 Vue.use(directive)
+Vue.use(plugins)
 Vue.use(VueMeta)
+DictData.install()
 for(let key in globalFunction) {
   Vue.prototype[key] = globalFunction[key]
 }

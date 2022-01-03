@@ -3,6 +3,7 @@ package com.ruoyi.generator.util;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.velocity.VelocityContext;
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.constant.GenConstants;
@@ -58,6 +59,7 @@ public class VelocityUtils
         velocityContext.put("permissionPrefix", getPermissionPrefix(moduleName, businessName));
         velocityContext.put("columns", genTable.getColumns());
         velocityContext.put("table", genTable);
+        velocityContext.put("dicts", getDicts(genTable));
         setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory))
         {
@@ -258,6 +260,28 @@ public class VelocityUtils
             }
         }
         return importList;
+    }
+
+    /**
+     * 根据列类型获取字典组
+     * 
+     * @param genTable 业务表对象
+     * @return 返回字典组
+     */
+    public static String getDicts(GenTable genTable)
+    {
+        List<GenTableColumn> columns = genTable.getColumns();
+        Set<String> dicts = new HashSet<String>();
+        for (GenTableColumn column : columns)
+        {
+            if (!column.isSuperColumn() && StringUtils.isNotEmpty(column.getDictType()) && StringUtils.equalsAny(
+                    column.getHtmlType(),
+                    new String[] { GenConstants.HTML_SELECT, GenConstants.HTML_RADIO, GenConstants.HTML_CHECKBOX }))
+            {
+                dicts.add("'" + column.getDictType() + "'");
+            }
+        }
+        return StringUtils.join(dicts, ", ");
     }
 
     /**

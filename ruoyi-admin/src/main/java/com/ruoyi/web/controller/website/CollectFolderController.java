@@ -20,6 +20,8 @@ import com.ruoyi.website.service.ICollectFolderService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 收藏夹Controller
  *
@@ -50,12 +52,12 @@ public class CollectFolderController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:collectFolder:export')")
     @Log(title = "收藏夹", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(CollectFolder collectFolder)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, CollectFolder collectFolder)
     {
         List<CollectFolder> list = collectFolderService.selectCollectFolderList(collectFolder);
         ExcelUtil<CollectFolder> util = new ExcelUtil<CollectFolder>(CollectFolder.class);
-        return util.exportExcel(list, "收藏夹数据");
+        util.exportExcel(response, list, "收藏夹数据");
     }
 
     /**

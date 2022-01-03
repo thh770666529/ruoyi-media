@@ -1,11 +1,12 @@
 package com.ruoyi.common.core.domain.model;
 
-import java.util.Collection;
-import java.util.Set;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ruoyi.common.core.domain.entity.SysUser;
+
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * 登录用户身份权限
@@ -119,7 +120,7 @@ public class LoginUser implements UserDetails
         this.permissions = permissions;
     }
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     @Override
     public String getPassword()
     {
@@ -135,7 +136,7 @@ public class LoginUser implements UserDetails
     /**
      * 账户是否未过期,过期无法验证
      */
-    @JsonIgnore
+    @JSONField(serialize = false)
     @Override
     public boolean isAccountNonExpired()
     {
@@ -147,7 +148,7 @@ public class LoginUser implements UserDetails
      * 
      * @return
      */
-    @JsonIgnore
+    @JSONField(serialize = false)
     @Override
     public boolean isAccountNonLocked()
     {
@@ -159,7 +160,7 @@ public class LoginUser implements UserDetails
      * 
      * @return
      */
-    @JsonIgnore
+    @JSONField(serialize = false)
     @Override
     public boolean isCredentialsNonExpired()
     {
@@ -171,7 +172,7 @@ public class LoginUser implements UserDetails
      * 
      * @return
      */
-    @JsonIgnore
+    @JSONField(serialize = false)
     @Override
     public boolean isEnabled()
     {

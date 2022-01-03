@@ -377,7 +377,7 @@ export default {
           files: JSON.stringify(this.selectionFile)
         }
         batchMoveFile(data).then((res) => {
-            this.msgSuccess(res.msg)
+            this.$modal.msgSuccess(res.msg)
             this.getTableDataByType()
             this.dialogMoveFile.visible = false
             this.selectionFile = []

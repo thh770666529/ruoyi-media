@@ -8,7 +8,7 @@
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
-        
+
         <el-tooltip content="源码地址" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
         </el-tooltip>
@@ -96,7 +96,7 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      this.$confirm('确定注销并退出系统吗？', '提示', {
+      this.$modal.confirm('确定注销并退出系统吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

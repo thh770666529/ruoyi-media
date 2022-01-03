@@ -42,12 +42,3 @@ export function delBanner(bannerId) {
     method: 'delete'
   })
 }
-
-// 导出首页banner
-export function exportBanner(query) {
-  return request({
-    url: '/website/banner/export',
-    method: 'get',
-    params: query
-  })
-}

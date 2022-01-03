@@ -13,10 +13,10 @@
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.common_switch"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -65,7 +65,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['media:tag:export']"
         >导出</el-button>
@@ -82,22 +81,9 @@
           <el-tag v-else :type="scope.row.listClass == 'primary' ? '' : scope.row.listClass">{{scope.row.content}}</el-tag>
         </template>
       </el-table-column>
-      <el-form-item label="样式属性" prop="cssClass">
-        <el-input v-model="form.cssClass" placeholder="请输入样式属性" />
-      </el-form-item>
-      <el-form-item label="回显样式" prop="listClass">
-        <el-select v-model="form.listClass">
-          <el-option
-            v-for="item in listClassOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.common_switch" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="排序" align="center" prop="sort" />
@@ -152,10 +138,10 @@
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="parseInt(dict.dictValue)"
-            >{{dict.dictLabel}}</el-radio>
+              v-for="dict in dict.type.common_switch"
+              :key="dict.value"
+              :label="parseInt(dict.value)"
+            >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="显示排序" prop="sort">
@@ -174,16 +160,15 @@
 </template>
 
 <script>
-  import { listTag, getTag, delTag, addTag, updateTag, exportTag } from "@/api/media/tag";
+  import { listTag, getTag, delTag, addTag, updateTag } from "@/api/media/tag";
 
   export default {
     name: "Tag",
+    dicts: ['common_switch'],
     data() {
       return {
         // 遮罩层
         loading: true,
-        // 导出遮罩层
-        exportLoading: false,
         // 选中数组
         ids: [],
         // 非单个禁用
@@ -200,8 +185,6 @@
         title: "",
         // 是否显示弹出层
         open: false,
-        // 状态字典
-        statusOptions: [],
         // 数据标签回显样式
         listClassOptions: [
           {
@@ -255,9 +238,6 @@
     },
     created() {
       this.getList();
-      this.getDicts("common_switch").then(response => {
-        this.statusOptions = response.data;
-      });
     },
     methods: {
       /** 查询电影标签列表 */
@@ -325,13 +305,13 @@
           if (valid) {
             if (this.form.tagId != null) {
               updateTag(this.form).then(response => {
-                this.msgSuccess("修改成功");
+                this.$modal.msgSuccess("修改成功");
                 this.open = false;
                 this.getList();
               });
             } else {
               addTag(this.form).then(response => {
-                this.msgSuccess("新增成功");
+                this.$modal.msgSuccess("新增成功");
                 this.open = false;
                 this.getList();
               });
@@ -342,7 +322,7 @@
       /** 删除按钮操作 */
       handleDelete(row) {
         const tagIds = row.tagId || this.ids;
-        this.$confirm('是否确认删除电影标签编号为"' + tagIds + '"的数据项?', "警告", {
+        this.$modal.confirm('是否确认删除电影标签编号为"' + tagIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -350,23 +330,14 @@
           return delTag(tagIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         }).catch(() => {});
       },
       /** 导出按钮操作 */
       handleExport() {
-        const queryParams = this.queryParams;
-        this.$confirm('是否确认导出所有电影标签数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportTag(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+        this.download('media/tag/export', {
+          ...this.queryParams
+        }, `tag_${new Date().getTime()}.xlsx`)
       }
     }
   };

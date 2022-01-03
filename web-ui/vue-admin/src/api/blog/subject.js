@@ -42,12 +42,3 @@ export function delSubject(subjectId) {
     method: 'delete'
   })
 }
-
-// 导出文章专题
-export function exportSubject(query) {
-  return request({
-    url: '/blog/subject/export',
-    method: 'get',
-    params: query
-  })
-}

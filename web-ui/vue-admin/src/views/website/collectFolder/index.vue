@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="表名称" prop="tableName">
         <el-select v-model="queryParams.tableName" placeholder="请选择表名称" clearable size="small">
           <el-option
-            v-for="dict in tableNameOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.website_table_name"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -23,10 +23,10 @@
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.common_switch"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -75,7 +75,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['website:collectFolder:export']"
         >导出</el-button>
@@ -88,13 +87,13 @@
       <el-table-column label="主键" align="center" prop="collectFolderId" />
       <el-table-column label="表名称" align="center" prop="tableName">
         <template slot-scope="scope">
-          <dict-tag :options="tableNameOptions" :value="scope.row.tableName"/>
+          <dict-tag :options="dict.type.website_table_name" :value="scope.row.tableName"/>
         </template>
       </el-table-column>
       <el-table-column label="收藏夹名称" align="center" prop="name" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.common_switch" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
@@ -117,7 +116,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -135,10 +134,10 @@
         <el-form-item label="表名称" prop="tableName">
           <el-select v-model="form.tableName" placeholder="请选择表名称">
             <el-option
-              v-for="dict in tableNameOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
+              v-for="dict in dict.type.website_table_name"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -148,10 +147,10 @@
         <el-form-item label="状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择状态">
             <el-option
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="parseInt(dict.dictValue)"
+              v-for="dict in dict.type.common_switch"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -168,16 +167,15 @@
 </template>
 
 <script>
-import { listCollectFolder, getCollectFolder, delCollectFolder, addCollectFolder, updateCollectFolder, exportCollectFolder } from "@/api/website/collectFolder";
+import { listCollectFolder, getCollectFolder, delCollectFolder, addCollectFolder, updateCollectFolder } from "@/api/website/collectFolder";
 
 export default {
   name: "CollectFolder",
+  dicts: [ 'website_table_name', 'common_switch' ],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -194,10 +192,6 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 表名称字典
-      tableNameOptions: [],
-      // 状态字典
-      statusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -224,12 +218,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("website_table_name").then(response => {
-      this.tableNameOptions = response.data;
-    });
-    this.getDicts("common_switch").then(response => {
-      this.statusOptions = response.data;
-    });
   },
   methods: {
     /** 查询收藏夹列表 */
@@ -300,13 +288,13 @@ export default {
         if (valid) {
           if (this.form.collectFolderId != null) {
             updateCollectFolder(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addCollectFolder(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -317,7 +305,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const collectFolderIds = row.collectFolderId || this.ids;
-      this.$confirm('是否确认删除收藏夹编号为"' + collectFolderIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除收藏夹编号为"' + collectFolderIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -325,23 +313,14 @@ export default {
           return delCollectFolder(collectFolderIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有收藏夹数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportCollectFolder(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+      this.download('website/collectFolder/export', {
+        ...this.queryParams
+      }, `collectFolder_${new Date().getTime()}.xlsx`)
     }
   }
 };

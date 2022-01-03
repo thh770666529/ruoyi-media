@@ -1,10 +1,11 @@
 package com.ruoyi.system.service;
 
-import java.util.List;
-import java.util.Set;
 import com.ruoyi.common.core.domain.TreeSelect;
 import com.ruoyi.common.core.domain.entity.SysMenu;
 import com.ruoyi.system.domain.vo.RouterVo;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单 业务层
@@ -52,7 +53,7 @@ public interface ISysMenuService
      * @param roleId 角色ID
      * @return 选中菜单列表
      */
-    public List<Integer> selectMenuListByRoleId(Long roleId);
+    public List<Long> selectMenuListByRoleId(Long roleId);
 
     /**
      * 构建前端路由所需要的菜单

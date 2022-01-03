@@ -164,7 +164,7 @@
       },
       search() {
         if (!this.keyword) {
-          this.msgError('搜索关键字不得为空！')
+          this.$modal.msgError('搜索关键字不得为空！')
           return;
         }
         this.queryParams.keyword = this.keyword

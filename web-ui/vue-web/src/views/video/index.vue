@@ -182,7 +182,7 @@ export default {
         openSteamMedia: openSteamMedia
       };
       if (!this.videoPreviewList.length) {
-        this.msgError("没有转化好的视频文件，请联系管理员！");
+        this.$modal.msgError("没有转化好的视频文件，请联系管理员！");
         data.videoPreviewVisible = false
       }
       this.$store.commit('setVideoPreviewData', data);
@@ -213,7 +213,7 @@ export default {
               this.dialogVideoFile.visible = false
               this.setCookies(`movie_password${this.movie.movieId}`, true);
             }else {
-              this.msgError(res.msg)
+              this.$modal.msgError(res.msg)
             }
           });
         } else {

@@ -47,40 +47,40 @@
       <el-form-item label="推荐等级" prop="level">
         <el-select v-model="queryParams.level" placeholder="请选择推荐等级" @change="handleQuery" clearable size="small">
           <el-option
-            v-for="dict in levelOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.article_level"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="isPublish">
         <el-select v-model="queryParams.isPublish" placeholder="请选择状态" @change="handleQuery" clearable size="small">
           <el-option
-            v-for="dict in isPublishOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.article_publish_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="是否原创" prop="isOriginal">
         <el-select v-model="queryParams.isOriginal" placeholder="请选择是否原创" @change="handleQuery" clearable size="small">
           <el-option
-            v-for="dict in isOriginalOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.article_original"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="文章类型" prop="type">
         <el-select v-model="queryParams.type" placeholder="请选择文章类型" @change="handleQuery" clearable size="small">
           <el-option
-            v-for="dict in typeOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.article_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -129,7 +129,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['blog:article:export']"
         >导出Excel</el-button>
@@ -141,7 +140,7 @@
         icon="el-icon-download"
         size="mini"
         :disabled="multiple"
-        :loading="exportLoading"
+
         @click="handleExportMarkdown"
         v-hasPermi="['blog:article:export']"
       >导出markdown</el-button>
@@ -170,12 +169,12 @@
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="推荐等级" align="center" prop="level">
         <template slot-scope="scope">
-          <dict-tag :options="levelOptions" :value="scope.row.level"/>
+          <dict-tag :options="dict.type.article_level" :value="scope.row.level"/>
         </template>
       </el-table-column>
       <el-table-column label="是否原创" align="center" prop="isOriginal">
         <template slot-scope="scope">
-          <dict-tag :options="isOriginalOptions" :value="scope.row.isOriginal"/>
+          <dict-tag :options="dict.type.article_original" :value="scope.row.isOriginal"/>
         </template>
       </el-table-column>
       <el-table-column label="博客分类" align="center"  prop="categoryId"  width="100" >
@@ -211,19 +210,19 @@
       </el-table-column>
       <el-table-column label="类型" align="center" prop="type">
         <template slot-scope="scope">
-          <dict-tag :options="typeOptions" :value="scope.row.type"/>
+          <dict-tag :options="dict.type.article_type" :value="scope.row.type"/>
         </template>
       </el-table-column>
       <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="点击数" align="center" prop="clickCount" />
       <el-table-column label="开启评论" align="center" prop="openComment">
         <template slot-scope="scope">
-          <dict-tag :options="openCommentOptions" :value="scope.row.openComment"/>
+          <dict-tag :options="dict.type.common_switch" :value="scope.row.openComment"/>
         </template>
       </el-table-column>
       <el-table-column label="发布状态" align="center" prop="isPublish">
         <template slot-scope="scope">
-          <dict-tag :options="isPublishOptions" :value="scope.row.isPublish"/>
+          <dict-tag :options="dict.type.article_publish_status" :value="scope.row.isPublish"/>
         </template>
       </el-table-column>
 
@@ -316,10 +315,10 @@
             <el-form-item label="推荐等级" prop="level">
               <el-select v-model="form.level" placeholder="请选择推荐等级">
                 <el-option
-                  v-for="dict in levelOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictLabel"
-                  :value="parseInt(dict.dictValue)"
+                  v-for="dict in dict.type.article_level"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="parseInt(dict.value)"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -342,10 +341,10 @@
             <el-form-item label="是否原创">
               <el-radio-group v-model="form.isOriginal">
                 <el-radio
-                  v-for="dict in isOriginalOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictValue"
-                >{{dict.dictLabel}}</el-radio>
+                  v-for="dict in dict.type.article_original"
+                  :key="dict.value"
+                  :label="dict.value"
+                >{{dict.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -353,10 +352,10 @@
             <el-form-item label="文章类型" prop="type">
               <el-radio-group v-model="form.type">
               <el-radio
-                v-for="dict in typeOptions"
-                :key="dict.dictValue"
-                :label="dict.dictValue"
-              >{{dict.dictLabel}}</el-radio>
+                v-for="dict in dict.type.article_type"
+                :key="dict.value"
+                :label="dict.value"
+              >{{dict.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -364,10 +363,10 @@
             <el-form-item label="是否开启评论">
               <el-radio-group v-model="form.openComment">
                 <el-radio
-                  v-for="dict in openCommentOptions"
-                  :key="dict.dictValue"
-                  :label="parseInt(dict.dictValue)"
-                >{{dict.dictLabel}}</el-radio>
+                  v-for="dict in dict.type.common_switch"
+                  :key="dict.value"
+                  :label="parseInt(dict.value)"
+                >{{dict.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -377,10 +376,10 @@
             <el-form-item label="状态">
               <el-radio-group v-model="form.isPublish">
                 <el-radio
-                  v-for="dict in isPublishOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictValue"
-                >{{dict.dictLabel}}</el-radio>
+                  v-for="dict in dict.type.article_publish_status"
+                  :key="dict.value"
+                  :label="dict.value"
+                >{{dict.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -388,10 +387,10 @@
             <el-form-item label="发布状态">
               <el-radio-group v-model="form.status">
                 <el-radio
-                  v-for="dict in statusOptions"
-                  :key="dict.dictValue"
-                  :label="parseInt(dict.dictValue)"
-                >{{dict.dictLabel}}</el-radio>
+                  v-for="dict in dict.type.article_status"
+                  :key="dict.value"
+                  :label="parseInt(dict.value)"
+                >{{dict.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -399,10 +398,10 @@
             <el-form-item label="开启密钥模式">
               <el-radio-group v-model="form.openPassword">
                 <el-radio
-                  v-for="dict in openPasswordOptions"
-                  :key="dict.dictValue"
-                  :label="parseInt(dict.dictValue)"
-                >{{dict.dictLabel}}</el-radio>
+                  v-for="dict in dict.type.common_switch"
+                  :key="dict.value"
+                  :label="parseInt(dict.value)"
+                >{{dict.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -498,10 +497,11 @@
 <script>
 import { listTag } from "@/api/blog/tag";
 import { listCategory } from "@/api/blog/category";
-import { listArticle, getArticle, delArticle, addArticle, updateArticle, exportArticle } from "@/api/blog/article";
+import { listArticle, getArticle, delArticle, addArticle, updateArticle } from "@/api/blog/article";
 import { getToken } from "@/utils/auth";
 export default {
   name: "Article",
+  dicts: [ 'article_publish_status', 'article_original', 'article_level', 'article_status', 'common_switch', 'article_type'],
   data() {
     return {
       headers: {
@@ -517,8 +517,6 @@ export default {
       changeCount: 0, //文章编辑次数
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -539,20 +537,6 @@ export default {
       tagOptions: [],
       //分类字典
       categoryOptions: [],
-      // 状态字典
-      statusOptions: [],
-      // 是否原创字典
-      isOriginalOptions: [],
-      // 推荐等级字典
-      levelOptions: [],
-      // 状态字典
-      isPublishOptions: [],
-      // 是否开启评论字典
-      openCommentOptions: [],
-      // 类型字典
-      typeOptions: [],
-      // 是否开启密钥模式字典
-      openPasswordOptions: [],
       //保存选中标签id(编辑时)
       tagList: [],
       editorMode: "1", //编辑模式
@@ -615,8 +599,8 @@ export default {
   created() {
     // 查询列表
     this.getList();
-    // 查询字典
-    this.getDictList();
+    // 查询初始化数据
+    this.getInitData();
   },
   watch:{
     // 内容改变备份
@@ -664,34 +648,10 @@ export default {
     },
     previewArticle(row) {
       if(row.isPublish == 0) {
-        this.msgError("文章暂未发布，无法进行浏览")
+        this.$modal.msgError("文章暂未发布，无法进行浏览")
         return;
       }
       window.open( process.env.VUE_APP_WEB_HOST + '/article/' + row.articleId);
-    },
-    // 是否原创字典翻译
-    isOriginalFormat(row, column) {
-      return this.selectDictLabel(this.isOriginalOptions, row.isOriginal);
-    },
-    // 推荐等级字典翻译
-    levelFormat(row, column) {
-      return this.selectDictLabel(this.levelOptions, row.level);
-    },
-    // 状态字典翻译
-    isPublishFormat(row, column) {
-      return this.selectDictLabel(this.isPublishOptions, row.isPublish);
-    },
-    // 是否开启评论字典翻译
-    openCommentFormat(row, column) {
-      return this.selectDictLabel(this.openCommentOptions, row.openComment);
-    },
-    // 类型字典翻译
-    typeFormat(row, column) {
-      return this.selectDictLabel(this.typeOptions, row.type);
-    },
-    // 是否开启密钥模式字典翻译
-    openPasswordFormat(row, column) {
-      return this.selectDictLabel(this.openPasswordOptions, row.openPassword);
     },
     // 取消按钮
     cancel() {
@@ -773,7 +733,7 @@ export default {
         tempForm = JSON.parse(tempForm);
       }
       if (tempForm != null && tempForm.title) {
-        this.$confirm('还有上次未完成的博客编辑，是否继续编辑?', '提示', {
+        this.$modal.confirm('还有上次未完成的博客编辑，是否继续编辑?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -848,14 +808,14 @@ export default {
         if (valid) {
           if (this.form.articleId != null) {
             updateArticle(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addArticle(this.form).then(response => {
               localStorage.removeItem("articleForm");
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -866,7 +826,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const articleIds = row.articleId || this.ids;
-      this.$confirm('是否确认删除博客文章编号为"' + articleIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除博客文章编号为"' + articleIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -874,28 +834,19 @@ export default {
           return delArticle(articleIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有博客文章数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportArticle(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+        this.download('blog/article/export', {
+        ...this.queryParams
+        }, `article_${new Date().getTime()}.xlsx`)
     },
     /** 导出markDown */
     handleExportMarkdown() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出选中的博客文章数据项?', "警告", {
+      this.$modal.confirm('是否确认导出选中的博客文章数据项?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -906,24 +857,14 @@ export default {
         for(let index = 0; index < blogList.length; index++) {
           this.htmlToMarkdownFile(blogList[index].title, blogList[index].content)
         }
-        this.msgSuccess("导出成功");
+        this.$modal.msgSuccess("导出成功");
         this.exportLoading = false;
       }).catch(() => {});
     },
     /**
-     * 字典查询
+     * 初始化查询
      */
-    getDictList() {
-      const dictTypeList =  [ 'article_publish_status', 'article_original', 'article_level', 'article_status', 'common_switch', 'article_type']
-      this.getDictsByTypeList(dictTypeList).then(response => {
-        this.statusOptions = response.data.article_status;
-        this.isOriginalOptions = response.data.article_original;
-        this.levelOptions = response.data.article_level;
-        this.isPublishOptions = response.data.article_publish_status;
-        this.openCommentOptions = response.data.common_switch;
-        this.typeOptions = response.data.article_type;
-        this.openPasswordOptions = response.data.common_switch;
-      });
+    getInitData() {
       listCategory({status: '1'}).then(response => {
         this.categoryOptions = response.rows;
       });
@@ -968,7 +909,7 @@ export default {
         success: (response) => {
           let res = JSON.parse(response)
           if(res.code === 200) {
-            this.msgSuccess('图片上传成功！');
+            this.$modal.msgSuccess('图片上传成功！');
             let data = res.data;
             this.uploadLocalImageList = data.map((file) => {
               return {
@@ -979,7 +920,7 @@ export default {
               };
             });
           } else {
-            this.msgSuccess('图片上传失败！');
+            this.$modal.msgSuccess('图片上传失败！');
           }
         },
         error: (error) => {
@@ -1006,10 +947,10 @@ export default {
           loading.close();
           let res = JSON.parse(response)
           if(res.code === 200) {
-            this.msgSuccess('上传本地文件成功！');
+            this.$modal.msgSuccess('上传本地文件成功！');
             this.getList();
           } else {
-            this.msgError(res.msg);
+            this.$modal.msgError(res.msg);
           }
           this.localUploadVisible = false
           // 上传成功后，将里面的内容删除

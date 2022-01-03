@@ -665,7 +665,7 @@ export default {
       unzipFile(fileInfo).then((res) => {
           this.$emit('getTableDataByType')
           this.$store.dispatch('showStorage')
-          this.msgSuccess('解压成功')
+          this.$modal.msgSuccess('解压成功')
           loading.close()
       })
     },
@@ -678,7 +678,7 @@ export default {
     handleDeleteFileBtnClick(fileInfo) {
       if (this.fileType === 6) {
         //  回收站里 - 彻底删除
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        this.$modal.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -694,7 +694,7 @@ export default {
           })
       } else {
         //  非回收站
-        this.$confirm('删除后可在回收站查看, 是否继续删除?', '提示', {
+        this.$modal.confirm('删除后可在回收站查看, 是否继续删除?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -724,14 +724,14 @@ export default {
         }).then((res) => {
             this.$emit('getTableDataByType')
             this.$store.dispatch('showStorage')
-            this.msgSuccess('删除成功')
+            this.$modal.msgSuccess('删除成功')
         })
       } else {
         //  非回收站删除
         deleteFile(fileInfo).then((res) => {
             this.$emit('getTableDataByType')
             this.$store.dispatch('showStorage')
-            this.msgSuccess('删除成功')
+            this.$modal.msgSuccess('删除成功')
         })
       }
     },
@@ -747,7 +747,7 @@ export default {
       }).then((res) => {
           this.$emit('getTableDataByType')
           this.$store.dispatch('showStorage')
-          this.msgSuccess('已还原')
+          this.$modal.msgSuccess('已还原')
       })
     },
     /**
@@ -786,7 +786,7 @@ export default {
       renameFile(fileInfo).then((res) => {
           this.$emit('getTableDataByType')
           this.$store.dispatch('showStorage')
-          this.msgSuccess('重命名成功')
+          this.$modal.msgSuccess('重命名成功')
       })
     },
     /**

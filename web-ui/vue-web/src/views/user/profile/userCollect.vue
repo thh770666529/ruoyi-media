@@ -132,9 +132,9 @@ export default {
       cancelCollectByTargetId(collectForm).then(res => {
         if (res.code === 200){
           this.getList();
-          this.msgSuccess("取消收藏成功！");
+          this.$modal.msgSuccess("取消收藏成功！");
         } else {
-          this.msgSuccess("取消收藏失败！");
+          this.$modal.msgSuccess("取消收藏失败！");
         }
       });
     },

@@ -3,8 +3,6 @@
  * Copyright (c) 2019 ruoyi
  */
 
-const baseURL = process.env.VUE_APP_BASE_API
-
 // 日期格式化
 export function parseTime(time, pattern) {
 	if (arguments.length === 0 || !time) {
@@ -70,34 +68,29 @@ export function addDateRange(params, dateRange, propName) {
 
 // 回显数据字典
 export function selectDictLabel(datas, value) {
-	var actions = [];
-	Object.keys(datas).some((key) => {
-		if (datas[key].dictValue == ('' + value)) {
-			actions.push(datas[key].dictLabel);
-			return true;
-		}
-	})
-	return actions.join('');
+  var actions = [];
+  Object.keys(datas).some((key) => {
+    if (datas[key].value == ('' + value)) {
+      actions.push(datas[key].label);
+      return true;
+    }
+  })
+  return actions.join('');
 }
 
 // 回显数据字典（字符串数组）
 export function selectDictLabels(datas, value, separator) {
-	let actions = [];
-	const currentSeparator = undefined === separator ? "," : separator;
-  const temp = value.split(currentSeparator);
-	Object.keys(value.split(currentSeparator)).some((val) => {
-		Object.keys(datas).some((key) => {
-			if (datas[key].dictValue == ('' + temp[val])) {
-				actions.push(datas[key].dictLabel + currentSeparator);
-			}
-		})
-	})
-	return actions.join('').substring(0, actions.join('').length - 1);
-}
-
-// 通用下载方法
-export function download(fileName) {
-	window.location.href = baseURL + "/common/download?fileName=" + encodeURI(fileName) + "&delete=" + true;
+  var actions = [];
+  var currentSeparator = undefined === separator ? "," : separator;
+  var temp = value.split(currentSeparator);
+  Object.keys(value.split(currentSeparator)).some((val) => {
+    Object.keys(datas).some((key) => {
+      if (datas[key].value == ('' + temp[val])) {
+        actions.push(datas[key].label + currentSeparator);
+      }
+    })
+  })
+  return actions.join('').substring(0, actions.join('').length - 1);
 }
 
 // 字符串格式化(%s )
@@ -121,6 +114,23 @@ export function praseStrEmpty(str) {
 	}
 	return str;
 }
+
+// 数据合并
+export function mergeRecursive(source, target) {
+  for (var p in target) {
+    try {
+      if (target[p].constructor == Object) {
+        source[p] = mergeRecursive(source[p], target[p]);
+      } else {
+        source[p] = target[p];
+      }
+    } catch(e) {
+      source[p] = target[p];
+    }
+  }
+  return source;
+}
+
 
 /**
  * 构造树型结构数据
@@ -171,4 +181,41 @@ export function handleTree(data, id, parentId, children) {
 		}
 	}
 	return tree;
+}
+
+/**
+ * 参数处理
+ * @param {*} params  参数
+ */
+export function tansParams(params) {
+  let result = ''
+  for (const propName of Object.keys(params)) {
+    const value = params[propName];
+    var part = encodeURIComponent(propName) + "=";
+    if (value !== null && typeof (value) !== "undefined") {
+      if (typeof value === 'object') {
+        for (const key of Object.keys(value)) {
+          if (value[key] !== null && typeof (value[key]) !== 'undefined') {
+            let params = propName + '[' + key + ']';
+            var subPart = encodeURIComponent(params) + "=";
+            result += subPart + encodeURIComponent(value[key]) + "&";
+          }
+        }
+      } else {
+        result += part + encodeURIComponent(value) + "&";
+      }
+    }
+  }
+  return result
+}
+
+// 验证是否为blob格式
+export async function blobValidate(data) {
+  try {
+    const text = await data.text();
+    JSON.parse(text);
+    return false;
+  } catch (error) {
+    return true;
+  }
 }

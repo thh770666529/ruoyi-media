@@ -24,6 +24,7 @@ import com.ruoyi.media.service.IVideoService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -56,12 +57,12 @@ public class VideoController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:video:export')")
     @Log(title = "电影视频", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(Video video)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Video video)
     {
         List<Video> list = videoService.selectVideoList(video);
         ExcelUtil<Video> util = new ExcelUtil<Video>(Video.class);
-        return util.exportExcel(list, "电影视频数据");
+        util.exportExcel(response, list, "电影视频数据");
     }
 
     /**

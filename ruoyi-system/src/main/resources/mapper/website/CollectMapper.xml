@@ -131,7 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
             <if test="targetId != null  and targetId != ''"> and target_id = #{targetId}</if>
-            <if test="status != null "> and status = #{status}</if>
+            <if test="status != null and status != '' "> and status = #{status}</if>
             <if test="tableName != null  and tableName != ''"> and table_name = #{tableName}</if>
         </where>
     </select>

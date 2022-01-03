@@ -228,7 +228,7 @@
                 this.dialogArticle.visible = false;
                 this.setCookies(`article_password${this.articleId}`, true);
               } else {
-                this.msgError(res.msg)
+                this.$modal.msgError(res.msg)
               }
             });
           } else {

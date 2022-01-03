@@ -229,7 +229,7 @@ export default {
     handleBatchDeleteBtnClick() {
       if (this.fileType === 6) {
         //  回收站里 - 彻底删除
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        this.$modal.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -245,7 +245,7 @@ export default {
           })
       } else {
         //  非回收站
-        this.$confirm('删除后可在回收站查看, 是否继续删除?', '提示', {
+        this.$modal.confirm('删除后可在回收站查看, 是否继续删除?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

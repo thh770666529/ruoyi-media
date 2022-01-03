@@ -42,12 +42,3 @@ export function delLink(linkId) {
     method: 'delete'
   })
 }
-
-// 导出站点友情链接
-export function exportLink(query) {
-  return request({
-    url: '/website/link/export',
-    method: 'get',
-    params: query
-  })
-}

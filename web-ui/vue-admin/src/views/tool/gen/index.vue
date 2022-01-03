@@ -169,7 +169,8 @@
           :name="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
           :key="key"
         >
-        <pre><code class="hljs" v-html="highlightedCode(value, key)"></code></pre>
+          <el-link :underline="false" icon="el-icon-document-copy" v-clipboard:copy="value" v-clipboard:success="clipboardSuccess" style="float:right">复制</el-link>
+          <pre><code class="hljs" v-html="highlightedCode(value, key)"></code></pre>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -180,7 +181,6 @@
 <script>
 import { listTable, previewTable, delTable, genCode, synchDb } from "@/api/tool/gen";
 import importTable from "./importTable";
-import { downLoadZip } from "@/utils/zipdownload";
 import hljs from "highlight.js/lib/highlight";
 import "highlight.js/styles/github-gist.css";
 hljs.registerLanguage("java", require("highlight.js/lib/languages/java"));
@@ -262,28 +262,24 @@ export default {
     handleGenTable(row) {
       const tableNames = row.tableName || this.tableNames;
       if (tableNames == "") {
-        this.msgError("请选择要生成的数据");
+        this.$modal.msgError("请选择要生成的数据");
         return;
       }
       if(row.genType === "1") {
         genCode(row.tableName).then(response => {
-          this.msgSuccess("成功生成到自定义路径：" + row.genPath);
+          this.$modal.msgSuccess("成功生成到自定义路径：" + row.genPath);
         });
       } else {
-        downLoadZip("/tool/gen/batchGenCode?tables=" + tableNames, "ruoyi");
+        this.$download.zip("/tool/gen/batchGenCode?tables=" + tableNames, "ruoyi");
       }
     },
     /** 同步数据库操作 */
     handleSynchDb(row) {
       const tableName = row.tableName;
-      this.$confirm('确认要强制同步"' + tableName + '"表结构吗？', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function() {
-          return synchDb(tableName);
+      this.$modal.confirm('确认要强制同步"' + tableName + '"表结构吗？').then(function() {
+        return synchDb(tableName);
       }).then(() => {
-          this.msgSuccess("同步成功");
+        this.$modal.msgSuccess("同步成功");
       }).catch(() => {});
     },
     /** 打开导入表弹窗 */
@@ -311,6 +307,10 @@ export default {
       const result = hljs.highlight(language, code || "", true);
       return result.value || '&nbsp;';
     },
+    /** 复制代码成功 */
+    clipboardSuccess(){
+      this.$modal.msgSuccess("复制成功");
+    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.tableId);
@@ -326,15 +326,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const tableIds = row.tableId || this.ids;
-      this.$confirm('是否确认删除表编号为"' + tableIds + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function() {
-          return delTable(tableIds);
+      this.$modal.confirm('是否确认删除表编号为"' + tableIds + '"的数据项？').then(function() {
+        return delTable(tableIds);
       }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     }
   }

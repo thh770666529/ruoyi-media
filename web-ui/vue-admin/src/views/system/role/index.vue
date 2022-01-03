@@ -30,10 +30,10 @@
           style="width: 240px"
         >
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.sys_normal_disable"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -94,7 +94,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['system:role:export']"
         >导出</el-button>
@@ -183,10 +182,10 @@
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="dict.dictValue"
-            >{{dict.dictLabel}}</el-radio>
+              v-for="dict in dict.type.sys_normal_disable"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="菜单权限">
@@ -200,7 +199,7 @@
             ref="menu"
             node-key="id"
             :check-strictly="!form.menuCheckStrictly"
-            empty-text="加载中，请稍后"
+            empty-text="加载中，请稍候"
             :props="defaultProps"
           ></el-tree>
         </el-form-item>
@@ -245,7 +244,7 @@
             ref="dept"
             node-key="id"
             :check-strictly="!form.deptCheckStrictly"
-            empty-text="加载中，请稍后"
+            empty-text="加载中，请稍候"
             :props="defaultProps"
           ></el-tree>
         </el-form-item>
@@ -259,18 +258,17 @@
 </template>
 
 <script>
-import { listRole, getRole, delRole, addRole, updateRole, exportRole, dataScope, changeRoleStatus } from "@/api/system/role";
+import { listRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus } from "@/api/system/role";
 import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
 import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
 
 export default {
   name: "Role",
+  dicts: ['sys_normal_disable'],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -295,8 +293,6 @@ export default {
       deptNodeAll: false,
       // 日期范围
       dateRange: [],
-      // 状态数据字典
-      statusOptions: [],
       // 数据范围选项
       dataScopeOptions: [
         {
@@ -354,16 +350,12 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_normal_disable").then(response => {
-      this.statusOptions = response.data;
-    });
   },
   methods: {
     /** 查询角色列表 */
     getList() {
       this.loading = true;
-      listRole(this.addDateRange(this.queryParams, this.dateRange)).then(
-        response => {
+      listRole(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
           this.roleList = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -417,17 +409,13 @@ export default {
     // 角色状态修改
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
-      this.$confirm('确认要"' + text + '""' + row.roleName + '"角色吗?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return changeRoleStatus(row.roleId, row.status);
-        }).then(() => {
-          this.msgSuccess(text + "成功");
-        }).catch(function() {
-          row.status = row.status === "0" ? "1" : "0";
-        });
+      this.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗？').then(function() {
+        return changeRoleStatus(row.roleId, row.status);
+      }).then(() => {
+        this.$modal.msgSuccess(text + "成功");
+      }).catch(function() {
+        row.status = row.status === "0" ? "1" : "0";
+      });
     },
     // 取消按钮
     cancel() {
@@ -583,14 +571,14 @@ export default {
           if (this.form.roleId != undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys();
             updateRole(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             this.form.menuIds = this.getMenuAllCheckedKeys();
             addRole(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -603,7 +591,7 @@ export default {
       if (this.form.roleId != undefined) {
         this.form.deptIds = this.getDeptAllCheckedKeys();
         dataScope(this.form).then(response => {
-          this.msgSuccess("修改成功");
+          this.$modal.msgSuccess("修改成功");
           this.openDataScope = false;
           this.getList();
         });
@@ -612,31 +600,18 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const roleIds = row.roleId || this.ids;
-      this.$confirm('是否确认删除角色编号为"' + roleIds + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return delRole(roleIds);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        }).catch(() => {});
+      this.$modal.confirm('是否确认删除角色编号为"' + roleIds + '"的数据项？').then(function() {
+        return delRole(roleIds);
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有角色数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportRole(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+      this.download('system/role/export', {
+        ...this.queryParams
+      }, `role_${new Date().getTime()}.xlsx`)
     }
   }
 };

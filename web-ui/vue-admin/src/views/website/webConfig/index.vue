@@ -104,7 +104,7 @@
           <el-row :gutter="24">
             <el-col :span="6">
               <el-form-item label="网站评论">
-                <el-radio v-for="dict in switchOptions" :key="dict.dictValue" v-model="webConfig.openComment"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+                <el-radio v-for="dict in dict.type.common_switch" :key="dict.value" v-model="webConfig.openComment"  :label="dict.value" border size="medium">{{dict.label}}</el-radio>
               </el-form-item>
             </el-col>
           </el-row>
@@ -112,7 +112,7 @@
           <el-row :gutter="24">
             <el-col :span="6">
               <el-form-item label="网站打赏">
-                <el-radio v-for="dict in switchOptions" :key="dict.dictValue" v-model="webConfig.openAdmiration"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+                <el-radio v-for="dict in dict.type.common_switch" :key="dict.value" v-model="webConfig.openAdmiration"  :label="dict.value" border size="medium">{{dict.label}}</el-radio>
               </el-form-item>
             </el-col>
           </el-row>
@@ -120,7 +120,7 @@
           <el-row :gutter="24">
             <el-col :span="6">
               <el-form-item label="移动端评论">
-                <el-radio v-for="dict in switchOptions" :key="dict.dictValue" v-model="webConfig.openMobileComment"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+                <el-radio v-for="dict in dict.type.common_switch" :key="dict.value" v-model="webConfig.openMobileComment"  :label="dict.value" border size="medium">{{dict.label}}</el-radio>
               </el-form-item>
             </el-col>
           </el-row>
@@ -128,7 +128,7 @@
           <el-row :gutter="24">
             <el-col :span="6">
               <el-form-item label="移动端打赏">
-                <el-radio v-for="dict in switchOptions" :key="dict.dictValue" v-model="webConfig.openMobileAdmiration"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+                <el-radio v-for="dict in dict.type.common_switch" :key="dict.value" v-model="webConfig.openMobileAdmiration"  :label="dict.value" border size="medium">{{dict.label}}</el-radio>
               </el-form-item>
             </el-col>
           </el-row>
@@ -214,7 +214,7 @@
           </el-form-item>
 
           <el-form-item label="存储类型">
-            <el-radio v-for="dict in storageTypeOptions" :key="dict.dictValue" v-model="webConfig.storageType"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+            <el-radio v-for="dict in dict.type.storage_type" :key="dict.value" v-model="webConfig.storageType"  :label="dict.value" border size="medium">{{dict.label}}</el-radio>
           </el-form-item>
 
           <el-form-item>
@@ -258,15 +258,15 @@
 
           <el-form-item label="存储区域">
             <el-select v-model="webConfig.qiNiuArea" placeholder="请选择存储区域" clearable>
-              <el-option v-for="dict in qiNiuAreaOptions"
-                         :key="dict.dictValue"
-                         :label="dict.dictLabel"
-                         :value="dict.dictValue"></el-option>
+              <el-option v-for="dict in dict.type.qi_niu_area"
+                         :key="dict.value"
+                         :label="dict.label"
+                         :value="dict.value"></el-option>
             </el-select>
           </el-form-item>
 
           <el-form-item label="存储类型">
-            <el-radio v-for="dict in storageTypeOptions" :key="dict.dictValue" v-model="webConfig.storageType" :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+            <el-radio v-for="dict in dict.type.storage_type" :key="dict.value" v-model="webConfig.storageType" :label="dict.value" border size="medium">{{dict.label}}</el-radio>
           </el-form-item>
 
           <el-form-item>
@@ -314,7 +314,7 @@
           </el-form-item>
 
           <el-form-item label="存储类型">
-            <el-radio v-for="dict in storageTypeOptions" :key="dict.dictValue" v-model="webConfig.storageType"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+            <el-radio v-for="dict in dict.type.storage_type" :key="dict.value" v-model="webConfig.storageType"  :label="dict.value" border size="medium">{{dict.label}}</el-radio>
           </el-form-item>
 
           <el-form-item>
@@ -368,7 +368,7 @@
           </aside>
 
           <el-form-item label="流媒体开关" prop="openSteamMedia">
-            <el-radio v-for="dict in switchOptions" :key="dict.dictValue" v-model="webConfig.openSteamMedia"  :label="dict.dictValue" border size="medium">{{dict.dictLabel}}</el-radio>
+            <el-radio v-for="dict in dict.type.common_switch" :key="dict.value" v-model="webConfig.openSteamMedia"  :label="dict.value" border size="medium">{{dict.label}}</el-radio>
           </el-form-item>
 
           <el-form-item>
@@ -390,36 +390,17 @@ import {  getWebConfig, updateWebConfig } from "@/api/website/webConfig";
 
 export default {
   name: "WebConfig",
+  dicts: ['storage_type', 'qi_niu_area', 'common_switch'],
   components: {
   },
   data() {
     return {
       webConfig: {},
-      showList:[],
-      //字典是否
-      storageTypeOptions: [],
-      qiNiuAreaOptions: [],
-      switchOptions: []
+      showList:[]
     };
   },
   created() {
     this.getWebConfig()
-    this.getDicts("storage_type").then(response => {
-      this.storageTypeOptions = response.data;
-    });
-
-    this.getDicts("qi_niu_area").then(response => {
-      this.qiNiuAreaOptions = response.data;
-    });
-    this.getDicts("common_switch").then(response => {
-      this.switchOptions = response.data;
-    });
-
-    let data = {
-      filePath: '/',
-      currentPage: 1,
-      pageCount: 10
-    }
   },
   methods: {
     // 查询站点信息
@@ -450,7 +431,7 @@ export default {
       this.webConfig.loginTypeList = JSON.stringify(this.webConfig.loginTypeList)
       updateWebConfig(this.webConfig).then(response => {
         this.getWebConfig();
-        this.msgSuccess("更新成功");
+        this.$modal.msgSuccess("更新成功");
       });
     },
 

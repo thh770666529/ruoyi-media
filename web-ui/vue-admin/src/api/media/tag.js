@@ -42,12 +42,3 @@ export function delTag(tagId) {
     method: 'delete'
   })
 }
-
-// 导出电影标签
-export function exportTag(query) {
-  return request({
-    url: '/media/tag/export',
-    method: 'get',
-    params: query
-  })
-}

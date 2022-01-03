@@ -29,13 +29,13 @@ export default {
     variables() {
       return variables;
     },
-	sideTheme() {
+    sideTheme() {
       return this.$store.state.settings.sideTheme
     }
   },
   data() {
     return {
-      title: '视频媒资管理系统',
+      title: '若依管理系统',
       logo: logoImg
     }
   }

@@ -42,12 +42,3 @@ export function delTag(tagId) {
     method: 'delete'
   })
 }
-
-// 导出文章标签
-export function exportTag(query) {
-  return request({
-    url: '/blog/tag/export',
-    method: 'get',
-    params: query
-  })
-}

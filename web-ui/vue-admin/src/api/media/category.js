@@ -42,12 +42,3 @@ export function delCategory(categoryId) {
     method: 'delete'
   })
 }
-
-// 导出电影分类
-export function exportCategory(query) {
-  return request({
-    url: '/media/category/export',
-    method: 'get',
-    params: query
-  })
-}

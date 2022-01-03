@@ -42,12 +42,3 @@ export function delCategory(categoryId) {
     method: 'delete'
   })
 }
-
-// 导出博客分类
-export function exportCategory(query) {
-  return request({
-    url: '/blog/category/export',
-    method: 'get',
-    params: query
-  })
-}

@@ -20,6 +20,8 @@ import com.ruoyi.website.service.ISignRecordService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 签到日志Controller
  *
@@ -50,12 +52,12 @@ public class SignRecordController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:signRecord:export')")
     @Log(title = "签到日志", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(SignRecord signRecord)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, SignRecord signRecord)
     {
         List<SignRecord> list = signRecordService.selectSignRecordList(signRecord);
         ExcelUtil<SignRecord> util = new ExcelUtil<SignRecord>(SignRecord.class);
-        return util.exportExcel(list, "签到日志数据");
+        util.exportExcel(response, list, "签到日志数据");
     }
 
     /**

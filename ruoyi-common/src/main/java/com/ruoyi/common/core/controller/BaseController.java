@@ -9,6 +9,7 @@ import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.page.TableSupport;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.PageUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.sql.SqlUtil;
@@ -23,7 +24,7 @@ import java.util.List;
 
 /**
  * web层通用数据处理
- *
+ * 
  * @author ruoyi
  */
 public class BaseController
@@ -52,15 +53,7 @@ public class BaseController
      */
     protected void startPage()
     {
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        Integer pageNum = pageDomain.getPageNum();
-        Integer pageSize = pageDomain.getPageSize();
-        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
-        {
-            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
-            Boolean reasonable = pageDomain.getReasonable();
-            PageHelper.startPage(pageNum, pageSize, orderBy).setReasonable(reasonable);
-        }
+        PageUtils.startPage();
     }
 
     /**
@@ -124,7 +117,7 @@ public class BaseController
 
     /**
      * 响应返回结果
-     *
+     * 
      * @param rows 影响行数
      * @return 操作结果
      */
@@ -135,7 +128,7 @@ public class BaseController
 
     /**
      * 响应返回结果
-     *
+     * 
      * @param result 结果
      * @return 操作结果
      */

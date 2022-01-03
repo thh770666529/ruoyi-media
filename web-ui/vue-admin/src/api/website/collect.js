@@ -42,12 +42,3 @@ export function delCollect(collectId) {
     method: 'delete'
   })
 }
-
-// 导出收藏
-export function exportCollect(query) {
-  return request({
-    url: '/website/collect/export',
-    method: 'get',
-    params: query
-  })
-}

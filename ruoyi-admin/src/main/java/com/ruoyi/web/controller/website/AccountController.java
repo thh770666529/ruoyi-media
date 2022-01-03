@@ -20,6 +20,8 @@ import com.ruoyi.website.service.IAccountService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 用户账户Controller
  *
@@ -50,12 +52,12 @@ public class AccountController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:account:export')")
     @Log(title = "用户账户", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(Account account)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Account account)
     {
         List<Account> list = accountService.selectAccountList(account);
         ExcelUtil<Account> util = new ExcelUtil<Account>(Account.class);
-        return util.exportExcel(list, "用户账户数据");
+        util.exportExcel(response, list, "用户账户数据");
     }
 
     /**

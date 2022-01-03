@@ -42,12 +42,3 @@ export function delSignConfig(signConfigId) {
     method: 'delete'
   })
 }
-
-// 导出签到配置
-export function exportSignConfig(query) {
-  return request({
-    url: '/website/signConfig/export',
-    method: 'get',
-    params: query
-  })
-}

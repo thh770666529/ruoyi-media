@@ -25,6 +25,8 @@ import com.ruoyi.quartz.domain.SysJob;
 import com.ruoyi.quartz.service.ISysJobService;
 import com.ruoyi.quartz.util.CronUtils;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 调度任务信息操作处理
  *
@@ -54,12 +56,12 @@ public class SysJobController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:export')")
     @Log(title = "定时任务", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(SysJob sysJob)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, SysJob sysJob)
     {
         List<SysJob> list = jobService.selectJobList(sysJob);
         ExcelUtil<SysJob> util = new ExcelUtil<SysJob>(SysJob.class);
-        return util.exportExcel(list, "定时任务");
+        util.exportExcel(response, list, "定时任务");
     }
 
     /**
@@ -96,6 +98,10 @@ public class SysJobController extends BaseController
         {
             return error("新增任务'" + job.getJobName() + "'失败，目标字符串不允许'http(s)//'调用");
         }
+        else if (StringUtils.containsAnyIgnoreCase(job.getInvokeTarget(), Constants.JOB_ERROR_STR))
+        {
+            return error("新增任务'" + job.getJobName() + "'失败，目标字符串存在违规");
+        }
         job.setCreateBy(getUsername());
         return toAjax(jobService.insertJob(job));
     }
@@ -123,6 +129,10 @@ public class SysJobController extends BaseController
         else if (StringUtils.containsAnyIgnoreCase(job.getInvokeTarget(), new String[] { Constants.HTTP, Constants.HTTPS }))
         {
             return error("修改任务'" + job.getJobName() + "'失败，目标字符串不允许'http(s)//'调用");
+        }
+        else if (StringUtils.containsAnyIgnoreCase(job.getInvokeTarget(), Constants.JOB_ERROR_STR))
+        {
+            return error("修改任务'" + job.getJobName() + "'失败，目标字符串存在违规");
         }
         job.setUpdateBy(getUsername());
         return toAjax(jobService.updateJob(job));

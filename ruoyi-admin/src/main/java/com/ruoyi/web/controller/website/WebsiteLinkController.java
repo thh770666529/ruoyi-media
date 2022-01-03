@@ -20,6 +20,8 @@ import com.ruoyi.website.service.IWebsiteLinkService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 站点友情链接Controller
  *
@@ -50,12 +52,12 @@ public class WebsiteLinkController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:link:export')")
     @Log(title = "站点友情链接", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(WebsiteLink websiteLink)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, WebsiteLink websiteLink)
     {
         List<WebsiteLink> list = websiteLinkService.selectWebsiteLinkList(websiteLink);
         ExcelUtil<WebsiteLink> util = new ExcelUtil<WebsiteLink>(WebsiteLink.class);
-        return util.exportExcel(list, "站点友情链接数据");
+        util.exportExcel(response, list, "站点友情链接数据");
     }
 
     /**

@@ -66,9 +66,9 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="bannerId" />
       <el-table-column label="标题" align="center" prop="title" />
-      <el-table-column prop="imageUrl" label="图片地址" align="center" width="150">
+      <el-table-column prop="imageUrl" label="图片地址" align="center" width="150"  >
         <template slot-scope="scope">
-          <el-image :src="fileUploadHost+scope.row.imageUrl" />
+          <el-image :src="fileUploadHost + scope.row.imageUrl"  @click="previewPicture(fileUploadHost + scope.row.imageUrl)" />
         </template>
       </el-table-column>
       <el-table-column label="链接地址" align="center" prop="linkUrl" />
@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import { listBanner, getBanner, delBanner, addBanner, updateBanner, exportBanner } from "@/api/website/banner";
+import { listBanner, getBanner, delBanner, addBanner, updateBanner } from "@/api/website/banner";
 
 export default {
   name: "Banner",
@@ -245,13 +245,13 @@ export default {
         if (valid) {
           if (this.form.bannerId != null) {
             updateBanner(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addBanner(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -262,7 +262,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const bannerIds = row.bannerId || this.ids;
-      this.$confirm('是否确认删除首页banner编号为"' + bannerIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除首页banner编号为"' + bannerIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -270,21 +270,14 @@ export default {
           return delBanner(bannerIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         })
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有首页banner数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportBanner(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+      this.download('website/banner/export', {
+        ...this.queryParams
+      }, `banner_${new Date().getTime()}.xlsx`)
     }
   }
 };

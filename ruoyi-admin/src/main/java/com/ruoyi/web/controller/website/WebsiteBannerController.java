@@ -20,6 +20,8 @@ import com.ruoyi.website.service.IWebsiteBannerService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 首页bannerController
  *
@@ -50,12 +52,12 @@ public class WebsiteBannerController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:banner:export')")
     @Log(title = "首页banner", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(WebsiteBanner websiteBanner)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, WebsiteBanner websiteBanner)
     {
         List<WebsiteBanner> list = websiteBannerService.selectWebsiteBannerList(websiteBanner);
         ExcelUtil<WebsiteBanner> util = new ExcelUtil<WebsiteBanner>(WebsiteBanner.class);
-        return util.exportExcel(list, "首页banner数据");
+        util.exportExcel(response, list, "首页banner数据");
     }
 
     /**

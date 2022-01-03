@@ -1,17 +1,14 @@
 package com.ruoyi.common.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.enums.LimitType;
 
+import java.lang.annotation.*;
+
 /**
  * 限流注解
- *
- * @author thh
+ * 
+ * @author ruoyi
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

@@ -533,7 +533,7 @@
             message: '登录后才可以签到哦~',
             offset: 100
           });
-          this.$confirm('登录后才可以签到哦，是否进行登录', '提示', {
+          this.$modal.confirm('登录后才可以签到哦，是否进行登录', '提示', {
             confirmButtonText: '登录',
             cancelButtonText: '取消',
             type: 'warning'

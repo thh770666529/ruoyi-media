@@ -104,7 +104,7 @@ export default {
           }
         ],
         // poster: 'https://p1.music.126.net/5zs7IvmLv7KahY3BFzUmrg==/109951163635241613.jpg?param=600y500', // 你的封面地址
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        notSupportedMessage: '此视频暂无法播放，请稍侯再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controlBar: {
           timeDivider: true,
           durationDisplay: true,

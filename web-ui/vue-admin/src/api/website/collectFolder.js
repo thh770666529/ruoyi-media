@@ -42,12 +42,3 @@ export function delCollectFolder(collectFolderId) {
     method: 'delete'
   })
 }
-
-// 导出收藏夹
-export function exportCollectFolder(query) {
-  return request({
-    url: '/website/collectFolder/export',
-    method: 'get',
-    params: query
-  })
-}

@@ -1,7 +1,11 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.ArrayList;
-import java.util.List;;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.validation.Validator;
+
+import com.ruoyi.common.utils.bean.BeanValidators;
 import com.ruoyi.website.service.IAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +30,7 @@ import com.ruoyi.system.mapper.SysUserPostMapper;
 import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 用户 业务层处理
@@ -54,6 +59,9 @@ public class SysUserServiceImpl implements ISysUserService
 
     @Autowired
     private ISysConfigService configService;
+
+    @Autowired
+    protected Validator validator;
 
     @Autowired
     private IAccountService accountService;
@@ -122,7 +130,7 @@ public class SysUserServiceImpl implements ISysUserService
 
     /**
      * 查询用户所属角色组
-     * 
+     *
      * @param userName 用户名
      * @return 结果
      */
@@ -130,21 +138,16 @@ public class SysUserServiceImpl implements ISysUserService
     public String selectUserRoleGroup(String userName)
     {
         List<SysRole> list = roleMapper.selectRolesByUserName(userName);
-        StringBuffer idsStr = new StringBuffer();
-        for (SysRole role : list)
+        if (CollectionUtils.isEmpty(list))
         {
-            idsStr.append(role.getRoleName()).append(",");
+            return StringUtils.EMPTY;
         }
-        if (StringUtils.isNotEmpty(idsStr.toString()))
-        {
-            return idsStr.substring(0, idsStr.length() - 1);
-        }
-        return idsStr.toString();
+        return list.stream().map(SysRole::getRoleName).collect(Collectors.joining(","));
     }
 
     /**
      * 查询用户所属岗位组
-     * 
+     *
      * @param userName 用户名
      * @return 结果
      */
@@ -152,16 +155,11 @@ public class SysUserServiceImpl implements ISysUserService
     public String selectUserPostGroup(String userName)
     {
         List<SysPost> list = postMapper.selectPostsByUserName(userName);
-        StringBuffer idsStr = new StringBuffer();
-        for (SysPost post : list)
+        if (CollectionUtils.isEmpty(list))
         {
-            idsStr.append(post.getPostName()).append(",");
+            return StringUtils.EMPTY;
         }
-        if (StringUtils.isNotEmpty(idsStr.toString()))
-        {
-            return idsStr.substring(0, idsStr.length() - 1);
-        }
-        return idsStr.toString();
+        return list.stream().map(SysPost::getPostName).collect(Collectors.joining(","));
     }
 
     /**
@@ -182,7 +180,7 @@ public class SysUserServiceImpl implements ISysUserService
     }
 
     /**
-     * 校验用户名称是否唯一
+     * 校验手机号码是否唯一
      *
      * @param user 用户信息
      * @return
@@ -526,6 +524,7 @@ public class SysUserServiceImpl implements ISysUserService
                 SysUser u = userMapper.selectUserByUserName(user.getUserName());
                 if (StringUtils.isNull(u))
                 {
+                    BeanValidators.validateWithException(validator, user);
                     user.setPassword(SecurityUtils.encryptPassword(password));
                     user.setCreateBy(operName);
                     this.insertUser(user);
@@ -534,6 +533,7 @@ public class SysUserServiceImpl implements ISysUserService
                 }
                 else if (isUpdateSupport)
                 {
+                    BeanValidators.validateWithException(validator, user);
                     user.setUpdateBy(operName);
                     this.updateUser(user);
                     successNum++;

@@ -6,8 +6,8 @@
           v-model="queryParams.ipaddr"
           placeholder="请输入登录地址"
           clearable
+		  size="small"
           style="width: 240px;"
-          size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
@@ -16,8 +16,8 @@
           v-model="queryParams.userName"
           placeholder="请输入用户名称"
           clearable
+		  size="small"
           style="width: 240px;"
-          size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
@@ -30,10 +30,10 @@
           style="width: 240px"
         >
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.sys_common_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -83,7 +83,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['monitor:logininfor:export']"
         >导出</el-button>
@@ -101,7 +100,7 @@
       <el-table-column label="操作系统" align="center" prop="os" />
       <el-table-column label="登录状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.sys_common_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="操作信息" align="center" prop="msg" />
@@ -123,16 +122,15 @@
 </template>
 
 <script>
-import { list, delLogininfor, cleanLogininfor, exportLogininfor } from "@/api/monitor/logininfor";
+import { list, delLogininfor, cleanLogininfor } from "@/api/monitor/logininfor";
 
 export default {
   name: "Logininfor",
+  dicts: ['sys_common_status'],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非多个禁用
@@ -143,8 +141,6 @@ export default {
       total: 0,
       // 表格数据
       list: [],
-      // 状态数据字典
-      statusOptions: [],
       // 日期范围
       dateRange: [],
       // 默认排序
@@ -161,9 +157,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_common_status").then(response => {
-      this.statusOptions = response.data;
-    });
   },
   methods: {
     /** 查询登录日志列表 */
@@ -202,44 +195,27 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const infoIds = row.infoId || this.ids;
-      this.$confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return delLogininfor(infoIds);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        }).catch(() => {});
+      this.$modal.confirm('是否确认删除访问编号为"' + infoIds + '"的数据项？').then(function() {
+        return delLogininfor(infoIds);
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {});
     },
     /** 清空按钮操作 */
     handleClean() {
-        this.$confirm('是否确认清空所有登录日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return cleanLogininfor();
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("清空成功");
-        }).catch(() => {});
+      this.$modal.confirm('是否确认清空所有登录日志数据项？').then(function() {
+        return cleanLogininfor();
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("清空成功");
+      }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有操作日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportLogininfor(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+      this.download('monitor/logininfor/export', {
+        ...this.queryParams
+      }, `logininfor_${new Date().getTime()}.xlsx`)
     }
   }
 };

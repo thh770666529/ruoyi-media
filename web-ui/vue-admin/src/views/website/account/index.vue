@@ -13,10 +13,10 @@
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.website_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -65,7 +65,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['website:account:export']"
         >导出</el-button>
@@ -81,7 +80,7 @@
       <el-table-column label="账户描述" align="center" prop="accountDesc" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.website_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="累计签到天数" align="center" prop="seriesDays" />
@@ -121,8 +120,8 @@
     />
 
     <!-- 添加或修改用户账户对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="用户id" prop="userId">
           <el-input v-model="form.userId" placeholder="请输入用户id" />
         </el-form-item>
@@ -135,28 +134,17 @@
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="parseInt(dict.dictValue)"
-            >{{dict.dictLabel}}</el-radio>
+              v-for="dict in dict.type.website_status"
+              :key="dict.value"
+              :label="parseInt(dict.value)"
+            >{{dict.label}}</el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item label="删除标志" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
         </el-form-item>
         <el-form-item label="累计签到天数" prop="seriesDays">
           <el-input v-model="form.seriesDays" placeholder="请输入累计签到天数" />
         </el-form-item>
         <el-form-item label="连续签到天数" prop="continuityDays">
           <el-input v-model="form.continuityDays" placeholder="请输入连续签到天数" />
-        </el-form-item>
-        <el-form-item label="最后签到时间" prop="lastSignTime">
-          <el-date-picker clearable size="small"
-            v-model="form.lastSignTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择最后签到时间">
-          </el-date-picker>
         </el-form-item>
         <el-form-item label="可补签次数" prop="signNums">
           <el-input v-model="form.signNums" placeholder="请输入可补签次数" />
@@ -171,16 +159,15 @@
 </template>
 
 <script>
-import { listAccount, getAccount, delAccount, addAccount, updateAccount, exportAccount } from "@/api/website/account";
+import { listAccount, getAccount, delAccount, addAccount, updateAccount } from "@/api/website/account";
 
 export default {
   name: "Account",
+  dicts: [ 'website_status' ],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -197,8 +184,6 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 状态字典
-      statusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -221,9 +206,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("website_status").then(response => {
-      this.statusOptions = response.data;
-    });
   },
   methods: {
     /** 查询用户账户列表 */
@@ -296,13 +278,13 @@ export default {
         if (valid) {
           if (this.form.accountId != null) {
             updateAccount(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addAccount(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -313,7 +295,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const accountIds = row.accountId || this.ids;
-      this.$confirm('是否确认删除用户账户编号为"' + accountIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除用户账户编号为"' + accountIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -321,23 +303,14 @@ export default {
           return delAccount(accountIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有用户账户数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportAccount(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+      this.download('website/account/export', {
+        ...this.queryParams
+      }, `account_${new Date().getTime()}.xlsx`)
     }
   }
 };

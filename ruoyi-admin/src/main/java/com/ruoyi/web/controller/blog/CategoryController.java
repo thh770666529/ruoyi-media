@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -44,12 +45,12 @@ public class CategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:category:export')")
     @Log(title = "博客分类", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(Category category)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Category category)
     {
         List<Category> list = categoryService.selectCategoryList(category);
         ExcelUtil<Category> util = new ExcelUtil<Category>(Category.class);
-        return util.exportExcel(list, "博客分类数据");
+        util.exportExcel(response, list, "博客分类数据");
     }
 
     /**

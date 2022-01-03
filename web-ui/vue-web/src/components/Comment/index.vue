@@ -71,10 +71,10 @@
         params.oppose = 0;
         replyComment(params).then(response => {
           if (response.code === 200){
-            this.msgSuccess("发表成功！");
+            this.$modal.msgSuccess("发表成功！");
             this.getCommentList();
           }else{
-            this.msgError("发表失败！")
+            this.$modal.msgError("发表失败！")
           }
         });
       },
