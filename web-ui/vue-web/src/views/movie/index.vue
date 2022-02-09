@@ -45,8 +45,8 @@
             <el-radio-group size="small" fill="#f34d41" @change="getList" v-model="queryParams.country"
                             style="margin-left: 10px">
               <el-radio-button label="">全部</el-radio-button>
-              <el-radio-button v-for="(dict,index) in countryOptions" :key="index" :label="dict.value">
-                {{dict.label}}
+              <el-radio-button v-for="(dict,index) in countryOptions" :key="index" :label="dict.dictValue">
+                {{dict.dictLabel}}
               </el-radio-button>
             </el-radio-group>
           </ul>
@@ -181,6 +181,7 @@
         const dictTypeList = ['movie_country', 'movie_status', 'movie_type'];
         getDictsByTypeList(dictTypeList).then(response => {
           this.countryOptions = response.data.movie_country;
+          console.log(this.countryOptions)
         });
         listCategory({status: '1'}).then(response => {
           this.categoryOptions = response.rows;

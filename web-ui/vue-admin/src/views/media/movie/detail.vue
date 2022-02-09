@@ -887,7 +887,7 @@ export default {
       let ids = '0';
         if (this.actorList.length > 0 && this.movieActorType === 'actor'){
           ids = this.actorList.map(item => item.actorId)
-        }else if(this.directorList.length > 0) {
+        }else if(this.directorList.length > 0 && this.movieActorType === 'director') {
           ids = this.directorList.map(item => item.actorId)
         }
       notSelectedActorList(this.queryActorParams, ids).then(response => {

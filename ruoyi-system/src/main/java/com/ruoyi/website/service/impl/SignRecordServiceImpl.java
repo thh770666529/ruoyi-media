@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.enums.UserStatus;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ServletUtils;
@@ -120,6 +121,14 @@ public class SignRecordServiceImpl implements ISignRecordService
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         //判断最后更新时间，如果更新时间是今天 直接返回账户数据，如果不是则调用一次存过进行返回
         Account account = accountMapper.selectAccountByUserId(loginUser.getUserId() + "");
+        if(account == null){
+           account = new Account();
+            account.setUserId(loginUser.getUserId() + "");
+            account.setAccountAmount(0L);
+            account.setAccountDesc(loginUser.getUsername() + "的账户");
+            account.setStatus(Integer.parseInt(UserStatus.OK.getCode()));
+            account.setContinuityDays(0);
+        }
         Date signDataUpdateTime = account.getSignDataUpdateTime();
         String date = DateUtils.getDate();
         signRecordVO.setUserId(loginUser.getUserId() + "");
