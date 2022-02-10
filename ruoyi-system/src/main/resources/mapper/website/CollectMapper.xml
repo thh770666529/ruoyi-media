@@ -109,13 +109,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from website_collect c
         LEFT JOIN sys_user u ON u.user_id = c.user_id
         <if test="tableName != null  and tableName == 'wm_movie'">
-            LEFT JOIN wm_movie m ON m.movie_id = c.target_id
+            INNER JOIN wm_movie m ON m.movie_id = c.target_id
         </if>
         <if test="tableName != null  and tableName == 'blog_article'">
-            LEFT JOIN blog_article a ON a.article_id = c.target_id
+            INNER JOIN blog_article a ON a.article_id = c.target_id
         </if>
         <if test="tableName != null  and tableName == 'wm_actor'">
-            LEFT JOIN wm_actor ac ON ac.actor_id = c.target_id
+            INNER JOIN wm_actor ac ON ac.actor_id = c.target_id
         </if>
         <where>
             <if test="userId != null  and userId != ''"> and c.user_id = #{userId}</if>

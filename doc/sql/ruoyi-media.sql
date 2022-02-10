@@ -2428,40 +2428,43 @@ DROP PROCEDURE IF EXISTS `proc_sign_continue_times`;
 delimiter ;;
 CREATE DEFINER=`mysql`@`%` PROCEDURE `proc_sign_continue_times`(IN in_user_id VARCHAR(64), OUT signinTodayFlag Integer, OUT continuityDays Integer,OUT series_days Integer, OUT signDataUpdateTime datetime)
 BEGIN
-	
-  SET @now = CURRENT_DATE(); 
+
+  SET @now = CURRENT_DATE();
 	SET @count = 0;
 	SET @isSigninToday = 0;
 	set @row_number = 0;
   set @totalcount = 0;
-	SET @signDataUpdateTime = now(); 
-		
-	select count(1) into @count from (
-		select  ABS(datediff(sign_date, @now))  aa ,  -- 签到时间对比今天的差值
-				(@row_number:=@row_number + 1) bb    -- 排序字段 
-		from  website_sign_record
-		where user_id  = in_user_id   and  ABS(datediff(sign_date, @now))  > 0  -- 条件排除今天的签到记录
-		ORDER BY aa asc
-	) T where aa = bb ;
-	
-	
-	
-	select COUNT(*) into @isSigninToday from  website_sign_record where user_id  = in_user_id  and DATEDIFF(sign_date , @now ) = 0 ;-- 今天是否登录
-		
-	select count(1) into @totalcount from website_sign_record where user_id  = in_user_id;
-	
-    -- 更新连续签到次数
-	update website_account set continuity_days = (select @count + @isSinginToday), series_days = (select @totalcount), sign_data_update_time =(select @signDataUpdateTime) where user_id  = in_user_id ;
-		
-	
+	SET @signDataUpdateTime = now();
 
-	select  @isSigninToday as signinTodayFlag, -- 当天是否签到
-	        @count + @isSigninToday as continuityDays,  -- 连续签到n天
-         @totalcount as seriesDays, -- 签到总天数
-				 @signDataUpdateTime as signDataUpdateTime; -- 最后更新签到数据
-				
+select count(1) into @count from (
+                                     select  ABS(datediff(sign_date, @now))  aa ,  -- 签到时间对比今天的差值
+                                             (@row_number:=@row_number + 1) bb    -- 排序字段
+                                     from  website_sign_record
+                                     where user_id  = in_user_id   and  ABS(datediff(sign_date, @now))  > 0  -- 条件排除今天的签到记录
+                                     ORDER BY aa asc
+                                 ) T where aa = bb ;
+
+
+
+select COUNT(*) into @isSigninToday from  website_sign_record where user_id  = in_user_id  and DATEDIFF(sign_date , @now ) = 0 ;-- 今天是否登录
+
+select count(1) into @totalcount from website_sign_record where user_id  = in_user_id;
+
+-- 更新连续签到次数
+update website_account set continuity_days = (select @count + @isSigninToday), series_days = (select @totalcount), sign_data_update_time =(select @signDataUpdateTime) where user_id  = in_user_id ;
+
+
+
+select  @isSigninToday as signinTodayFlag, -- 当天是否签到
+        @count + @isSigninToday as continuityDays,  -- 连续签到n天
+        @totalcount as seriesDays, -- 签到总天数
+        @signDataUpdateTime as signDataUpdateTime; -- 最后更新签到数据
+
 END
 ;;
 delimiter ;
+
+
+
 
 SET FOREIGN_KEY_CHECKS = 1;

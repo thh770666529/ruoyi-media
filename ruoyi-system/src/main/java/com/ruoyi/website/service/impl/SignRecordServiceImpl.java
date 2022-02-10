@@ -15,6 +15,7 @@ import com.ruoyi.system.util.TokenUtil;
 import com.ruoyi.website.domain.Account;
 import com.ruoyi.website.domain.vo.SignRecordVO;
 import com.ruoyi.website.mapper.AccountMapper;
+import com.ruoyi.website.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.website.mapper.SignRecordMapper;
@@ -41,6 +42,9 @@ public class SignRecordServiceImpl implements ISignRecordService
 
     @Autowired
     private TokenUtil tokenUtil;
+
+    @Autowired
+    IAccountService accountService;
 
     /**
      * 查询签到日志
@@ -122,12 +126,16 @@ public class SignRecordServiceImpl implements ISignRecordService
         //判断最后更新时间，如果更新时间是今天 直接返回账户数据，如果不是则调用一次存过进行返回
         Account account = accountMapper.selectAccountByUserId(loginUser.getUserId() + "");
         if(account == null){
-           account = new Account();
+            account = new Account();
             account.setUserId(loginUser.getUserId() + "");
             account.setAccountAmount(0L);
-            account.setAccountDesc(loginUser.getUsername() + "的账户");
-            account.setStatus(Integer.parseInt(UserStatus.OK.getCode()));
+            account.setStatus(1);
+            account.setCreateTime(DateUtils.getNowDate());
+            account.setUpdateTime(DateUtils.getNowDate());
+            account.setSeriesDays(0);
             account.setContinuityDays(0);
+            account.setSignNums(0);
+            accountService.insertAccount(account);
         }
         Date signDataUpdateTime = account.getSignDataUpdateTime();
         String date = DateUtils.getDate();
