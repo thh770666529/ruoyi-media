@@ -7,7 +7,11 @@
           <span class="fsize20">{{movie.title}}</span>
         </div>
         <div style="min-height: 529px">
-          <video-preview ref="player" :videoId="videoId" :autoplay="!dialogVideoFile.visible"></video-preview>
+          <iFrame v-show="video.url"
+                  v-if="video.storageType === `iframe`"
+                  :src="video.url"
+          />
+          <video-preview v-else ref="player" :videoId="videoId" :autoplay="!dialogVideoFile.visible"></video-preview>
         </div>
 
         <!-- 评论 -->
@@ -76,13 +80,15 @@ import VideoPreview from '@/components/Play/VideoPreview'
 import movieApi from '@/api/media/movie'
 import {getWebConfig} from '@/api/website/webConfig'
 import Comment from "@/components/Comment"
+import iFrame from "@/components/iFrame";
 import {videoPlayer} from 'vue-video-player'
 
 export default {
   name: 'playVideo',
   components: {
     VideoPreview,
-    Comment
+    Comment,
+    iFrame
   },
   computed: {},
   data() {
@@ -160,6 +166,9 @@ export default {
       });
     },
     playVideo() {
+      if (this.video.storageType === `iframe`){
+        return
+      }
       this.videoPreviewList = []
       const openSteamMedia = this.webConfig.openSteamMedia;
       if (openSteamMedia === '1') {

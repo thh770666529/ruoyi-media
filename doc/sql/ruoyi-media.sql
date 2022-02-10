@@ -844,6 +844,8 @@ INSERT INTO `sys_dict_data` VALUES (191, 0, '积分', '1', 'sign_type', NULL, 'd
 INSERT INTO `sys_dict_data` VALUES (192, 0, '金币', '2', 'sign_type', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:36:41', 'admin', '2021-12-11 19:11:32', NULL);
 INSERT INTO `sys_dict_data` VALUES (193, 0, '单次', '1', 'sign_set', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:39:42', 'admin', '2021-12-11 19:08:20', NULL);
 INSERT INTO `sys_dict_data` VALUES (194, 0, '循环', '2', 'sign_set', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:40:21', 'admin', '2021-12-11 19:08:23', NULL);
+INSERT INTO `sys_dict_data`(`dict_code`, `dict_sort`, `dict_label`, `dict_value`, `dict_type`, `css_class`, `list_class`, `is_default`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (195, 0, 'iframe', 'iframe', 'movie_storage_type', NULL, 'default', 'N', '0', 'admin', '2022-02-10 10:44:48', '', NULL, NULL);
+INSERT INTO `sys_dict_data`(`dict_code`, `dict_sort`, `dict_label`, `dict_value`, `dict_type`, `css_class`, `list_class`, `is_default`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (196, 0, '本地存储', 'localStorage', 'movie_storage_type', NULL, 'default', 'N', '0', 'admin', '2022-02-10 10:45:20', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -899,6 +901,7 @@ INSERT INTO `sys_dict_type` VALUES (119, '站点状态', 'website_status', '0', 
 INSERT INTO `sys_dict_type` VALUES (120, '积分类型', 'credits_type', '0', 'admin', '2021-12-11 18:29:14', '', NULL, 'credits_type');
 INSERT INTO `sys_dict_type` VALUES (121, '签到类型', 'sign_type', '0', 'admin', '2021-12-11 18:36:06', 'admin', '2021-12-11 19:11:21', NULL);
 INSERT INTO `sys_dict_type` VALUES (122, '签到配置', 'sign_set', '0', 'admin', '2021-12-11 18:38:20', '', NULL, NULL);
+INSERT INTO `sys_dict_type`(`dict_id`, `dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (123, '视频存储类型', 'movie_storage_type', '0', 'admin', '2022-02-10 10:44:15', '', NULL, 'movie_storage_type');
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -2403,7 +2406,7 @@ CREATE TABLE `wm_video`  (
   `ext` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件后缀',
   `length` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '播放长度',
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型',
-  `storage_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '存储类型',
+  `storage_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '存储类型',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',

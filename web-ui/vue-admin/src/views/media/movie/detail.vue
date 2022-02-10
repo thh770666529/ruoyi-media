@@ -234,12 +234,12 @@
             <template slot-scope="scope">
               <el-input v-model="scope.row.type" placeholder="请输入类型" />
             </template>
-          </el-table-column>
+          </el-table-column>-->
           <el-table-column label="存储类型" prop="storageType">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.storageType" placeholder="请输入存储类型" />
+              <dict-tag :options="dict.type.movie_storage_type" :value="scope.row.storageType"/>
             </template>
-          </el-table-column>-->
+          </el-table-column>
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button
@@ -369,6 +369,16 @@
           </el-input>
         </el-form-item>
 
+        <el-form-item label="存储类型">
+          <el-radio-group v-model="movieVideoForm.storageType">
+            <el-radio
+              v-for="dict in dict.type.movie_storage_type"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
         <el-form-item label="上传视频" prop="url">
           <el-upload
             class="upload-demo"
@@ -473,7 +483,7 @@ export default {
     Editor,
     FileTable
   },
-  dicts: ['movie_country', 'movie_status', 'movie_type', 'sys_yes_no', 'actor_label', 'video_status', 'common_switch', 'lang'],
+  dicts: ['movie_country', 'movie_status', 'movie_type', 'sys_yes_no', 'actor_label', 'video_status', 'common_switch', 'lang', 'movie_storage_type'],
   data() {
     return {
       headers: {
