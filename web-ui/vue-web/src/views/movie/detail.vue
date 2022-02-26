@@ -270,7 +270,7 @@ export default {
     //播放
     play(videoId){
       if (this.videoList.length === 0){
-        this.msgError("暂时没有播放的视频！请联系管理员进行上传！")
+        this.$modal.msgError("暂时没有播放的视频！请联系管理员进行上传！")
       }else {
         const routeData = this.$router.resolve({
           path: "/video/" + videoId,

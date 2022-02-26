@@ -34,10 +34,10 @@
       <el-form-item label="签到类型" prop="signType">
         <el-select v-model="queryParams.signType" placeholder="请选择签到类型" clearable size="small">
           <el-option
-            v-for="dict in signTypeOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.sign_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -86,7 +86,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['website:signRecord:export']"
         >导出</el-button>
@@ -106,7 +105,7 @@
       </el-table-column>
       <el-table-column label="签到类型" align="center" prop="signType">
         <template slot-scope="scope">
-          <dict-tag :options="signTypeOptions" :value="scope.row.signType"/>
+          <dict-tag :options="dict.type.sign_type" :value="scope.row.signType"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -157,10 +156,10 @@
         <el-form-item label="签到类型1=签到2=补签" prop="signType">
           <el-select v-model="form.signType" placeholder="请选择签到类型1=签到2=补签">
             <el-option
-              v-for="dict in signTypeOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="parseInt(dict.dictValue)"
+              v-for="dict in dict.type.sign_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -174,16 +173,15 @@
 </template>
 
 <script>
-import { listSignRecord, getSignRecord, delSignRecord, addSignRecord, updateSignRecord, exportSignRecord } from "@/api/website/signRecord";
+import { listSignRecord, getSignRecord, delSignRecord, addSignRecord, updateSignRecord } from "@/api/website/signRecord";
 
 export default {
   name: "SignRecord",
+  dicts: [ 'sign_type' ],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -202,8 +200,6 @@ export default {
       open: false,
       // 签到时间时间范围
       daterangeSignTime: [],
-      // 签到类型1=签到2=补签字典
-      signTypeOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -222,9 +218,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sign_type").then(response => {
-      this.signTypeOptions = response.data;
-    });
   },
   methods: {
     /** 查询签到日志列表 */
@@ -297,13 +290,13 @@ export default {
         if (valid) {
           if (this.form.signRecordId != null) {
             updateSignRecord(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addSignRecord(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -314,7 +307,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const signRecordIds = row.signRecordId || this.ids;
-      this.$confirm('是否确认删除签到日志编号为"' + signRecordIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除签到日志编号为"' + signRecordIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -322,23 +315,14 @@ export default {
           return delSignRecord(signRecordIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有签到日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportSignRecord(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+      this.download('website/signRecord/export', {
+        ...this.queryParams
+      }, `signRecord_${new Date().getTime()}.xlsx`)
     }
   }
 };

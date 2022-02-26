@@ -20,6 +20,8 @@ import com.ruoyi.media.service.IMediaCategoryService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 电影分类Controller
  *
@@ -50,12 +52,12 @@ public class MediaCategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:category:export')")
     @Log(title = "电影分类", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(MediaCategory mediaCategory)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, MediaCategory mediaCategory)
     {
         List<MediaCategory> list = mediaCategoryService.selectMediaCategoryList(mediaCategory);
         ExcelUtil<MediaCategory> util = new ExcelUtil<MediaCategory>(MediaCategory.class);
-        return util.exportExcel(list, "电影分类数据");
+        util.exportExcel(response, list, "电影分类数据");
     }
 
     /**

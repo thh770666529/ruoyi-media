@@ -196,7 +196,7 @@
                   this.loginType.wechat = true
                 } break;
                 default: {
-                  this.msgError('登录方式设置有误')
+                  this.$modal.msgError('登录方式设置有误')
                 }
               }
             }
@@ -232,7 +232,7 @@
                 this.loading = false;
               }).catch(err => {
                 this.$store.store.dispatch('LogOut').then(() => {
-                  this.msgError(err)
+                  this.$modal.msgError(err)
                 })
               })
               //this.$router.push({ path: this.redirect || "/" }).catch(()=>{});

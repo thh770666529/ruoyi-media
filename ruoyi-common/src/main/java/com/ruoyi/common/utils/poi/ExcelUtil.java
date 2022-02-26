@@ -47,6 +47,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -84,6 +85,9 @@ import com.ruoyi.common.utils.reflect.ReflectUtils;
 public class ExcelUtil<T>
 {
     private static final Logger log = LoggerFactory.getLogger(ExcelUtil.class);
+
+    public static final String[] FORMULA_STR = { "=", "-", "+", "@" };
+
 
     /**
      * Excel sheet最大行数，默认65536
@@ -126,6 +130,16 @@ public class ExcelUtil<T>
     private List<Object[]> fields;
 
     /**
+     * 当前行号
+     */
+    private int rownum;
+
+    /**
+     * 标题
+     */
+    private String title;
+
+    /**
      * 最大高度
      */
     private short maxHeight;
@@ -150,7 +164,7 @@ public class ExcelUtil<T>
         this.clazz = clazz;
     }
 
-    public void init(List<T> list, String sheetName, Type type)
+    public void init(List<T> list, String sheetName, String title, Type type)
     {
         if (list == null)
         {
@@ -159,8 +173,27 @@ public class ExcelUtil<T>
         this.list = list;
         this.sheetName = sheetName;
         this.type = type;
+        this.title = title;
         createExcelField();
         createWorkbook();
+        createTitle();
+    }
+
+    /**
+     * 创建excel第一行标题
+     */
+    public void createTitle()
+    {
+        if (StringUtils.isNotEmpty(title))
+        {
+            Row titleRow = sheet.createRow(rownum == 0 ? rownum++ : 0);
+            titleRow.setHeightInPoints(30);
+            Cell titleCell = titleRow.createCell(0);
+            titleCell.setCellStyle(styles.get("title"));
+            titleCell.setCellValue(title);
+            sheet.addMergedRegion(new CellRangeAddress(titleRow.getRowNum(), titleRow.getRowNum(), titleRow.getRowNum(),
+                    this.fields.size() - 1));
+        }
     }
 
     /**
@@ -171,17 +204,30 @@ public class ExcelUtil<T>
      */
     public List<T> importExcel(InputStream is) throws Exception
     {
-        return importExcel(StringUtils.EMPTY, is);
+        return importExcel(is, 0);
+    }
+
+    /**
+     * 对excel表单默认第一个索引名转换成list
+     *
+     * @param is 输入流
+     * @param titleNum 标题占用行数
+     * @return 转换后集合
+     */
+    public List<T> importExcel(InputStream is, int titleNum) throws Exception
+    {
+        return importExcel(StringUtils.EMPTY, is, titleNum);
     }
 
     /**
      * 对excel表单指定表格索引名转换成list
      *
      * @param sheetName 表格索引名
+     * @param titleNum 标题占用行数
      * @param is 输入流
      * @return 转换后集合
      */
-    public List<T> importExcel(String sheetName, InputStream is) throws Exception
+    public List<T> importExcel(String sheetName, InputStream is, int titleNum) throws Exception
     {
         this.type = Type.IMPORT;
         this.wb = WorkbookFactory.create(is);
@@ -210,7 +256,7 @@ public class ExcelUtil<T>
             // 定义一个map用于存放excel列的序号和field.
             Map<String, Integer> cellMap = new HashMap<String, Integer>();
             // 获取表头
-            Row heard = sheet.getRow(0);
+            Row heard = sheet.getRow(titleNum);
             for (int i = 0; i < heard.getPhysicalNumberOfCells(); i++)
             {
                 Cell cell = heard.getCell(i);
@@ -225,25 +271,18 @@ public class ExcelUtil<T>
                 }
             }
             // 有数据时才处理 得到类的所有field.
-            Field[] allFields = clazz.getDeclaredFields();
-            // 定义一个map用于存放列的序号和field.
-            Map<Integer, Field> fieldsMap = new HashMap<Integer, Field>();
-            for (int col = 0; col < allFields.length; col++)
+            List<Object[]> fields = this.getFields();
+            Map<Integer, Object[]> fieldsMap = new HashMap<Integer, Object[]>();
+            for (Object[] objects : fields)
             {
-                Field field = allFields[col];
-                Excel attr = field.getAnnotation(Excel.class);
-                if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
+                Excel attr = (Excel) objects[1];
+                Integer column = cellMap.get(attr.name());
+                if (column != null)
                 {
-                    // 设置类的私有字段属性可访问.
-                    field.setAccessible(true);
-                    Integer column = cellMap.get(attr.name());
-                    if (column != null)
-                    {
-                        fieldsMap.put(column, field);
-                    }
+                    fieldsMap.put(column, objects);
                 }
             }
-            for (int i = 1; i <= rows; i++)
+            for (int i = titleNum + 1; i <= rows; i++)
             {
                 // 从第2行开始取数据,默认第一行是表头.
                 Row row = sheet.getRow(i);
@@ -253,14 +292,15 @@ public class ExcelUtil<T>
                     continue;
                 }
                 T entity = null;
-                for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet())
+                for (Map.Entry<Integer, Object[]> entry : fieldsMap.entrySet())
                 {
                     Object val = this.getCellValue(row, entry.getKey());
 
                     // 如果不存在实例则新建.
                     entity = (entity == null ? clazz.newInstance() : entity);
                     // 从map中得到对应列的field.
-                    Field field = fieldsMap.get(entry.getKey());
+                    Field field = (Field) entry.getValue()[0];
+                    Excel attr = (Excel) entry.getValue()[1];
                     // 取得类型,并根据对象类型设置值.
                     Class<?> fieldType = field.getType();
                     if (String.class == fieldType)
@@ -320,7 +360,6 @@ public class ExcelUtil<T>
                     }
                     if (StringUtils.isNotNull(fieldType))
                     {
-                        Excel attr = field.getAnnotation(Excel.class);
                         String propertyName = field.getName();
                         if (StringUtils.isNotEmpty(attr.targetAttr()))
                         {
@@ -369,7 +408,20 @@ public class ExcelUtil<T>
      */
     public AjaxResult exportExcel(List<T> list, String sheetName)
     {
-        this.init(list, sheetName, Type.EXPORT);
+        return exportExcel(list, sheetName, StringUtils.EMPTY);
+    }
+
+    /**
+     * 对list数据源将其里面的数据导入到excel表单
+     *
+     * @param list 导出数据集合
+     * @param sheetName 工作表的名称
+     * @param title 标题
+     * @return 结果
+     */
+    public AjaxResult exportExcel(List<T> list, String sheetName, String title)
+    {
+        this.init(list, sheetName, title, Type.EXPORT);
         return exportExcel();
     }
 
@@ -382,12 +434,27 @@ public class ExcelUtil<T>
      * @return 结果
      * @throws IOException
      */
-    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) throws IOException
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName)
+    {
+        exportExcel(response, list, sheetName, StringUtils.EMPTY);
+    }
+
+    /**
+     * 对list数据源将其里面的数据导入到excel表单
+     *
+     * @param response 返回数据
+     * @param list 导出数据集合
+     * @param sheetName 工作表的名称
+     * @param title 标题
+     * @return 结果
+     * @throws IOException
+     */
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String title)
     {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
-        this.init(list, sheetName, Type.EXPORT);
-        exportExcel(response.getOutputStream());
+        this.init(list, sheetName, title, Type.EXPORT);
+        exportExcel(response);
     }
 
     /**
@@ -398,7 +465,19 @@ public class ExcelUtil<T>
      */
     public AjaxResult importTemplateExcel(String sheetName)
     {
-        this.init(null, sheetName, Type.IMPORT);
+        return importTemplateExcel(sheetName, StringUtils.EMPTY);
+    }
+
+    /**
+     * 对list数据源将其里面的数据导入到excel表单
+     *
+     * @param sheetName 工作表的名称
+     * @param title 标题
+     * @return 结果
+     */
+    public AjaxResult importTemplateExcel(String sheetName, String title)
+    {
+        this.init(null, sheetName, title, Type.IMPORT);
         return exportExcel();
     }
 
@@ -408,12 +487,24 @@ public class ExcelUtil<T>
      * @param sheetName 工作表的名称
      * @return 结果
      */
-    public void importTemplateExcel(HttpServletResponse response, String sheetName) throws IOException
+    public void importTemplateExcel(HttpServletResponse response, String sheetName)
+    {
+        importTemplateExcel(response, sheetName, StringUtils.EMPTY);
+    }
+
+    /**
+     * 对list数据源将其里面的数据导入到excel表单
+     *
+     * @param sheetName 工作表的名称
+     * @param title 标题
+     * @return 结果
+     */
+    public void importTemplateExcel(HttpServletResponse response, String sheetName, String title)
     {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
-        this.init(null, sheetName, Type.IMPORT);
-        exportExcel(response.getOutputStream());
+        this.init(null, sheetName, title, Type.IMPORT);
+        exportExcel(response);
     }
 
     /**
@@ -421,12 +512,12 @@ public class ExcelUtil<T>
      *
      * @return 结果
      */
-    public void exportExcel(OutputStream out)
+    public void exportExcel(HttpServletResponse response)
     {
         try
         {
             writeSheet();
-            wb.write(out);
+            wb.write(response.getOutputStream());
         }
         catch (Exception e)
         {
@@ -435,7 +526,6 @@ public class ExcelUtil<T>
         finally
         {
             IOUtils.closeQuietly(wb);
-            IOUtils.closeQuietly(out);
         }
     }
 
@@ -473,13 +563,13 @@ public class ExcelUtil<T>
     public void writeSheet()
     {
         // 取出一共有多少个sheet.
-        double sheetNo = Math.ceil(list.size() / sheetSize);
-        for (int index = 0; index <= sheetNo; index++)
+        int sheetNo = Math.max(1, (int) Math.ceil(list.size() * 1.0 / sheetSize));
+        for (int index = 0; index < sheetNo; index++)
         {
             createSheet(sheetNo, index);
 
             // 产生一行
-            Row row = sheet.createRow(0);
+            Row row = sheet.createRow(rownum);
             int column = 0;
             // 写入各个字段的列头名称
             for (Object[] os : fields)
@@ -507,7 +597,7 @@ public class ExcelUtil<T>
         int endNo = Math.min(startNo + sheetSize, list.size());
         for (int i = startNo; i < endNo; i++)
         {
-            row = sheet.createRow(i + 1 - startNo);
+            row = sheet.createRow(i + 1 + rownum - startNo);
             // 得到导出对象.
             T vo = (T) list.get(i);
             int column = 0;
@@ -515,8 +605,6 @@ public class ExcelUtil<T>
             {
                 Field field = (Field) os[0];
                 Excel excel = (Excel) os[1];
-                // 设置实体类私有属性可访问
-                field.setAccessible(true);
                 this.addCell(excel, row, vo, field, column++);
             }
         }
@@ -533,6 +621,16 @@ public class ExcelUtil<T>
         // 写入各条记录,每条记录对应excel表中的一行
         Map<String, CellStyle> styles = new HashMap<String, CellStyle>();
         CellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        Font titleFont = wb.createFont();
+        titleFont.setFontName("Arial");
+        titleFont.setFontHeightInPoints((short) 16);
+        titleFont.setBold(true);
+        style.setFont(titleFont);
+        styles.put("title", style);
+
+        style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
         style.setBorderRight(BorderStyle.THIN);
@@ -615,7 +713,13 @@ public class ExcelUtil<T>
     {
         if (ColumnType.STRING == attr.cellType())
         {
-            cell.setCellValue(StringUtils.isNull(value) ? attr.defaultValue() : value + attr.suffix());
+            String cellValue = Convert.toStr(value);
+            // 对于任何以表达式触发字符 =-+@开头的单元格，直接使用tab字符作为前缀，防止CSV注入。
+            if (StringUtils.containsAny(cellValue, FORMULA_STR))
+            {
+                cellValue = StringUtils.replaceEach(cellValue, FORMULA_STR, new String[] { "\t=", "\t-", "\t+", "\t@" });
+            }
+            cell.setCellValue(StringUtils.isNull(cellValue) ? attr.defaultValue() : cellValue + attr.suffix());
         }
         else if (ColumnType.NUMERIC == attr.cellType())
         {
@@ -1018,7 +1122,7 @@ public class ExcelUtil<T>
         if (StringUtils.isNotEmpty(excel.targetAttr()))
         {
             String target = excel.targetAttr();
-            if (target.indexOf(".") > -1)
+            if (target.contains("."))
             {
                 String[] targets = target.split("[.]");
                 for (String name : targets)
@@ -1059,7 +1163,17 @@ public class ExcelUtil<T>
      */
     private void createExcelField()
     {
-        this.fields = new ArrayList<Object[]>();
+        this.fields = getFields();
+        this.fields = this.fields.stream().sorted(Comparator.comparing(objects -> ((Excel) objects[1]).sort())).collect(Collectors.toList());
+        this.maxHeight = getRowHeight();
+    }
+
+    /**
+     * 获取字段注解信息
+     */
+    public List<Object[]> getFields()
+    {
+        List<Object[]> fields = new ArrayList<Object[]>();
         List<Field> tempFields = new ArrayList<>();
         tempFields.addAll(Arrays.asList(clazz.getSuperclass().getDeclaredFields()));
         tempFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
@@ -1068,7 +1182,12 @@ public class ExcelUtil<T>
             // 单注解
             if (field.isAnnotationPresent(Excel.class))
             {
-                putToField(field, field.getAnnotation(Excel.class));
+                Excel attr = field.getAnnotation(Excel.class);
+                if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
+                {
+                    field.setAccessible(true);
+                    fields.add(new Object[] { field, attr });
+                }
             }
 
             // 多注解
@@ -1076,14 +1195,17 @@ public class ExcelUtil<T>
             {
                 Excels attrs = field.getAnnotation(Excels.class);
                 Excel[] excels = attrs.value();
-                for (Excel excel : excels)
+                for (Excel attr : excels)
                 {
-                    putToField(field, excel);
+                    if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
+                    {
+                        field.setAccessible(true);
+                        fields.add(new Object[] { field, attr });
+                    }
                 }
             }
         }
-        this.fields = this.fields.stream().sorted(Comparator.comparing(objects -> ((Excel) objects[1]).sort())).collect(Collectors.toList());
-        this.maxHeight = getRowHeight();
+        return fields;
     }
 
     /**
@@ -1095,20 +1217,9 @@ public class ExcelUtil<T>
         for (Object[] os : this.fields)
         {
             Excel excel = (Excel) os[1];
-            maxHeight = maxHeight > excel.height() ? maxHeight : excel.height();
+            maxHeight = Math.max(maxHeight, excel.height());
         }
         return (short) (maxHeight * 20);
-    }
-
-    /**
-     * 放到字段集合中
-     */
-    private void putToField(Field field, Excel attr)
-    {
-        if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
-        {
-            this.fields.add(new Object[] { field, attr });
-        }
     }
 
     /**
@@ -1117,6 +1228,9 @@ public class ExcelUtil<T>
     public void createWorkbook()
     {
         this.wb = new SXSSFWorkbook(500);
+        this.sheet = wb.createSheet();
+        wb.setSheetName(0, sheetName);
+        this.styles = createStyles(wb);
     }
 
     /**
@@ -1125,17 +1239,13 @@ public class ExcelUtil<T>
      * @param sheetNo sheet数量
      * @param index 序号
      */
-    public void createSheet(double sheetNo, int index)
+    public void createSheet(int sheetNo, int index)
     {
-        this.sheet = wb.createSheet();
-        this.styles = createStyles(wb);
         // 设置工作表的名称.
-        if (sheetNo == 0)
+        if (sheetNo > 1 && index > 0)
         {
-            wb.setSheetName(index, sheetName);
-        }
-        else
-        {
+            this.sheet = wb.createSheet();
+            this.createTitle();
             wb.setSheetName(index, sheetName + index);
         }
     }

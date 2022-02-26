@@ -13,10 +13,10 @@
       <el-form-item label="电影类型" prop="movieType">
         <el-select v-model="queryParams.type" placeholder="请选择电影类型" clearable size="small">
           <el-option
-            v-for="dict in typeOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.movie_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -50,10 +50,10 @@
       <el-form-item label="国家" prop="country">
         <el-select v-model="queryParams.country" clearable  placeholder="请输入国家">
           <el-option
-            v-for="dict in countryOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.movie_country"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -62,10 +62,10 @@
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.movie_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -132,7 +132,7 @@
       <el-table-column label="标题" align="left" show-overflow-tooltip  prop="title" width="200" />
       <el-table-column label="电影类型" align="center" prop="type"  width="100" >
         <template slot-scope="scope">
-          <dict-tag :options="typeOptions" :value="scope.row.type"/>
+          <dict-tag :options="dict.type.movie_type" :value="scope.row.type"/>
         </template>
       </el-table-column>
       <el-table-column label="电影分类" align="center"  prop="categoryName"  width="100" >
@@ -168,7 +168,7 @@
       </el-table-column>
       <el-table-column label="国家" align="center" prop="country"  width="100" >
         <template slot-scope="scope">
-          <dict-tag :options="countryOptions" :value="scope.row.country"/>
+          <dict-tag :options="dict.type.movie_country" :value="scope.row.country"/>
         </template>
       </el-table-column>
       <el-table-column label="发布人" align="center" prop="publishUsername" width="100" />
@@ -179,7 +179,7 @@
       </el-table-column>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.movie_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -213,11 +213,12 @@
 </template>
 
 <script>
-import { listMovie, getMovie, delMovie, addMovie, updateMovie, exportMovie } from "@/api/media/movie";
+import { listMovie, getMovie, delMovie, addMovie, updateMovie } from "@/api/media/movie";
 import { listTag } from "@/api/media/tag";
 import { listCategory } from "@/api/media/category";
 export default {
   name: "Movie",
+  dicts: ['movie_country', 'movie_status', 'movie_type'],
   components: {
   },
   data() {
@@ -258,12 +259,6 @@ export default {
         openDownload: null,
         tagIdList: null
       },
-      //电影国家字典
-      countryOptions:[],
-      //状态字典
-      statusOptions:[],
-      //电影类型
-      typeOptions:[],
       //标签字典
       tagOptions: [],
       //分类字典
@@ -311,12 +306,6 @@ export default {
       listTag({status: '1'}).then(response => {
         this.tagOptions = response.rows;
       });
-      const dictTypeList =  ['movie_country', 'movie_status', 'movie_type'];
-      this.getDictsByTypeList(dictTypeList).then(response => {
-        this.countryOptions = response.data.movie_country;
-        this.statusOptions = response.data.movie_status;
-        this.typeOptions = response.data.movie_type;
-      });
     },
     // 取消按钮
     cancel() {
@@ -359,13 +348,13 @@ export default {
           this.form.wmMovieVideoList = this.wmMovieVideoList;
           if (this.form.movieId != null) {
             updateMovie(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addMovie(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -376,7 +365,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const movieIds = row.movieId || this.ids;
-      this.$confirm('是否确认删除电影管理编号为"' + movieIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除电影管理编号为"' + movieIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -384,21 +373,14 @@ export default {
           return delMovie(movieIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         })
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有电影管理数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportMovie(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+      this.download('media/category/export', {
+        ...this.queryParams
+      }, `category_${new Date().getTime()}.xlsx`)
     },
     //标签翻译
     getTagArray(tagId) {

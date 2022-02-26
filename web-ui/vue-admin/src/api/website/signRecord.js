@@ -42,12 +42,3 @@ export function delSignRecord(signRecordId) {
     method: 'delete'
   })
 }
-
-// 导出签到日志
-export function exportSignRecord(query) {
-  return request({
-    url: '/website/signRecord/export',
-    method: 'get',
-    params: query
-  })
-}

@@ -20,7 +20,7 @@ import Collect from "@/components/Collect";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css' //样式
 import globalFunction from '@/utils/globalFunction'
-
+import plugins from './plugins' // plugins
 
 
 Vue.config.devtools = process.env.VUE_APP_ENV === 'dev' || process.env.VUE_APP_ENV === 'stage'
@@ -60,6 +60,9 @@ Vue.component('Collect', Collect);
 for(let key in globalFunction) {
   Vue.prototype[key] = globalFunction[key]
 }
+
+Vue.use(plugins)
+
 // 全局过滤器设置
 Vue.filter('ellipsis', function (msg, num) {
   const currentNum = num || 5

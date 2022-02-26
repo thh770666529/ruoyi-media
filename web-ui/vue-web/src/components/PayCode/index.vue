@@ -122,7 +122,7 @@
             message: '登录后才可以点赞哦~',
             offset: 100
           });
-          this.$confirm('登录后才可以评论，是否进行登录', '提示', {
+          this.$modal.confirm('登录后才可以评论，是否进行登录', '提示', {
             confirmButtonText: '登录',
             cancelButtonText: '取消',
             type: 'warning'

@@ -20,6 +20,8 @@ import com.ruoyi.media.service.IMediaTagService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 电影标签Controller
  *
@@ -50,12 +52,12 @@ public class MediaTagController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:tag:export')")
     @Log(title = "电影标签", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(MediaTag mediaTag)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, MediaTag mediaTag)
     {
         List<MediaTag> list = mediaTagService.selectMediaTagList(mediaTag);
         ExcelUtil<MediaTag> util = new ExcelUtil<MediaTag>(MediaTag.class);
-        return util.exportExcel(list, "电影标签数据");
+        util.exportExcel(response, list, "电影标签数据");
     }
 
     /**

@@ -1,7 +1,8 @@
 package com.ruoyi.system.service;
 
-import java.util.List;
 import com.ruoyi.system.domain.SysPost;
+
+import java.util.List;
 
 /**
  * 岗位信息 服务层
@@ -39,7 +40,7 @@ public interface ISysPostService
      * @param userId 用户ID
      * @return 选中岗位ID列表
      */
-    public List<Integer> selectPostListByUserId(Long userId);
+    public List<Long> selectPostListByUserId(Long userId);
 
     /**
      * 校验岗位名称

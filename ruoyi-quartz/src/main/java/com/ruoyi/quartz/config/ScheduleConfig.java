@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
- * 定时任务配置
+ * 定时任务配置（单机部署建议删除此类和qrtz数据库表，默认走内存会最高效）
  * 
  * @author ruoyi
  */
@@ -29,7 +29,7 @@ public class ScheduleConfig
         prop.put("org.quartz.threadPool.threadCount", "20");
         prop.put("org.quartz.threadPool.threadPriority", "5");
         // JobStore配置
-        prop.put("org.quartz.jobStore.class", "org.quartz.impl.jdbcjobstore.JobStoreTX");
+        prop.put("org.quartz.jobStore.class", "org.springframework.scheduling.quartz.LocalDataSourceJobStore");
         // 集群配置
         prop.put("org.quartz.jobStore.isClustered", "true");
         prop.put("org.quartz.jobStore.clusterCheckinInterval", "15000");

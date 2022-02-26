@@ -1,5 +1,10 @@
 package com.ruoyi.framework.config;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -8,15 +13,10 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 
 /**
  * redis配置
- *
+ * 
  * @author ruoyi
  */
 @Configuration
@@ -68,12 +68,12 @@ public class RedisConfig extends CachingConfigurerSupport
                 "local time = tonumber(ARGV[2])\n" +
                 "local current = redis.call('get', key);\n" +
                 "if current and tonumber(current) > count then\n" +
-                "    return current;\n" +
+                "    return tonumber(current);\n" +
                 "end\n" +
                 "current = redis.call('incr', key)\n" +
                 "if tonumber(current) == 1 then\n" +
                 "    redis.call('expire', key, time)\n" +
                 "end\n" +
-                "return current;";
+                "return tonumber(current);";
     }
 }

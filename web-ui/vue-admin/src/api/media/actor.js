@@ -51,12 +51,3 @@ export function delActor(actorId) {
     method: 'delete'
   })
 }
-
-// 导出演员
-export function exportActor(query) {
-  return request({
-    url: '/media/actor/export',
-    method: 'get',
-    params: query
-  })
-}

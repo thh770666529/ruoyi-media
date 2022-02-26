@@ -108,7 +108,7 @@
             message: '登录后才可以评论哦~',
             offset: 100
           });
-          this.$confirm('登录后才可以评论，是否进行登录', '提示', {
+          this.$modal.confirm('登录后才可以评论，是否进行登录', '提示', {
             confirmButtonText: '登录',
             cancelButtonText: '取消',
             type: 'warning'
@@ -147,11 +147,11 @@
         replyComment(params).then(response => {
           if (response.code === 200){
             const commentData = response.data
-            this.msgSuccess("发表成功！")
+            this.$modal.msgSuccess("发表成功！")
             document.getElementById(e.commentId).style.display = 'none';
             this.updateCommentList(this.comments, commentData.parentCommentId, commentData)
           }else{
-            this.msgError("发表失败！")
+            this.$modal.msgError("发表失败！")
           }
         });
       },
@@ -179,7 +179,7 @@
             message: "登录后才能删除评论哦~",
             offset: 100
           });
-          this.$confirm('登录后才能删除评论，是否进行登录', '提示', {
+          this.$modal.confirm('登录后才能删除评论，是否进行登录', '提示', {
             confirmButtonText: '登录',
             cancelButtonText: '取消',
             type: 'warning'
@@ -195,7 +195,7 @@
           return
         }
 
-        this.$confirm("此操作将把本评论和子评论删除, 是否继续?", "提示", {
+        this.$modal.confirm("此操作将把本评论和子评论删除, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"

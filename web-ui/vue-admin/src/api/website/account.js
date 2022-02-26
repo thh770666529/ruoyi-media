@@ -10,7 +10,7 @@ export function listAccount(query) {
 }
 
 // 查询用户账户详细
-export function getSignRecord(accountId) {
+export function getAccount(accountId) {
   return request({
     url: '/website/account/' + accountId,
     method: 'get'
@@ -43,11 +43,3 @@ export function delAccount(accountId) {
   })
 }
 
-// 导出用户账户
-export function exportAccount(query) {
-  return request({
-    url: '/website/account/export',
-    method: 'get',
-    params: query
-  })
-}

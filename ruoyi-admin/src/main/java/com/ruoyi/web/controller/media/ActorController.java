@@ -24,6 +24,8 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 演员Controller
  *
@@ -66,12 +68,12 @@ public class ActorController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:actor:export')")
     @Log(title = "演员", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(Actor actor)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Actor actor)
     {
         List<Actor> list = actorService.selectActorList(actor);
         ExcelUtil<Actor> util = new ExcelUtil<Actor>(Actor.class);
-        return util.exportExcel(list, "演员数据");
+        util.exportExcel(response, list, "演员数据");
     }
 
     /**

@@ -22,10 +22,10 @@
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.article_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -74,7 +74,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['blog:subject:export']"
         >导出</el-button>
@@ -95,7 +94,7 @@
       <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.article_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -144,10 +143,10 @@
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="parseInt(dict.dictValue)"
-            >{{dict.dictLabel}}</el-radio>
+              v-for="dict in dict.type.article_status"
+              :key="dict.value"
+              :label="parseInt(dict.value)"
+            >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -183,16 +182,15 @@
 </template>
 
 <script>
-import { listSubject, getSubject, delSubject, addSubject, updateSubject, exportSubject } from "@/api/blog/subject";
+import { listSubject, getSubject, delSubject, addSubject, updateSubject } from "@/api/blog/subject";
 
 export default {
   name: "Subject",
+  dicts: [ 'article_status' ],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 子表选中数据
@@ -213,8 +211,6 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 状态字典
-      statusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -250,9 +246,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("article_status").then(response => {
-      this.statusOptions = response.data;
-    });
   },
   methods: {
     /** 查询文章专题列表 */
@@ -326,13 +319,13 @@ export default {
           this.form.articleSubjectList = this.articleSubjectList;
           if (this.form.subjectId != null) {
             updateSubject(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addSubject(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -343,7 +336,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const subjectIds = row.subjectId || this.ids;
-      this.$confirm('是否确认删除文章专题编号为"' + subjectIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除文章专题编号为"' + subjectIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -351,7 +344,7 @@ export default {
           return delSubject(subjectIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         }).catch(() => {});
     },
 	/** 文章专题Item序号 */
@@ -368,7 +361,7 @@ export default {
     /** 文章专题Item删除按钮操作 */
     handleDeleteArticleSubject() {
       if (this.checkedArticleSubject.length == 0) {
-        this.msgError("请先选择要删除的文章专题Item数据");
+        this.$modal.msgError("请先选择要删除的文章专题Item数据");
       } else {
         const articleSubjectList = this.articleSubjectList;
         const checkedArticleSubject = this.checkedArticleSubject;
@@ -383,18 +376,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有文章专题数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportSubject(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+      this.download('blog/subject/export', {
+        ...this.queryParams
+      }, `subject_${new Date().getTime()}.xlsx`)
     }
   }
 };

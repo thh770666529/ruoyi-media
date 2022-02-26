@@ -43,15 +43,6 @@ export function delMovie(movieId) {
   })
 }
 
-// 导出电影管理
-export function exportMovie(query) {
-  return request({
-    url: '/media/movie/export',
-    method: 'get',
-    params: query
-  })
-}
-
 // 上传电影视频
   export function uploadMovieVideo(data) {
     return request({

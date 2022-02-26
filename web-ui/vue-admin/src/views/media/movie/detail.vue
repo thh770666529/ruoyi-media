@@ -14,10 +14,10 @@
               <el-form-item label="类型" prop="type">
                 <el-select v-model="form.type" placeholder="请选择电影类型">
                   <el-option
-                    v-for="dict in typeOptions"
-                    :key="dict.dictValue"
-                    :label="dict.dictLabel"
-                    :value="dict.dictValue"
+                    v-for="dict in dict.type.movie_type"
+                    :key="dict.value"
+                    :label="dict.label"
+                    :value="dict.value"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -38,10 +38,10 @@
                 <el-form-item label="国家"  prop="country">
                   <el-select v-model="form.country" placeholder="请输入国家">
                     <el-option
-                      v-for="dict in countryOptions"
-                      :key="dict.dictValue"
-                      :label="dict.dictLabel"
-                      :value="dict.dictValue"
+                      v-for="dict in dict.type.movie_country"
+                      :key="dict.value"
+                      :label="dict.label"
+                      :value="dict.value"
                     ></el-option>
                   </el-select>
                 </el-form-item>
@@ -52,10 +52,10 @@
                 <el-form-item label="语言" prop="lang">
                   <el-select v-model="form.lang" placeholder="语言">
                     <el-option
-                      v-for="dict in langOptions"
-                      :key="dict.dictValue"
-                      :label="dict.dictLabel"
-                      :value="dict.dictValue"
+                      v-for="dict in dict.type.lang"
+                      :key="dict.value"
+                      :label="dict.label"
+                      :value="dict.value"
                     ></el-option>
                   </el-select>
                 </el-form-item>
@@ -75,10 +75,10 @@
                 <el-form-item label="状态">
                   <el-select v-model="form.status"  placeholder="请选择状态" clearable size="small">
                     <el-option
-                      v-for="dict in statusOptions"
-                      :key="dict.dictValue"
-                      :label="dict.dictLabel"
-                      :value="dict.dictValue"
+                      v-for="dict in dict.type.movie_status"
+                      :key="dict.value"
+                      :label="dict.label"
+                      :value="dict.value"
                     ></el-option>
                   </el-select>
                 </el-form-item>
@@ -89,10 +89,10 @@
                 <el-form-item label="是否可以评论" prop="openComment">
                   <el-radio-group v-model="form.openComment">
                     <el-radio
-                      v-for="dict in commonSwitchOptions"
-                      :key="dict.dictValue"
-                      :label="parseInt(dict.dictValue)"
-                    >{{dict.dictLabel}}</el-radio>
+                      v-for="dict in dict.type.common_switch"
+                      :key="dict.value"
+                      :label="parseInt(dict.value)"
+                    >{{dict.label}}</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
@@ -100,10 +100,10 @@
                 <el-form-item label="是否可以下载" prop="openDownload">
                   <el-radio-group v-model="form.openDownload">
                     <el-radio
-                      v-for="dict in commonSwitchOptions"
-                      :key="dict.dictValue"
-                      :label="parseInt(dict.dictValue)"
-                    >{{dict.dictLabel}}</el-radio>
+                      v-for="dict in dict.type.common_switch"
+                      :key="dict.value"
+                      :label="parseInt(dict.value)"
+                    >{{dict.label}}</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
@@ -111,10 +111,10 @@
                 <el-form-item label="开启密钥模式">
                   <el-radio-group v-model="form.openPassword">
                     <el-radio
-                      v-for="dict in commonSwitchOptions"
-                      :key="dict.dictValue"
-                      :label="parseInt(dict.dictValue)"
-                    >{{dict.dictLabel}}</el-radio>
+                      v-for="dict in dict.type.common_switch"
+                      :key="dict.value"
+                      :label="parseInt(dict.value)"
+                    >{{dict.label}}</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
@@ -226,7 +226,7 @@
           <el-table-column label="视频大小" :formatter="filesizeFormat" prop="filesize" align="center" />
           <el-table-column label="视频状态" highlight-current-row  align="center">
             <template slot-scope="scope">
-              <dict-tag :options="videoStatusOptions" :value="scope.row.status"/>
+              <dict-tag :options="dict.type.video_status" :value="scope.row.status"/>
             </template>
           </el-table-column>
           <el-table-column label="备注" prop="remark" width="200"/>
@@ -234,12 +234,12 @@
             <template slot-scope="scope">
               <el-input v-model="scope.row.type" placeholder="请输入类型" />
             </template>
-          </el-table-column>
+          </el-table-column>-->
           <el-table-column label="存储类型" prop="storageType">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.storageType" placeholder="请输入存储类型" />
+              <dict-tag :options="dict.type.movie_storage_type" :value="scope.row.storageType"/>
             </template>
-          </el-table-column>-->
+          </el-table-column>
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button
@@ -273,7 +273,7 @@
               <el-table-column label="姓名" prop="name" />
               <el-table-column prop="avatar" label="头像" align="center" width="60">
                 <template slot-scope="scope">
-                  <el-image class="imagesList" :src="fileUploadHost+scope.row.avatar" lazy />
+                  <el-image class="imagesList" :src="fileUploadHost + scope.row.avatar" lazy />
                 </template>
               </el-table-column>
               <el-table-column label="标签" prop="label" :formatter="actorLabelFormat" width="250"/>
@@ -369,6 +369,16 @@
           </el-input>
         </el-form-item>
 
+        <el-form-item label="存储类型">
+          <el-radio-group v-model="movieVideoForm.storageType">
+            <el-radio
+              v-for="dict in dict.type.movie_storage_type"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
         <el-form-item label="上传视频" prop="url">
           <el-upload
             class="upload-demo"
@@ -452,7 +462,7 @@
 
 <script>
 import { uploadVideoByNetWorkDisk,deleteMovieActor,listMovie, getMovie, delMovie, addMovie, updateMovie, exportMovie } from "@/api/media/movie";
-import { notSelectedActorList,listActor, getActor, delActor, addActor, updateActor, exportActor } from "@/api/media/actor";
+import { notSelectedActorList,listActor, getActor, delActor, addActor, updateActor } from "@/api/media/actor";
 import { listTag } from "@/api/media/tag";
 import { listCategory } from "@/api/media/category";
 import { getToken } from "@/utils/auth";
@@ -473,6 +483,7 @@ export default {
     Editor,
     FileTable
   },
+  dicts: ['movie_country', 'movie_status', 'movie_type', 'sys_yes_no', 'actor_label', 'video_status', 'common_switch', 'lang', 'movie_storage_type'],
   data() {
     return {
       headers: {
@@ -520,25 +531,10 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      //电影国家字典
-      countryOptions:[],
-      // 状态字典
-      statusOptions:[],
-      // 电影类型
-      typeOptions:[],
-      // 视频状态字典
-      videoStatusOptions:[],
-      //字典是否
-      sysYesNoOptions: [],
-      // 开关字典
-      commonSwitchOptions: [],
-      langOptions: [],
       //标签字典
       tagOptions: [],
       //分类字典
       categoryOptions: [],
-      //演员标签
-      actorLabelOptions:[],
       tagList:[],
       notSelectedActorList:[],
       selectedActorList:[],
@@ -599,9 +595,9 @@ export default {
     this.init();
   },
   created() {
-    this.uploadVideoUrl =process.env.VUE_APP_BASE_API+"/media/movie/upload/video";
-    // 查询字典
-    this.getDictList();
+    this.uploadVideoUrl =process.env.VUE_APP_BASE_API + '/media/movie/upload/video';
+    // 查询分类和标签
+    this.getInitData();
   },
   watch:{
     "$route":{
@@ -625,26 +621,14 @@ export default {
   },
   methods: {
     /**
-     * 字典查询
+     * 查询分类和标签
      */
-    getDictList() {
+    getInitData() {
       listCategory({status: '1'}).then(response => {
         this.categoryOptions = response.rows;
       });
       listTag({status: '1'}).then(response => {
         this.tagOptions = response.rows;
-      });
-      const dictTypeList =  ['movie_country', 'movie_status', 'movie_type', 'sys_yes_no', 'actor_label', 'video_status', 'common_switch', 'lang'];
-      this.getDictsByTypeList(dictTypeList).then(response => {
-        this.countryOptions = response.data.movie_country;
-        this.statusOptions = response.data.movie_status;
-        this.typeOptions = response.data.movie_type;
-        this.sysYesNoOptions = response.data.sys_yes_no;
-        this.actorLabelOptions = response.data.actor_label;
-        this.videoStatusOptions = response.data.video_status;
-        this.commonSwitchOptions = response.data.common_switch;
-        this.langOptions = response.data.lang;
-
       });
     },
     /**
@@ -733,8 +717,6 @@ export default {
     },
     // 表单重置
     reset() {
-      // 导出遮罩层
-      this.exportLoading =  false;
       this.videoList = [];
       this.actorList = [];
       this.directorList = [];
@@ -815,13 +797,13 @@ export default {
             this.form.directorList = this.directorList;
             if (this.form.movieId != null) {
               updateMovie(this.form).then(response => {
-                this.msgSuccess("修改成功");
+                this.$modal.msgSuccess("修改成功");
                 this.getDetail(this.form.movieId);
               });
             } else {
               addMovie(this.form).then(response => {
                 this.form = response.data;
-                this.msgSuccess("新增成功");
+                this.$modal.msgSuccess("新增成功");
                 this.$router.replace({
                   path: "/media/movie/detail/" + this.form.movieId
                 });
@@ -838,7 +820,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const movieIds = row.movieId || this.ids;
-      this.$confirm('是否确认删除电影管理编号为"' + movieIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除电影管理编号为"' + movieIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -846,7 +828,7 @@ export default {
           return delMovie(movieIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         })
     },
 	/** 电影视频序号 */
@@ -894,24 +876,9 @@ export default {
       this.selectedMovieVideo = selection;
       this.single = selection.length !== 1;
     },
-    /** 导出按钮操作 */
-    handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有电影管理数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(()=> {
-          this.exportLoading = true;
-          return exportMovie(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
-    },
     submitActorForm(){
       if (!this.selectedActorList || this.selectedActorList.length === 0){
-        this.msgError("请选择要添加的演员/导演！");
+        this.$modal.msgError("请选择要添加的演员/导演！");
       }
       for (let index = 0; index < this.selectedActorList.length; index++) {
         if (this.selectedActorList[index] != null && this.selectedActorList[index] !== "") {
@@ -930,7 +897,7 @@ export default {
       let ids = '0';
         if (this.actorList.length > 0 && this.movieActorType === 'actor'){
           ids = this.actorList.map(item => item.actorId)
-        }else if(this.directorList.length > 0) {
+        }else if(this.directorList.length > 0 && this.movieActorType === 'director') {
           ids = this.directorList.map(item => item.actorId)
         }
       notSelectedActorList(this.queryActorParams, ids).then(response => {
@@ -951,7 +918,7 @@ export default {
     // 删除导演
     handleDeleteDirector(){
       if (!this.selectedActorList || this.selectedActorList.length === 0){
-        this.msgError("请选择要删除的导演！");
+        this.$modal.msgError("请选择要删除的导演！");
         return;
       }
       for (let index = 0; index < this.selectedActorList.length; index++) {
@@ -974,7 +941,7 @@ export default {
     //删除演员
     handleDeleteActor(){
       if (!this.selectedActorList || this.selectedActorList.length === 0){
-        this.msgError("请选择要删除的演员！");
+        this.$modal.msgError("请选择要删除的演员！");
         return;
       }
       for (let index = 0; index < this.selectedActorList.length; index++) {
@@ -984,33 +951,29 @@ export default {
       }
       this.save();
     },
-    // 状态字典翻译
-    statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
-    },
     //标签类型字典翻译
     actorLabelFormat(row, column){
       if (!row.label) return '';
-      return this.selectDictLabels(this.actorLabelOptions, row.label);
+      return this.selectDictLabels(this.dict.type.actor_label, row.label);
     },
 
     handleImagesSuccess(res, file) {
       const code = res.code;
       if (code === 200) {
         this.form.images =  res.url;
-        this.msgSuccess("上传成功！");
+        this.$modal.msgSuccess("上传成功！");
       } else {
-        this.msgError(res.msg);
+        this.$modal.msgError(res.msg);
       }
     },
     beforeImagesUpload(file) {
       const isImages = (file.type === 'image/jpeg') || (file.type === 'image/png');
       const isLt10M = file.size / 1024 / 1024 < 10;
       if (!isImages) {
-        this.msgError('上传头像图片只能是 JPG 格式 和 PNG 格式!');
+        this.$modal.msgError('上传头像图片只能是 JPG 格式 和 PNG 格式!');
       }
       if (!isLt10M) {
-        this.msgError('上传头像图片大小不能超过 10MB!');
+        this.$modal.msgError('上传头像图片大小不能超过 10MB!');
       }
       return isImages && isLt10M;
     },
@@ -1020,9 +983,9 @@ export default {
       const code = res.code;
       if (code === 200) {
         this.movieVideoForm = res.data;
-        this.msgSuccess("上传成功！");
+        this.$modal.msgSuccess("上传成功！");
       } else {
-        this.msgError(res.msg);
+        this.$modal.msgError(res.msg);
       }
     },
     beforeVideoUpload(file) {
@@ -1030,10 +993,10 @@ export default {
       const isVideo  = file.type === 'video/mp4';
       const isLt1G = file.size / 1024 / 1024 / 1024 < 1;
       if (!isVideo) {
-        this.msgError('上传视频文件只能是 video格式!');
+        this.$modal.msgError('上传视频文件只能是 video格式!');
       }
       if (!isLt1G) {
-        this.msgError('上传视频文件大小不能超过 1GB!');
+        this.$modal.msgError('上传视频文件大小不能超过 1GB!');
       }
       return isVideo && isLt1G;
     },
@@ -1045,11 +1008,11 @@ export default {
     },
     uploadVideoByNetWorkDisk(){
       if (this.selectionFile.length === 0){
-        this.msgError("请选择要上传的视频！")
+        this.$modal.msgError("请选择要上传的视频！")
         return
       }
       if (this.selectionFile.length > 1){
-        this.msgError("只能勾选一个视频文件进行上传！")
+        this.$modal.msgError("只能勾选一个视频文件进行上传！")
         return
       }
       const fileId = this.selectionFile[0].fileId

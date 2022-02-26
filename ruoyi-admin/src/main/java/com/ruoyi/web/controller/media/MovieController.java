@@ -27,6 +27,8 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 电影Controller
  *
@@ -57,12 +59,12 @@ public class MovieController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:movie:export')")
     @Log(title = "电影", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(Movie movie)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Movie movie)
     {
         List<MovieVO> list = movieService.selectMovieList(movie);
         ExcelUtil<MovieVO> util = new ExcelUtil<MovieVO>(MovieVO.class);
-        return util.exportExcel(list, "电影数据");
+        util.exportExcel(response, list, "电影数据");
     }
 
     /**

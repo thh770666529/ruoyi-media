@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -46,12 +47,12 @@ public class ArticleController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:article:export')")
     @Log(title = "博客文章", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(Article article)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Article article)
     {
         List<Article> list = articleService.selectArticleList(article);
         ExcelUtil<Article> util = new ExcelUtil<Article>(Article.class);
-        return util.exportExcel(list, "博客文章数据");
+        util.exportExcel(response, list, "博客文章数据");
     }
 
     /**

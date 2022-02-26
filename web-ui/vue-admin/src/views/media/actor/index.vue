@@ -124,12 +124,12 @@
             <el-form-item label="标签"   prop="label" >
               <el-select v-model="labelList" multiple style="width: 60%"  placeholder="请选择标签">
                 <el-option
-                  v-for="dict in labelOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictLabel"
-                  :value="dict.dictValue">
-                  <span style="float: left">{{ dict.dictLabel }}</span>
-                  <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.dictValue }}</span>
+                  v-for="dict in dict.type.actor_label"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value">
+                  <span style="float: left">{{ dict.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.value }}</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -165,7 +165,7 @@
 </template>
 
 <script>
-  import { listActor, getActor, delActor, addActor, updateActor, exportActor } from "@/api/media/actor";
+  import { listActor, getActor, delActor, addActor, updateActor } from "@/api/media/actor";
   import { getToken } from "@/utils/auth";
   import Editor from "../../../components/Editor";
   export default {
@@ -173,6 +173,7 @@
     components: {
       Editor
     },
+    dicts: [ 'actor_label' ],
     data() {
       return {
         headers: {
@@ -207,8 +208,6 @@
           awards: null,
           label: null
         },
-        //标签类型
-        labelOptions:[],
         //标签数据
         labelList:[],
         // 表单参数
@@ -224,24 +223,21 @@
       };
     },
     created() {
-      this.getDicts("actor_label").then(response => {
-        this.labelOptions = response.data;
-      });
       this.getList();
     },
     methods: {
       //标签类型字典翻译
       labelFormat(row, column){
         if (!row.label) return '';
-        return this.selectDictLabels(this.labelOptions, row.label);
+        return this.selectDictLabels(this.dict.type.actor_label, row.label);
       },
       handleImagesSuccess(res, file) {
         const code = res.code;
         if (code === 200) {
           this.form.avatar =  res.url;
-          this.msgSuccess("上传成功！");
+          this.$modal.msgSuccess("上传成功！");
         } else {
-          this.msgError(res.msg);
+          this.$modal.msgError(res.msg);
         }
       },
       beforeImagesUpload(file) {
@@ -249,10 +245,10 @@
         const isImages = (file.type === 'image/jpeg') || (file.type === 'image/png');
         const isLt10M = file.size / 1024 / 1024 < 10;
         if (!isImages) {
-          this.msgError('上传头像图片只能是 JPG 格式 和 PNG 格式!');
+          this.$modal.msgError('上传头像图片只能是 JPG 格式 和 PNG 格式!');
         }
         if (!isLt10M) {
-          this.msgError('上传头像图片大小不能超过 10MB!');
+          this.$modal.msgError('上传头像图片大小不能超过 10MB!');
         }
         return isImages && isLt10M;
       },
@@ -326,7 +322,7 @@
       /** 提交按钮 */
       submitForm() {
         if(this.labelList.length <= 0) {
-          this.msgError("标签不能为空!");
+          this.$modal.msgError("标签不能为空!");
           return;
         }
         var that = this;
@@ -335,13 +331,13 @@
           if (valid) {
             if (this.form.actorId != null) {
               updateActor(this.form).then(response => {
-                this.msgSuccess("修改成功");
+                this.$modal.msgSuccess("修改成功");
                 this.open = false;
                 this.getList();
               });
             } else {
               addActor(this.form).then(response => {
-                this.msgSuccess("新增成功");
+                this.$modal.msgSuccess("新增成功");
                 this.open = false;
                 this.getList();
               });
@@ -352,7 +348,7 @@
       /** 删除按钮操作 */
       handleDelete(row) {
         const actorIds = row.actorId || this.ids;
-        this.$confirm('是否确认删除演员编号为"' + actorIds + '"的数据项?', "警告", {
+        this.$modal.confirm('是否确认删除演员编号为"' + actorIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -360,21 +356,14 @@
           return delActor(actorIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         })
       },
       /** 导出按钮操作 */
       handleExport() {
-        const queryParams = this.queryParams;
-        this.$confirm('是否确认导出所有演员数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportActor(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+        this.download('media/actor/export', {
+          ...this.queryParams
+        }, `actor_${new Date().getTime()}.xlsx`)
       }
     }
   };

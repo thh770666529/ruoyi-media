@@ -51,7 +51,7 @@
             message: '登录后才可以收藏哦~',
             offset: 100
           });
-          this.$confirm('登录后才可以收藏哦，是否进行登录', '提示', {
+          this.$modal.confirm('登录后才可以收藏哦，是否进行登录', '提示', {
             confirmButtonText: '登录',
             cancelButtonText: '取消',
             type: 'warning'
@@ -79,9 +79,9 @@
           if (res.code === 200){
             this.collectFlag = false;
             this.collectCount = Number(this.collectCount) - 1;
-            this.msgSuccess("取消收藏成功！");
+            this.$modal.msgSuccess("取消收藏成功！");
           } else {
-            this.msgSuccess("取消收藏失败！");
+            this.$modal.msgSuccess("取消收藏失败！");
           }
         });
       },
@@ -93,9 +93,9 @@
           if (res.code === 200){
             this.collectFlag = true;
             this.collectCount = Number(this.collectCount) + 1;
-            this.msgSuccess("收藏成功！");
+            this.$modal.msgSuccess("收藏成功！");
           } else {
-            this.msgSuccess("收藏失败！");
+            this.$modal.msgSuccess("收藏失败！");
           }
         });
       }

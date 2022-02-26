@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -44,12 +45,12 @@ public class TagController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:tag:export')")
     @Log(title = "文章标签", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(Tag tag)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Tag tag)
     {
         List<Tag> list = tagService.selectTagList(tag);
         ExcelUtil<Tag> util = new ExcelUtil<Tag>(Tag.class);
-        return util.exportExcel(list, "文章标签数据");
+        util.exportExcel(response, list, "文章标签数据");
     }
 
     /**

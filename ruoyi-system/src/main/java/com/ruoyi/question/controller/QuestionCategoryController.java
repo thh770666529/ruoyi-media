@@ -20,6 +20,8 @@ import com.ruoyi.question.service.IQuestionCategoryService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 问答分类Controller
  * 
@@ -50,12 +52,12 @@ public class QuestionCategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('question:category:export')")
     @Log(title = "问答分类", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(QuestionCategory questionCategory)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, QuestionCategory questionCategory)
     {
         List<QuestionCategory> list = questionCategoryService.selectQuestionCategoryList(questionCategory);
         ExcelUtil<QuestionCategory> util = new ExcelUtil<QuestionCategory>(QuestionCategory.class);
-        return util.exportExcel(list, "问答分类数据");
+        util.exportExcel(response, list, "问答分类数据");
     }
 
     /**

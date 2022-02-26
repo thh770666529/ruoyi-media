@@ -20,6 +20,8 @@ import com.ruoyi.question.service.IQuestionService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 问答Controller
  * 
@@ -50,12 +52,12 @@ public class QuestionController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('question:question:export')")
     @Log(title = "问答", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(Question question)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Question question)
     {
         List<Question> list = questionService.selectQuestionList(question);
         ExcelUtil<Question> util = new ExcelUtil<Question>(Question.class);
-        return util.exportExcel(list, "问答数据");
+        util.exportExcel(response, list, "问答数据");
     }
 
     /**

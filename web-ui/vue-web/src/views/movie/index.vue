@@ -181,6 +181,7 @@
         const dictTypeList = ['movie_country', 'movie_status', 'movie_type'];
         getDictsByTypeList(dictTypeList).then(response => {
           this.countryOptions = response.data.movie_country;
+          console.log(this.countryOptions)
         });
         listCategory({status: '1'}).then(response => {
           this.categoryOptions = response.rows;

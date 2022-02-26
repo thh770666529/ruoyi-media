@@ -28,6 +28,7 @@ public class FilterConfig
     private String urlPatterns;
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
+    @ConditionalOnProperty(value = "xss.enabled", havingValue = "true")
     @Bean
     public FilterRegistrationBean xssFilterRegistration()
     {

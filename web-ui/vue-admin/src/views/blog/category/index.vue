@@ -13,10 +13,10 @@
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" @change="getList" placeholder="请选择状态" clearable size="small">
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.article_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -65,7 +65,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['blog:category:export']"
         >导出</el-button>
@@ -82,7 +81,7 @@
       <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.article_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
@@ -126,10 +125,10 @@
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="parseInt(dict.dictValue)"
-            >{{dict.dictLabel}}</el-radio>
+              v-for="dict in dict.type.article_status"
+              :key="dict.value"
+              :label="parseInt(dict.value)"
+            >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="显示排序" prop="sort">
@@ -148,16 +147,15 @@
 </template>
 
 <script>
-import { listCategory, getCategory, delCategory, addCategory, updateCategory, exportCategory } from "@/api/blog/category";
+import { listCategory, getCategory, delCategory, addCategory, updateCategory } from "@/api/blog/category";
 
 export default {
   name: "Category",
+  dicts: [ 'article_status' ],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -174,8 +172,6 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 状态字典
-      statusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -203,10 +199,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("article_status").then(response => {
-      this.statusOptions = response.data;
-    });
-
   },
   methods: {
     /** 查询博客分类列表 */
@@ -273,13 +265,13 @@ export default {
         if (valid) {
           if (this.form.categoryId != null) {
             updateCategory(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addCategory(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -290,7 +282,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const categoryIds = row.categoryId || this.ids;
-      this.$confirm('是否确认删除博客分类编号为"' + categoryIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除博客分类编号为"' + categoryIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -298,23 +290,14 @@ export default {
           return delCategory(categoryIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有博客分类数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportCategory(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+      this.download('blog/category/export', {
+        ...this.queryParams
+      }, `articleCategory_${new Date().getTime()}.xlsx`)
     }
   }
 };

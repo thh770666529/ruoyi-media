@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -44,12 +45,12 @@ public class SubjectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:subject:export')")
     @Log(title = "文章专题", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(Subject subject)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Subject subject)
     {
         List<Subject> list = subjectService.selectSubjectList(subject);
         ExcelUtil<Subject> util = new ExcelUtil<Subject>(Subject.class);
-        return util.exportExcel(list, "文章专题数据");
+        util.exportExcel(response, list, "文章专题数据");
     }
 
     /**

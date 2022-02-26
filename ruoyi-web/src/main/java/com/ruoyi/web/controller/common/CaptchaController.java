@@ -1,13 +1,14 @@
 package com.ruoyi.web.controller.common;
 
 import com.google.code.kaptcha.Producer;
+import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.utils.sign.Base64;
 import com.ruoyi.common.utils.uuid.IdUtils;
+import com.ruoyi.system.service.ISysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 验证码操作处理
- *
+ * 
  * @author ruoyi
  */
 @RestController
@@ -35,17 +36,23 @@ public class CaptchaController
 
     @Autowired
     private RedisCache redisCache;
-
-    // 验证码类型
-    @Value("${ruoyi.captchaType}")
-    private String captchaType;
-
+    
+    @Autowired
+    private ISysConfigService configService;
     /**
      * 生成验证码
      */
     @GetMapping("/captchaImage")
     public AjaxResult getCode(HttpServletResponse response) throws IOException
     {
+        AjaxResult ajax = AjaxResult.success();
+        boolean captchaOnOff = configService.selectCaptchaOnOff();
+        ajax.put("captchaOnOff", captchaOnOff);
+        if (!captchaOnOff)
+        {
+            return ajax;
+        }
+
         // 保存验证码信息
         String uuid = IdUtils.simpleUUID();
         String verifyKey = Constants.CAPTCHA_CODE_KEY + uuid;
@@ -53,6 +60,8 @@ public class CaptchaController
         String capStr = null, code = null;
         BufferedImage image = null;
 
+        // 生成验证码
+        String captchaType = RuoYiConfig.getCaptchaType();
         // 生成验证码
         if ("math".equals(captchaType))
         {
@@ -79,7 +88,6 @@ public class CaptchaController
             return AjaxResult.error(e.getMessage());
         }
 
-        AjaxResult ajax = AjaxResult.success();
         ajax.put("uuid", uuid);
         ajax.put("img", Base64.encode(os.toByteArray()));
         return ajax;

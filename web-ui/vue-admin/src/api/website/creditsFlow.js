@@ -42,12 +42,3 @@ export function delCreditsFlow(creditsId) {
     method: 'delete'
   })
 }
-
-// 导出积分流水
-export function exportCreditsFlow(query) {
-  return request({
-    url: '/website/creditsFlow/export',
-    method: 'get',
-    params: query
-  })
-}

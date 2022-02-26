@@ -28,6 +28,8 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysDictTypeService;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 数据字典信息
  *
@@ -54,12 +56,12 @@ public class SysDictDataController extends BaseController
 
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:dict:export')")
-    @GetMapping("/export")
-    public AjaxResult export(SysDictData dictData)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, SysDictData dictData)
     {
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
         ExcelUtil<SysDictData> util = new ExcelUtil<SysDictData>(SysDictData.class);
-        return util.exportExcel(list, "字典数据");
+        util.exportExcel(response, list, "字典数据");
     }
 
     /**

@@ -20,6 +20,8 @@ import com.ruoyi.website.service.ICreditsFlowService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 积分流水Controller
  *
@@ -50,12 +52,12 @@ public class CreditsFlowController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:creditsFlow:export')")
     @Log(title = "积分流水", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(CreditsFlow creditsFlow)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, CreditsFlow creditsFlow)
     {
         List<CreditsFlow> list = creditsFlowService.selectCreditsFlowList(creditsFlow);
         ExcelUtil<CreditsFlow> util = new ExcelUtil<CreditsFlow>(CreditsFlow.class);
-        return util.exportExcel(list, "积分流水数据");
+        util.exportExcel(response, list, "积分流水数据");
     }
 
     /**

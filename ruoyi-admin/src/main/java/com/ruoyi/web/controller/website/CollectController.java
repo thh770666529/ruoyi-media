@@ -20,6 +20,8 @@ import com.ruoyi.website.service.ICollectService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 收藏Controller
  *
@@ -50,12 +52,12 @@ public class CollectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:collect:export')")
     @Log(title = "收藏", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(Collect collect)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, Collect collect)
     {
         List<Collect> list = collectService.selectCollectList(collect);
         ExcelUtil<Collect> util = new ExcelUtil<Collect>(Collect.class);
-        return util.exportExcel(list, "收藏数据");
+        util.exportExcel(response, list, "收藏数据");
     }
 
     /**

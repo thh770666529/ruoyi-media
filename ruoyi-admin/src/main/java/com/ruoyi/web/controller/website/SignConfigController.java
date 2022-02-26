@@ -20,6 +20,8 @@ import com.ruoyi.website.service.ISignConfigService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 签到配置Controller
  *
@@ -50,12 +52,12 @@ public class SignConfigController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:signConfig:export')")
     @Log(title = "签到配置", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(SignConfig signConfig)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, SignConfig signConfig)
     {
         List<SignConfig> list = signConfigService.selectSignConfigList(signConfig);
         ExcelUtil<SignConfig> util = new ExcelUtil<SignConfig>(SignConfig.class);
-        return util.exportExcel(list, "签到配置数据");
+        util.exportExcel(response, list, "签到配置数据");
     }
 
     /**

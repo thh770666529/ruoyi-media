@@ -844,6 +844,8 @@ INSERT INTO `sys_dict_data` VALUES (191, 0, '积分', '1', 'sign_type', NULL, 'd
 INSERT INTO `sys_dict_data` VALUES (192, 0, '金币', '2', 'sign_type', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:36:41', 'admin', '2021-12-11 19:11:32', NULL);
 INSERT INTO `sys_dict_data` VALUES (193, 0, '单次', '1', 'sign_set', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:39:42', 'admin', '2021-12-11 19:08:20', NULL);
 INSERT INTO `sys_dict_data` VALUES (194, 0, '循环', '2', 'sign_set', NULL, 'default', 'N', '0', 'admin', '2021-12-11 18:40:21', 'admin', '2021-12-11 19:08:23', NULL);
+INSERT INTO `sys_dict_data`(`dict_code`, `dict_sort`, `dict_label`, `dict_value`, `dict_type`, `css_class`, `list_class`, `is_default`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (195, 0, 'iframe', 'iframe', 'movie_storage_type', NULL, 'default', 'N', '0', 'admin', '2022-02-10 10:44:48', '', NULL, NULL);
+INSERT INTO `sys_dict_data`(`dict_code`, `dict_sort`, `dict_label`, `dict_value`, `dict_type`, `css_class`, `list_class`, `is_default`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (196, 0, '本地存储', 'localStorage', 'movie_storage_type', NULL, 'default', 'N', '0', 'admin', '2022-02-10 10:45:20', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -899,6 +901,7 @@ INSERT INTO `sys_dict_type` VALUES (119, '站点状态', 'website_status', '0', 
 INSERT INTO `sys_dict_type` VALUES (120, '积分类型', 'credits_type', '0', 'admin', '2021-12-11 18:29:14', '', NULL, 'credits_type');
 INSERT INTO `sys_dict_type` VALUES (121, '签到类型', 'sign_type', '0', 'admin', '2021-12-11 18:36:06', 'admin', '2021-12-11 19:11:21', NULL);
 INSERT INTO `sys_dict_type` VALUES (122, '签到配置', 'sign_set', '0', 'admin', '2021-12-11 18:38:20', '', NULL, NULL);
+INSERT INTO `sys_dict_type`(`dict_id`, `dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (123, '视频存储类型', 'movie_storage_type', '0', 'admin', '2022-02-10 10:44:15', '', NULL, 'movie_storage_type');
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -2167,7 +2170,7 @@ INSERT INTO `wm_actor` VALUES (27, '威尔·史密斯 Will Smith', '/avatar/2021
 INSERT INTO `wm_actor` VALUES (28, '贾登·史密斯 Jaden Smith', '/avatar/2021/05/15/063959b2-856d-479b-9c37-4a9f5c58ab88.jpg', '　　贾登·史密斯，1998年7月8日出生于美国加州洛杉矶，是威尔·史密斯的儿子，也是《功夫梦》的主演。在《功夫梦》盛大的首映式上，贾登跳太空步、打醉拳，还大方地展示自己的八块腹肌，惹得成龙不禁大叫要和威尔·史密斯换儿子。2006年他和父亲一同出演了《当幸福来敲门》，不俗的表现让他成为了不可多得的童星，前途一片光明。', '2014年 第34届金酸莓奖 最差男主角 重返地球\r\n2013年 第22届MTV电影奖 MTV电影奖 Biggest Summer Teen Bad Ass(提名) 重返地球\r\n2011年 第20届MTV电影奖 MTV电影奖 最佳动作明星(提名)				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
 INSERT INTO `wm_actor` VALUES (29, '罗伯·莱纳 Rob Reiner', '/avatar/2021/05/15/0035c082-a5a2-443f-8a08-d36d64ec797b.jpg', '　　罗伯·莱纳以演员起家，却因执导的第一部电影《摇滚万岁》(1984) 而成名，为自己在好莱坞界赢得具有票房潜力的商业导演之美名；尤其以两部在评论界倍受好评、票房上亦获成功的喜剧《公主新娘》(1987)及《当哈利碰上莎莉》(1989) 最受人瞩目；此外，青少年电影《犯贱情人》(1985)、由史蒂芬·金的惊悚小说改编而成的《危情十日》(1990)证明他有尝试各种影片类型的能力。1993年以《义海雄风》提名当年奥斯卡最佳影片奖，此后更成为一名制片人。\r\n　　而《伴我同行》等具有艺术气质的作品更让他获得了评论界与影迷的一致赞誉，在商业片和文艺片都有很高的建树，又是一例好莱坞电影全才的成功案例。', '1993年 第65届奥斯卡金像奖 最佳影片(提名) 好人寥寥				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
 INSERT INTO `wm_actor` VALUES (30, '玛德琳·卡罗尔 Madeline Carroll', '/avatar/2021/05/15/2300536c-8669-4a03-927f-894b76f6fe71.jpg', '　　Madeline Carroll 1996年3月18日在美国加利福尼亚州洛杉矶市出生，并且在那里长大。Madeline 三岁时就成为了模特，很快她在谢尔曼橡树市的一家美甲店里被文化经纪人 Wendy 发现，不久便开始了她的演艺生涯。\r\n　　Madeline 到目前为止已经拍摄过50多部全国性商业广告并在其中担任主角。她也客串和出演了几集电视剧，比如：《迷失》第三季的20集出现过，饰演和本杰明小时候一起的Annie；《铁证悬案》（Cold Case）（2003年、2009年），《实习医生格蕾》（Grey\'s Anatomy）（2008年）和《别对我撒谎》（Lie to Me）（2009年）。Madeline 还在电影《关键投票》（Swing Vote ）（2008年），《生化危机3：灭绝》（Resident Evil ：Extinction）（2007年）和《来电惊魂》（When a Stranger Calls）（2006年）中崭露头角。2008和2009这两年对于 Madeline 来说是惊喜不断的，它们会在2010年给 Madeline 带来更多片约。在2010年她将会有二部故事片《邻家特工》（The Spy Next Door）（2010年），《怦然心动》（Flipped）（2010年）和一部独立影片《咖啡》（cafe）（2010年）上映。\r\n　　Madeline 非常喜欢恐怖电影，到目前为止她最喜爱的角色是来自《恶夜狂魔》（Night Stalker）（2005年）的 Julie Medlock 和来自《生化危机3：灭绝》（Resident Evil：Extinction）（2007年）的 White Queen 。Madeline 也喜欢和他的三个兄弟还有小狗 Spot 玩。', '...			', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
-INSERT INTO `wm_actor` VALUES (31, '卡兰·麦克奥利菲 Callan McAuliffe', '/avatar/2021/05/15/a6969cff-eda2-452c-8be1-f56ea30af8ea.jpg', '　　麦考利夫出生在悉尼郊区。就读于一所苏格兰人寄宿学校。当时他是学校唱诗班的领唱，并且通过了伦敦Trinity musical theatre的考试。可以说卡兰是童星出身，八岁的时候他就开始演戏。\r\n　　2007年卡兰在澳大利亚电视台拍摄的连续剧《Comedy Inc.》和《Blue Water High》中亮相，并引起了强烈的反响。 2009年，他主演的澳大利亚独立制作短片《Franswa Sharl》。这部短片让卡兰大步迈进了澳大利亚和美国的大银幕。\r\n　　2010年8月，卡兰主演了他的好莱坞处女作----电影《Flipped》，这部根据2001年Wendelin Van Draanen同名小说改编，由Warner Bros出品，ROB REINER导演的充满了浪漫气息的电影让卡兰成功的登陆好莱坞。\r\n　　随后，2010年5月，卡兰出演了Disney出品，Steven Spielberg和Michael Bay制作的科幻电影《关键第四号》中Sam一角。该片导演为D.J.Caruso，于当月在匹兹堡开机，预计于2011年2月18日公映。 此外，麦考利夫还将出演澳大利亚电视台拍摄的电视连续剧《Cloudstreet》。在这部由同名小说改编的电视剧中，卡兰饰演主角少年Quick Lamb。', '...				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
+INSERT INTO `wm_actor` VALUES (31, '卡兰·麦克奥利菲 Callan McAuliffe', '/avatar/2021/05/15/a6969cff-eda2-452c-8be1-f56ea30af8ea.jpg', '　　麦考利夫出生在悉尼郊区。就读于一所苏格兰人寄宿学校。当时他是学校唱诗班的领唱，并且通过了伦敦Trinity musical theatre的考试。可以说卡兰是童星出身，八岁的时候他就开始演戏。\r\n　　2007年卡兰在澳大利亚电视台拍摄的连续剧《Comedy Inc.》和《Blue Water High》中亮相，并引起了强烈的反响。 2009年，他主演的澳大利亚独立制作短片《Franswa Sharl》。这部短片让卡兰大步迈进了澳大利亚和美国的大银幕。\r\n　　2010年8月，卡兰主演了他的好莱坞处女作----电影《Flipped》，这部根据2001年Wendelin Van Draanen同名小说改编，由Warner Bros出品，ROB REINER导演的充满了浪漫气息的电影让卡兰成功的登录好莱坞。\r\n　　随后，2010年5月，卡兰出演了Disney出品，Steven Spielberg和Michael Bay制作的科幻电影《关键第四号》中Sam一角。该片导演为D.J.Caruso，于当月在匹兹堡开机，预计于2011年2月18日公映。 此外，麦考利夫还将出演澳大利亚电视台拍摄的电视连续剧《Cloudstreet》。在这部由同名小说改编的电视剧中，卡兰饰演主角少年Quick Lamb。', '...				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
 INSERT INTO `wm_actor` VALUES (32, '李·昂克里奇 Lee Unkrich', '/avatar/2021/05/15/296a262f-5160-4f21-8dd3-c40937149832.jpg', '...', '2018年 第90届奥斯卡金像奖 最佳动画长片 寻梦环游记\r\n2017年 第89届美国国家评论协会奖 最佳动画片 寻梦环游记\r\n2011年 第83届奥斯卡金像奖 最佳改编剧本(提名) 玩具总动员3				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
 INSERT INTO `wm_actor` VALUES (33, '安东尼·冈萨雷斯 Anthony Gonzalez', '/avatar/2021/05/15/2954917f-f936-4b18-b0f4-6484eacd6bee.jpg', '...', '2018年 第45届动画安妮奖 最佳配音 寻梦环游记\r\n2017年 第16届华盛顿影评人协会奖 最佳配音 寻梦环游记				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
 INSERT INTO `wm_actor` VALUES (34, '盖尔·加西亚·贝纳尔 Gael García Bernal', '/avatar/2021/05/15/5ad52a63-b8e9-4788-addc-5361aefa3e44.jpg', '　　1978年出生於墨西哥瓜达拉哈拉市的演员世家，幼年时期便曾参与多部短片演出。17岁旅行至欧洲，并在两年後进入伦敦中央戏剧学院就读，成为第一位获选进入该校就读的墨西哥籍学生。\r\n　　他第一次受到国际影坛注目，是演出大导演阿利安卓岗札雷伊纳利图所执导的《爱情像母狗》（Amores Perros），该片曾获得奥斯卡最佳外语片提名。而他也因为本片夺得银羚奖最佳男主角及芝加哥电影节银雨果奖最佳男主角的殊荣。不久，他与导演阿方索克朗合作的公路电影《你他妈的也是》更让他与剧中另一位主角狄耶哥卢纳共同摘下威尼斯影展马塞罗?马斯托依安尼(Marcello Mastroianni)奖，从此星路大开。\r\n　　2004年，《中央车站》导演华特沙勒斯相中他俊美的外表与精湛演技，邀他在《革命前夕的摩托车日记》中演出传奇英雄切格瓦拉。这次他获得英国奥斯卡最佳男主角提名，并被英国电影协会誉为「最具潜力的明日之星」！同年稍晚，西班牙国宝阿莫多瓦与他合作《坏教慾》。在这部颇负争议的作品里，他大胆诠释幼年遭神父性侵，成年後迷上变装、变性，命运堪称坎坷的男主角。\r\n　　盖尔贾西亚贝纳近期作品包括《上帝的私生子》、《火线交错》等。这位有拉丁美洲梁朝伟之称的性格小生已然成为全球影坛光芒四射的超级巨星！', '2019年 第22届上海国际电影节 金爵奖 最佳影片(提名) 逃离小镇\r\n2017年 第74届金球奖 电视类 音乐/喜剧类剧集最佳男主角(提名) 丛林中的莫扎特 第三季\r\n2016年 第73届金球奖 电视类 音乐/喜剧类剧集最佳男主角 丛林中的莫扎特 第一季				', NULL, '1', '2021-10-06 22:08:10', '1', '2021-10-06 22:08:10', NULL, 0, 0);
@@ -2403,7 +2406,7 @@ CREATE TABLE `wm_video`  (
   `ext` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件后缀',
   `length` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '播放长度',
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型',
-  `storage_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '存储类型',
+  `storage_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '存储类型',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
@@ -2428,40 +2431,43 @@ DROP PROCEDURE IF EXISTS `proc_sign_continue_times`;
 delimiter ;;
 CREATE DEFINER=`mysql`@`%` PROCEDURE `proc_sign_continue_times`(IN in_user_id VARCHAR(64), OUT signinTodayFlag Integer, OUT continuityDays Integer,OUT series_days Integer, OUT signDataUpdateTime datetime)
 BEGIN
-	
-  SET @now = CURRENT_DATE(); 
+
+  SET @now = CURRENT_DATE();
 	SET @count = 0;
 	SET @isSigninToday = 0;
 	set @row_number = 0;
   set @totalcount = 0;
-	SET @signDataUpdateTime = now(); 
-		
-	select count(1) into @count from (
-		select  ABS(datediff(sign_date, @now))  aa ,  -- 签到时间对比今天的差值
-				(@row_number:=@row_number + 1) bb    -- 排序字段 
-		from  website_sign_record
-		where user_id  = in_user_id   and  ABS(datediff(sign_date, @now))  > 0  -- 条件排除今天的签到记录
-		ORDER BY aa asc
-	) T where aa = bb ;
-	
-	
-	
-	select COUNT(*) into @isSigninToday from  website_sign_record where user_id  = in_user_id  and DATEDIFF(sign_date , @now ) = 0 ;-- 今天是否登录
-		
-	select count(1) into @totalcount from website_sign_record where user_id  = in_user_id;
-	
-    -- 更新连续签到次数
-	update website_account set continuity_days = (select @count + @isSinginToday), series_days = (select @totalcount), sign_data_update_time =(select @signDataUpdateTime) where user_id  = in_user_id ;
-		
-	
+	SET @signDataUpdateTime = now();
 
-	select  @isSigninToday as signinTodayFlag, -- 当天是否签到
-	        @count + @isSigninToday as continuityDays,  -- 连续签到n天
-         @totalcount as seriesDays, -- 签到总天数
-				 @signDataUpdateTime as signDataUpdateTime; -- 最后更新签到数据
-				
+select count(1) into @count from (
+                                     select  ABS(datediff(sign_date, @now))  aa ,  -- 签到时间对比今天的差值
+                                             (@row_number:=@row_number + 1) bb    -- 排序字段
+                                     from  website_sign_record
+                                     where user_id  = in_user_id   and  ABS(datediff(sign_date, @now))  > 0  -- 条件排除今天的签到记录
+                                     ORDER BY aa asc
+                                 ) T where aa = bb ;
+
+
+
+select COUNT(*) into @isSigninToday from  website_sign_record where user_id  = in_user_id  and DATEDIFF(sign_date , @now ) = 0 ;-- 今天是否登录
+
+select count(1) into @totalcount from website_sign_record where user_id  = in_user_id;
+
+-- 更新连续签到次数
+update website_account set continuity_days = (select @count + @isSigninToday), series_days = (select @totalcount), sign_data_update_time =(select @signDataUpdateTime) where user_id  = in_user_id ;
+
+
+
+select  @isSigninToday as signinTodayFlag, -- 当天是否签到
+        @count + @isSigninToday as continuityDays,  -- 连续签到n天
+        @totalcount as seriesDays, -- 签到总天数
+        @signDataUpdateTime as signDataUpdateTime; -- 最后更新签到数据
+
 END
 ;;
 delimiter ;
+
+
+
 
 SET FOREIGN_KEY_CHECKS = 1;

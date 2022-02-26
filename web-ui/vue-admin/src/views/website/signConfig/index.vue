@@ -4,20 +4,20 @@
       <el-form-item label="明细种类" prop="type">
         <el-select v-model="queryParams.type" placeholder="请选择明细种类" clearable size="small">
           <el-option
-            v-for="dict in typeOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.sign_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="奖励方式" prop="signSet">
         <el-select v-model="queryParams.signSet" placeholder="请选择奖励方式" clearable size="small">
           <el-option
-            v-for="dict in signSetOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.sign_set"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -66,7 +66,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['website:signConfig:export']"
         >导出</el-button>
@@ -80,14 +79,14 @@
       <el-table-column label="签到天数" align="center" prop="signDay" />
       <el-table-column label="明细种类" align="center" prop="type">
         <template slot-scope="scope">
-          <dict-tag :options="typeOptions" :value="scope.row.type"/>
+          <dict-tag :options="dict.type.sign_type" :value="scope.row.type"/>
         </template>
       </el-table-column>
       <el-table-column label="数量" align="center" prop="number" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="奖励方式" align="center" prop="signSet">
         <template slot-scope="scope">
-          <dict-tag :options="signSetOptions" :value="scope.row.signSet"/>
+          <dict-tag :options="dict.type.sign_set" :value="scope.row.signSet"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -127,10 +126,10 @@
         <el-form-item label="明细种类" prop="type">
           <el-select v-model="form.type" placeholder="请选择明细种类">
             <el-option
-              v-for="dict in typeOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
+              v-for="dict in dict.type.sign_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -143,10 +142,10 @@
         <el-form-item label="奖励方式" prop="signSet">
           <el-select v-model="form.signSet" placeholder="请选择奖励方式">
             <el-option
-              v-for="dict in signSetOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="parseInt(dict.dictValue)"
+              v-for="dict in dict.type.sign_set"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -160,16 +159,15 @@
 </template>
 
 <script>
-import { listSignConfig, getSignConfig, delSignConfig, addSignConfig, updateSignConfig, exportSignConfig } from "@/api/website/signConfig";
+import { listSignConfig, getSignConfig, delSignConfig, addSignConfig, updateSignConfig } from "@/api/website/signConfig";
 
 export default {
   name: "SignConfig",
+  dicts: [ 'sign_type', 'sign_set' ],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -186,10 +184,6 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 明细种类字典
-      typeOptions: [],
-      // 奖励方式字典
-      signSetOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -206,12 +200,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sign_type").then(response => {
-      this.typeOptions = response.data;
-    });
-    this.getDicts("sign_type").then(response => {
-      this.signSetOptions = response.data;
-    });
   },
   methods: {
     /** 查询签到配置列表 */
@@ -280,13 +268,13 @@ export default {
         if (valid) {
           if (this.form.signConfigId != null) {
             updateSignConfig(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addSignConfig(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -297,7 +285,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const signConfigIds = row.signConfigId || this.ids;
-      this.$confirm('是否确认删除签到配置编号为"' + signConfigIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除签到配置编号为"' + signConfigIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -305,23 +293,14 @@ export default {
           return delSignConfig(signConfigIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有签到配置数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportSignConfig(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+      this.download('website/signConfig/export', {
+        ...this.queryParams
+      }, `signConfig_${new Date().getTime()}.xlsx`)
     }
   }
 };

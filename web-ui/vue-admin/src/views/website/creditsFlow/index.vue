@@ -13,20 +13,20 @@
       <el-form-item label="账号" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择账号" clearable size="small">
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.website_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="积分类型" prop="creditsType">
         <el-select v-model="queryParams.creditsType" placeholder="请选择积分类型" clearable size="small">
           <el-option
-            v-for="dict in creditsTypeOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.credits_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -75,7 +75,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['website:creditsFlow:export']"
         >导出</el-button>
@@ -94,12 +93,12 @@
       <el-table-column label="消耗积分" align="center" prop="postAcount" />
       <el-table-column label="账号" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.website_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="积分类型" align="center" prop="creditsType">
         <template slot-scope="scope">
-          <dict-tag :options="creditsTypeOptions" :value="scope.row.creditsType"/>
+          <dict-tag :options="dict.type.credits_type" :value="scope.row.creditsType"/>
         </template>
       </el-table-column>
       <el-table-column label="描述" align="center" prop="creditsDesc" />
@@ -122,7 +121,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -158,19 +157,19 @@
         <el-form-item label="账号">
           <el-radio-group v-model="form.status">
             <el-radio
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="parseInt(dict.dictValue)"
-            >{{dict.dictLabel}}</el-radio>
+              v-for="dict in dict.type.website_status"
+              :key="dict.value"
+              :label="parseInt(dict.value)"
+            >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="积分类型" prop="creditsType">
           <el-select v-model="form.creditsType" placeholder="请选择积分类型">
             <el-option
-              v-for="dict in creditsTypeOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
+              v-for="dict in dict.type.credits_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -190,16 +189,15 @@
 </template>
 
 <script>
-import { listCreditsFlow, getCreditsFlow, delCreditsFlow, addCreditsFlow, updateCreditsFlow, exportCreditsFlow } from "@/api/website/creditsFlow";
+import { listCreditsFlow, getCreditsFlow, delCreditsFlow, addCreditsFlow, updateCreditsFlow } from "@/api/website/creditsFlow";
 
 export default {
   name: "CreditsFlow",
+  dicts: ['website_status', 'credits_type'],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -216,10 +214,6 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 账号字典
-      statusOptions: [],
-      // 积分类型字典
-      creditsTypeOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -237,12 +231,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("website_status").then(response => {
-      this.statusOptions = response.data;
-    });
-    this.getDicts("credits_type").then(response => {
-      this.creditsTypeOptions = response.data;
-    });
   },
   methods: {
     /** 查询积分流水列表 */
@@ -317,13 +305,13 @@ export default {
         if (valid) {
           if (this.form.creditsId != null) {
             updateCreditsFlow(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addCreditsFlow(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -334,7 +322,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const creditsIds = row.creditsId || this.ids;
-      this.$confirm('是否确认删除积分流水编号为"' + creditsIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除积分流水编号为"' + creditsIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -342,23 +330,14 @@ export default {
           return delCreditsFlow(creditsIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有积分流水数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportCreditsFlow(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+      this.download('website/creditsFlow/export', {
+        ...this.queryParams
+      }, `creditsFlow_${new Date().getTime()}.xlsx`)
     }
   }
 };

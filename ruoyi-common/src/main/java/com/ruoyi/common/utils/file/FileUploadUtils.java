@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 import cn.hutool.core.io.file.FileNameUtil;
 import org.apache.commons.fileupload.FileItem;
@@ -139,8 +140,8 @@ public class FileUploadUtils
             throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException,
             InvalidExtensionException
     {
-        int fileNamelength = file.getOriginalFilename().length();
-        if (fileNamelength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH)
+        int fileNameLength = Objects.requireNonNull(file.getOriginalFilename()).length();
+        if (fileNameLength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH)
         {
             throw new FileNameLengthLimitExceededException(FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
         }
@@ -151,8 +152,7 @@ public class FileUploadUtils
 
         File desc = getAbsoluteFile(baseDir, fileName);
         file.transferTo(desc);
-        String pathFileName = getPathFileName(baseDir, fileName);
-        return pathFileName;
+        return  getPathFileName(baseDir, fileName);
     }
 
     /**
@@ -195,10 +195,7 @@ public class FileUploadUtils
      */
     public static final String extractFilename(MultipartFile file)
     {
-        String fileName = file.getOriginalFilename();
-        String extension = getExtension(file);
-        fileName = DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + extension;
-        return fileName;
+        return DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + getExtension(file);
     }
 
     /**
@@ -206,11 +203,8 @@ public class FileUploadUtils
      */
     public static final String extractFilename2(MultipartFile file)
     {
-        String fileName = file.getOriginalFilename();
-        String extension = getExtension(file);
         String uuid = IdUtils.fastUUID().replace("-","");
-        fileName = DateUtils.datePath() + "/" + uuid + "/" + uuid + "." + extension;
-        return fileName;
+        return DateUtils.datePath() + "/" + uuid + "/" + uuid + "." + getExtension(file);
     }
 
     /**
@@ -218,10 +212,8 @@ public class FileUploadUtils
      */
     public static final String extractFilename(File file)
     {
-        String fileName = file.getName();
         String extension = FilenameUtils.getExtension(file.getAbsolutePath());
-        fileName = DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + extension;
-        return fileName;
+        return DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + extension;
     }
 
     /**
@@ -268,7 +260,7 @@ public class FileUploadUtils
             throws FileSizeLimitExceededException, InvalidExtensionException
     {
         long size = file.getSize();
-        if (DEFAULT_MAX_SIZE != -1 && size > DEFAULT_MAX_SIZE)
+        if (size > DEFAULT_MAX_SIZE)
         {
             throw new FileSizeLimitExceededException(DEFAULT_MAX_SIZE / 1024 / 1024);
         }
@@ -330,7 +322,7 @@ public class FileUploadUtils
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         if (StringUtils.isEmpty(extension))
         {
-            extension = MimeTypeUtils.getExtension(file.getContentType());
+            extension =  MimeTypeUtils.getExtension(Objects.requireNonNull(file.getContentType()));
         }
         return extension;
     }

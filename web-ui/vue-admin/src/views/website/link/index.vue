@@ -22,10 +22,10 @@
       <el-form-item label="状态" prop="status">
         <el-select clearable v-model="queryParams.status"  @change="handleQuery" >
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue "
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.link_status"
+            :key="dict.value "
+            :label="dict.label"
+            :value="dict.value"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -89,7 +89,7 @@
       <el-table-column label="跳转方式" align="center" prop="linkTarget" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status + ``"/>
+          <dict-tag :options="dict.type.link_status" :value="scope.row.status + ``"/>
         </template>
       </el-table-column>
       <el-table-column label="排序" align="center" prop="sort" />
@@ -138,10 +138,10 @@
           <el-radio-group v-model="form.status">
             <el-radio
               v-model="form.status"
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="dict.dictValue"
-            >{{dict.dictLabel}}</el-radio>
+              v-for="dict in dict.type.link_status"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="显示排序" prop="orderNum">
@@ -160,16 +160,15 @@
 </template>
 
 <script>
-import { listLink, getLink, delLink, addLink, updateLink, exportLink } from "@/api/website/link";
+import { listLink, getLink, delLink, addLink, updateLink } from "@/api/website/link";
 
 export default {
   name: "Link",
+  dicts: [ 'link_status' ],
   components: {
   },
   data() {
     return {
-      // 状态数据字典
-      statusOptions: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -238,9 +237,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("link_status").then(response => {
-      this.statusOptions = response.data;
-    });
   },
   methods: {
     /** 查询站点友情链接列表 */
@@ -313,13 +309,13 @@ export default {
         if (valid) {
           if (this.form.linkId != null) {
             updateLink(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addLink(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -330,7 +326,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const linkIds = row.linkId || this.ids;
-      this.$confirm('是否确认删除站点友情链接编号为"' + linkIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除站点友情链接编号为"' + linkIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -338,21 +334,14 @@ export default {
           return delLink(linkIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         })
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有站点友情链接数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportLink(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+      this.download('website/link/export', {
+        ...this.queryParams
+      }, `link_${new Date().getTime()}.xlsx`)
     }
   }
 };

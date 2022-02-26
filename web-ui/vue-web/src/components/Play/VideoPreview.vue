@@ -121,7 +121,7 @@
           // poster: this.poster, // 预览图
           flash: { hls: { withCredentials: false }},
           html5: { hls: { withCredentials: false }},
-          notSupportedMessage: '此视频暂无法播放，请稍后再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+          notSupportedMessage: '此视频暂无法播放，请稍侯再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
           controlBar: {
             timeDivider: true,
             durationDisplay: true,

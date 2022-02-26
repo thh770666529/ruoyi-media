@@ -41,10 +41,10 @@
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status"  placeholder="请选择状态" clearable size="small">
           <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dict.type.common_switch"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -93,7 +93,6 @@
           plain
           icon="el-icon-download"
           size="mini"
-          :loading="exportLoading"
           @click="handleExport"
           v-hasPermi="['question:question:export']"
         >导出</el-button>
@@ -107,7 +106,7 @@
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column prop="images" label="封面" align="center" width="100">
         <template slot-scope="scope">
-          <el-image :src="fileUploadHost + scope.row.images" lazy />
+          <el-image :src="fileUploadHost + scope.row.images" lazy  @click="previewPicture(fileUploadHost + scope.row.images)" />
         </template>
       </el-table-column>
       <el-table-column label="分类" align="center"  prop="categoryName" >
@@ -123,7 +122,7 @@
       <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.common_switch" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -178,10 +177,10 @@
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
                 <el-radio
-                  v-for="dict in statusOptions"
-                  :key="dict.dictValue"
-                  :label="parseInt(dict.dictValue)"
-                >{{dict.dictLabel}}</el-radio>
+                  v-for="dict in dict.type.common_switch"
+                  :key="dict.value"
+                  :label="parseInt(dict.value)"
+                >{{dict.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="分数" prop="score">
@@ -210,16 +209,15 @@
 </template>
 
 <script>
-import { listQuestion, getQuestion, delQuestion, addQuestion, updateQuestion, exportQuestion } from "@/api/question/question";
+import { listQuestion, getQuestion, delQuestion, addQuestion, updateQuestion } from "@/api/question/question";
 import { listCategory } from "@/api/question/category";
 export default {
   name: "Question",
+  dicts: [ 'common_switch' ],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -238,8 +236,6 @@ export default {
       open: false,
       //分类字典
       categoryOptions: [],
-      //状态数据字典
-      statusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -271,9 +267,6 @@ export default {
   created() {
     listCategory({status: '1'}).then(response => {
       this.categoryOptions = response.rows;
-    });
-    this.getDicts("common_switch").then(response => {
-      this.statusOptions = response.data;
     });
     this.getList();
   },
@@ -368,13 +361,13 @@ export default {
           this.setCategoryName(this.form.categoryId);
           if (this.form.questionId != null) {
             updateQuestion(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addQuestion(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
             });
@@ -385,7 +378,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const questionIds = row.questionId || this.ids;
-      this.$confirm('是否确认删除问答编号为"' + questionIds + '"的数据项?', "警告", {
+      this.$modal.confirm('是否确认删除问答编号为"' + questionIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -393,23 +386,14 @@ export default {
           return delQuestion(questionIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.msgSuccess("删除成功");
         }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有问答数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportQuestion(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        }).catch(() => {});
+      this.download('question/question/export', {
+        ...this.queryParams
+      }, `question_${new Date().getTime()}.xlsx`)
     },
     // 赋值分类名称 冗余数据
     setCategoryName(categoryId){
