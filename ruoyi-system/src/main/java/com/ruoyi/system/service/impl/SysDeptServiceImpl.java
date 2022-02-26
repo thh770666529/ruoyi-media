@@ -60,22 +60,18 @@ public class SysDeptServiceImpl implements ISysDeptService
     {
         List<SysDept> returnList = new ArrayList<SysDept>();
         List<Long> tempList = new ArrayList<Long>();
-        for (SysDept dept : depts)
-        {
+        for (SysDept dept : depts){
             tempList.add(dept.getDeptId());
         }
-        for (Iterator<SysDept> iterator = depts.iterator(); iterator.hasNext();)
-        {
+        for (Iterator<SysDept> iterator = depts.iterator(); iterator.hasNext();) {
             SysDept dept = (SysDept) iterator.next();
             // 如果是顶级节点, 遍历该父节点的所有子节点
-            if (!tempList.contains(dept.getParentId()))
-            {
+            if (!tempList.contains(dept.getParentId())) {
                 recursionFn(depts, dept);
                 returnList.add(dept);
             }
         }
-        if (returnList.isEmpty())
-        {
+        if (returnList.isEmpty()){
             returnList = depts;
         }
         return returnList;

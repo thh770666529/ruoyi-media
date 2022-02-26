@@ -25,6 +25,9 @@ dump.rdb
 *.iml
 *.ipr
 
+### JRebel ###
+rebel.xml
+
 ### NetBeans ###
 nbproject/private/
 build/*
