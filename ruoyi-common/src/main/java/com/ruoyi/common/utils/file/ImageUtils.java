@@ -67,7 +67,6 @@ public class ImageUtils
     public static byte[] readFile(String url)
     {
         InputStream in = null;
-        ByteArrayOutputStream baos = null;
         try
         {
             if (url.startsWith("http"))
@@ -97,7 +96,6 @@ public class ImageUtils
         finally
         {
             IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(baos);
         }
     }
 
