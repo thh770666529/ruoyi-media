@@ -17,7 +17,7 @@ router.beforeEach((to, from, next) => {
       isRelogin.show = true
       // 判断当前用户是否已拉取完user_info信息
       store.dispatch('GetInfo').then(() => {
-        sRelogin.show = false
+        isRelogin.show = false
         next();
       }).catch(err => {
         store.dispatch('LogOut').then(() => {
