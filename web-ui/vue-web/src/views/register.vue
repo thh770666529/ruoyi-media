@@ -130,7 +130,7 @@ export default {
               dangerouslyUseHTMLString: true,
               type: 'success'
             }).then(() => {
-              this.$router.push("/login");
+              this.$router.push("/");
             }).catch(() => {});
           }).catch(() => {
             this.loading = false;
