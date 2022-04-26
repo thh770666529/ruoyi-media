@@ -14,28 +14,27 @@
         </div>
       </div>-->
       <div class="nav">
-        <el-menu :default-active="defaultActive"
-                 mode="horizontal"
-                 text-color="black"
-                 router
-                 background-color="#fafafa"
-                 active-text-color="#ef4238">
-          <el-menu-item index="/">首页</el-menu-item>
-          <el-menu-item index="/movie">电影</el-menu-item>
-          <el-menu-item index="/actor">演员</el-menu-item>
-          <el-menu-item index="/article">文章</el-menu-item>
-          <el-menu-item index="/question">问答</el-menu-item>
-          <el-menu-item><a href="https://gitee.com/tanhuihuang/ruoyi-media.git" target="_blank">源码</a></el-menu-item>
-        </el-menu>
-       <!--<ul class="nav-list">
-          <li><a href="/" class="nav-model active">首页</a></li>
-          <li><a href="/movie" class="nav-model">电影</a></li>
-          <li><a href="/actor" class="nav-model">演员</a></li>
-          <li class="nav-model">文章</li>
-          <li class="nav-model">问答</li>
-          <li class="nav-model">热门</li>
-        </ul>-->
-
+        <!--        <el-menu :default-active="defaultActive"
+                         mode="horizontal"
+                         text-color="black"
+                         router
+                         background-color="#fafafa"
+                         active-text-color="#ef4238">
+                  <el-menu-item index="/">首页</el-menu-item>
+                  <el-menu-item index="/movie">电影</el-menu-item>
+                  <el-menu-item index="/actor">演员</el-menu-item>
+                  <el-menu-item index="/article">文章</el-menu-item>
+                  <el-menu-item index="/question">问答</el-menu-item>
+                  <el-menu-item><a href="https://gitee.com/tanhuihuang/ruoyi-media.git" target="_blank">源码</a></el-menu-item>
+                </el-menu>-->
+        <ul class="nav-list">
+          <li><a href="/" :class="defaultActive === `/` ? `nav-model active`: `nav-model`">首页</a></li>
+          <li><a href="/movie" :class="defaultActive === `/movie` ? `nav-model active`: `nav-model`">电影</a></li>
+          <li><a href="/actor" :class="defaultActive === `/actor` ? `nav-model active`: `nav-model`">演员</a></li>
+          <li><a href="/article" :class="defaultActive === `/article` ? `nav-model active`: `nav-model`">文章</a></li>
+          <li><a href="/question" :class="defaultActive === `/question` ? `nav-model active`: `nav-model`">问答</a></li>
+          <li class="nav-model"><a href="https://gitee.com/tanhuihuang/ruoyi-media.git" target="_blank">源码</a></li>
+        </ul>
 
 
       </div>
@@ -54,7 +53,7 @@
       <div class="search">
         <div type="text" class="searchinput">
           <input type="text" v-model="keyword" class="input" placeholder="找影视剧、影人、影院">
-          <input class="submit" @click="search"  type="submit" value="">
+          <input class="submit" @click="search" type="submit" value="">
         </div>
       </div>
       <!--<div  class="userimg">
@@ -81,15 +80,15 @@
           </router-link>
         </li>
         <li v-if="isLogin" class="h-r-user">
-          <el-dropdown trigger="click" @command="handleCommand" >
+          <el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link">
 
               <img style="width: 30px;height: 30px"
-                class="avatar"
-                :src="avatar"/>
+                   class="avatar"
+                   :src="avatar"/>
               {{ name }}
             </span>
-            <el-dropdown-menu  slot="dropdown">
+            <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="ucenter" icon="el-icon-user-solid">个人中心</el-dropdown-item>
               <el-dropdown-item command="logout" icon="el-icon-remove-outline">退出</el-dropdown-item>
             </el-dropdown-menu>
@@ -102,10 +101,11 @@
 </template>
 
 <script>
-import  '@/assets/styles/css/clear.css';
-import  { getUrlParams } from '@/utils/ruoyi';
-import  { setToken } from '@/utils/auth';
-import { mapGetters } from 'vuex'
+import '@/assets/styles/css/clear.css';
+import {getUrlParams} from '@/utils/ruoyi';
+import {setToken} from '@/utils/auth';
+import {mapGetters} from 'vuex'
+
 export default {
   name: "Header",
   data() {
@@ -121,11 +121,11 @@ export default {
     defaultActive() {
       let routePath = this.$route.matched[1].path || '/';
       // 如果是动态路由，则只取前一级路由 /movie/:id
-      if (routePath.indexOf('/', 1) !== -1){
+      if (routePath.indexOf('/', 1) !== -1) {
         // 截取一级路由 /movie
         routePath = routePath.substring(0, routePath.indexOf('/', 1));
       }
-      if (routePath === '/video'){
+      if (routePath === '/video') {
         return '/movie';
       }
       return routePath;
@@ -141,18 +141,18 @@ export default {
   },
   methods: {
     search() {
-      this.$router.push({ path: '/search', query: {keyword: this.keyword} })
+      this.$router.push({path: '/search', query: {keyword: this.keyword}})
     },
     getToken() {
       let token = this.$route.query.thirdToken || '';
-      if (token){
+      if (token) {
         setToken(token);
         self.opener.location.reload();
         window.close()
       }
     },
-    handleCommand(command){
-      if (!this.isLogin){
+    handleCommand(command) {
+      if (!this.isLogin) {
         this.$store.dispatch('showLoginForm');
       }
       switch (command) {
@@ -184,16 +184,59 @@ export default {
 </script>
 
 <style scoped>
-  .avatar{
-    margin: 0 auto;
-    border-radius: 50%;
-  }
-  .h-r-login li a:hover,.nav li a:hover,.nav li.current a{text-decoration:none}
-  .h-r-login,.h-r-search{float:right;padding-top:22px}
-  .h-r-login li{float:left;margin-left:10px;position:relative}
-  .h-r-login li a{cursor:pointer;line-height:50px;color:#666;font-size:16px;transition:.3s;-webkit-transition:.3s}
-  .h-r-login li.h-r-user a img{border-radius:50%;width:30px;height:30px}
-  .h-r-login li.h-r-user span{max-width:60px;height:17px;font-size:16px;line-height:16px;overflow:hidden}
-  .red-point{position:absolute;right:-4px;top:8px;display:block;width:8px;height:8px;border-radius:50%;background:#cb2020;text-indent:-9999px}
+.avatar {
+  margin: 0 auto;
+  border-radius: 50%;
+}
+
+.h-r-login li a:hover, .nav li a:hover, .nav li.current a {
+  text-decoration: none
+}
+
+.h-r-login, .h-r-search {
+  float: right;
+  padding-top: 22px
+}
+
+.h-r-login li {
+  float: left;
+  margin-left: 10px;
+  position: relative;
+}
+
+.h-r-login li a {
+  cursor: pointer;
+  line-height: 50px;
+  color: #666;
+  font-size: 16px;
+  transition: .3s;
+  -webkit-transition: .3s
+}
+
+.h-r-login li.h-r-user a img {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px
+}
+
+.h-r-login li.h-r-user span {
+  max-width: 60px;
+  height: 17px;
+  font-size: 16px;
+  line-height: 16px;
+  overflow: hidden
+}
+
+.red-point {
+  position: absolute;
+  right: -4px;
+  top: 8px;
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #cb2020;
+  text-indent: -9999px
+}
 
 </style>
