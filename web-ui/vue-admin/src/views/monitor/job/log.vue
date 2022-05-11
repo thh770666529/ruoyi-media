@@ -14,7 +14,7 @@
       <el-form-item label="任务组名" prop="jobGroup">
         <el-select
           v-model="queryParams.jobGroup"
-          placeholder="请任务组名"
+          placeholder="请选择任务组名"
           clearable
           size="small"
           style="width: 240px"
