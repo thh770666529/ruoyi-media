@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 import cn.hutool.core.io.file.FileNameUtil;
@@ -151,8 +152,8 @@ public class FileUploadUtils
 
         String fileName = extractFilename(file);
 
-        File desc = getAbsoluteFile(baseDir, fileName);
-        file.transferTo(desc);
+        String absPath = getAbsoluteFile(baseDir, fileName).getAbsolutePath();
+        file.transferTo(Paths.get(absPath));
         return  getPathFileName(baseDir, fileName);
     }
 
@@ -184,8 +185,8 @@ public class FileUploadUtils
         }else {
             fileName = extractFilename(file);
         }
-        File desc = getAbsoluteFile(baseDir, fileName);
-        file.transferTo(desc);
+        String absPath = getAbsoluteFile(baseDir, fileName).getAbsolutePath();
+        file.transferTo(Paths.get(absPath));
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(baseDir, dirLastIndex);
         return "/" + currentDir + "/" + fileName;
