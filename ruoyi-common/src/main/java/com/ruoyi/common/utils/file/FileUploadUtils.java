@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.util.Objects;
 
 import cn.hutool.core.io.file.FileNameUtil;
+import com.ruoyi.common.utils.uuid.Seq;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -195,7 +196,8 @@ public class FileUploadUtils
      */
     public static final String extractFilename(MultipartFile file)
     {
-        return DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + getExtension(file);
+        return StringUtils.format("{}/{}_{}.{}", DateUtils.datePath(),
+                FilenameUtils.getBaseName(file.getOriginalFilename()), Seq.getId(Seq.uploadSeqType), getExtension(file));
     }
 
     /**
@@ -221,10 +223,9 @@ public class FileUploadUtils
      */
     public static final String extractFilename2(File file)
     {
-        String fileName = file.getName();
         String extension = FilenameUtils.getExtension(file.getAbsolutePath());
         String uuid = IdUtils.fastUUID().replace("-","");
-        fileName = DateUtils.datePath() + "/" + uuid + "/" + uuid + "." + extension;
+        String fileName = DateUtils.datePath() + "/" + uuid + "/" + uuid + "." + extension;
         return fileName;
     }
 
