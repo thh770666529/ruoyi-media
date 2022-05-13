@@ -1,15 +1,10 @@
 package com.ruoyi.common.utils.file;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.nio.file.Paths;
 import java.util.Objects;
-
-import cn.hutool.core.io.file.FileNameUtil;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import com.ruoyi.common.utils.uuid.Seq;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.config.RuoYiConfig;
@@ -150,8 +145,8 @@ public class FileUploadUtils
 
         String fileName = extractFilename(file);
 
-        File desc = getAbsoluteFile(baseDir, fileName);
-        file.transferTo(desc);
+        String absPath = getAbsoluteFile(baseDir, fileName).getAbsolutePath();
+        file.transferTo(Paths.get(absPath));
         return  getPathFileName(baseDir, fileName);
     }
 
@@ -183,8 +178,8 @@ public class FileUploadUtils
         }else {
             fileName = extractFilename(file);
         }
-        File desc = getAbsoluteFile(baseDir, fileName);
-        file.transferTo(desc);
+        String absPath = getAbsoluteFile(baseDir, fileName).getAbsolutePath();
+        file.transferTo(Paths.get(absPath));
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(baseDir, dirLastIndex);
         return "/" + currentDir + "/" + fileName;
@@ -195,7 +190,8 @@ public class FileUploadUtils
      */
     public static final String extractFilename(MultipartFile file)
     {
-        return DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + getExtension(file);
+        return StringUtils.format("{}/{}_{}.{}", DateUtils.datePath(),
+                FilenameUtils.getBaseName(file.getOriginalFilename()), Seq.getId(Seq.uploadSeqType), getExtension(file));
     }
 
     /**
@@ -221,10 +217,9 @@ public class FileUploadUtils
      */
     public static final String extractFilename2(File file)
     {
-        String fileName = file.getName();
         String extension = FilenameUtils.getExtension(file.getAbsolutePath());
         String uuid = IdUtils.fastUUID().replace("-","");
-        fileName = DateUtils.datePath() + "/" + uuid + "/" + uuid + "." + extension;
+        String fileName = DateUtils.datePath() + "/" + uuid + "/" + uuid + "." + extension;
         return fileName;
     }
 
