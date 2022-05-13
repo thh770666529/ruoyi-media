@@ -1,5 +1,6 @@
 package com.ruoyi.quartz.util;
 
+import com.ruoyi.common.utils.spring.SpringUtils;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.Job;
@@ -127,6 +128,7 @@ public class ScheduleUtils
         {
             return StringUtils.containsAnyIgnoreCase(invokeTarget, Constants.JOB_WHITELIST_STR);
         }
-        return true;
+        Object obj = SpringUtils.getBean(StringUtils.split(invokeTarget, ".")[0]);
+        return StringUtils.containsAnyIgnoreCase(obj.getClass().getPackage().getName(), Constants.JOB_WHITELIST_STR);
     }
 }
