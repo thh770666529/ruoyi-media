@@ -322,6 +322,9 @@ export default {
     handleEditTable(row) {
       const tableId = row.tableId || this.ids[0];
       this.$router.push({ path: '/tool/gen-edit/index/' + tableId, query: { pageNum: this.queryParams.pageNum } });
+      const tableName = row.tableName || this.tableNames[0];
+      const params = { pageNum: this.queryParams.pageNum };
+      this.$tab.openPage("修改[" + tableName + "]生成配置", '/tool/gen-edit/index/' + tableId, params);
     },
     /** 删除按钮操作 */
     handleDelete(row) {
