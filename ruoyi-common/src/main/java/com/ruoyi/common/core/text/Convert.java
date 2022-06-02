@@ -562,17 +562,12 @@ public class Convert
         switch (valueStr)
         {
             case "true":
-                return true;
-            case "false":
-                return false;
+            case "ok":
+            case "1":
             case "yes":
                 return true;
-            case "ok":
-                return true;
+            case "false":
             case "no":
-                return false;
-            case "1":
-                return true;
             case "0":
                 return false;
             default:

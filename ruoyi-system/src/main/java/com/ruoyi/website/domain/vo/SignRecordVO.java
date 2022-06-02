@@ -40,4 +40,8 @@ public class SignRecordVO {
     Date signDataUpdateTime;
 
 
+    /**
+     * 账号积分
+     */
+    Long accountAmount;
 }

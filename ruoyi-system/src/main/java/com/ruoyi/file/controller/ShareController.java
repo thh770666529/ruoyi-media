@@ -2,7 +2,7 @@ package com.ruoyi.file.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;

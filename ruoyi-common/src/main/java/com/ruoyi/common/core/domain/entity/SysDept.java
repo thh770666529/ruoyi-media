@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -11,7 +12,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 部门表 sys_dept
- * 
+ *
  * @author ruoyi
  */
 public class SysDept extends BaseEntity
@@ -31,7 +32,7 @@ public class SysDept extends BaseEntity
     private String deptName;
 
     /** 显示顺序 */
-    private String orderNum;
+    private Integer orderNum;
 
     /** 负责人 */
     private String leader;
@@ -50,7 +51,7 @@ public class SysDept extends BaseEntity
 
     /** 父部门名称 */
     private String parentName;
-    
+
     /** 子部门 */
     private List<SysDept> children = new ArrayList<SysDept>();
 
@@ -96,13 +97,13 @@ public class SysDept extends BaseEntity
         this.deptName = deptName;
     }
 
-    @NotBlank(message = "显示顺序不能为空")
-    public String getOrderNum()
+    @NotNull(message = "显示顺序不能为空")
+    public Integer getOrderNum()
     {
         return orderNum;
     }
 
-    public void setOrderNum(String orderNum)
+    public void setOrderNum(Integer orderNum)
     {
         this.orderNum = orderNum;
     }
@@ -183,20 +184,20 @@ public class SysDept extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("deptId", getDeptId())
-            .append("parentId", getParentId())
-            .append("ancestors", getAncestors())
-            .append("deptName", getDeptName())
-            .append("orderNum", getOrderNum())
-            .append("leader", getLeader())
-            .append("phone", getPhone())
-            .append("email", getEmail())
-            .append("status", getStatus())
-            .append("delFlag", getDelFlag())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
+                .append("deptId", getDeptId())
+                .append("parentId", getParentId())
+                .append("ancestors", getAncestors())
+                .append("deptName", getDeptName())
+                .append("orderNum", getOrderNum())
+                .append("leader", getLeader())
+                .append("phone", getPhone())
+                .append("email", getEmail())
+                .append("status", getStatus())
+                .append("delFlag", getDelFlag())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .toString();
     }
 }

@@ -1,7 +1,5 @@
 package com.ruoyi.common.enums;
 
-import sun.security.util.Password;
-
 /**
  * 业务操作类型
  *

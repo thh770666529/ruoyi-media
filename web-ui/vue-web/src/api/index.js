@@ -60,5 +60,14 @@ export default {
       method: 'get',
       params: query
     })
+  },
+
+  //获取积分排行榜
+  getBestUserIntegralList(query) {
+    return request({
+      url: '/index/getBestUserIntegralList',
+      method: 'get',
+      params: query
+    })
   }
 }

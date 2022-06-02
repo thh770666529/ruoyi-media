@@ -11,6 +11,8 @@ import com.ruoyi.framework.web.service.SysLoginService;
 import com.ruoyi.framework.web.service.SysPermissionService;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysMenuService;
+import com.ruoyi.website.domain.Account;
+import com.ruoyi.website.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +41,9 @@ public class SysLoginController
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private IAccountService accountService;
 
     /**
      * 登录方法
@@ -71,9 +76,12 @@ public class SysLoginController
         Set<String> roles = permissionService.getRolePermission(user);
         // 权限集合
         Set<String> permissions = permissionService.getMenuPermission(user);
+        //账户信息
+        Account account = accountService.selectAccountByUserId(user.getUserId() + "");
         AjaxResult ajax = AjaxResult.success();
         ajax.put("user", user);
         ajax.put("roles", roles);
+        ajax.put("accountAmount", account.getAccountAmount());
         ajax.put("permissions", permissions);
         return ajax;
     }

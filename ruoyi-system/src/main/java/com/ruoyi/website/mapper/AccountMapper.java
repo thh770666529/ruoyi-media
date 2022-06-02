@@ -2,6 +2,7 @@ package com.ruoyi.website.mapper;
 
 import java.util.List;
 import com.ruoyi.website.domain.Account;
+import com.ruoyi.website.vo.UserIntegralVO;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -68,4 +69,11 @@ public interface AccountMapper
      * @return 结果
      */
     public int deleteAccountByAccountIds(Long[] accountIds);
-    }
+
+
+    /**
+     * 查询用户积分排行榜
+     * @return
+     */
+    List<UserIntegralVO> selectBestUserIntegralList();
+}

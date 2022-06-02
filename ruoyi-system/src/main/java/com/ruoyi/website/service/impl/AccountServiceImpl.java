@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.website.vo.UserIntegralVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.website.mapper.AccountMapper;
@@ -99,7 +100,7 @@ public class AccountServiceImpl implements IAccountService
     @Override
     public boolean insertUserAccount(SysUser user) {
         Account account = new Account();
-        account.setUserId(user.getUserId() + "");
+        account.setUserId(String.valueOf(user.getUserId()));
         account.setAccountAmount(0L);
         account.setStatus(1);
         account.setCreateTime(DateUtils.getNowDate());
@@ -108,5 +109,15 @@ public class AccountServiceImpl implements IAccountService
         account.setContinuityDays(0);
         account.setSignNums(0);
         return accountMapper.insertAccount(account) > 0;
+    }
+
+    @Override
+    public Account selectAccountByUserId(String userId) {
+        return accountMapper.selectAccountByUserId(userId);
+    }
+
+    @Override
+    public List<UserIntegralVO> selectBestUserIntegralList() {
+        return accountMapper.selectBestUserIntegralList();
     }
 }

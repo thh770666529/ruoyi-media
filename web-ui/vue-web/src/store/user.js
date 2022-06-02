@@ -15,7 +15,8 @@ const user = {
       signinTodayFlag: 0,
       seriesDays: 0,
       continuityDays: 0
-    }
+    },
+    accountAmount: 0
   },
 
   mutations: {
@@ -42,6 +43,9 @@ const user = {
     },
     SET_SIGNRECORD: (state, signRecord) =>{
       state.signRecord = signRecord
+    },
+    SET_ACCOUNTAMOUNT: (state, accountAmount) =>{
+      state.accountAmount = accountAmount
     }
   },
 
@@ -67,6 +71,7 @@ const user = {
     SignIn({ commit }){
       signIn().then(response => {
         commit('SET_SIGNRECORD', response.data);
+        commit('SET_ACCOUNTAMOUNT', response.data.accountAmount);
       })
     },
     // 获取签到数据
@@ -91,6 +96,7 @@ const user = {
           commit('SET_NAME', user.userName);
           commit('SET_AVATAR', avatar);
           commit('SET_USERID', user.userId);
+          commit('SET_ACCOUNTAMOUNT', res.accountAmount)
           resolve(res)
         }).catch(error => {
           reject(error)
@@ -119,6 +125,7 @@ const user = {
             seriesDays: 0,
             continuityDays: 0
           });
+          commit('SET_ACCOUNTAMOUNT', 0)
           resolve()
         }).catch(error => {
           reject(error)

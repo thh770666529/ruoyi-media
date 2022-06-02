@@ -1,7 +1,7 @@
 package com.ruoyi.ufo.operation.upload.product;
 
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.*;

@@ -11,7 +11,9 @@ const getters = {
   userId: (state) => state.user.userId,
   // 登录弹出框
   loginFormVisible: (state) => state.user.loginFormVisible,
-  //签到数据
-  signRecord: (state) => state.user.signRecord
+  // 签到数据
+  signRecord: (state) => state.user.signRecord,
+  // 账号积分
+  accountAmount: (state) => state.user.accountAmount
 }
 export default getters

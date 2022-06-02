@@ -2,6 +2,7 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.enums.IntegralTypeEnum;
 
 /**
  * 用户 业务层
@@ -203,4 +204,13 @@ public interface ISysUserService
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+
+    /**
+     * 添加用户积分
+     * @param integralTypeEnum
+     * @param userId
+     * @param resourceId
+     */
+    public void insertUserIntegral(IntegralTypeEnum integralTypeEnum, String userId, String resourceId);
 }

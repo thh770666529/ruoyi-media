@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.enums.IntegralTypeEnum;
 import com.ruoyi.common.enums.UserStatus;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.bean.BeanUtils;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.util.TokenUtil;
 import com.ruoyi.website.domain.Account;
 import com.ruoyi.website.domain.vo.SignRecordVO;
@@ -45,6 +47,9 @@ public class SignRecordServiceImpl implements ISignRecordService
 
     @Autowired
     IAccountService accountService;
+
+    @Autowired
+    ISysUserService userService;
 
     /**
      * 查询签到日志
@@ -123,11 +128,12 @@ public class SignRecordServiceImpl implements ISignRecordService
     public SignRecordVO getSignRecord() {
         SignRecordVO signRecordVO = new SignRecordVO();
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
+        String userId = loginUser.getUserId() + "";
         //判断最后更新时间，如果更新时间是今天 直接返回账户数据，如果不是则调用一次存过进行返回
-        Account account = accountMapper.selectAccountByUserId(loginUser.getUserId() + "");
+        Account account = accountMapper.selectAccountByUserId(userId);
         if(account == null){
             account = new Account();
-            account.setUserId(loginUser.getUserId() + "");
+            account.setUserId(userId);
             account.setAccountAmount(0L);
             account.setStatus(1);
             account.setCreateTime(DateUtils.getNowDate());
@@ -151,7 +157,10 @@ public class SignRecordServiceImpl implements ISignRecordService
         } else {
             setUpdateSignData(signRecordVO, loginUser.getUserId() + "");
         }
+        //账户信息
+        Account nowAcount = accountService.selectAccountByUserId(userId);
         signRecordVO.setUserId(null);
+        signRecordVO.setAccountAmount(nowAcount.getAccountAmount());
         return signRecordVO;
     }
 
@@ -174,7 +183,8 @@ public class SignRecordServiceImpl implements ISignRecordService
     @Override
     public SignRecordVO sign() {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
-        Account account = accountMapper.selectAccountByUserId(loginUser.getUserId() + "");
+        String userId = loginUser.getUserId() + "";
+        Account account = accountMapper.selectAccountByUserId(userId);
         Date lastSignTime = account.getLastSignTime();
         String date = DateUtils.getDate();
         if (lastSignTime != null && date.equals(DateUtils.dateTime(lastSignTime))){
@@ -183,21 +193,26 @@ public class SignRecordServiceImpl implements ISignRecordService
         //先判断最后签到时间 如果最后签到时间是今天，报错今天已经签到过了
         // 如果今天没有签到，那么增加一条签到数据。并且更新最后签到时间
         SignRecord signRecord = new SignRecord();
-        signRecord.setUserId(loginUser.getUserId() + "");
-        signRecord.setSignReward("1");
+        signRecord.setUserId(userId);
+        signRecord.setSignReward(String.format("每日签到，奖励积分{}分", IntegralTypeEnum.SignIn.getIntegral().toString()));
         signRecord.setSignDate(DateUtils.getNowDate());
         signRecord.setSignType(1); // 签到
         signRecord.setCreateTime(DateUtils.getNowDate());
         int count = signRecordMapper.insertSignRecord(signRecord);
         SignRecordVO signRecordVO = new SignRecordVO();
-        if (count>0){
+        if (count > 0){
+            //签到获取积分
+            userService.insertUserIntegral(IntegralTypeEnum.SignIn, userId, null);
             //签到完成后 调用存过来更新 总签到数据 连续签到时间 最后更新数据时间进行返回
-            setUpdateSignData(signRecordVO, loginUser.getUserId() + "");
+            setUpdateSignData(signRecordVO, userId);
             Account acc = new Account();
             acc.setAccountId(account.getAccountId());
-            acc.setUserId(loginUser.getUserId() + "");
+            acc.setUserId(userId);
             acc.setLastSignTime(DateUtils.getNowDate());
             accountMapper.updateAccount(acc);
+            //账户信息
+            Account nowAcount = accountService.selectAccountByUserId(userId);
+            signRecordVO.setAccountAmount(nowAcount.getAccountAmount());
             return signRecordVO;
         } else {
             throw new ServiceException("签到失败！");

@@ -1,5 +1,6 @@
 package com.ruoyi.framework.config;
 
+import com.ruoyi.framework.config.properties.PermitAllUrlProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,6 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     private CorsFilter corsFilter;
 
     /**
+     * 允许匿名访问的地址
+     */
+    @Autowired
+    private PermitAllUrlProperties permitAllUrl;
+
+    /**
      * 解决 无法直接注入 AuthenticationManager
      *
      * @return
@@ -87,6 +95,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception
     {
+        // 注解标记允许匿名访问的url
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity.authorizeRequests();
+        permitAllUrl.getUrls().forEach(url -> registry.antMatchers(url).permitAll());
         httpSecurity
                 // CSRF禁用，因为不使用session
                 .csrf().disable()
@@ -98,19 +109,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .authorizeRequests()
                 // 对于登录login 注册register 验证码captchaImage 允许匿名访问
                 .antMatchers("/login", "/register", "/captchaImage").anonymous()
-                .antMatchers(
-                        HttpMethod.GET,
-                        "/*.html",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js",
-                        "/profile/**"
-                ).permitAll()
-                .antMatchers("/swagger-ui.html").anonymous()
-                .antMatchers("/swagger-resources/**").anonymous()
-                .antMatchers("/webjars/**").anonymous()
-                .antMatchers("/*/api-docs").anonymous()
-                .antMatchers("/druid/**").anonymous()
+                // 静态资源，可匿名访问
+                .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
+                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()
                 .antMatchers("/filetransfer/preview**",
                                          "/filetransfer/downloadfile**",
                                          "/share/sharefileList",
@@ -122,6 +123,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().disable();
+        // 添加Logout filter
         httpSecurity.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
         // 添加JWT filter
         httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
