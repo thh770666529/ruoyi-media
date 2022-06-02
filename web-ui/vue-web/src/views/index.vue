@@ -20,7 +20,7 @@
         <!-- 正在热映 -->
         <div class="hot-movie">
           <div class="movie-header">
-            <h2>正在热映（{{hotPlayMovieTotle}}部）</h2>
+            <h2>正在热映（{{hotPlayMovieTotal}}部）</h2>
             <a href="/movie">
               <span>全部></span>
             </a>
@@ -50,7 +50,7 @@
         <!-- 即将上映 -->
         <div class="movie-box">
           <div class="movie-header">
-            <h2>即将上映（{{hotPlayMovieTotle}}部）</h2>
+            <h2>即将上映（{{hotPlayMovieTotal}}部）</h2>
             <a href="/movie">
               <span>全部></span>
             </a>
@@ -94,7 +94,7 @@
                 </el-tooltip>
               </el-col>
               <el-col :lg="8">
-                <span style="font-weight: 600;">{{signRecord.seriesDays}}</span> 积分
+                <span style="font-weight: 600;">{{ accountAmount }}</span> 积分
               </el-col>
               <el-col :lg="12">
 
@@ -488,10 +488,16 @@
         tagOptions: [],
         hotMovieList: [],
         hotPlayMovieList: [],
-        hotPlayMovieTotle: 0,
+        hotPlayMovieTotal: 0,
         bannerList: [],
         hotActorList: [],
-        hotArticleList: []
+        hotArticleList: [],
+        bestUserIntegralList: [],
+        bestUserIntegralTotal: 0,
+        bestUserIntegralParam: {
+          pageNum: 1,
+          pageSize: 12
+        }
       }
     },
     created() {
@@ -514,15 +520,22 @@
       const hotPlayMovieQueryParams = {pageNum: 1, pageSize: 8, orderByColumn: 'clickCount', isAsc: 'desc'};
       movieApi.listMovie(hotPlayMovieQueryParams).then(response => {
         this.hotPlayMovieList = response.rows;
-        this.hotPlayMovieTotle = response.total;
+        this.hotPlayMovieTotal = response.total;
       })
       // 获取签到数据
       this.getSignData()
+
+      // 获取积分排行榜
+      index.getBestUserIntegralList(this.bestUserIntegralParam).then(response => {
+        this.bestUserIntegralList = response.rows;
+        this.bestUserIntegralTotal = response.total;
+      })
     },
     computed: {
       ...mapGetters([
         'signRecord',
-        'isLogin'
+        'isLogin',
+        'accountAmount'
       ])
     },
     methods: {
@@ -561,7 +574,9 @@
         if (!this.vailLogin()) {
           return;
         }
-        this.$store.dispatch('SignIn').then(() => {this.msgInfo("签到成功！")}).catch(err => {});
+        this.$store.dispatch('SignIn').then(() => {
+          this.msgSuccess("签到成功！");
+        }).catch(err => {});
       },
       toMovieDetail(movieId) {
         window.open('/movie/' + movieId, '_blank')

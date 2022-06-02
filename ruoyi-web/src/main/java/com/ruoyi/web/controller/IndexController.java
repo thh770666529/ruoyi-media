@@ -1,7 +1,6 @@
 package com.ruoyi.web.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.blog.domain.Article;
 import com.ruoyi.blog.domain.Tag;
 import com.ruoyi.blog.service.IArticleService;
@@ -14,12 +13,11 @@ import com.ruoyi.index.vo.SearchParamVO;
 import com.ruoyi.media.domain.vo.MovieVO;
 import com.ruoyi.media.service.IActorService;
 import com.ruoyi.media.service.IMovieService;
-import com.ruoyi.website.domain.SearchLog;
+import com.ruoyi.website.domain.IntegralRecord;
 import com.ruoyi.website.domain.WebsiteBanner;
 import com.ruoyi.website.domain.WebsiteLink;
-import com.ruoyi.website.service.ISearchLogService;
-import com.ruoyi.website.service.IWebsiteBannerService;
-import com.ruoyi.website.service.IWebsiteLinkService;
+import com.ruoyi.website.service.*;
+import com.ruoyi.website.vo.UserIntegralVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * @Desc 首页controller
@@ -59,6 +58,9 @@ public class IndexController extends BaseController {
 
     @Autowired
     private ISearchLogService searchLogService;
+
+    @Autowired
+    private IAccountService accountService;
 
     @GetMapping("/getHotActorList")
     public AjaxResult getHotActorList(){
@@ -121,6 +123,17 @@ public class IndexController extends BaseController {
         searchLogService.insertSearchLog(searchParamVO.getKeyword());
         startPage();
         List<MovieVO> list = movieService.search(searchParamVO);
+        return getDataTable(list);
+    }
+
+    /**
+     * 获取积分排行榜
+     * @return
+     */
+    @GetMapping("/getBestUserIntegralList")
+    public TableDataInfo getBestUserIntegralList(Map<String, Object> params){
+        startPage();
+        List<UserIntegralVO> list = accountService.selectBestUserIntegralList();
         return getDataTable(list);
     }
 }

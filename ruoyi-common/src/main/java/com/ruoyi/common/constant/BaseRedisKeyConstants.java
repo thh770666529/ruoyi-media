@@ -52,6 +52,9 @@ public class BaseRedisKeyConstants {
     public final static String ACTOR_CLICK = "ACTOR_CLICK";
 
 
-
+    /**
+     * 每日用户积分
+     */
+    public final static String USER_INTEGRAL_ADD_LIMIT = "USER_INTEGRAL_ADD_LIMIT";
 
 }

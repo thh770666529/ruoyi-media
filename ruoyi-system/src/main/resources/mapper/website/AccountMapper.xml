@@ -24,6 +24,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select account_id, user_id, account_amount, account_desc, status, create_time, update_time, del_flag, series_days, continuity_days, last_sign_time, sign_nums, sign_data_update_time from website_account
     </sql>
 
+    <select id="selectAccountByUserId" parameterType="Account" resultMap="AccountResult">
+        <include refid="selectAccountVo"/>
+        where user_id = #{userId}
+    </select>
+
     <select id="selectAccountList" parameterType="Account" resultMap="AccountResult">
         <include refid="selectAccountVo"/>
         <where>
@@ -39,16 +44,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+
+    <select id="selectBestUserIntegralList" resultType="com.ruoyi.website.vo.UserIntegralVO">
+        select a.account_amount as integral, u.avatar as avatar, u.user_name as userName, u.user_id as userId
+        from website_account a
+        join sys_user u on a.user_id = u.user_id
+        order by a.account_amount desc
+    </select>
+
     <select id="selectAccountByAccountId" parameterType="Long" resultMap="AccountResult">
         <include refid="selectAccountVo"/>
         where account_id = #{accountId}
     </select>
-
-    <select id="selectAccountByUserId" parameterType="String" resultMap="AccountResult">
-        <include refid="selectAccountVo"/>
-        where user_id = #{userId}
-    </select>
-
 
     <insert id="insertAccount" parameterType="Account">
         insert into website_account

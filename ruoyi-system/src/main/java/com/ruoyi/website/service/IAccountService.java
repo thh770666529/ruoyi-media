@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.website.domain.Account;
+import com.ruoyi.website.vo.UserIntegralVO;
 
 /**
  * 用户账户Service接口
@@ -67,4 +68,13 @@ public interface IAccountService
      * @return
      */
     public boolean insertUserAccount(SysUser user);
+
+
+    public Account selectAccountByUserId(String userId);
+
+    /**
+     * 查询用户积分排行榜
+     * @return
+     */
+    List<UserIntegralVO> selectBestUserIntegralList();
 }
