@@ -2,11 +2,17 @@ package com.ruoyi.system.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.validation.Validator;
-
+import com.ruoyi.common.constant.BaseRedisKeyConstants;
+import com.ruoyi.common.core.redis.RedisCache;
+import com.ruoyi.common.enums.IntegralTypeEnum;
 import com.ruoyi.common.utils.bean.BeanValidators;
+import com.ruoyi.website.domain.Account;
+import com.ruoyi.website.domain.IntegralRecord;
 import com.ruoyi.website.service.IAccountService;
+import com.ruoyi.website.service.IIntegralRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +71,15 @@ public class SysUserServiceImpl implements ISysUserService
 
     @Autowired
     private IAccountService accountService;
+
+
+    @Autowired
+    private IIntegralRecordService integralRecordService;
+
+
+    @Autowired
+    private RedisCache redisCache;
+
     /**
      * 根据条件分页查询用户列表
      * 
@@ -563,5 +578,65 @@ public class SysUserServiceImpl implements ISysUserService
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
         return successMsg.toString();
+    }
+
+
+    /**
+     * 添加用户积分
+     * @param integralTypeEnum
+     * @param userId
+     * @param resourceId
+     */
+    @Override
+    @Transactional(
+            rollbackFor = {Exception.class}
+    )
+    public void insertUserIntegral(IntegralTypeEnum integralTypeEnum, String userId, String resourceId) {
+        // 1.用户id空值判断
+        if (StringUtils.isEmpty(userId)) {
+            return;
+        }
+        int code = integralTypeEnum.getCode();
+        int integral = integralTypeEnum.getIntegral();
+        int limit = integralTypeEnum.getLimit();
+        String integralName = integralTypeEnum.getName();
+        // 2.判断是否超过每天限制
+        String integralLimitJson = redisCache.getCacheObject(BaseRedisKeyConstants.USER_INTEGRAL_ADD_LIMIT + ":" + userId + ":" + integralName);
+        int integralLimit = 0;
+        if (StringUtils.isNotEmpty(integralLimitJson)) {
+            integralLimit = Integer.valueOf(integralLimitJson);
+            if (integralLimit >= limit) {
+                log.error(String.format("%s已达到今日获取积分上限; userId:%s", integralName, userId));
+                return;
+            }
+        }
+        // 3.判断资源是否重复获取积分
+        if (StringUtils.isNotEmpty(resourceId)){
+            IntegralRecord queryIntegralRecordParam = new IntegralRecord();
+            queryIntegralRecordParam.setUserId(userId);
+            queryIntegralRecordParam.setIntegralType(code);
+            queryIntegralRecordParam.setResourceId(resourceId);
+            List<IntegralRecord> integralRecords = integralRecordService.selectIntegralRecordList(queryIntegralRecordParam);
+            if (integralRecords.size() > 0){
+                log.error(String.format("用户id:%s在%s积分类型上已经获取过积分，无法重复获取; resourceId:%s" , userId, integralName, resourceId));
+                return;
+            }
+        }
+
+        Account account = accountService.selectAccountByUserId(userId);
+        // 4.添加到积分表
+        IntegralRecord integralRecord = new IntegralRecord();
+        integralRecord.setIntegralType(code);
+        integralRecord.setIntegralName(integralName);
+        integralRecord.setValue(integral);
+        integralRecord.setUserId(userId);
+        integralRecord.setResourceId(resourceId);
+        integralRecord.setOldValue(account.getAccountAmount());
+
+        //5.更新账户的积分
+        account.setAccountAmount(account.getAccountAmount() + integral);
+        accountService.updateAccount(account);
+        redisCache.setCacheObject(BaseRedisKeyConstants.USER_INTEGRAL_ADD_LIMIT + ":" + userId + ":" + integralName, String.valueOf(integralLimit + 1), 1, TimeUnit.DAYS);
+        integralRecordService.insertIntegralRecord(integralRecord);
     }
 }
