@@ -7,14 +7,11 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import cn.hutool.core.collection.CollectionUtil;
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.gson.internal.LinkedTreeMap;
 import com.ruoyi.blog.domain.Category;
 import com.ruoyi.blog.service.ICategoryService;
 import com.ruoyi.common.constant.BaseRedisKeyConstants;
@@ -26,10 +23,7 @@ import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.ServletUtils;
-import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.common.utils.file.MarkdownUtils;
-import com.ruoyi.media.domain.Movie;
-import com.ruoyi.media.mapper.MovieMapper;
 import com.ruoyi.system.util.TokenUtil;
 import com.ruoyi.website.domain.WebConfig;
 import com.ruoyi.website.service.IWebConfigService;
@@ -289,7 +283,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
             }
         }
         String imagesList = ServletUtils.getParameter("imagesList");
-        List<Map<String, String>> list = (List<Map<String, String>>) JSONArray.parse(imagesList);
+        List<Map<String, String>> list = JSON.parseArray(imagesList, Map.class);
         Map<String, String> imagesMap = new HashMap<>();
         for (Map<String, String> item : list) {
             imagesMap.put(item.get("fileOldName"), item.get("url"));
