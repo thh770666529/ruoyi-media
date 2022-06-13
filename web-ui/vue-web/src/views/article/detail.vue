@@ -202,7 +202,8 @@
 
         getArticle(this.articleId).then(response => {
           this.article = response.data;
-          const passwordFlag = this.getCookies(`article_password${this.article.articleId}`);
+          const key = `article_pwd:${this.article.articleId + `:` + this.$store.state.user.userId}`
+          const passwordFlag = this.getCookies(key);
           this.getOtherData();
           if (passwordFlag === 'true') {
             this.dialogArticle.visible = false;
@@ -226,7 +227,8 @@
               if (res.code === 200) {
                 this.resetForm(formName);//  清空表单
                 this.dialogArticle.visible = false;
-                this.setCookies(`article_password${this.articleId}`, true);
+                const key = `article_pwd:${this.article.articleId + `:` + this.$store.state.user.userId}`
+                this.setCookies(key, true);
               } else {
                 this.$modal.msgError(res.msg)
               }

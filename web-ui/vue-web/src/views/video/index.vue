@@ -154,7 +154,8 @@ export default {
       movieApi.getMovieVideo(videoId).then(response => {
         this.video = response.data.video;
         this.movie = response.data.movie;
-        const passwordFlag = this.getCookies(`movie_password${this.movie.movieId}`);
+        const key = `movie_pwd:${this.movie.movieId + `:` + this.$store.state.user.userId}`
+        const passwordFlag = this.getCookies(key);
         if (passwordFlag  === 'true'){
           this.playVideo();
           this.dialogVideoFile.visible = false;
@@ -220,7 +221,8 @@ export default {
               this.playVideo();
               this.resetForm(formName);//  清空表单
               this.dialogVideoFile.visible = false
-              this.setCookies(`movie_password${this.movie.movieId}`, true);
+              const key = `movie_pwd:${this.movie.movieId + `:` + this.$store.state.user.userId}`
+              this.setCookies(key, true);
             }else {
               this.$modal.msgError(res.msg)
             }
