@@ -1,82 +1,82 @@
-/*
- * JAVE - A Java Audio/Video Encoder (based on FFMPEG)
- *
- * Copyright (C) 2008-2009 Carlo Pelliccia (www.sauronsoftware.it)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package com.ruoyi.common.utils.ffmpeg;
 
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.ZipUtil;
-import com.ruoyi.common.exception.ServiceException;
-import com.ruoyi.common.exception.file.FileException;
-import org.springframework.util.FileCopyUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.file.Files;
 
 /**
- * The default ffmpeg executable locator, which exports on disk the ffmpeg
- * executable bundled with the library distributions. It should work both for
- * windows and many linux distributions. If it doesn't, try compiling your own
- * ffmpeg executable and plug it in JAVE with a custom {@link DefaultFFMPEGLocator}.
+ * 默认的 ffmpeg 可执行文件定位器，它在磁盘上导出与库分发捆绑的 ffmpeg 可执行文件。
+ * 它应该适用于 windows 和许多 linux 发行版。如果没有，请尝试编译您自己的 ffmpeg 可执行文件并使用自定义
  *
- * @author Carlo Pelliccia
+ * @author thh
  */
 public class DefaultFFMPEGLocator extends FFMPEGLocator {
 
-    /**
-     * Trace the version of the bundled ffmpeg executable. It's a counter: every
-     * time the bundled ffmpeg change it is incremented by 1.
-     */
-    private static final int myEXEversion = 1;
+    private static final Logger log = LoggerFactory.getLogger(DefaultFFMPEGLocator.class);
 
     /**
-     * The ffmpeg executable file path.
+     * 版本
+     */
+    private static final int myExeVersion = 1;
+
+    /**
+     * ffmpeg执行地址
+     * 例如：用户的临时目录是 ： C:\Users\用户名\AppData\Local\Temp  ， 那么文件将导入到 C:\Users\tanhh\AppData\Local\Temp\ruoyi-media1\ffmpeg下
      */
     private String path;
 
+
+    public static void main(String[] args) {
+        DefaultFFMPEGLocator defaultFFMPEGLocator = new DefaultFFMPEGLocator();
+        String ffmpegExecutablePath = defaultFFMPEGLocator.getFFMPEGExecutablePath();
+        System.out.println("ffmpegExecutablePath = " + ffmpegExecutablePath);
+    }
+
+    // 判断是否是windows
+    public boolean isWindows() {
+        String os = System.getProperty("os.name").toLowerCase();
+        return os.toLowerCase().contains("windows");
+    }
+
     /**
-     * It builds the default FFMPEGLocator, exporting the ffmpeg executable on a
-     * temp file.
+     * ffmpeg 工具导入用户目录下
      */
     public DefaultFFMPEGLocator() {
-        // Windows?
-        boolean isWindows;
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.indexOf("windows") != -1) {
-            isWindows = true;
-        } else {
-            isWindows = false;
-        }
-        // Temp dir?
+        boolean isWindows = isWindows();
+        // 获取临时目录（windows）/用户目录（linux）
         File temp = new File(System.getProperty("user.dir"), "conf");
         if (isWindows) {
-            temp = new File(System.getProperty("java.io.tmpdir"), "ruoyi-media" + myEXEversion);
+            temp = new File(System.getProperty("java.io.tmpdir"), "ruoyi-media" + myExeVersion);
         }
+        // 获取并创建临时目录
         if (!temp.exists()) {
             temp.mkdirs();
             temp.deleteOnExit();
         }
-        //String suffix = isWindows ? ".exe" : "";
         File zip = new File(temp, "ffmpeg.zip");
         String suffix = isWindows ? ".exe" : "";
-        File exe = new File(temp.getAbsolutePath() + File.separator + "ffmpeg"+ File.separator +"ffmpeg" + suffix);
+        File exe = new File(temp.getAbsolutePath() + File.separator + "ffmpeg" + File.separator + "ffmpeg" + suffix);
         if (!zip.exists()) {
-            copyFile("ffmpeg/ffmpeg.zip", zip);
-            ZipUtil.unzip(new File(temp.getAbsolutePath(), "ffmpeg.zip"));
+            log.info("ffmpeg.zip is not exists，copy file to {}", zip.getAbsolutePath());
+            try {
+                copyFile("ffmpeg/ffmpeg.zip", zip);
+            } catch (Exception e) {
+                log.error("ffmpeg.zip copy error", e);
+                throw e;
+            }
+        }
+        if (!exe.exists()) {
+            try {
+                log.info("ffmpeg执行文件不存在，unzip file to {}", exe.getAbsolutePath());
+                ZipUtil.unzip(new File(temp.getAbsolutePath(), "ffmpeg.zip"));
+            } catch (Exception e) {
+                log.error("unzip ffmpeg.zip error", e);
+                throw e;
+            }
+
             if (!isWindows) {
                 Runtime runtime = Runtime.getRuntime();
                 try {
@@ -90,7 +90,6 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         this.path = exe.getAbsolutePath();
     }
 
-
     @Override
     protected String getFFMPEGExecutablePath() {
         return path;
@@ -98,41 +97,21 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
 
 
     /**
-     * Copies a file bundled in the package to the supplied destination.
-     *
-     * @param path The name of the bundled file.
-     * @param dest The destination.
-     * @throws RuntimeException If aun unexpected error occurs.
+     * @param path
+     * @param dest
+     * @Author tanhuihuang
+     * @Description 复制文件
+     * @Date 9:04 2022/8/25
      */
     private void copyFile(String path, File dest) throws RuntimeException {
-        InputStream input = null;
-        OutputStream output = null;
-        try {
-            input = DefaultFFMPEGLocator.class.getClassLoader().getResourceAsStream(path);
-            output = new FileOutputStream(dest);
+        try (InputStream input = DefaultFFMPEGLocator.class.getClassLoader().getResourceAsStream(path); OutputStream output = Files.newOutputStream(dest.toPath())) {
             byte[] buffer = new byte[1024];
             int l;
             while ((l = input.read(buffer)) != -1) {
                 output.write(buffer, 0, l);
             }
         } catch (IOException e) {
-            throw new RuntimeException("Cannot write file "
-                    + dest.getAbsolutePath());
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (Throwable t) {
-
-                }
-            }
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (Throwable t) {
-
-                }
-            }
+            throw new RuntimeException("Cannot write file " + dest.getAbsolutePath());
         }
     }
 
