@@ -15,6 +15,11 @@ ruoyi:
   # 验证码类型 math 数组计算 char 字符验证
   captchaType: math
 
+# 日志配置
+logging:
+  level:
+    com.ruoyi: info
+    org.springframework: warn
 
 ufo:
   storage-type: 0  #存储类型 0 本地存储
