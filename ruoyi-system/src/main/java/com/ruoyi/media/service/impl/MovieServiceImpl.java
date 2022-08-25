@@ -324,13 +324,13 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
      * @return 返回添加了高亮的字符串
      */
     private String getHitCode(String str, String keyword) {
-        if (StringUtils.isEmpty(keyword) || StringUtils.isEmpty(str)) {
-            return str;
+        if (StringUtils.isAnyBlank(str, keyword)) {
+            return "";
         }
         String startStr = "<span style = 'color:red'>";
         String endStr = "</span>";
         // 判断关键字是否直接是搜索的内容，否者直接返回
-        if (str.equals(keyword)) {
+        if (str.equalsIgnoreCase(keyword)) {
             return startStr + str + endStr;
         }
         String lowerCaseStr = str.toLowerCase();
@@ -339,7 +339,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         boolean isEndWith = lowerCaseStr.endsWith(lowerKeyword);
 
         // 计算分割后的字符串位置
-        Integer count = 0;
+        int count = 0;
         List<Map<String, Integer>> list = new ArrayList<>();
         List<Map<String, Integer>> keyList = new ArrayList<>();
         for (int index = 0; index < lowerCaseArray.length; index++) {
@@ -347,7 +347,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
             Map<String, Integer> map = new HashMap<>();
             Map<String, Integer> keyMap = new HashMap<>();
             map.put("startIndex", count);
-            Integer len = lowerCaseArray[index].length();
+            int len = lowerCaseArray[index].length();
             count += len;
             map.put("endIndex", count);
             list.add(map);
