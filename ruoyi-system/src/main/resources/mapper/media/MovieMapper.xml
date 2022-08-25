@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.media.mapper.MovieMapper">
 
     <resultMap type="MovieVO" id="MovieResult">
-        <result property="movieId"    column="movie_id"    />
-        <result property="images"    column="images"  />
-        <result property="title"    column="title"    />
-        <result property="type"    column="type"    />
-        <result property="country"    column="country"    />
-        <result property="tagId"   column="tag_id" />
-        <result property="description"    column="description"    />
-        <result property="publishBy"    column="publish_by"    />
-        <result property="publishTime"    column="publish_time"    />
-        <result property="status"    column="status"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="remark"    column="remark"    />
-        <result property="clickCount"    column="click_count"    />
-        <result property="commentCount"    column="comment_count"    />
-        <result property="followCount"    column="follow_count"    />
-        <result property="collectionCount"    column="collection_count"    />
-        <result property="supportCount"    column="support_count"    />
-        <result property="opposeCount"    column="oppose_count"    />
-        <result property="shareCount"    column="share_count"    />
-        <result property="openComment"    column="open_comment"    />
-        <result property="openDownload"    column="open_download"    />
-        <result property="price"    column="price"    />
-        <result property="rate"    column="rate"    />
-        <result property="publishUsername"    column="publishUsername"    />
-        <result property="categoryId"   column="category_id"    />
-        <result property="categoryName"   column="category_name"  />
-        <result property="qrcodePath"   column="qrcode_path" />
-        <result property="openPassword"   column="open_password" />
-        <result property="password"   column="password" />
-        <result property="stills"   column="stills" />
-        <result property="totalVideoLength"   column="total_video_length" />
-        <result property="summary"   column="summary" />
-        <result property="en"   column="en" />
-        <result property="letter"   column="letter" />
-        <result property="lang"   column="lang" />
+        <result property="movieId" column="movie_id"/>
+        <result property="images" column="images"/>
+        <result property="title" column="title"/>
+        <result property="type" column="type"/>
+        <result property="country" column="country"/>
+        <result property="tagId" column="tag_id"/>
+        <result property="description" column="description"/>
+        <result property="publishBy" column="publish_by"/>
+        <result property="publishTime" column="publish_time"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="remark" column="remark"/>
+        <result property="clickCount" column="click_count"/>
+        <result property="commentCount" column="comment_count"/>
+        <result property="followCount" column="follow_count"/>
+        <result property="collectionCount" column="collection_count"/>
+        <result property="supportCount" column="support_count"/>
+        <result property="opposeCount" column="oppose_count"/>
+        <result property="shareCount" column="share_count"/>
+        <result property="openComment" column="open_comment"/>
+        <result property="openDownload" column="open_download"/>
+        <result property="price" column="price"/>
+        <result property="rate" column="rate"/>
+        <result property="publishUsername" column="publishUsername"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="qrcodePath" column="qrcode_path"/>
+        <result property="openPassword" column="open_password"/>
+        <result property="password" column="password"/>
+        <result property="stills" column="stills"/>
+        <result property="totalVideoLength" column="total_video_length"/>
+        <result property="summary" column="summary"/>
+        <result property="en" column="en"/>
+        <result property="letter" column="letter"/>
+        <result property="lang" column="lang"/>
         <collection property="actorList" column="movie_id" select="selectMovieActorList"/>
         <collection property="directorList" column="movie_id" select="selectMovieDirectorList"/>
     </resultMap>
 
     <resultMap type="MovieActorVO" id="MovieActorVOResult">
-        <result property="actorId"    column="actor_id"    />
-        <result property="movieId"    column="movie_id"    />
-        <result property="name"    column="name"    />
-        <result property="avatar"    column="avatar"    />
-        <result property="label"    column="label"    />
+        <result property="actorId" column="actor_id"/>
+        <result property="movieId" column="movie_id"/>
+        <result property="name" column="name"/>
+        <result property="avatar" column="avatar"/>
+        <result property="label" column="label"/>
     </resultMap>
 
     <select id="selectMovieActorList" parameterType="MovieActorVO" resultMap="MovieActorVOResult">
@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from wm_movie_actor ma,wm_actor a
         <where>
             ma.actor_id = a.actor_id AND ma.type = 'actor'
-            <if test="movieId != null "> AND ma.movie_id = #{movieId}</if>
+            <if test="movieId != null ">AND ma.movie_id = #{movieId}</if>
         </where>
     </select>
 
@@ -70,33 +70,88 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from wm_movie_actor ma,wm_actor a
         <where>
             ma.actor_id = a.actor_id AND ma.type = 'director'
-            <if test="movieId != null "> AND ma.movie_id = #{movieId}</if>
+            <if test="movieId != null ">AND ma.movie_id = #{movieId}</if>
         </where>
     </select>
 
     <sql id="selectMovieVo">
-        select m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
-        m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
-        m.open_comment, m.open_download, m.price, m.rate,
-        m.category_id,m.category_name,m.qrcode_path,m.open_password,m.password,m.stills,m.total_video_length,
-        m.summary, m.en, m.lang, m.letter,
-        u.nick_name as publishUsername
+        select m.movie_id,
+               m.images,
+               m.title,
+               m.type,
+               m.country,
+               m.tag_id,
+               m.description,
+               m.publish_by,
+               m.publish_time,
+               m.status,
+               m.create_by,
+               m.create_time,
+               m.update_by,
+               m.update_time,
+               m.del_flag,
+               m.remark,
+               m.open_comment,
+               m.open_download,
+               m.price,
+               m.rate,
+               m.category_id,
+               m.category_name,
+               m.qrcode_path,
+               m.open_password,
+               m.password,
+               m.stills,
+               m.total_video_length,
+               m.summary,
+               m.en,
+               m.lang,
+               m.letter,
+               u.nick_name as publishUsername
         from wm_movie m
-        left join sys_user u on m.publish_by = u.user_id
+                 left join sys_user u on m.publish_by = u.user_id
     </sql>
 
     <sql id="selectWebMovieVo">
-        select m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
-        m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
-        m.open_comment, m.price, m.rate,
-        m.category_id,m.category_name,m.qrcode_path,m.open_password,stills,total_video_length,
-        m.click_count, m.comment_count,m.follow_count,m.collection_count,m.support_count,m.oppose_count,m.share_count,
-        m.summary, m.en, m.lang, m.letter,
-        u.nick_name as publishUsername
+        select m.movie_id,
+               m.images,
+               m.title,
+               m.type,
+               m.country,
+               m.tag_id,
+               m.description,
+               m.publish_by,
+               m.publish_time,
+               m.status,
+               m.create_by,
+               m.create_time,
+               m.update_by,
+               m.update_time,
+               m.del_flag,
+               m.remark,
+               m.open_comment,
+               m.price,
+               m.rate,
+               m.category_id,
+               m.category_name,
+               m.qrcode_path,
+               m.open_password,
+               stills,
+               total_video_length,
+               m.click_count,
+               m.comment_count,
+               m.follow_count,
+               m.collection_count,
+               m.support_count,
+               m.oppose_count,
+               m.share_count,
+               m.summary,
+               m.en,
+               m.lang,
+               m.letter,
+               u.nick_name as publishUsername
         from wm_movie m
-        left join sys_user u on m.publish_by = u.user_id
+                 left join sys_user u on m.publish_by = u.user_id
     </sql>
-
 
 
     <select id="searchWebMovieList" parameterType="com.ruoyi.index.vo.SearchParamVO" resultMap="MovieResult">
@@ -110,20 +165,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from wm_movie m
         left join sys_user u on m.publish_by = u.user_id
         where
-            m.status = 0
+        m.status = 0
         <if test="keyword != null  and keyword != ''">
-           and
-           (
-           m.title like concat('%', #{keyword}, '%')
-           or m.description like concat('%', #{keyword}, '%')
-           or m.category_name like concat('%', #{keyword}, '%')
-           or m.summary like concat('%', #{keyword}, '%')
-           or date_format(m.publish_time,'%Y') like concat('%', #{keyword}, '%')
-           )
+            and
+            (
+            m.title like concat('%', #{keyword}, '%')
+            or m.description like concat('%', #{keyword}, '%')
+            or m.category_name like concat('%', #{keyword}, '%')
+            or m.summary like concat('%', #{keyword}, '%')
+            or date_format(m.publish_time,'%Y') like concat('%', #{keyword}, '%')
+            )
         </if>
-           order by create_time desc
+        order by create_time desc
     </select>
-
 
 
     <select id="selectHotMovieList" parameterType="Integer" resultMap="MovieResult">
@@ -140,49 +194,79 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectWebMovieList" parameterType="MovieVO" resultMap="MovieResult">
         <include refid="selectWebMovieVo"/>
         <where>
-             m.status = 0
-            <if test="title != null  and title != ''"> and m.title like concat('%', #{title}, '%')</if>
-            <if test="type != null  and type != ''"> and m.type = #{type}</if>
-            <if test="country != null  and country != ''"> and m.country = #{country}</if>
+            m.status = 0
+            <if test="title != null  and title != ''">and m.title like concat('%', #{title}, '%')</if>
+            <if test="type != null  and type != ''">and m.type = #{type}</if>
+            <if test="country != null  and country != ''">and m.country = #{country}</if>
             <if test="tagId != null  and tagId != ''">
                 and FIND_IN_SET(#{tagId},tag_id)
             </if>
-            <if test="description != null  and description != ''"> and m.description like concat('%', #{description}, '%')</if>
-            <if test="publishBy != null  and publishBy != ''"> and m.publish_by = #{publishBy}</if>
-            <if test="publishTime != null "> and m.publish_time = #{publishTime}</if>
-            <if test="openComment != null  and openComment != ''"> and m.open_comment = #{openComment}</if>
-            <if test="openDownload != null  and openDownload != ''"> and m.open_download = #{openDownload}</if>
-            <if test="price != null "> and m.price = #{price}</if>
-            <if test="rate != null "> and m.rate = #{rate}</if>
-            <if test="categoryId != null "> and m.category_id = #{categoryId}</if>
-            <if test="categoryName != null "> and m.category_name like concat('%', #{categoryName}, '%')</if>
-            <if test="qrcodePath != null "> and m.qrcode_path = #{qrcodePath}</if>
-            <if test="openPassword != null "> and m.open_password = #{openPassword}</if>
-            <if test="password != null "> and m.password = #{password}</if>
-            <if test="summary != null  and summary != ''"> and m.summary like concat('%', #{summary}, '%')</if>
-            <if test="en != null  and en != '' "> and m.en  like concat('%', #{en}, '%')</if>
-            <if test="letter != null  and letter != '' "> and m.letter  like concat('%', #{letter}, '%')</if>
-            <if test="lang != null  and lang != '' "> and m.lang = #{lang} </if>
+            <if test="description != null  and description != ''">and m.description like concat('%', #{description},
+                '%')
+            </if>
+            <if test="publishBy != null  and publishBy != ''">and m.publish_by = #{publishBy}</if>
+            <if test="publishTime != null ">and m.publish_time = #{publishTime}</if>
+            <if test="openComment != null  and openComment != ''">and m.open_comment = #{openComment}</if>
+            <if test="openDownload != null  and openDownload != ''">and m.open_download = #{openDownload}</if>
+            <if test="price != null ">and m.price = #{price}</if>
+            <if test="rate != null ">and m.rate = #{rate}</if>
+            <if test="categoryId != null ">and m.category_id = #{categoryId}</if>
+            <if test="categoryName != null ">and m.category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="qrcodePath != null ">and m.qrcode_path = #{qrcodePath}</if>
+            <if test="openPassword != null ">and m.open_password = #{openPassword}</if>
+            <if test="password != null ">and m.password = #{password}</if>
+            <if test="summary != null  and summary != ''">and m.summary like concat('%', #{summary}, '%')</if>
+            <if test="en != null  and en != '' ">and m.en like concat('%', #{en}, '%')</if>
+            <if test="letter != null  and letter != '' ">and m.letter like concat('%', #{letter}, '%')</if>
+            <if test="lang != null  and lang != '' ">and m.lang = #{lang}</if>
 
             <if test="tagIdList != null and tagIdList.size() > 0 ">
                 <foreach item="tagId" collection="tagIdList" open="and (" separator="or" close=")">
                     FIND_IN_SET(#{tagId},tag_id)
                 </foreach>
             </if>
-            <if test="publishYear != null and publishYear != '' "> and date_format(m.publish_time,'%Y') =  #{publishYear}</if>
+            <if test="publishYear != null and publishYear != '' ">and date_format(m.publish_time,'%Y') =
+                #{publishYear}
+            </if>
         </where>
     </select>
 
 
-
     <select id="selectListByActorId" parameterType="Long" resultMap="MovieResult">
-       select DISTINCT m.movie_id, m.images, m.title, m.type, m.country, m.tag_id, m.description, m.publish_by, m.publish_time,
-        m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.del_flag, m.remark,
-        m.open_comment, m.open_download, m.price, m.rate,
-        m.category_id,m.category_name,m.qrcode_path,m.open_password,m.stills,m.total_video_length,
-        m.summary, m.en, m.lang, m.letter
-        from wm_movie m, wm_movie_actor ma
-        where m.movie_id = ma.movie_id and ma.actor_id = #{actorId}
+        select DISTINCT m.movie_id,
+                        m.images,
+                        m.title,
+                        m.type,
+                        m.country,
+                        m.tag_id,
+                        m.description,
+                        m.publish_by,
+                        m.publish_time,
+                        m.status,
+                        m.create_by,
+                        m.create_time,
+                        m.update_by,
+                        m.update_time,
+                        m.del_flag,
+                        m.remark,
+                        m.open_comment,
+                        m.open_download,
+                        m.price,
+                        m.rate,
+                        m.category_id,
+                        m.category_name,
+                        m.qrcode_path,
+                        m.open_password,
+                        m.stills,
+                        m.total_video_length,
+                        m.summary,
+                        m.en,
+                        m.lang,
+                        m.letter
+        from wm_movie m,
+             wm_movie_actor ma
+        where m.movie_id = ma.movie_id
+          and ma.actor_id = #{actorId}
         order by m.create_time desc
     </select>
 
@@ -190,35 +274,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectMovieList" parameterType="MovieVO" resultMap="MovieResult">
         <include refid="selectMovieVo"/>
         <where>
-            <if test="title != null  and title != ''"> and m.title like concat('%', #{title}, '%')</if>
-            <if test="type != null  and type != ''"> and m.type = #{type}</if>
-            <if test="country != null  and country != ''"> and m.country = #{country}</if>
+            <if test="title != null  and title != ''">and m.title like concat('%', #{title}, '%')</if>
+            <if test="type != null  and type != ''">and m.type = #{type}</if>
+            <if test="country != null  and country != ''">and m.country = #{country}</if>
             <if test="tagId != null  and tagId != ''">
-               and FIND_IN_SET(#{tagId},tag_id)
+                and FIND_IN_SET(#{tagId},tag_id)
             </if>
-            <if test="description != null  and description != ''"> and m.description like concat('%', #{description}, '%')</if>
-            <if test="publishBy != null  and publishBy != ''"> and m.publish_by = #{publishBy}</if>
-            <if test="publishTime != null "> and m.publish_time = #{publishTime}</if>
-            <if test="status != null  and status != ''"> and m.status = #{status}</if>
-            <if test="openComment != null  and openComment != ''"> and m.open_comment = #{openComment}</if>
-            <if test="openDownload != null  and openDownload != ''"> and m.open_download = #{openDownload}</if>
-            <if test="price != null "> and m.price = #{price}</if>
-            <if test="rate != null "> and m.rate = #{rate}</if>
-            <if test="categoryId != null "> and m.category_id = #{categoryId}</if>
-            <if test="categoryName != null "> and m.category_name like concat('%', #{categoryName}, '%')</if>
-            <if test="qrcodePath != null "> and m.qrcode_path = #{qrcodePath}</if>
-            <if test="openPassword != null "> and m.open_password = #{openPassword}</if>
-            <if test="password != null "> and m.password = #{password}</if>
+            <if test="description != null  and description != ''">and m.description like concat('%', #{description},
+                '%')
+            </if>
+            <if test="publishBy != null  and publishBy != ''">and m.publish_by = #{publishBy}</if>
+            <if test="publishTime != null ">and m.publish_time = #{publishTime}</if>
+            <if test="status != null  and status != ''">and m.status = #{status}</if>
+            <if test="openComment != null  and openComment != ''">and m.open_comment = #{openComment}</if>
+            <if test="openDownload != null  and openDownload != ''">and m.open_download = #{openDownload}</if>
+            <if test="price != null ">and m.price = #{price}</if>
+            <if test="rate != null ">and m.rate = #{rate}</if>
+            <if test="categoryId != null ">and m.category_id = #{categoryId}</if>
+            <if test="categoryName != null ">and m.category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="qrcodePath != null ">and m.qrcode_path = #{qrcodePath}</if>
+            <if test="openPassword != null ">and m.open_password = #{openPassword}</if>
+            <if test="password != null ">and m.password = #{password}</if>
             <if test="tagIdList != null and tagIdList.size() > 0 ">
                 <foreach item="tagId" collection="tagIdList" open="and (" separator="or" close=")">
                     FIND_IN_SET(#{tagId},tag_id)
                 </foreach>
             </if>
-            <if test="publishYear != null and publishYear != '' "> and date_format(m.publish_time,'%Y') =  #{publishYear}</if>
-            <if test="summary != null  and summary != ''"> and m.summary like concat('%', #{summary}, '%')</if>
-            <if test="en != null  and en != '' "> and m.en  like concat('%', #{en}, '%')</if>
-            <if test="letter != null  and letter != '' "> and m.letter like concat('%', #{letter}, '%')</if>
-            <if test="lang != null  and lang != '' "> and m.lang = #{lang} </if>
+            <if test="publishYear != null and publishYear != '' ">and date_format(m.publish_time,'%Y') =
+                #{publishYear}
+            </if>
+            <if test="summary != null  and summary != ''">and m.summary like concat('%', #{summary}, '%')</if>
+            <if test="en != null  and en != '' ">and m.en like concat('%', #{en}, '%')</if>
+            <if test="letter != null  and letter != '' ">and m.letter like concat('%', #{letter}, '%')</if>
+            <if test="lang != null  and lang != '' ">and m.lang = #{lang}</if>
         </where>
     </select>
 </mapper>

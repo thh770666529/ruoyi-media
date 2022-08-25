@@ -12,8 +12,7 @@ import com.ruoyi.media.domain.Movie;
  * @author thh
  * @date 2021-05-16
  */
-public interface IActorService extends IService<Actor>
-{
+public interface IActorService extends IService<Actor> {
 
     /**
      * 查询演员列表
@@ -25,6 +24,7 @@ public interface IActorService extends IService<Actor>
 
     /**
      * 查询热门演员
+     *
      * @param top
      * @return
      */
@@ -32,8 +32,9 @@ public interface IActorService extends IService<Actor>
 
     /**
      * 查询没有被选择的数据
+     *
      * @param ids
      * @return
      */
-    List<Actor> selectNotSelectedList(Actor actor,Long[] ids);
+    List<Actor> selectNotSelectedList(Actor actor, Long[] ids);
 }

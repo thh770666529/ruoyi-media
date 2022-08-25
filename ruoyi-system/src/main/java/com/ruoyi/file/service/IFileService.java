@@ -14,8 +14,4 @@ public interface IFileService extends IService<FileBean> {
     void decreaseFilePointCount(Long fileId);
 
 
-
-
-
-
 }

@@ -15,8 +15,7 @@ import com.ruoyi.media.vo.UploadVideoVO;
  * @author thh
  * @date 2021-05-16
  */
-public interface IVideoService extends IService<Video>
-{
+public interface IVideoService extends IService<Video> {
 
     public List<Video> selectVideoList(Video video);
 
@@ -25,7 +24,8 @@ public interface IVideoService extends IService<Video>
 
     /**
      * 通过网盘上传视频
-     *@param netWorkDiskVO
+     *
+     * @param netWorkDiskVO
      * @return
      */
     public UploadVideoVO uploadVideoByNetWorkDisk(NetWorkDiskVO netWorkDiskVO);

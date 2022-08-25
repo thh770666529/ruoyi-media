@@ -15,6 +15,7 @@ import java.io.File;
 public class FastDFSDeleter extends Deleter {
     @Autowired
     private FastFileStorageClient fastFileStorageClient;
+
     @Override
     public void delete(DeleteFile deleteFile) {
         fastFileStorageClient.deleteFile(deleteFile.getFileUrl().replace("M00", "group1"));

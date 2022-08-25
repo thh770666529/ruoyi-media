@@ -205,9 +205,9 @@ public class AliyunOSSUploader extends Uploader {
         PartListing partListing = getClient(uploadFile).listParts(listPartsRequest);
 
         for (PartSummary part : partListing.getParts()) {
-            log.info("分片号："+part.getPartNumber() + ", 分片数据大小: "+
-                    part.getSize() + "，分片的ETag:"+part.getETag()
-                    + "， 分片最后修改时间："+ part.getLastModified());
+            log.info("分片号：" + part.getPartNumber() + ", 分片数据大小: " +
+                    part.getSize() + "，分片的ETag:" + part.getETag()
+                    + "， 分片最后修改时间：" + part.getLastModified());
             // 获取分片号。
             part.getPartNumber();
             // 获取分片数据大小。

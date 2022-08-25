@@ -19,54 +19,75 @@ import java.util.Map;
  */
 @Data
 @TableName("website_collect")
-public class Collect
-{
+public class Collect {
     private static final long serialVersionUID = 1L;
 
-    /** 主键 */
+    /**
+     * 主键
+     */
     @TableId(type = IdType.AUTO)
     private Long collectId;
 
-    /** 用户 */
+    /**
+     * 用户
+     */
     @Excel(name = "用户")
     private String userId;
 
-    /** 目标ID */
+    /**
+     * 目标ID
+     */
     @Excel(name = "目标ID")
     private String targetId;
 
-    /** 状态 */
+    /**
+     * 状态
+     */
     @Excel(name = "状态")
     private String status;
 
-    /** 表名称 */
+    /**
+     * 表名称
+     */
     @Excel(name = "表名称")
     private String tableName;
 
 
-    /** 搜索值 */
+    /**
+     * 搜索值
+     */
     @TableField(exist = false)
     private String searchValue;
 
-    /** 创建者 */
+    /**
+     * 创建者
+     */
     @TableField(fill = FieldFill.INSERT)
     private String createBy;
 
-    /** 创建时间 */
+    /**
+     * 创建时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
-    /** 更新者 */
+    /**
+     * 更新者
+     */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
-    /** 更新时间 */
+    /**
+     * 更新时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
-    /** 请求参数 */
+    /**
+     * 请求参数
+     */
     @TableField(exist = false)
     private Map<String, Object> params;
 }

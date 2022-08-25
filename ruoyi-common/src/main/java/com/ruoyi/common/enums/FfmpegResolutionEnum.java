@@ -6,13 +6,13 @@ package com.ruoyi.common.enums;
  * @Author thh
  * @Date 12:11 2021/07/10
  **/
-public enum  FfmpegResolutionEnum {
+public enum FfmpegResolutionEnum {
 
-    RESOLUTION_1080P("1920x1080",1920,1080,2600,2600,25,128,2,48),
+    RESOLUTION_1080P("1920x1080", 1920, 1080, 2600, 2600, 25, 128, 2, 48),
 
-    RESOLUTION_720P("1280x720",1280,720,1800,1800,25,64,2,48),
+    RESOLUTION_720P("1280x720", 1280, 720, 1800, 1800, 25, 64, 2, 48),
 
-    RESOLUTION_360P("720x480",720,480,1500,1500,18,64,2,48);
+    RESOLUTION_360P("720x480", 720, 480, 1500, 1500, 18, 64, 2, 48);
 
     private final String code;
 

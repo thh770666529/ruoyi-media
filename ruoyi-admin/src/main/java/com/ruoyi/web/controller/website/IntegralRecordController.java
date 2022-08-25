@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.website;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +24,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 积分记录Controller
- * 
+ *
  * @author thh
  * @date 2022-05-13
  */
 @RestController
 @RequestMapping("/website/integralRecord")
-public class IntegralRecordController extends BaseController
-{
+public class IntegralRecordController extends BaseController {
     @Autowired
     private IIntegralRecordService integralRecordService;
 
@@ -39,8 +39,7 @@ public class IntegralRecordController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:integralRecord:list')")
     @GetMapping("/list")
-    public TableDataInfo list(IntegralRecord integralRecord)
-    {
+    public TableDataInfo list(IntegralRecord integralRecord) {
         startPage();
         List<IntegralRecord> list = integralRecordService.selectIntegralRecordList(integralRecord);
         return getDataTable(list);
@@ -52,8 +51,7 @@ public class IntegralRecordController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:integralRecord:export')")
     @Log(title = "积分记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, IntegralRecord integralRecord)
-    {
+    public void export(HttpServletResponse response, IntegralRecord integralRecord) {
         List<IntegralRecord> list = integralRecordService.selectIntegralRecordList(integralRecord);
         ExcelUtil<IntegralRecord> util = new ExcelUtil<IntegralRecord>(IntegralRecord.class);
         util.exportExcel(response, list, "积分记录数据");
@@ -64,8 +62,7 @@ public class IntegralRecordController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:integralRecord:query')")
     @GetMapping(value = "/{integralRecordId}")
-    public AjaxResult getInfo(@PathVariable("integralRecordId") Long integralRecordId)
-    {
+    public AjaxResult getInfo(@PathVariable("integralRecordId") Long integralRecordId) {
         return AjaxResult.success(integralRecordService.selectIntegralRecordByIntegralRecordId(integralRecordId));
     }
 
@@ -75,8 +72,7 @@ public class IntegralRecordController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:integralRecord:add')")
     @Log(title = "积分记录", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody IntegralRecord integralRecord)
-    {
+    public AjaxResult add(@RequestBody IntegralRecord integralRecord) {
         return toAjax(integralRecordService.insertIntegralRecord(integralRecord));
     }
 
@@ -86,8 +82,7 @@ public class IntegralRecordController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:integralRecord:edit')")
     @Log(title = "积分记录", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody IntegralRecord integralRecord)
-    {
+    public AjaxResult edit(@RequestBody IntegralRecord integralRecord) {
         return toAjax(integralRecordService.updateIntegralRecord(integralRecord));
     }
 
@@ -96,9 +91,8 @@ public class IntegralRecordController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:integralRecord:remove')")
     @Log(title = "积分记录", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{integralRecordIds}")
-    public AjaxResult remove(@PathVariable Long[] integralRecordIds)
-    {
+    @DeleteMapping("/{integralRecordIds}")
+    public AjaxResult remove(@PathVariable Long[] integralRecordIds) {
         return toAjax(integralRecordService.deleteIntegralRecordByIntegralRecordIds(integralRecordIds));
     }
 }

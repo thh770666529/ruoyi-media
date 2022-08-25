@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -24,7 +25,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         log.info("start insert fill ....");
         this.strictInsertFill(metaObject, "createTime", () -> DateUtils.getNowDate(), Date.class);
         this.strictInsertFill(metaObject, "updateTime", () -> DateUtils.getNowDate(), Date.class);
-        if(loginUser != null){
+        if (loginUser != null) {
             this.strictInsertFill(metaObject, "createBy", () -> loginUser.getUserId() + "", String.class);
             this.strictInsertFill(metaObject, "updateBy", () -> loginUser.getUserId() + "", String.class);
         }
@@ -34,13 +35,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     private LoginUser getLoginUser() {
         LoginUser loginUser = null;
         Authentication authentication = getAuthentication();
-        if (authentication != null){
-            try
-            {
+        if (authentication != null) {
+            try {
                 loginUser = (LoginUser) authentication.getPrincipal();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
 
             }
         }
@@ -52,7 +50,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         log.info("start update fill ....");
         LoginUser loginUser = this.getLoginUser();
         this.strictUpdateFill(metaObject, "updateTime", () -> DateUtils.getNowDate(), Date.class);
-        if(loginUser != null){
+        if (loginUser != null) {
             this.strictUpdateFill(metaObject, "updateBy", () -> loginUser.getUserId() + "", String.class);
         }
         log.info("end update fill ....");

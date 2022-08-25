@@ -14,8 +14,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-05-16
  */
 @Repository
-public interface ActorMapper extends BaseMapper<Actor>
-{
+public interface ActorMapper extends BaseMapper<Actor> {
     /**
      * 查询演员
      *
@@ -66,6 +65,7 @@ public interface ActorMapper extends BaseMapper<Actor>
 
     /**
      * 查询热门演员
+     *
      * @param top
      * @return
      */
@@ -78,5 +78,5 @@ public interface ActorMapper extends BaseMapper<Actor>
      * @param actorIds 演员ID
      * @return 结果
      */
-    List<Actor> selectNotSelectedListByIds(@Param("actor") Actor actor,@Param("actorIds") Long[] actorIds);
+    List<Actor> selectNotSelectedListByIds(@Param("actor") Actor actor, @Param("actorIds") Long[] actorIds);
 }

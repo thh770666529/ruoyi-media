@@ -16,6 +16,4 @@ public class ShareFileDTO {
     private String remarks;
 
 
-
-
 }

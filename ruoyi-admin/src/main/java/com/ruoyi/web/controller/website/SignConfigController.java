@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.website;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/website/signConfig")
-public class SignConfigController extends BaseController
-{
+public class SignConfigController extends BaseController {
     @Autowired
     private ISignConfigService signConfigService;
 
@@ -40,8 +40,7 @@ public class SignConfigController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:signConfig:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SignConfig signConfig)
-    {
+    public TableDataInfo list(SignConfig signConfig) {
         startPage();
         List<SignConfig> list = signConfigService.selectSignConfigList(signConfig);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class SignConfigController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:signConfig:export')")
     @Log(title = "签到配置", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SignConfig signConfig)
-    {
+    public void export(HttpServletResponse response, SignConfig signConfig) {
         List<SignConfig> list = signConfigService.selectSignConfigList(signConfig);
         ExcelUtil<SignConfig> util = new ExcelUtil<SignConfig>(SignConfig.class);
         util.exportExcel(response, list, "签到配置数据");
@@ -65,8 +63,7 @@ public class SignConfigController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:signConfig:query')")
     @GetMapping(value = "/{signConfigId}")
-    public AjaxResult getInfo(@PathVariable("signConfigId") Long signConfigId)
-    {
+    public AjaxResult getInfo(@PathVariable("signConfigId") Long signConfigId) {
         return AjaxResult.success(signConfigService.selectSignConfigBySignConfigId(signConfigId));
     }
 
@@ -76,8 +73,7 @@ public class SignConfigController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:signConfig:add')")
     @Log(title = "签到配置", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody SignConfig signConfig)
-    {
+    public AjaxResult add(@RequestBody SignConfig signConfig) {
         return toAjax(signConfigService.insertSignConfig(signConfig));
     }
 
@@ -87,8 +83,7 @@ public class SignConfigController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:signConfig:edit')")
     @Log(title = "签到配置", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody SignConfig signConfig)
-    {
+    public AjaxResult edit(@RequestBody SignConfig signConfig) {
         return toAjax(signConfigService.updateSignConfig(signConfig));
     }
 
@@ -97,9 +92,8 @@ public class SignConfigController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:signConfig:remove')")
     @Log(title = "签到配置", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{signConfigIds}")
-    public AjaxResult remove(@PathVariable Long[] signConfigIds)
-    {
+    @DeleteMapping("/{signConfigIds}")
+    public AjaxResult remove(@PathVariable Long[] signConfigIds) {
         return toAjax(signConfigService.deleteSignConfigBySignConfigIds(signConfigIds));
     }
 }

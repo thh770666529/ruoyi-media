@@ -76,14 +76,15 @@ public class FileDealComp {
 
     /**
      * 还原父文件路径
-     *
+     * <p>
      * 回收站文件还原操作会将文件恢复到原来的路径下,当还原文件的时候，如果父目录已经不存在了，则需要把父母录给还原
+     *
      * @param filePath
      * @param sessionUserId
      */
     public void restoreParentFilePath(String filePath, Long sessionUserId) {
         String parentFilePath = PathUtil.getParentPath(filePath);
-        while(parentFilePath.contains("/")) {
+        while (parentFilePath.contains("/")) {
             String fileName = parentFilePath.substring(parentFilePath.lastIndexOf("/") + 1);
             parentFilePath = PathUtil.getParentPath(parentFilePath);
 
@@ -111,8 +112,9 @@ public class FileDealComp {
 
     /**
      * 删除重复的子目录文件
-     *
+     * <p>
      * 当还原目录的时候，如果其子目录在文件系统中已存在，则还原之后进行去重操作
+     *
      * @param filePath
      * @param sessionUserId
      */
@@ -134,7 +136,7 @@ public class FileDealComp {
                     .eq(UserFile::getFileName, userFile.getFileName())
                     .eq(UserFile::getDeleteFlag, "0");
             List<UserFile> userFiles = userFileMapper.selectList(lambdaQueryWrapper1);
-            for (int i = 0; i < userFiles.size() - 1; i ++) {
+            for (int i = 0; i < userFiles.size() - 1; i++) {
                 userFileMapper.deleteById(userFiles.get(i).getUserFileId());
             }
         }
@@ -142,23 +144,24 @@ public class FileDealComp {
 
     /**
      * 组织一个树目录节点，文件移动的时候使用
+     *
      * @param treeNode
      * @param id
      * @param filePath
      * @param nodeNameQueue
      * @return
      */
-    public TreeNode insertTreeNode(TreeNode treeNode, long id, String filePath, Queue<String> nodeNameQueue){
+    public TreeNode insertTreeNode(TreeNode treeNode, long id, String filePath, Queue<String> nodeNameQueue) {
 
         List<TreeNode> childrenTreeNodes = treeNode.getChildren();
         String currentNodeName = nodeNameQueue.peek();
-        if (currentNodeName == null){
+        if (currentNodeName == null) {
             return treeNode;
         }
 
         filePath = filePath + currentNodeName + "/";
 
-        if (!isExistPath(childrenTreeNodes, currentNodeName)){  //1、判断有没有该子节点，如果没有则插入
+        if (!isExistPath(childrenTreeNodes, currentNodeName)) {  //1、判断有没有该子节点，如果没有则插入
             //插入
             TreeNode resultTreeNode = new TreeNode();
 
@@ -168,7 +171,7 @@ public class FileDealComp {
 
             childrenTreeNodes.add(resultTreeNode);
 
-        }else{  //2、如果有，则跳过
+        } else {  //2、如果有，则跳过
             nodeNameQueue.poll();
         }
 
@@ -176,7 +179,7 @@ public class FileDealComp {
             for (int i = 0; i < childrenTreeNodes.size(); i++) {
 
                 TreeNode childrenTreeNode = childrenTreeNodes.get(i);
-                if (currentNodeName.equals(childrenTreeNode.getLabel())){
+                if (currentNodeName.equals(childrenTreeNode.getLabel())) {
                     childrenTreeNode = insertTreeNode(childrenTreeNode, id * 10, filePath, nodeNameQueue);
                     childrenTreeNodes.remove(i);
                     childrenTreeNodes.add(childrenTreeNode);
@@ -184,7 +187,7 @@ public class FileDealComp {
                 }
 
             }
-        }else{
+        } else {
             treeNode.setChildren(childrenTreeNodes);
         }
 
@@ -194,20 +197,21 @@ public class FileDealComp {
 
     /**
      * 判断该路径在树节点中是否已经存在
+     *
      * @param childrenTreeNodes
      * @param path
      * @return
      */
-    public boolean isExistPath(List<TreeNode> childrenTreeNodes, String path){
+    public boolean isExistPath(List<TreeNode> childrenTreeNodes, String path) {
         boolean isExistPath = false;
 
         try {
-            for (int i = 0; i < childrenTreeNodes.size(); i++){
-                if (path.equals(childrenTreeNodes.get(i).getLabel())){
+            for (int i = 0; i < childrenTreeNodes.size(); i++) {
+                if (path.equals(childrenTreeNodes.get(i).getLabel())) {
                     isExistPath = true;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

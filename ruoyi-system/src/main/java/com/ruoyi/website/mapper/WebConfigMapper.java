@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
  * @date 2021-06-08
  */
 @Repository
-public interface WebConfigMapper extends BaseMapper<WebConfig>
-{
+public interface WebConfigMapper extends BaseMapper<WebConfig> {
 
 }

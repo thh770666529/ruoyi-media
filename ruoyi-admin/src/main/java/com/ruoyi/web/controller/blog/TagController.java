@@ -23,8 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/blog/tag")
-public class TagController extends BaseController
-{
+public class TagController extends BaseController {
     @Autowired
     private ITagService tagService;
 
@@ -33,8 +32,7 @@ public class TagController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:tag:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Tag tag)
-    {
+    public TableDataInfo list(Tag tag) {
         startPage();
         List<Tag> list = tagService.selectTagList(tag);
         return getDataTable(list);
@@ -46,8 +44,7 @@ public class TagController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:tag:export')")
     @Log(title = "文章标签", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Tag tag)
-    {
+    public void export(HttpServletResponse response, Tag tag) {
         List<Tag> list = tagService.selectTagList(tag);
         ExcelUtil<Tag> util = new ExcelUtil<Tag>(Tag.class);
         util.exportExcel(response, list, "文章标签数据");
@@ -58,8 +55,7 @@ public class TagController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:tag:query')")
     @GetMapping(value = "/{tagId}")
-    public AjaxResult getInfo(@PathVariable("tagId") Long tagId)
-    {
+    public AjaxResult getInfo(@PathVariable("tagId") Long tagId) {
         return AjaxResult.success(tagService.selectTagByTagId(tagId));
     }
 
@@ -69,8 +65,7 @@ public class TagController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:tag:add')")
     @Log(title = "文章标签", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Tag tag)
-    {
+    public AjaxResult add(@RequestBody Tag tag) {
         return toAjax(tagService.insertTag(tag));
     }
 
@@ -80,8 +75,7 @@ public class TagController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:tag:edit')")
     @Log(title = "文章标签", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Tag tag)
-    {
+    public AjaxResult edit(@RequestBody Tag tag) {
         return toAjax(tagService.updateTag(tag));
     }
 
@@ -90,9 +84,8 @@ public class TagController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:tag:remove')")
     @Log(title = "文章标签", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{tagIds}")
-    public AjaxResult remove(@PathVariable Long[] tagIds)
-    {
+    @DeleteMapping("/{tagIds}")
+    public AjaxResult remove(@PathVariable Long[] tagIds) {
         return toAjax(tagService.deleteTagByTagIds(tagIds));
     }
 }

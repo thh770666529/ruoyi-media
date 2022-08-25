@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.website;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/website/creditsFlow")
-public class CreditsFlowController extends BaseController
-{
+public class CreditsFlowController extends BaseController {
     @Autowired
     private ICreditsFlowService creditsFlowService;
 
@@ -40,8 +40,7 @@ public class CreditsFlowController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:creditsFlow:list')")
     @GetMapping("/list")
-    public TableDataInfo list(CreditsFlow creditsFlow)
-    {
+    public TableDataInfo list(CreditsFlow creditsFlow) {
         startPage();
         List<CreditsFlow> list = creditsFlowService.selectCreditsFlowList(creditsFlow);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class CreditsFlowController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:creditsFlow:export')")
     @Log(title = "积分流水", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, CreditsFlow creditsFlow)
-    {
+    public void export(HttpServletResponse response, CreditsFlow creditsFlow) {
         List<CreditsFlow> list = creditsFlowService.selectCreditsFlowList(creditsFlow);
         ExcelUtil<CreditsFlow> util = new ExcelUtil<CreditsFlow>(CreditsFlow.class);
         util.exportExcel(response, list, "积分流水数据");
@@ -65,8 +63,7 @@ public class CreditsFlowController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:creditsFlow:query')")
     @GetMapping(value = "/{creditsId}")
-    public AjaxResult getInfo(@PathVariable("creditsId") Long creditsId)
-    {
+    public AjaxResult getInfo(@PathVariable("creditsId") Long creditsId) {
         return AjaxResult.success(creditsFlowService.selectCreditsFlowByCreditsId(creditsId));
     }
 
@@ -76,8 +73,7 @@ public class CreditsFlowController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:creditsFlow:add')")
     @Log(title = "积分流水", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody CreditsFlow creditsFlow)
-    {
+    public AjaxResult add(@RequestBody CreditsFlow creditsFlow) {
         return toAjax(creditsFlowService.insertCreditsFlow(creditsFlow));
     }
 
@@ -87,8 +83,7 @@ public class CreditsFlowController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:creditsFlow:edit')")
     @Log(title = "积分流水", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody CreditsFlow creditsFlow)
-    {
+    public AjaxResult edit(@RequestBody CreditsFlow creditsFlow) {
         return toAjax(creditsFlowService.updateCreditsFlow(creditsFlow));
     }
 
@@ -97,9 +92,8 @@ public class CreditsFlowController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:creditsFlow:remove')")
     @Log(title = "积分流水", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{creditsIds}")
-    public AjaxResult remove(@PathVariable Long[] creditsIds)
-    {
+    @DeleteMapping("/{creditsIds}")
+    public AjaxResult remove(@PathVariable Long[] creditsIds) {
         return toAjax(creditsFlowService.deleteCreditsFlowByCreditsIds(creditsIds));
     }
 }

@@ -12,8 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author thh
  * @date 2021-08-28
  */
-public interface IArticleService extends IService<Article>
-{
+public interface IArticleService extends IService<Article> {
     /**
      * 查询博客文章
      *
@@ -72,6 +71,7 @@ public interface IArticleService extends IService<Article>
 
     /**
      * 获取热门博客文章列表
+     *
      * @param top
      * @return
      */
@@ -79,12 +79,14 @@ public interface IArticleService extends IService<Article>
 
     /**
      * 获取最新的博客文章列表
+     *
      * @return
      */
     List<Article> selectNewArticleList();
 
     /**
      * 门户搜索博客文章列表
+     *
      * @param article 搜索对象
      * @return
      */
@@ -92,19 +94,22 @@ public interface IArticleService extends IService<Article>
 
     /**
      * 门户查询文章
+     *
      * @param articleId
      * @return
      */
     Article selectWebArticleByArticleId(Long articleId);
 
     /**
-     *  支持文章
+     * 支持文章
+     *
      * @param articleId
      */
     void thumbArticleById(Long articleId);
 
     /**
      * 获取相同类型的文章列表
+     *
      * @param articleId
      */
     List<Article> getSameArticleList(Long articleId);

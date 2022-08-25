@@ -19,6 +19,7 @@ import java.io.OutputStream;
 public class FastDFSDownloader extends Downloader {
     @Autowired
     private FastFileStorageClient fastFileStorageClient;
+
     @Override
     public void download(HttpServletResponse httpServletResponse, DownloadFile downloadFile) {
         String group = downloadFile.getFileUrl().substring(0, downloadFile.getFileUrl().indexOf("/"));
@@ -51,13 +52,13 @@ public class FastDFSDownloader extends Downloader {
                             downloadByteArray);
                     outputStream.write(bytes);
                     fileOffset += bufferSize;
-                    int percent = (int)((double) fileOffset / (double) fileSize * 100);
+                    int percent = (int) ((double) fileOffset / (double) fileSize * 100);
                     log.debug("正在下载文件:{}, 进度：{}", downloadFile.getFileUrl(), percent + "%");
                 }
                 bytes = fastFileStorageClient.downloadFile(group,
                         path,
                         fileOffset,
-                        downloadFile.getFileSize() -  fileOffset,
+                        downloadFile.getFileSize() - fileOffset,
                         downloadByteArray);
                 outputStream.write(bytes);
                 log.debug("正在下载文件:{}, 进度：{}", downloadFile.getFileUrl(), 100 + "%");

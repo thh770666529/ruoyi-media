@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.website.mapper.SignRecordMapper">
 
     <resultMap type="SignRecord" id="SignRecordResult">
-        <result property="signRecordId"    column="sign_record_id"    />
-        <result property="userId"    column="user_id"    />
-        <result property="signReward"    column="sign_reward"    />
-        <result property="signDate"    column="sign_date"    />
-        <result property="signType"    column="sign_type"    />
-        <result property="createTime"    column="create_time"    />
+        <result property="signRecordId" column="sign_record_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="signReward" column="sign_reward"/>
+        <result property="signDate" column="sign_date"/>
+        <result property="signType" column="sign_type"/>
+        <result property="createTime" column="create_time"/>
     </resultMap>
 
     <sql id="selectSignRecordVo">
-        select sign_record_id, user_id, sign_reward, sign_date, sign_type, create_time from website_sign_record
+        select sign_record_id, user_id, sign_reward, sign_date, sign_type, create_time
+        from website_sign_record
     </sql>
 
     <select id="selectSignRecordList" parameterType="SignRecord" resultMap="SignRecordResult">
         <include refid="selectSignRecordVo"/>
         <where>
-            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
-            <if test="signReward != null  and signReward != ''"> and sign_reward like concat('%', #{signReward}, '%')</if>
-            <if test="params.beginSignTime != null and params.beginSignTime != '' and params.endSignTime != null and params.endSignTime != ''"> and sign_date between #{params.beginSignTime} and #{params.endSignTime}</if>
-            <if test="signType != null "> and sign_type = #{signType}</if>
+            <if test="userId != null  and userId != ''">and user_id = #{userId}</if>
+            <if test="signReward != null  and signReward != ''">and sign_reward like concat('%', #{signReward}, '%')
+            </if>
+            <if test="params.beginSignTime != null and params.beginSignTime != '' and params.endSignTime != null and params.endSignTime != ''">
+                and sign_date between #{params.beginSignTime} and #{params.endSignTime}
+            </if>
+            <if test="signType != null ">and sign_type = #{signType}</if>
         </where>
     </select>
 
@@ -41,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="signDate != null">sign_date,</if>
             <if test="signType != null">sign_type,</if>
             <if test="createTime != null">create_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="signRecordId != null">#{signRecordId},</if>
             <if test="userId != null">#{userId},</if>
@@ -49,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="signDate != null">#{signDate},</if>
             <if test="signType != null">#{signType},</if>
             <if test="createTime != null">#{createTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSignRecord" parameterType="SignRecord">
@@ -65,7 +69,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteSignRecordBySignRecordId" parameterType="Long">
-        delete from website_sign_record where sign_record_id = #{signRecordId}
+        delete
+        from website_sign_record
+        where sign_record_id = #{signRecordId}
     </delete>
 
     <delete id="deleteSignRecordBySignRecordIds" parameterType="String">
@@ -76,15 +82,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
 
-
     <select id="getMyNewSignRecord" parameterType="java.util.Map" resultType="java.util.Map" statementType="CALLABLE">
-		{call proc_sign_continue_times
-		(#{userId,mode=IN,jdbcType=VARCHAR},
-		 #{singinTodayFlag, mode=OUT, jdbcType=INTEGER},
-		 #{seriesDays, mode=OUT, jdbcType=INTEGER},
-		 #{continuityDays, mode=OUT,jdbcType=INTEGER},
-		 #{signDataUpdateTime, mode=OUT, jdbcType=DATE}
-		 )}
-	</select>
+        {call proc_sign_continue_times
+            (#{userId,mode=IN,jdbcType=VARCHAR},
+             #{singinTodayFlag, mode=OUT, jdbcType=INTEGER},
+             #{seriesDays, mode=OUT, jdbcType=INTEGER},
+             #{continuityDays, mode=OUT,jdbcType=INTEGER},
+             #{signDataUpdateTime, mode=OUT, jdbcType=DATE}
+            )}
+    </select>
 
 </mapper>

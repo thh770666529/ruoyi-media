@@ -123,7 +123,7 @@ public class SqlVersionService {
      * @return
      * @throws SQLException
      */
-    public void excuteSqlFile(Reader reader){
+    public void excuteSqlFile(Reader reader) {
         //获取一个连接
         Connection conn = null;
         try {

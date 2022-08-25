@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.media;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/media/category")
-public class MediaCategoryController extends BaseController
-{
+public class MediaCategoryController extends BaseController {
     @Autowired
     private IMediaCategoryService mediaCategoryService;
 
@@ -40,8 +40,7 @@ public class MediaCategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:category:list')")
     @GetMapping("/list")
-    public TableDataInfo list(MediaCategory mediaCategory)
-    {
+    public TableDataInfo list(MediaCategory mediaCategory) {
         startPage();
         List<MediaCategory> list = mediaCategoryService.selectMediaCategoryList(mediaCategory);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class MediaCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:category:export')")
     @Log(title = "电影分类", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, MediaCategory mediaCategory)
-    {
+    public void export(HttpServletResponse response, MediaCategory mediaCategory) {
         List<MediaCategory> list = mediaCategoryService.selectMediaCategoryList(mediaCategory);
         ExcelUtil<MediaCategory> util = new ExcelUtil<MediaCategory>(MediaCategory.class);
         util.exportExcel(response, list, "电影分类数据");
@@ -65,8 +63,7 @@ public class MediaCategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:category:query')")
     @GetMapping(value = "/{categoryId}")
-    public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId)
-    {
+    public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId) {
         return AjaxResult.success(mediaCategoryService.selectMediaCategoryByCategoryId(categoryId));
     }
 
@@ -76,8 +73,7 @@ public class MediaCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:category:add')")
     @Log(title = "电影分类", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody MediaCategory mediaCategory)
-    {
+    public AjaxResult add(@RequestBody MediaCategory mediaCategory) {
         return toAjax(mediaCategoryService.insertMediaCategory(mediaCategory));
     }
 
@@ -87,8 +83,7 @@ public class MediaCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:category:edit')")
     @Log(title = "电影分类", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody MediaCategory mediaCategory)
-    {
+    public AjaxResult edit(@RequestBody MediaCategory mediaCategory) {
         return toAjax(mediaCategoryService.updateMediaCategory(mediaCategory));
     }
 
@@ -97,9 +92,8 @@ public class MediaCategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:category:remove')")
     @Log(title = "电影分类", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{categoryIds}")
-    public AjaxResult remove(@PathVariable Long[] categoryIds)
-    {
+    @DeleteMapping("/{categoryIds}")
+    public AjaxResult remove(@PathVariable Long[] categoryIds) {
         return toAjax(mediaCategoryService.deleteMediaCategoryByCategoryIds(categoryIds));
     }
 }

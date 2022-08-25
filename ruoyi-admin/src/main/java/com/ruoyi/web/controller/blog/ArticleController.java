@@ -25,8 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/blog/article")
-public class ArticleController extends BaseController
-{
+public class ArticleController extends BaseController {
     @Autowired
     private IArticleService articleService;
 
@@ -35,8 +34,7 @@ public class ArticleController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:article:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Article article)
-    {
+    public TableDataInfo list(Article article) {
         startPage();
         List<Article> list = articleService.selectArticleList(article);
         return getDataTable(list);
@@ -48,8 +46,7 @@ public class ArticleController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:article:export')")
     @Log(title = "博客文章", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Article article)
-    {
+    public void export(HttpServletResponse response, Article article) {
         List<Article> list = articleService.selectArticleList(article);
         ExcelUtil<Article> util = new ExcelUtil<Article>(Article.class);
         util.exportExcel(response, list, "博客文章数据");
@@ -60,8 +57,7 @@ public class ArticleController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:article:query')")
     @GetMapping(value = "/{articleId}")
-    public AjaxResult getInfo(@PathVariable("articleId") Long articleId)
-    {
+    public AjaxResult getInfo(@PathVariable("articleId") Long articleId) {
         return AjaxResult.success(articleService.selectArticleByArticleId(articleId));
     }
 
@@ -71,8 +67,7 @@ public class ArticleController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:article:add')")
     @Log(title = "博客文章", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Article article)
-    {
+    public AjaxResult add(@RequestBody Article article) {
         return toAjax(articleService.insertArticle(article));
     }
 
@@ -82,8 +77,7 @@ public class ArticleController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:article:edit')")
     @Log(title = "博客文章", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Article article)
-    {
+    public AjaxResult edit(@RequestBody Article article) {
         return toAjax(articleService.updateArticle(article));
     }
 
@@ -92,9 +86,8 @@ public class ArticleController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:article:remove')")
     @Log(title = "博客文章", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{articleIds}")
-    public AjaxResult remove(@PathVariable Long[] articleIds)
-    {
+    @DeleteMapping("/{articleIds}")
+    public AjaxResult remove(@PathVariable Long[] articleIds) {
         return toAjax(articleService.deleteArticleByArticleIds(articleIds));
     }
 

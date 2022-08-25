@@ -42,14 +42,14 @@ public class AliyunOSSPreviewer extends Previewer {
         int thumbImageHeight = UFOAutoConfiguration.thumbImageHeight;
         int width = thumbImageWidth == 0 ? 150 : thumbImageWidth;
         int height = thumbImageHeight == 0 ? 150 : thumbImageHeight;
-        param.put("x-oss-process", "image/resize,m_fill,h_"+height+",w_"+width+"/rotate,0");
+        param.put("x-oss-process", "image/resize,m_fill,h_" + height + ",w_" + width + "/rotate,0");
         InputStream inputStream = null;
         try {
             URL url1 = new URL(url.toString());
             URI uri = new URI(url1.getProtocol(), url1.getUserInfo(), url1.getHost(), url1.getPort(), url1.getPath(), url1.getQuery(), url1.getRef());
             String urlStr = uri.toASCIIString();
 
-            inputStream = HttpUtils.doGet(urlStr , param);
+            inputStream = HttpUtils.doGet(urlStr, param);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {

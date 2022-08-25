@@ -19,6 +19,7 @@ import java.util.zip.ZipFile;
 @Slf4j
 public class FileOperation {
     private static Executor executor = Executors.newFixedThreadPool(20);
+
     /**
      * 创建文件
      *
@@ -207,7 +208,7 @@ public class FileOperation {
     /**
      * 文件解压缩
      *
-     * @param sourceFile        需要解压的文件
+     * @param sourceFile  需要解压的文件
      * @param destDirPath 目的路径
      * @return 解压目录列表
      */
@@ -323,8 +324,8 @@ public class FileOperation {
      *
      * @param sourceFile  需要解压的文件
      * @param destDirPath 目的路径
-     * @throws Exception 异常
      * @return 解压文件列表
+     * @throws Exception 异常
      */
     public static List<String> unrar(File sourceFile, String destDirPath) throws Exception {
         File destDir = new File(destDirPath);
@@ -419,11 +420,12 @@ public class FileOperation {
 
     /**
      * 保存数据
+     *
      * @param filePath 文件路径
      * @param fileName 文件名
-     * @param data 数据
+     * @param data     数据
      */
-    public static void saveDataToFile(String filePath, String fileName, String data){
+    public static void saveDataToFile(String filePath, String fileName, String data) {
         BufferedWriter writer = null;
 
         File dir = new File(filePath);
@@ -432,10 +434,10 @@ public class FileOperation {
             filePath = filePath + File.separator;
         }
 
-        File file = new File(filePath+ fileName);
+        File file = new File(filePath + fileName);
 
         //如果文件不存在，则新建一个
-        if(!file.exists()){
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -444,14 +446,14 @@ public class FileOperation {
         }
         //写入
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,false), "UTF-8"));
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), "UTF-8"));
             writer.write(data);
             log.info("文件写入成功！");
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
-                if(writer != null){
+                if (writer != null) {
                     writer.close();
                 }
             } catch (IOException e) {

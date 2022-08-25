@@ -14,8 +14,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-05-16
  */
 @Repository
-public interface VideoMapper extends BaseMapper<Video>
-{
+public interface VideoMapper extends BaseMapper<Video> {
     /**
      * 查询电影视频列表
      *
@@ -35,6 +34,7 @@ public interface VideoMapper extends BaseMapper<Video>
 
     /**
      * 根据电影Id删除视频
+     *
      * @param movieId
      * @return
      */

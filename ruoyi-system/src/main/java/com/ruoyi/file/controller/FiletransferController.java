@@ -131,7 +131,7 @@ public class FiletransferController extends BaseController {
 
     @Log(title = "下载文件", businessType = BusinessType.File)
     @GetMapping(value = "/downloadfile")
-    public void downloadFile(HttpServletResponse httpServletResponse, DownloadFileDTO downloadFileDTO,  String token) {
+    public void downloadFile(HttpServletResponse httpServletResponse, DownloadFileDTO downloadFileDTO, String token) {
         httpServletResponse.setContentType("application/force-download");// 设置强制下载不打开
         UserFile userFile = userFileService.getById(downloadFileDTO.getUserFileId());
         String fileName = "";
@@ -150,21 +150,21 @@ public class FiletransferController extends BaseController {
         filetransferService.downloadFile(httpServletResponse, downloadFileDTO);
     }
 
-    @Log(title="预览文件", businessType = BusinessType.File)
+    @Log(title = "预览文件", businessType = BusinessType.File)
     @GetMapping("/preview")
-    public void preview(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,  PreviewDTO previewDTO){
+    public void preview(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, PreviewDTO previewDTO) {
 
         UserFile userFile = userFileService.getById(previewDTO.getUserFileId());
         String token = previewDTO.getToken();
-        if ("undefined".equals(previewDTO.getShareBatchNum())  || StringUtils.isEmpty(previewDTO.getShareBatchNum())) {
+        if ("undefined".equals(previewDTO.getShareBatchNum()) || StringUtils.isEmpty(previewDTO.getShareBatchNum())) {
             LoginUser loginUser = tokenUtil.getLoginUser(token);
             if (loginUser == null) {
                 return;
             }
-            if (!userFile.getUserId().equals(loginUser.getUserId()) ) {
+            if (!userFile.getUserId().equals(loginUser.getUserId())) {
                 return;
             }
-        } else  {
+        } else {
             Map<String, Object> param = new HashMap<>();
             param.put("share_batch_num", previewDTO.getShareBatchNum());
             List<Share> shareList = shareService.listByMap(param);
@@ -187,7 +187,7 @@ public class FiletransferController extends BaseController {
             }
         }
         FileBean fileBean = fileService.getById(userFile.getFileId());
-        String mime= MimeTypeUtils.getMime(userFile.getExtendName());
+        String mime = MimeTypeUtils.getMime(userFile.getExtendName());
         httpServletResponse.setHeader("Content-Type", mime);
         String rangeString = httpServletRequest.getHeader("Range");//如果是video标签发起的请求就不会为null
         if (StringUtils.isNotEmpty(rangeString)) {
@@ -208,7 +208,7 @@ public class FiletransferController extends BaseController {
         httpServletResponse.addHeader("Content-Disposition", "fileName=" + fileName);// 设置文件名
         try {
             filetransferService.previewFile(httpServletResponse, previewDTO);
-        }catch (Exception e){
+        } catch (Exception e) {
             //org.apache.catalina.connector.ClientAbortException: java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
             e.printStackTrace();
             log.error("该异常忽略不做处理：" + e);
@@ -217,7 +217,7 @@ public class FiletransferController extends BaseController {
     }
 
 
-    @Log(title="获取存储信息", businessType = BusinessType.File)
+    @Log(title = "获取存储信息", businessType = BusinessType.File)
     @GetMapping("/getstorage")
     public AjaxResult getStorage() {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());

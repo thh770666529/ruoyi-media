@@ -1,6 +1,7 @@
 package com.ruoyi.website.mapper;
 
 import java.util.List;
+
 import com.ruoyi.website.domain.CreditsFlow;
 
 /**
@@ -9,8 +10,7 @@ import com.ruoyi.website.domain.CreditsFlow;
  * @author thh
  * @date 2021-12-11
  */
-public interface CreditsFlowMapper
-{
+public interface CreditsFlowMapper {
     /**
      * 查询积分流水
      *
@@ -58,4 +58,4 @@ public interface CreditsFlowMapper
      * @return 结果
      */
     public int deleteCreditsFlowByCreditsIds(Long[] creditsIds);
-    }
+}

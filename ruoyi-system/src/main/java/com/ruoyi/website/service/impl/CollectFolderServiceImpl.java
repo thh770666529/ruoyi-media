@@ -16,8 +16,7 @@ import com.ruoyi.website.service.ICollectFolderService;
  * @date 2021-10-05
  */
 @Service
-public class CollectFolderServiceImpl extends ServiceImpl<CollectFolderMapper, CollectFolder> implements ICollectFolderService
-{
+public class CollectFolderServiceImpl extends ServiceImpl<CollectFolderMapper, CollectFolder> implements ICollectFolderService {
     @Autowired
     private CollectFolderMapper collectFolderMapper;
 
@@ -28,8 +27,7 @@ public class CollectFolderServiceImpl extends ServiceImpl<CollectFolderMapper, C
      * @return 收藏夹
      */
     @Override
-    public CollectFolder selectCollectFolderByCollectFolderId(Long collectFolderId)
-    {
+    public CollectFolder selectCollectFolderByCollectFolderId(Long collectFolderId) {
         return collectFolderMapper.selectCollectFolderByCollectFolderId(collectFolderId);
     }
 
@@ -40,8 +38,7 @@ public class CollectFolderServiceImpl extends ServiceImpl<CollectFolderMapper, C
      * @return 收藏夹
      */
     @Override
-    public List<CollectFolder> selectCollectFolderList(CollectFolder collectFolder)
-    {
+    public List<CollectFolder> selectCollectFolderList(CollectFolder collectFolder) {
         return collectFolderMapper.selectCollectFolderList(collectFolder);
     }
 
@@ -52,8 +49,7 @@ public class CollectFolderServiceImpl extends ServiceImpl<CollectFolderMapper, C
      * @return 结果
      */
     @Override
-    public int insertCollectFolder(CollectFolder collectFolder)
-    {
+    public int insertCollectFolder(CollectFolder collectFolder) {
         return collectFolderMapper.insert(collectFolder);
     }
 
@@ -64,8 +60,7 @@ public class CollectFolderServiceImpl extends ServiceImpl<CollectFolderMapper, C
      * @return 结果
      */
     @Override
-    public int updateCollectFolder(CollectFolder collectFolder)
-    {
+    public int updateCollectFolder(CollectFolder collectFolder) {
         return collectFolderMapper.updateById(collectFolder);
     }
 
@@ -76,8 +71,7 @@ public class CollectFolderServiceImpl extends ServiceImpl<CollectFolderMapper, C
      * @return 结果
      */
     @Override
-    public int deleteCollectFolderByCollectFolderIds(Long[] collectFolderIds)
-    {
+    public int deleteCollectFolderByCollectFolderIds(Long[] collectFolderIds) {
         return collectFolderMapper.deleteCollectFolderByCollectFolderIds(collectFolderIds);
     }
 }

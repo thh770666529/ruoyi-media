@@ -23,8 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/blog/category")
-public class CategoryController extends BaseController
-{
+public class CategoryController extends BaseController {
     @Autowired
     private ICategoryService categoryService;
 
@@ -33,8 +32,7 @@ public class CategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:category:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Category category)
-    {
+    public TableDataInfo list(Category category) {
         startPage();
         List<Category> list = categoryService.selectCategoryList(category);
         return getDataTable(list);
@@ -46,8 +44,7 @@ public class CategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:category:export')")
     @Log(title = "博客分类", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Category category)
-    {
+    public void export(HttpServletResponse response, Category category) {
         List<Category> list = categoryService.selectCategoryList(category);
         ExcelUtil<Category> util = new ExcelUtil<Category>(Category.class);
         util.exportExcel(response, list, "博客分类数据");
@@ -58,8 +55,7 @@ public class CategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:category:query')")
     @GetMapping(value = "/{categoryId}")
-    public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId)
-    {
+    public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId) {
         return AjaxResult.success(categoryService.selectCategoryByCategoryId(categoryId));
     }
 
@@ -69,8 +65,7 @@ public class CategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:category:add')")
     @Log(title = "博客分类", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Category category)
-    {
+    public AjaxResult add(@RequestBody Category category) {
         return toAjax(categoryService.insertCategory(category));
     }
 
@@ -80,8 +75,7 @@ public class CategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:category:edit')")
     @Log(title = "博客分类", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Category category)
-    {
+    public AjaxResult edit(@RequestBody Category category) {
         return toAjax(categoryService.updateCategory(category));
     }
 
@@ -90,9 +84,8 @@ public class CategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:category:remove')")
     @Log(title = "博客分类", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{categoryIds}")
-    public AjaxResult remove(@PathVariable Long[] categoryIds)
-    {
+    @DeleteMapping("/{categoryIds}")
+    public AjaxResult remove(@PathVariable Long[] categoryIds) {
         return toAjax(categoryService.deleteCategoryByCategoryIds(categoryIds));
     }
 }

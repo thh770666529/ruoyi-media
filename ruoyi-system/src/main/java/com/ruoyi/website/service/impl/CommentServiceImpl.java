@@ -35,8 +35,7 @@ import com.ruoyi.website.service.ICommentService;
  * @date 2021-06-05
  */
 @Service
-public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  implements ICommentService
-{
+public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements ICommentService {
     @Autowired
     private CommentMapper commentMapper;
 
@@ -53,8 +52,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
      * @return 评论
      */
     @Override
-    public Comment selectCommentById(Long commentId)
-    {
+    public Comment selectCommentById(Long commentId) {
         return commentMapper.selectCommentById(commentId);
     }
 
@@ -66,8 +64,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
      * @return 评论
      */
     @Override
-    public List<Comment> selectCommentList(Comment comment)
-    {
+    public List<Comment> selectCommentList(Comment comment) {
         return commentMapper.selectCommentList(comment);
     }
 
@@ -79,8 +76,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
      * @return 结果
      */
     @Override
-    public int updateComment(Comment comment)
-    {
+    public int updateComment(Comment comment) {
         return commentMapper.updateById(comment);
     }
 
@@ -91,8 +87,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
      * @return 结果
      */
     @Override
-    public int deleteCommentByIds(Long[] commentIds)
-    {
+    public int deleteCommentByIds(Long[] commentIds) {
         return commentMapper.deleteCommentByIds(commentIds);
     }
 
@@ -103,8 +98,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
      * @return 结果
      */
     @Override
-    public int deleteCommentById(Long commentId)
-    {
+    public int deleteCommentById(Long commentId) {
         return commentMapper.deleteCommentById(commentId);
     }
 
@@ -139,33 +133,34 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
 
     @Override
     public List<Comment> selectTreeComment(Comment commentCondition) {
-        return this.getCommentListByParentCommentId(commentCondition,null);
+        return this.getCommentListByParentCommentId(commentCondition, null);
     }
 
     /**
      * 获取到子节点的评论数据
+     *
      * @param commentCondition
      * @param parentCommentId
      * @return
      */
     @Override
-    public List<Comment> getCommentListByParentCommentId (Comment commentCondition,Long parentCommentId){
+    public List<Comment> getCommentListByParentCommentId(Comment commentCondition, Long parentCommentId) {
         List<Comment> commentList = commentMapper.selectCommentList(commentCondition);
         // 定义一个空数组，用来存放最终的树结构数据
         List<Comment> result = new ArrayList<>();
         // 第一步遍历获取到的数据，将根节点数据存放 result 里
-        for (Comment comment: commentList) {
+        for (Comment comment : commentList) {
             // 判断是否是根节点，就是 parentId，这里是从 0 开始，如果 parentId 为 0 ，则表示根节点
             Long parentId = comment.getParentCommentId();
-            if (parentCommentId!=null && parentCommentId.equals(parentId)) {
+            if (parentCommentId != null && parentCommentId.equals(parentId)) {
                 result.add(comment);
-            }else if (parentCommentId==null && parentId ==null){
+            } else if (parentCommentId == null && parentId == null) {
                 result.add(comment);
             }
         }
         // 根节点添加完就需要添加每个节点的子节点了，这里需要调用 递归方法 getChildren();
         // 遍历根节点数据，为其设置子节点集合
-        for (Comment comment: result) {
+        for (Comment comment : result) {
             // 获取子节点数据，传入 当前节点 id 和 所有 list
             List<Comment> childList = getChildren(comment.getCommentId(), commentList);
             // 将获取到的子节点集合添加到根节点里
@@ -175,13 +170,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
     }
 
     @Override
-    public List<Comment> getAllCommentList(Comment commentCondition,Long parentCommentId){
+    public List<Comment> getAllCommentList(Comment commentCondition, Long parentCommentId) {
         List<Comment> commentList = this.getCommentListByParentCommentId(commentCondition, parentCommentId);
         List<Comment> resultList = new ArrayList<>();
         resultList.addAll(commentList);
         for (Comment comment : commentList) {
             List<Comment> children = getChildren(comment.getChildren());
-            if (children!=null){
+            if (children != null) {
                 resultList.addAll(children);
             }
         }
@@ -189,9 +184,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
     }
 
 
-    private List<Comment> getChildren(List<Comment>  commentList) {
+    private List<Comment> getChildren(List<Comment> commentList) {
         List<Comment> resultList = new ArrayList<>();
-        if (commentList==null){
+        if (commentList == null) {
             return resultList;
         }
         // 遍历所有节点数据
@@ -207,11 +202,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
 
     /**
      * 获取子节点数据
-     * @param id 父节点 ID
-     * @param  commentList 所有节点集合
+     *
+     * @param id          父节点 ID
+     * @param commentList 所有节点集合
      * @return 返回子节点列表
      */
-    private List<Comment> getChildren(Long id, List<Comment>  commentList) {
+    private List<Comment> getChildren(Long id, List<Comment> commentList) {
         // 存在子节点数据
         List<Comment> childList = new ArrayList<>();
         // 遍历所有节点数据
@@ -234,7 +230,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>  imp
         // 返回最终的子节点数据
         return childList;
     }
-
 
 
     /**

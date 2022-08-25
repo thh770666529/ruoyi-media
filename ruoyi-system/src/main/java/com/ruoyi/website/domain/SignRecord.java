@@ -1,6 +1,7 @@
 package com.ruoyi.website.domain;
 
 import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 签到日志对象 website_sign_record
- * 
+ *
  * @author thh
  * @date 2021-12-11
  */

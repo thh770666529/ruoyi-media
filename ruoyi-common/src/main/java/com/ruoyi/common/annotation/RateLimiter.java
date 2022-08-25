@@ -7,14 +7,13 @@ import java.lang.annotation.*;
 
 /**
  * 限流注解
- * 
+ *
  * @author ruoyi
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface RateLimiter
-{
+public @interface RateLimiter {
     /**
      * 限流key
      */

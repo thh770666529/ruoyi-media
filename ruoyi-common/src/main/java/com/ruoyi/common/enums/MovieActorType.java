@@ -10,7 +10,9 @@ public enum MovieActorType {
 
     private final String value;
 
-    MovieActorType(String value) { this.value = value; }
+    MovieActorType(String value) {
+        this.value = value;
+    }
 
     public String getValue() {
         return value;

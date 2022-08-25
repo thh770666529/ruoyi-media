@@ -15,12 +15,13 @@ import java.util.List;
 
 @Slf4j
 @Service
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor = Exception.class)
 public class ShareFileServiceImpl extends ServiceImpl<ShareFileMapper, ShareFile> implements IShareFileService {
     @Resource
     ShareFileMapper shareFileMapper;
     @Resource
     UserFileMapper userFileMapper;
+
     @Override
     public void batchInsertShareFile(List<ShareFile> shareFiles) {
         shareFileMapper.batchInsertShareFile(shareFiles);

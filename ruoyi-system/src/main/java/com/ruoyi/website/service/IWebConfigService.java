@@ -1,6 +1,7 @@
 package com.ruoyi.website.service;
 
 import java.util.List;
+
 import com.ruoyi.website.domain.WebConfig;
 import com.ruoyi.website.domain.vo.WebConfigVO;
 
@@ -10,8 +11,7 @@ import com.ruoyi.website.domain.vo.WebConfigVO;
  * @author thh
  * @date 2021-06-08
  */
-public interface IWebConfigService
-{
+public interface IWebConfigService {
 
     /**
      * 获取网站配置
@@ -19,7 +19,6 @@ public interface IWebConfigService
      * @return
      */
     WebConfig getWebConfig();
-
 
 
     /**

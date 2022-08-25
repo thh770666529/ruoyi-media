@@ -14,8 +14,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-12-11
  */
 @Repository
-public interface SignRecordMapper
-{
+public interface SignRecordMapper {
     /**
      * 查询签到日志
      *
@@ -67,6 +66,7 @@ public interface SignRecordMapper
 
     /**
      * 获取更新的签到数据
+     *
      * @param map
      * @return
      */

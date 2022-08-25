@@ -16,7 +16,8 @@ public class RedisUtil {
 
     /**
      * 将值放入缓存
-     * @param key 键
+     *
+     * @param key   键
      * @param value 值
      */
     public void set(String key, Object value) {
@@ -25,6 +26,7 @@ public class RedisUtil {
 
     /**
      * 获取对象
+     *
      * @param key 键
      * @param <T> 对象类型
      * @return 返回值
@@ -39,9 +41,10 @@ public class RedisUtil {
 
     /**
      * 将值放入缓存并设置时间-秒
-     * @param key 键
+     *
+     * @param key   键
      * @param value 值
-     * @param time 时间（单位：秒），如果值为负数，则永久
+     * @param time  时间（单位：秒），如果值为负数，则永久
      */
     public void set(String key, Object value, long time) {
         if (time > 0) {
@@ -53,6 +56,7 @@ public class RedisUtil {
 
     /**
      * 删除key
+     *
      * @param key
      */
     public void deleteKey(String key) {
@@ -61,6 +65,7 @@ public class RedisUtil {
 
     /**
      * 获取自增长值
+     *
      * @param key 键
      * @return 返回增长之后的值
      */

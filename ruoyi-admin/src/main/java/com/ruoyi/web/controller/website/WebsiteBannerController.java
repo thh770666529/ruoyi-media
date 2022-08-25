@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.website;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/website/banner")
-public class WebsiteBannerController extends BaseController
-{
+public class WebsiteBannerController extends BaseController {
     @Autowired
     private IWebsiteBannerService websiteBannerService;
 
@@ -40,8 +40,7 @@ public class WebsiteBannerController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:banner:list')")
     @GetMapping("/list")
-    public TableDataInfo list(WebsiteBanner websiteBanner)
-    {
+    public TableDataInfo list(WebsiteBanner websiteBanner) {
         startPage();
         List<WebsiteBanner> list = websiteBannerService.selectWebsiteBannerList(websiteBanner);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class WebsiteBannerController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:banner:export')")
     @Log(title = "首页banner", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, WebsiteBanner websiteBanner)
-    {
+    public void export(HttpServletResponse response, WebsiteBanner websiteBanner) {
         List<WebsiteBanner> list = websiteBannerService.selectWebsiteBannerList(websiteBanner);
         ExcelUtil<WebsiteBanner> util = new ExcelUtil<WebsiteBanner>(WebsiteBanner.class);
         util.exportExcel(response, list, "首页banner数据");
@@ -65,8 +63,7 @@ public class WebsiteBannerController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:banner:query')")
     @GetMapping(value = "/{bannerId}")
-    public AjaxResult getInfo(@PathVariable("bannerId") Long bannerId)
-    {
+    public AjaxResult getInfo(@PathVariable("bannerId") Long bannerId) {
         return AjaxResult.success(websiteBannerService.selectWebsiteBannerById(bannerId));
     }
 
@@ -76,8 +73,7 @@ public class WebsiteBannerController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:banner:add')")
     @Log(title = "首页banner", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody WebsiteBanner websiteBanner)
-    {
+    public AjaxResult add(@RequestBody WebsiteBanner websiteBanner) {
         return toAjax(websiteBannerService.insertWebsiteBanner(websiteBanner));
     }
 
@@ -87,8 +83,7 @@ public class WebsiteBannerController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:banner:edit')")
     @Log(title = "首页banner", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody WebsiteBanner websiteBanner)
-    {
+    public AjaxResult edit(@RequestBody WebsiteBanner websiteBanner) {
         return toAjax(websiteBannerService.updateWebsiteBanner(websiteBanner));
     }
 
@@ -97,9 +92,8 @@ public class WebsiteBannerController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:banner:remove')")
     @Log(title = "首页banner", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{bannerIds}")
-    public AjaxResult remove(@PathVariable Long[] bannerIds)
-    {
+    @DeleteMapping("/{bannerIds}")
+    public AjaxResult remove(@PathVariable Long[] bannerIds) {
         return toAjax(websiteBannerService.deleteWebsiteBannerByIds(bannerIds));
     }
 }

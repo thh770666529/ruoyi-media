@@ -22,8 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/blog/subject")
-public class SubjectController extends BaseController
-{
+public class SubjectController extends BaseController {
     @Autowired
     private ISubjectService subjectService;
 
@@ -31,8 +30,7 @@ public class SubjectController extends BaseController
      * 查询文章专题列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(Subject subject)
-    {
+    public TableDataInfo list(Subject subject) {
         startPage();
         List<Subject> list = subjectService.selectSubjectList(subject);
         return getDataTable(list);
@@ -42,8 +40,7 @@ public class SubjectController extends BaseController
      * 获取文章专题详细信息
      */
     @GetMapping(value = "/{subjectId}")
-    public AjaxResult getInfo(@PathVariable("subjectId") Long subjectId)
-    {
+    public AjaxResult getInfo(@PathVariable("subjectId") Long subjectId) {
         return AjaxResult.success(subjectService.selectSubjectBySubjectId(subjectId));
     }
 }

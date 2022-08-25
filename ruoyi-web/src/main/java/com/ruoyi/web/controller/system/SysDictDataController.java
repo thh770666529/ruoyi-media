@@ -27,8 +27,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/system/dict/data")
-public class SysDictDataController extends BaseController
-{
+public class SysDictDataController extends BaseController {
     @Autowired
     private ISysDictDataService dictDataService;
 
@@ -36,8 +35,7 @@ public class SysDictDataController extends BaseController
     private ISysDictTypeService dictTypeService;
 
     @GetMapping("/list")
-    public TableDataInfo list(SysDictData dictData)
-    {
+    public TableDataInfo list(SysDictData dictData) {
         startPage();
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
         return getDataTable(list);
@@ -47,8 +45,7 @@ public class SysDictDataController extends BaseController
      * 查询字典数据详细
      */
     @GetMapping(value = "/{dictCode}")
-    public AjaxResult getInfo(@PathVariable Long dictCode)
-    {
+    public AjaxResult getInfo(@PathVariable Long dictCode) {
         return AjaxResult.success(dictDataService.selectDictDataById(dictCode));
     }
 
@@ -56,11 +53,9 @@ public class SysDictDataController extends BaseController
      * 根据字典类型查询字典数据信息
      */
     @GetMapping(value = "/type/{dictType}")
-    public AjaxResult dictType(@PathVariable String dictType)
-    {
+    public AjaxResult dictType(@PathVariable String dictType) {
         List<SysDictData> data = dictTypeService.selectDictDataByType(dictType);
-        if (StringUtils.isNull(data))
-        {
+        if (StringUtils.isNull(data)) {
             data = new ArrayList<SysDictData>();
         }
         return AjaxResult.success(data);
@@ -71,8 +66,7 @@ public class SysDictDataController extends BaseController
      * 根据字典类型数组获取字典数据
      */
     @PostMapping("/listByDictTypeList")
-    public AjaxResult getListByDictTypeList(@RequestBody List<String> dictTypeList)
-    {
+    public AjaxResult getListByDictTypeList(@RequestBody List<String> dictTypeList) {
         if (dictTypeList.size() <= 0) {
             error();
         }

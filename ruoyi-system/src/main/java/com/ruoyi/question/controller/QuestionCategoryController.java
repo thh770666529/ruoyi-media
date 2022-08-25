@@ -1,6 +1,7 @@
 package com.ruoyi.question.controller;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,14 +25,13 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 问答分类Controller
- * 
+ *
  * @author thh
  * @date 2021-09-12
  */
 @RestController
 @RequestMapping("/question/category")
-public class QuestionCategoryController extends BaseController
-{
+public class QuestionCategoryController extends BaseController {
     @Autowired
     private IQuestionCategoryService questionCategoryService;
 
@@ -40,8 +40,7 @@ public class QuestionCategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('question:category:list')")
     @GetMapping("/list")
-    public TableDataInfo list(QuestionCategory questionCategory)
-    {
+    public TableDataInfo list(QuestionCategory questionCategory) {
         startPage();
         List<QuestionCategory> list = questionCategoryService.selectQuestionCategoryList(questionCategory);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class QuestionCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('question:category:export')")
     @Log(title = "问答分类", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, QuestionCategory questionCategory)
-    {
+    public void export(HttpServletResponse response, QuestionCategory questionCategory) {
         List<QuestionCategory> list = questionCategoryService.selectQuestionCategoryList(questionCategory);
         ExcelUtil<QuestionCategory> util = new ExcelUtil<QuestionCategory>(QuestionCategory.class);
         util.exportExcel(response, list, "问答分类数据");
@@ -65,8 +63,7 @@ public class QuestionCategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('question:category:query')")
     @GetMapping(value = "/{categoryId}")
-    public AjaxResult getInfo(@PathVariable("categoryId") Integer categoryId)
-    {
+    public AjaxResult getInfo(@PathVariable("categoryId") Integer categoryId) {
         return AjaxResult.success(questionCategoryService.selectQuestionCategoryByCategoryId(categoryId));
     }
 
@@ -76,8 +73,7 @@ public class QuestionCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('question:category:add')")
     @Log(title = "问答分类", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody QuestionCategory questionCategory)
-    {
+    public AjaxResult add(@RequestBody QuestionCategory questionCategory) {
         return toAjax(questionCategoryService.insertQuestionCategory(questionCategory));
     }
 
@@ -87,8 +83,7 @@ public class QuestionCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('question:category:edit')")
     @Log(title = "问答分类", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody QuestionCategory questionCategory)
-    {
+    public AjaxResult edit(@RequestBody QuestionCategory questionCategory) {
         return toAjax(questionCategoryService.updateQuestionCategory(questionCategory));
     }
 
@@ -97,9 +92,8 @@ public class QuestionCategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('question:category:remove')")
     @Log(title = "问答分类", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{categoryIds}")
-    public AjaxResult remove(@PathVariable Integer[] categoryIds)
-    {
+    @DeleteMapping("/{categoryIds}")
+    public AjaxResult remove(@PathVariable Integer[] categoryIds) {
         return toAjax(questionCategoryService.deleteQuestionCategoryByCategoryIds(categoryIds));
     }
 }

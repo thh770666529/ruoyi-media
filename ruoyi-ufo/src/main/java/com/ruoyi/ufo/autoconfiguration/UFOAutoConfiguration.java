@@ -23,6 +23,7 @@ public class UFOAutoConfiguration {
     public static AliyunConfig aliyunConfig;
     public static int thumbImageWidth;
     public static int thumbImageHeight;
+
     @Bean
     public UFOFactory ufoFactory(UFOProperties ufoProperties) {
         localStoragePath = ufoProperties.getLocalStoragePath();

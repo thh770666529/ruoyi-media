@@ -52,6 +52,7 @@ public class RedisLock {
 
     /**
      * 获取锁，没有获取到则一直等待
+     *
      * @param key 键
      */
     public void lock(final String key) {
@@ -65,6 +66,7 @@ public class RedisLock {
 
     /**
      * 释放锁
+     *
      * @param key 键
      */
     public void unlock(String key) {
@@ -77,6 +79,7 @@ public class RedisLock {
 
     /**
      * 尝试获取锁，指定时间内没有获取到，返回false。否则 返回true
+     *
      * @param key 键
      * @return 返回是否获取成功
      */
@@ -90,7 +93,8 @@ public class RedisLock {
 
     /**
      * 获取锁，指定时间内没有获取到，返回false。否则 返回true
-     * @param key 键
+     *
+     * @param key  键
      * @param time 获取锁等待时间
      * @param unit 时间单位
      * @return 返回是否获取成功
@@ -105,8 +109,9 @@ public class RedisLock {
 
     /**
      * 获取锁
-     * @param key redis key
-     * @param expire 锁过期时间, 单位 秒
+     *
+     * @param key      redis key
+     * @param expire   锁过期时间, 单位 秒
      * @param waitTime 获取锁超时时间, -1代表永不超时, 单位 秒
      * @return if true success else fail
      * @throws InterruptedException 阻塞方法收到中断请求
@@ -147,6 +152,7 @@ public class RedisLock {
 
     /**
      * 释放锁
+     *
      * @param key 键
      */
     private void release(String key) {
@@ -167,26 +173,27 @@ public class RedisLock {
         }
         map.remove(key);
         RedisCallback<Boolean> callback = (connection) ->
-            connection.eval(UNLOCK_LUA.getBytes(StandardCharsets.UTF_8), ReturnType.BOOLEAN, 1,
-                (key).getBytes(StandardCharsets.UTF_8), vo.lockId.getBytes(StandardCharsets.UTF_8));
+                connection.eval(UNLOCK_LUA.getBytes(StandardCharsets.UTF_8), ReturnType.BOOLEAN, 1,
+                        (key).getBytes(StandardCharsets.UTF_8), vo.lockId.getBytes(StandardCharsets.UTF_8));
         redisTemplate.execute(callback);
     }
 
     /**
      * 获取锁
-     * @param key 锁的key
+     *
+     * @param key    锁的key
      * @param expire 锁的超时时间 秒
      * @param lockId 获取锁后，UUID生成的唯一ID
      * @return 返回成功或失败
      */
     private boolean tryLock(String key, long expire, String lockId) {
-        try{
+        try {
             RedisCallback<Boolean> callback = (connection) ->
-                connection.set(
-                        (key).getBytes(StandardCharsets.UTF_8),
-                        lockId.getBytes(StandardCharsets.UTF_8),
-                        Expiration.seconds(expire),
-                        RedisStringCommands.SetOption.SET_IF_ABSENT);
+                    connection.set(
+                            (key).getBytes(StandardCharsets.UTF_8),
+                            lockId.getBytes(StandardCharsets.UTF_8),
+                            Expiration.seconds(expire),
+                            RedisStringCommands.SetOption.SET_IF_ABSENT);
             return (Boolean) redisTemplate.execute(callback);
         } catch (Exception e) {
             log.error("redis lock error.", e);

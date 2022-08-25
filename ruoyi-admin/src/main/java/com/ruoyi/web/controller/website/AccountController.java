@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.website;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/website/account")
-public class AccountController extends BaseController
-{
+public class AccountController extends BaseController {
     @Autowired
     private IAccountService accountService;
 
@@ -40,8 +40,7 @@ public class AccountController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:account:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Account account)
-    {
+    public TableDataInfo list(Account account) {
         startPage();
         List<Account> list = accountService.selectAccountList(account);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class AccountController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:account:export')")
     @Log(title = "用户账户", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Account account)
-    {
+    public void export(HttpServletResponse response, Account account) {
         List<Account> list = accountService.selectAccountList(account);
         ExcelUtil<Account> util = new ExcelUtil<Account>(Account.class);
         util.exportExcel(response, list, "用户账户数据");
@@ -65,8 +63,7 @@ public class AccountController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:account:query')")
     @GetMapping(value = "/{accountId}")
-    public AjaxResult getInfo(@PathVariable("accountId") Long accountId)
-    {
+    public AjaxResult getInfo(@PathVariable("accountId") Long accountId) {
         return AjaxResult.success(accountService.selectAccountByAccountId(accountId));
     }
 
@@ -76,8 +73,7 @@ public class AccountController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:account:add')")
     @Log(title = "用户账户", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Account account)
-    {
+    public AjaxResult add(@RequestBody Account account) {
         return toAjax(accountService.insertAccount(account));
     }
 
@@ -87,8 +83,7 @@ public class AccountController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:account:edit')")
     @Log(title = "用户账户", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Account account)
-    {
+    public AjaxResult edit(@RequestBody Account account) {
         return toAjax(accountService.updateAccount(account));
     }
 
@@ -97,9 +92,8 @@ public class AccountController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:account:remove')")
     @Log(title = "用户账户", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{accountIds}")
-    public AjaxResult remove(@PathVariable Long[] accountIds)
-    {
+    @DeleteMapping("/{accountIds}")
+    public AjaxResult remove(@PathVariable Long[] accountIds) {
         return toAjax(accountService.deleteAccountByAccountIds(accountIds));
     }
 }

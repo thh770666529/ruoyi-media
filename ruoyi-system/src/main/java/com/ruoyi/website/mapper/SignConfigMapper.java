@@ -1,6 +1,7 @@
 package com.ruoyi.website.mapper;
 
 import java.util.List;
+
 import com.ruoyi.website.domain.SignConfig;
 
 /**
@@ -9,8 +10,7 @@ import com.ruoyi.website.domain.SignConfig;
  * @author thh
  * @date 2021-12-11
  */
-public interface SignConfigMapper
-{
+public interface SignConfigMapper {
     /**
      * 查询签到配置
      *
@@ -58,4 +58,4 @@ public interface SignConfigMapper
      * @return 结果
      */
     public int deleteSignConfigBySignConfigIds(Long[] signConfigIds);
-    }
+}

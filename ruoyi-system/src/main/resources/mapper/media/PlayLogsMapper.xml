@@ -1,54 +1,70 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.media.mapper.PlayLogsMapper">
 
     <resultMap type="PlayLogs" id="PlayLogsResult">
-        <result property="playLogId"    column="play_log_id"    />
-        <result property="userId"    column="user_id"    />
-        <result property="videoId"    column="video_id"    />
-        <result property="customId"    column="custom_id"    />
-        <result property="playDuration"    column="play_duration"    />
-        <result property="playPosition"    column="play_position"    />
-        <result property="ip"    column="ip"    />
-        <result property="province"    column="province"    />
-        <result property="city"    column="city"    />
-        <result property="referer"    column="referer"    />
-        <result property="device"    column="device"    />
-        <result property="operatingSystem"    column="operating_system"    />
-        <result property="browser"    column="browser"    />
-        <result property="terminal"    column="terminal"    />
-        <result property="startTime"    column="start_time"    />
-        <result property="endTime"    column="end_time"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateTime"    column="update_time"    />
+        <result property="playLogId" column="play_log_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="videoId" column="video_id"/>
+        <result property="customId" column="custom_id"/>
+        <result property="playDuration" column="play_duration"/>
+        <result property="playPosition" column="play_position"/>
+        <result property="ip" column="ip"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="referer" column="referer"/>
+        <result property="device" column="device"/>
+        <result property="operatingSystem" column="operating_system"/>
+        <result property="browser" column="browser"/>
+        <result property="terminal" column="terminal"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <sql id="selectPlayLogsVo">
-        select play_log_id, user_id, video_id, custom_id, play_duration, play_position, ip, province, city, referer, device, operating_system, browser, terminal, start_time, end_time from wm_play_logs
+        select play_log_id,
+               user_id,
+               video_id,
+               custom_id,
+               play_duration,
+               play_position,
+               ip,
+               province,
+               city,
+               referer,
+               device,
+               operating_system,
+               browser,
+               terminal,
+               start_time,
+               end_time
+        from wm_play_logs
     </sql>
 
     <select id="selectPlayLogsList" parameterType="PlayLogs" resultMap="PlayLogsResult">
         <include refid="selectPlayLogsVo"/>
         <where>
-            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
-            <if test="videoId != null  and videoId != ''"> and video_id = #{videoId}</if>
-            <if test="customId != null  and customId != ''"> and custom_id = #{customId}</if>
-            <if test="playDuration != null "> and play_duration = #{playDuration}</if>
-            <if test="playPosition != null "> and play_position = #{playPosition}</if>
-            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
-            <if test="province != null  and province != ''"> and province = #{province}</if>
-            <if test="city != null  and city != ''"> and city = #{city}</if>
-            <if test="referer != null  and referer != ''"> and referer = #{referer}</if>
-            <if test="device != null  and device != ''"> and device = #{device}</if>
-            <if test="operatingSystem != null  and operatingSystem != ''"> and operating_system = #{operatingSystem}</if>
-            <if test="browser != null  and browser != ''"> and browser = #{browser}</if>
-            <if test="terminal != null  and terminal != ''"> and terminal = #{terminal}</if>
-            <if test="startTime != null "> and start_time = #{startTime}</if>
-            <if test="endTime != null  and endTime != ''"> and end_time = #{endTime}</if>
-            <if test="createTime != null  and createTime != ''"> and create_time = #{createTime}</if>
-            <if test="updateTime != null  and updateTime != ''"> and update_time = #{updateTime}</if>
+            <if test="userId != null  and userId != ''">and user_id = #{userId}</if>
+            <if test="videoId != null  and videoId != ''">and video_id = #{videoId}</if>
+            <if test="customId != null  and customId != ''">and custom_id = #{customId}</if>
+            <if test="playDuration != null ">and play_duration = #{playDuration}</if>
+            <if test="playPosition != null ">and play_position = #{playPosition}</if>
+            <if test="ip != null  and ip != ''">and ip = #{ip}</if>
+            <if test="province != null  and province != ''">and province = #{province}</if>
+            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="referer != null  and referer != ''">and referer = #{referer}</if>
+            <if test="device != null  and device != ''">and device = #{device}</if>
+            <if test="operatingSystem != null  and operatingSystem != ''">and operating_system = #{operatingSystem}</if>
+            <if test="browser != null  and browser != ''">and browser = #{browser}</if>
+            <if test="terminal != null  and terminal != ''">and terminal = #{terminal}</if>
+            <if test="startTime != null ">and start_time = #{startTime}</if>
+            <if test="endTime != null  and endTime != ''">and end_time = #{endTime}</if>
+            <if test="createTime != null  and createTime != ''">and create_time = #{createTime}</if>
+            <if test="updateTime != null  and updateTime != ''">and update_time = #{updateTime}</if>
         </where>
     </select>
 
@@ -58,21 +74,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <select id="selectPlayLogsByCondition"  resultMap="PlayLogsResult">
+    <select id="selectPlayLogsByCondition" resultMap="PlayLogsResult">
         <include refid="selectPlayLogsVo"/>
         <where>
-            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
-            <if test="videoId != null  and videoId != ''"> and video_id = #{videoId}</if>
-            <if test="customId != null  and customId != ''"> and custom_id = #{customId}</if>
-            <if test="playDuration != null "> and play_duration = #{playDuration}</if>
-            <if test="playPosition != null "> and play_position = #{playPosition}</if>
-            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
-            <if test="province != null  and province != ''"> and province = #{province}</if>
-            <if test="city != null  and city != ''"> and city = #{city}</if>
-            <if test="referer != null  and referer != ''"> and referer = #{referer}</if>
-            <if test="device != null  and device != ''"> and device = #{device}</if>
-            <if test="operatingSystem != null  and operatingSystem != ''"> and operating_system = #{operatingSystem}</if>
-            <if test="browser != null  and browser != ''"> and browser = #{browser}</if>
+            <if test="userId != null  and userId != ''">and user_id = #{userId}</if>
+            <if test="videoId != null  and videoId != ''">and video_id = #{videoId}</if>
+            <if test="customId != null  and customId != ''">and custom_id = #{customId}</if>
+            <if test="playDuration != null ">and play_duration = #{playDuration}</if>
+            <if test="playPosition != null ">and play_position = #{playPosition}</if>
+            <if test="ip != null  and ip != ''">and ip = #{ip}</if>
+            <if test="province != null  and province != ''">and province = #{province}</if>
+            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="referer != null  and referer != ''">and referer = #{referer}</if>
+            <if test="device != null  and device != ''">and device = #{device}</if>
+            <if test="operatingSystem != null  and operatingSystem != ''">and operating_system = #{operatingSystem}</if>
+            <if test="browser != null  and browser != ''">and browser = #{browser}</if>
         </where>
     </select>
 
@@ -98,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endTime != null">end_time,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="playLogId != null">#{playLogId},</if>
             <if test="userId != null">#{userId},</if>
@@ -118,7 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endTime != null">#{endTime},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updatePlayLogs" parameterType="PlayLogs">
@@ -145,7 +161,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deletePlayLogsByPlayLogId" parameterType="Long">
-        delete from wm_play_logs where play_log_id = #{playLogId}
+        delete
+        from wm_play_logs
+        where play_log_id = #{playLogId}
     </delete>
 
     <delete id="deletePlayLogsByPlayLogIds" parameterType="String">

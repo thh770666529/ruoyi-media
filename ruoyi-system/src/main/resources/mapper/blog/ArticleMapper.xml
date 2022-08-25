@@ -1,79 +1,179 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.blog.mapper.ArticleMapper">
 
     <resultMap type="Article" id="ArticleResult">
-        <result property="articleId"    column="article_id"    />
-        <result property="title"    column="title"    />
-        <result property="summary"    column="summary"    />
-        <result property="content"    column="content"    />
-        <result property="tagId"    column="tag_id"    />
-        <result property="images"    column="images"    />
-        <result property="status"    column="status"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="adminUserId"    column="admin_user_id"    />
-        <result property="isOriginal"    column="is_original"    />
-        <result property="author"    column="author"    />
-        <result property="articlesPart"    column="articles_part"    />
-        <result property="categoryId"    column="category_id"    />
-        <result property="categoryName"    column="category_name"    />
-        <result property="level"    column="level"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="isPublish"    column="is_publish"    />
-        <result property="sort"    column="sort"    />
-        <result property="openComment"    column="open_comment"    />
-        <result property="type"    column="type"    />
-        <result property="outsideLink"    column="outside_link"    />
-        <result property="userId"    column="user_id"    />
-        <result property="articleSource"    column="article_source"    />
-        <result property="qrcodePath"    column="qrcode_path"    />
-        <result property="openPassword"    column="open_password"    />
-        <result property="password"    column="password"    />
-        <result property="remark"    column="remark"    />
-        <result property="supportCount"    column="support_count"    />
-        <result property="opposeCount"    column="oppose_count"    />
-        <result property="clickCount"    column="click_count"    />
-        <result property="collectCount"    column="collect_count"    />
+        <result property="articleId" column="article_id"/>
+        <result property="title" column="title"/>
+        <result property="summary" column="summary"/>
+        <result property="content" column="content"/>
+        <result property="tagId" column="tag_id"/>
+        <result property="images" column="images"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="adminUserId" column="admin_user_id"/>
+        <result property="isOriginal" column="is_original"/>
+        <result property="author" column="author"/>
+        <result property="articlesPart" column="articles_part"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="level" column="level"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="isPublish" column="is_publish"/>
+        <result property="sort" column="sort"/>
+        <result property="openComment" column="open_comment"/>
+        <result property="type" column="type"/>
+        <result property="outsideLink" column="outside_link"/>
+        <result property="userId" column="user_id"/>
+        <result property="articleSource" column="article_source"/>
+        <result property="qrcodePath" column="qrcode_path"/>
+        <result property="openPassword" column="open_password"/>
+        <result property="password" column="password"/>
+        <result property="remark" column="remark"/>
+        <result property="supportCount" column="support_count"/>
+        <result property="opposeCount" column="oppose_count"/>
+        <result property="clickCount" column="click_count"/>
+        <result property="collectCount" column="collect_count"/>
     </resultMap>
 
     <sql id="selectArticleVo">
-        select article_id, title, summary, content, tag_id, images, status, create_time, create_by, update_time, update_by, admin_user_id, is_original, author, articles_part, category_id, category_name, level, del_flag, is_publish, sort, open_comment, type, outside_link, user_id, article_source, qrcode_path, open_password, password, remark, support_count, oppose_count, click_count, collect_count from blog_article
+        select article_id,
+               title,
+               summary,
+               content,
+               tag_id,
+               images,
+               status,
+               create_time,
+               create_by,
+               update_time,
+               update_by,
+               admin_user_id,
+               is_original,
+               author,
+               articles_part,
+               category_id,
+               category_name,
+               level,
+               del_flag,
+               is_publish,
+               sort,
+               open_comment,
+               type,
+               outside_link,
+               user_id,
+               article_source,
+               qrcode_path,
+               open_password,
+               password,
+               remark,
+               support_count,
+               oppose_count,
+               click_count,
+               collect_count
+        from blog_article
     </sql>
 
     <sql id="selectWebArticleVo">
-        select article_id, title, summary, tag_id, images, status, create_time, create_by, update_time, update_by, admin_user_id, is_original, author, articles_part, category_id, category_name, level, del_flag, is_publish, sort, open_comment, type, outside_link, user_id, article_source, qrcode_path, open_password, remark, support_count, oppose_count, click_count, collect_count from blog_article
+        select article_id,
+               title,
+               summary,
+               tag_id,
+               images,
+               status,
+               create_time,
+               create_by,
+               update_time,
+               update_by,
+               admin_user_id,
+               is_original,
+               author,
+               articles_part,
+               category_id,
+               category_name,
+               level,
+               del_flag,
+               is_publish,
+               sort,
+               open_comment,
+               type,
+               outside_link,
+               user_id,
+               article_source,
+               qrcode_path,
+               open_password,
+               remark,
+               support_count,
+               oppose_count,
+               click_count,
+               collect_count
+        from blog_article
     </sql>
 
 
     <!--查询最热门的文章信息-->
-    <select id="selectHotArticleList"  resultMap="ArticleResult">
-        select article_id, title, summary, tag_id, click_count, collect_count, images, status, create_time, create_by, update_time, update_by,
-        admin_user_id, is_original, author, articles_part, category_id, level, del_flag, is_publish, sort, open_comment, type,
-        outside_link, user_id, article_source, qrcode_path, open_password, remark, support_count, oppose_count, click_count, collect_count
+    <select id="selectHotArticleList" resultMap="ArticleResult">
+        select article_id,
+               title,
+               summary,
+               tag_id,
+               click_count,
+               collect_count,
+               images,
+               status,
+               create_time,
+               create_by,
+               update_time,
+               update_by,
+               admin_user_id,
+               is_original,
+               author,
+               articles_part,
+               category_id,
+               level,
+               del_flag,
+               is_publish,
+               sort,
+               open_comment,
+               type,
+               outside_link,
+               user_id,
+               article_source,
+               qrcode_path,
+               open_password,
+               remark,
+               support_count,
+               oppose_count,
+               click_count,
+               collect_count
         from blog_article
-        WHERE status = #{status} and is_publish = #{publishStatus}
-        order by sort asc,click_count desc limit #{top}
+        WHERE status = #{status}
+          and is_publish = #{publishStatus}
+        order by sort asc, click_count desc limit #{top}
     </select>
 
 
     <select id="selectSearchArticleList" parameterType="Article" resultMap="ArticleResult">
-        select article_id, title, summary, tag_id, click_count, collect_count, images, status, create_time, create_by, update_time, update_by, admin_user_id, is_original, author, articles_part, category_id, level, del_flag, is_publish, sort, open_comment, type, outside_link, user_id, article_source, qrcode_path, open_password, remark,praise_click_count from blog_article
+        select article_id, title, summary, tag_id, click_count, collect_count, images, status, create_time, create_by,
+        update_time, update_by, admin_user_id, is_original, author, articles_part, category_id, level, del_flag,
+        is_publish, sort, open_comment, type, outside_link, user_id, article_source, qrcode_path, open_password,
+        remark,praise_click_count from blog_article
         <where>
-            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
-            <if test="summary != null  and summary != ''"> and summary like concat('%', #{summary}, '%')</if>
-            <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
-            <if test="tagId != null  and tagId != ''"> and tag_id = #{tagId}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="isOriginal != null  and isOriginal != ''"> and is_original = #{isOriginal}</if>
-            <if test="categoryId != null  and categoryId != ''"> and category_id = #{categoryId}</if>
-            <if test="level != null "> and level = #{level}</if>
-            <if test="isPublish != null  and isPublish != ''"> and is_publish = #{isPublish}</if>
-            <if test="type != null "> and type = #{type}</if>
+            <if test="title != null  and title != ''">and title like concat('%', #{title}, '%')</if>
+            <if test="summary != null  and summary != ''">and summary like concat('%', #{summary}, '%')</if>
+            <if test="content != null  and content != ''">and content like concat('%', #{content}, '%')</if>
+            <if test="tagId != null  and tagId != ''">and tag_id = #{tagId}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="isOriginal != null  and isOriginal != ''">and is_original = #{isOriginal}</if>
+            <if test="categoryId != null  and categoryId != ''">and category_id = #{categoryId}</if>
+            <if test="level != null ">and level = #{level}</if>
+            <if test="isPublish != null  and isPublish != ''">and is_publish = #{isPublish}</if>
+            <if test="type != null ">and type = #{type}</if>
         </where>
     </select>
 
@@ -81,18 +181,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectWebArticleList" parameterType="Article" resultMap="ArticleResult">
         <include refid="selectWebArticleVo"/>
         <where>
-            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
-            <if test="summary != null  and summary != ''"> and summary like concat('%', #{summary}, '%')</if>
-            <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
+            <if test="title != null  and title != ''">and title like concat('%', #{title}, '%')</if>
+            <if test="summary != null  and summary != ''">and summary like concat('%', #{summary}, '%')</if>
+            <if test="content != null  and content != ''">and content like concat('%', #{content}, '%')</if>
             <if test="tagId != null  and tagId != ''">
                 and FIND_IN_SET(#{tagId},tag_id)
             </if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="isOriginal != null  and isOriginal != ''"> and is_original = #{isOriginal}</if>
-            <if test="categoryId != null  and categoryId != ''"> and category_id = #{categoryId}</if>
-            <if test="level != null "> and level = #{level}</if>
-            <if test="isPublish != null  and isPublish != ''"> and is_publish = #{isPublish}</if>
-            <if test="type != null "> and type = #{type}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="isOriginal != null  and isOriginal != ''">and is_original = #{isOriginal}</if>
+            <if test="categoryId != null  and categoryId != ''">and category_id = #{categoryId}</if>
+            <if test="level != null ">and level = #{level}</if>
+            <if test="isPublish != null  and isPublish != ''">and is_publish = #{isPublish}</if>
+            <if test="type != null ">and type = #{type}</if>
             <if test="tagIdList != null and tagIdList.size() > 0 ">
                 <foreach item="tagId" collection="tagIdList" open="and (" separator="or" close=")">
                     FIND_IN_SET(#{tagId},tag_id)
@@ -105,23 +205,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectArticleList" parameterType="Article" resultMap="ArticleResult">
         <include refid="selectArticleVo"/>
         <where>
-            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
-            <if test="summary != null  and summary != ''"> and summary like concat('%', #{summary}, '%')</if>
-            <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
+            <if test="title != null  and title != ''">and title like concat('%', #{title}, '%')</if>
+            <if test="summary != null  and summary != ''">and summary like concat('%', #{summary}, '%')</if>
+            <if test="content != null  and content != ''">and content like concat('%', #{content}, '%')</if>
             <if test="tagId != null  and tagId != ''">
                 and FIND_IN_SET(#{tagId},tag_id)
             </if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="isOriginal != null  and isOriginal != ''"> and is_original = #{isOriginal}</if>
-            <if test="categoryId != null  and categoryId != ''"> and category_id = #{categoryId}</if>
-            <if test="level != null "> and level = #{level}</if>
-            <if test="isPublish != null  and isPublish != ''"> and is_publish = #{isPublish}</if>
-            <if test="type != null "> and type = #{type}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="isOriginal != null  and isOriginal != ''">and is_original = #{isOriginal}</if>
+            <if test="categoryId != null  and categoryId != ''">and category_id = #{categoryId}</if>
+            <if test="level != null ">and level = #{level}</if>
+            <if test="isPublish != null  and isPublish != ''">and is_publish = #{isPublish}</if>
+            <if test="type != null ">and type = #{type}</if>
             <if test="tagIdList != null and tagIdList.size() > 0 ">
                 <foreach item="tagId" collection="tagIdList" open="and (" separator="or" close=")">
                     FIND_IN_SET(#{tagId},tag_id)
                 </foreach>
-             </if>
+            </if>
         </where>
     </select>
 

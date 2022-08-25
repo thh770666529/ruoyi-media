@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FileUtil{
+public class FileUtil {
 
     public static final String[] IMG_FILE = {"bmp", "jpg", "png", "tif", "gif", "jpeg"};
     public static final String[] DOC_FILE = {"doc", "docx", "ppt", "pptx", "xls", "xlsx", "txt", "hlp", "wps", "rtf", "html", "pdf"};
@@ -59,7 +59,6 @@ public class FileUtil{
     }
 
 
-
     public static String pathSplitFormat(String filePath) {
         String path = filePath.replace("///", "/")
                 .replace("//", "/")
@@ -70,6 +69,7 @@ public class FileUtil{
 
     /**
      * 获取文件扩展名
+     *
      * @param fileName 文件名
      * @return 文件扩展名
      */

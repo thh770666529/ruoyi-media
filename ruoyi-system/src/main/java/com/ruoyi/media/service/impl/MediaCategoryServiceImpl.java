@@ -1,6 +1,7 @@
 package com.ruoyi.media.service.impl;
 
 import java.util.List;
+
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,7 @@ import com.ruoyi.media.service.IMediaCategoryService;
  * @date 2021-09-11
  */
 @Service
-public class MediaCategoryServiceImpl implements IMediaCategoryService
-{
+public class MediaCategoryServiceImpl implements IMediaCategoryService {
     @Autowired
     private MediaCategoryMapper mediaCategoryMapper;
 
@@ -27,8 +27,7 @@ public class MediaCategoryServiceImpl implements IMediaCategoryService
      * @return 电影分类
      */
     @Override
-    public MediaCategory selectMediaCategoryByCategoryId(Long categoryId)
-    {
+    public MediaCategory selectMediaCategoryByCategoryId(Long categoryId) {
         return mediaCategoryMapper.selectMediaCategoryByCategoryId(categoryId);
     }
 
@@ -39,8 +38,7 @@ public class MediaCategoryServiceImpl implements IMediaCategoryService
      * @return 电影分类
      */
     @Override
-    public List<MediaCategory> selectMediaCategoryList(MediaCategory mediaCategory)
-    {
+    public List<MediaCategory> selectMediaCategoryList(MediaCategory mediaCategory) {
         return mediaCategoryMapper.selectMediaCategoryList(mediaCategory);
     }
 
@@ -51,8 +49,7 @@ public class MediaCategoryServiceImpl implements IMediaCategoryService
      * @return 结果
      */
     @Override
-    public int insertMediaCategory(MediaCategory mediaCategory)
-    {
+    public int insertMediaCategory(MediaCategory mediaCategory) {
         mediaCategory.setCreateTime(DateUtils.getNowDate());
         return mediaCategoryMapper.insert(mediaCategory);
     }
@@ -64,8 +61,7 @@ public class MediaCategoryServiceImpl implements IMediaCategoryService
      * @return 结果
      */
     @Override
-    public int updateMediaCategory(MediaCategory mediaCategory)
-    {
+    public int updateMediaCategory(MediaCategory mediaCategory) {
         mediaCategory.setUpdateTime(DateUtils.getNowDate());
         return mediaCategoryMapper.updateById(mediaCategory);
     }
@@ -77,8 +73,7 @@ public class MediaCategoryServiceImpl implements IMediaCategoryService
      * @return 结果
      */
     @Override
-    public int deleteMediaCategoryByCategoryIds(Long[] categoryIds)
-    {
+    public int deleteMediaCategoryByCategoryIds(Long[] categoryIds) {
         return mediaCategoryMapper.deleteMediaCategoryByCategoryIds(categoryIds);
     }
 
@@ -89,8 +84,7 @@ public class MediaCategoryServiceImpl implements IMediaCategoryService
      * @return 结果
      */
     @Override
-    public int deleteMediaCategoryByCategoryId(Long categoryId)
-    {
+    public int deleteMediaCategoryByCategoryId(Long categoryId) {
         return mediaCategoryMapper.deleteById(categoryId);
     }
 }

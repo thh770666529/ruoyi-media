@@ -1,4 +1,5 @@
 package com.ruoyi.index.vo;
+
 import lombok.Data;
 
 import java.util.Map;

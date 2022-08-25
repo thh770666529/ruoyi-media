@@ -14,8 +14,7 @@ import com.ruoyi.media.domain.vo.MovieVO;
  * @author thh
  * @date 2021-05-16
  */
-public interface IMovieService extends IService<Movie>
-{
+public interface IMovieService extends IService<Movie> {
     /**
      * 查询电影
      *
@@ -69,6 +68,7 @@ public interface IMovieService extends IService<Movie>
 
     /**
      * 查询热门电影
+     *
      * @param top
      * @return
      */
@@ -76,6 +76,7 @@ public interface IMovieService extends IService<Movie>
 
     /**
      * 删除演员关联
+     *
      * @param actorIds
      * @return
      */
@@ -83,6 +84,7 @@ public interface IMovieService extends IService<Movie>
 
     /**
      * 获取演员参演的电影
+     *
      * @param actorId
      * @return
      */
@@ -90,6 +92,7 @@ public interface IMovieService extends IService<Movie>
 
     /**
      * 获取相关类型的电影
+     *
      * @param movieId 电影id
      * @return
      */
@@ -97,6 +100,7 @@ public interface IMovieService extends IService<Movie>
 
     /**
      * 查询门户列表
+     *
      * @param movieVO
      * @return
      */
@@ -104,6 +108,7 @@ public interface IMovieService extends IService<Movie>
 
     /**
      * 搜索门户
+     *
      * @param searchParamVO
      * @return
      */

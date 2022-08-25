@@ -11,28 +11,40 @@ import lombok.Data;
  **/
 @Data
 public class MovieActorVO {
-    /** 演员ID */
+    /**
+     * 演员ID
+     */
     @Excel(name = "演员ID")
     private Long actorId;
 
-    /** 电影ID */
+    /**
+     * 电影ID
+     */
     @Excel(name = "电影ID")
     private Long movieId;
 
-    /** 类型 */
+    /**
+     * 类型
+     */
     @Excel(name = "类型")
     private String type;
 
 
-    /** 姓名 */
+    /**
+     * 姓名
+     */
     @Excel(name = "姓名")
     private String name;
 
-    /** 头像 */
+    /**
+     * 头像
+     */
     @Excel(name = "头像")
     private String avatar;
 
-    /** 标签  */
+    /**
+     * 标签
+     */
     @Excel(name = "标签 ")
     private String label;
 }

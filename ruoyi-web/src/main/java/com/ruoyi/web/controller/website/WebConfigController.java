@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/website/webConfig")
-public class WebConfigController extends BaseController
-{
+public class WebConfigController extends BaseController {
     @Autowired
     private IWebConfigService webConfigService;
 
@@ -25,9 +24,8 @@ public class WebConfigController extends BaseController
     /**
      * 获取站点配置
      */
-	@PostMapping("/getWebConfig")
-    public AjaxResult getWebConfig()
-    {
-        return  AjaxResult.success(webConfigService.getWebConfig());
+    @PostMapping("/getWebConfig")
+    public AjaxResult getWebConfig() {
+        return AjaxResult.success(webConfigService.getWebConfig());
     }
 }

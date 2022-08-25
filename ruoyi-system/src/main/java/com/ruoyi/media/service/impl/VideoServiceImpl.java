@@ -38,8 +38,7 @@ import javax.annotation.Resource;
  * @date 2021-05-16
  */
 @Service
-public class VideoServiceImpl  extends ServiceImpl<VideoMapper, Video> implements IVideoService
-{
+public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements IVideoService {
     private static final Logger log = LoggerFactory.getLogger(VideoServiceImpl.class);
 
     @Autowired
@@ -68,23 +67,23 @@ public class VideoServiceImpl  extends ServiceImpl<VideoMapper, Video> implement
         MultimediaInfo videoInfoByFile = VideoUtils.getVideoInfoByFile(file.getPath());
         //复制到视频目录
         String fileName = FileUploadUtils.extractFilename2(file);
-        File newVideoFile = new File(RuoYiConfig.getMovieVideoPath()+"" + File.separator + fileName);
+        File newVideoFile = new File(RuoYiConfig.getMovieVideoPath() + "" + File.separator + fileName);
         if (!newVideoFile.exists()) {
             if (!newVideoFile.getParentFile().exists()) {
                 newVideoFile.getParentFile().mkdirs();
             }
         }
         try {
-            FileCopyUtils.copy(file,newVideoFile);
-        }catch (IOException e){
-            log.error(" 上传视频失败,请联系管理员{}",e.getMessage(), e);
+            FileCopyUtils.copy(file, newVideoFile);
+        } catch (IOException e) {
+            log.error(" 上传视频失败,请联系管理员{}", e.getMessage(), e);
             throw new ServiceException("上传视频失败,请联系管理员！");
         }
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(RuoYiConfig.getMovieVideoPath(), dirLastIndex);
         String pathFileName = "/" + currentDir + "/" + fileName;
         String status = VideoStatus.READY_CONVERT.getCode();
-        UploadVideoVO uploadVideoVO = new UploadVideoVO(pathFileName, netWorkDiskVO.getFileName() , FilenameUtils.getExtension(pathFileName), fileBean.getFileSize(), videoInfoByFile.getVideoTime(),status);
+        UploadVideoVO uploadVideoVO = new UploadVideoVO(pathFileName, netWorkDiskVO.getFileName(), FilenameUtils.getExtension(pathFileName), fileBean.getFileSize(), videoInfoByFile.getVideoTime(), status);
         return uploadVideoVO;
     }
 }

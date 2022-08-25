@@ -25,19 +25,18 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/website/comment")
-public class CommentController extends BaseController
-{
+public class CommentController extends BaseController {
     @Autowired
     private ICommentService commentService;
 
     @Autowired
     TokenUtil tokenUtil;
+
     /**
      * 查询评论列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(Comment comment)
-    {
+    public TableDataInfo list(Comment comment) {
         startPage();
         List<Comment> list = commentService.selectCommentList(comment);
         return getDataTable(list);
@@ -47,8 +46,7 @@ public class CommentController extends BaseController
      * 查询评论树列表
      */
     @GetMapping("/treeList")
-    public TableDataInfo selectTreeComment(Comment comment)
-    {
+    public TableDataInfo selectTreeComment(Comment comment) {
         startPage();
         List<Comment> list = commentService.selectTreeComment(comment);
         return getDataTable(list);
@@ -59,13 +57,12 @@ public class CommentController extends BaseController
     @Log(title = "回复评论", businessType = BusinessType.REPLYCOMMENT)
     public AjaxResult reply(@RequestBody Comment comment) {
         int count = commentService.reply(comment);
-        if (count>0){
+        if (count > 0) {
             return AjaxResult.success(comment);
-        }else {
+        } else {
             return AjaxResult.error();
         }
     }
-
 
 
     /**
@@ -82,7 +79,7 @@ public class CommentController extends BaseController
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
 
         // 判断该评论是否能够删除
-        if (dbComment==null || !loginUser.getUserId().equals(dbComment.getUserId())) {
+        if (dbComment == null || !loginUser.getUserId().equals(dbComment.getUserId())) {
             return error("删除失败");
         }
 
@@ -104,8 +101,7 @@ public class CommentController extends BaseController
      */
     @Log(title = "评论", businessType = BusinessType.DELETE)
     @DeleteMapping("/{commentIds}")
-    public AjaxResult remove(@PathVariable Long[] commentIds)
-    {
+    public AjaxResult remove(@PathVariable Long[] commentIds) {
         return toAjax(commentService.deleteCommentByIds(commentIds));
     }
 
@@ -113,8 +109,7 @@ public class CommentController extends BaseController
      * 获取评论详细信息
      */
     @GetMapping(value = "/{commentId}")
-    public AjaxResult getInfo(@PathVariable("commentId") Long commentId)
-    {
+    public AjaxResult getInfo(@PathVariable("commentId") Long commentId) {
         return AjaxResult.success(commentService.selectCommentById(commentId));
     }
 
@@ -124,8 +119,7 @@ public class CommentController extends BaseController
      */
     @Log(title = "评论", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Comment comment)
-    {
+    public AjaxResult edit(@RequestBody Comment comment) {
         return toAjax(commentService.updateComment(comment));
     }
 

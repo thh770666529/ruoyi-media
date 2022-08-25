@@ -14,8 +14,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-08-28
  */
 @Repository
-public interface ArticleMapper extends BaseMapper<Article>
-{
+public interface ArticleMapper extends BaseMapper<Article> {
     /**
      * 查询博客文章
      *
@@ -43,15 +42,17 @@ public interface ArticleMapper extends BaseMapper<Article>
 
     /**
      * 搜索最热文章列表
+     *
      * @param status
      * @param publishStatus
      * @param top
      * @return
      */
-    List<Article> selectHotArticleList(@Param("status") int status,@Param("publishStatus") int publishStatus,@Param("top") int top);
+    List<Article> selectHotArticleList(@Param("status") int status, @Param("publishStatus") int publishStatus, @Param("top") int top);
 
     /**
      * 通过门户搜索文章列表
+     *
      * @param article
      * @return
      */
@@ -59,6 +60,7 @@ public interface ArticleMapper extends BaseMapper<Article>
 
     /**
      * 通过门户查找文章列表
+     *
      * @param article
      * @return
      */

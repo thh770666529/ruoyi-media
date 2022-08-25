@@ -1,6 +1,7 @@
 package com.ruoyi.website.mapper;
 
 import java.util.List;
+
 import com.ruoyi.website.domain.Account;
 import com.ruoyi.website.vo.UserIntegralVO;
 import org.springframework.stereotype.Repository;
@@ -12,8 +13,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-12-11
  */
 @Repository
-public interface AccountMapper
-{
+public interface AccountMapper {
     /**
      * 查询用户账户
      *
@@ -28,7 +28,7 @@ public interface AccountMapper
      * @param userId 用户主键
      * @return 用户账户
      */
-    public Account selectAccountByUserId(String  userId);
+    public Account selectAccountByUserId(String userId);
 
     /**
      * 查询用户账户列表
@@ -73,6 +73,7 @@ public interface AccountMapper
 
     /**
      * 查询用户积分排行榜
+     *
      * @return
      */
     List<UserIntegralVO> selectBestUserIntegralList();

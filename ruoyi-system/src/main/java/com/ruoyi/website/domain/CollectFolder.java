@@ -17,26 +17,35 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 @Data
 @TableName("website_collect_folder")
-public class CollectFolder extends BaseEntity
-{
+public class CollectFolder extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    /** 主键 */
+    /**
+     * 主键
+     */
     @TableId(type = IdType.AUTO)
     private Long collectFolderId;
 
-    /** 用户的id */
+    /**
+     * 用户的id
+     */
     private String userId;
 
-    /** 表名称 */
+    /**
+     * 表名称
+     */
     @Excel(name = "表名称")
     private String tableName;
 
-    /** 收藏夹名称 */
+    /**
+     * 收藏夹名称
+     */
     @Excel(name = "收藏夹名称")
     private String name;
 
-    /** 状态 */
+    /**
+     * 状态
+     */
     @Excel(name = "状态")
     private Integer status;
 }

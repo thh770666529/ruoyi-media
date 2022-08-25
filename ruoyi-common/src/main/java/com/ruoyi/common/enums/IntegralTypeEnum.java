@@ -8,7 +8,7 @@ public enum IntegralTypeEnum {
     /**
      * 积分补偿
      */
-    Compensation(99,"积分补偿",0,0),
+    Compensation(99, "积分补偿", 0, 0),
 
     /**
      * 签到
@@ -18,7 +18,7 @@ public enum IntegralTypeEnum {
     /**
      * 文章
      */
-    Article(2, "创作文章",5, 5);
+    Article(2, "创作文章", 5, 5);
 
     /**
      * 积分号

@@ -1,10 +1,13 @@
 package com.ruoyi.blog.service.impl;
 
 import java.util.List;
+
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
+
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.blog.domain.ArticleSubject;
@@ -19,8 +22,7 @@ import com.ruoyi.blog.service.ISubjectService;
  * @date 2021-08-28
  */
 @Service
-public class SubjectServiceImpl implements ISubjectService
-{
+public class SubjectServiceImpl implements ISubjectService {
     @Autowired
     private SubjectMapper subjectMapper;
 
@@ -31,8 +33,7 @@ public class SubjectServiceImpl implements ISubjectService
      * @return 文章专题
      */
     @Override
-    public Subject selectSubjectBySubjectId(Long subjectId)
-    {
+    public Subject selectSubjectBySubjectId(Long subjectId) {
         return subjectMapper.selectSubjectBySubjectId(subjectId);
     }
 
@@ -43,8 +44,7 @@ public class SubjectServiceImpl implements ISubjectService
      * @return 文章专题
      */
     @Override
-    public List<Subject> selectSubjectList(Subject subject)
-    {
+    public List<Subject> selectSubjectList(Subject subject) {
         return subjectMapper.selectSubjectList(subject);
     }
 
@@ -56,8 +56,7 @@ public class SubjectServiceImpl implements ISubjectService
      */
     @Transactional
     @Override
-    public int insertSubject(Subject subject)
-    {
+    public int insertSubject(Subject subject) {
         subject.setCreateTime(DateUtils.getNowDate());
         int rows = subjectMapper.insert(subject);
         insertArticleSubject(subject);
@@ -72,8 +71,7 @@ public class SubjectServiceImpl implements ISubjectService
      */
     @Transactional
     @Override
-    public int updateSubject(Subject subject)
-    {
+    public int updateSubject(Subject subject) {
         subject.setUpdateTime(DateUtils.getNowDate());
         subjectMapper.deleteArticleSubjectBySubjectId(subject.getSubjectId());
         insertArticleSubject(subject);
@@ -88,8 +86,7 @@ public class SubjectServiceImpl implements ISubjectService
      */
     @Transactional
     @Override
-    public int deleteSubjectBySubjectIds(Long[] subjectIds)
-    {
+    public int deleteSubjectBySubjectIds(Long[] subjectIds) {
         subjectMapper.deleteArticleSubjectBySubjectIds(subjectIds);
         return subjectMapper.deleteSubjectBySubjectIds(subjectIds);
     }
@@ -101,8 +98,7 @@ public class SubjectServiceImpl implements ISubjectService
      * @return 结果
      */
     @Override
-    public int deleteSubjectBySubjectId(Long subjectId)
-    {
+    public int deleteSubjectBySubjectId(Long subjectId) {
         subjectMapper.deleteArticleSubjectBySubjectId(subjectId);
         return subjectMapper.deleteById(subjectId);
     }
@@ -112,20 +108,16 @@ public class SubjectServiceImpl implements ISubjectService
      *
      * @param subject 文章专题对象
      */
-    public void insertArticleSubject(Subject subject)
-    {
+    public void insertArticleSubject(Subject subject) {
         List<ArticleSubject> articleSubjectList = subject.getArticleSubjectList();
         Long subjectId = subject.getSubjectId();
-        if (StringUtils.isNotNull(articleSubjectList))
-        {
+        if (StringUtils.isNotNull(articleSubjectList)) {
             List<ArticleSubject> list = new ArrayList<ArticleSubject>();
-            for (ArticleSubject articleSubject : articleSubjectList)
-            {
+            for (ArticleSubject articleSubject : articleSubjectList) {
                 articleSubject.setSubjectId(subjectId + "");
                 list.add(articleSubject);
             }
-            if (list.size() > 0)
-            {
+            if (list.size() > 0) {
                 subjectMapper.batchArticleSubject(list);
             }
         }

@@ -12,6 +12,4 @@ public class CheckExtractionCodeDTO {
     private String extractionCode;
 
 
-
-
 }

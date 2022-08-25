@@ -15,7 +15,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor = Exception.class)
 public class ShareServiceImpl extends ServiceImpl<ShareMapper, Share> implements IShareService {
 
     @Resource

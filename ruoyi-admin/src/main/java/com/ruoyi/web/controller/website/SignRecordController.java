@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.website;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/website/signRecord")
-public class SignRecordController extends BaseController
-{
+public class SignRecordController extends BaseController {
     @Autowired
     private ISignRecordService signRecordService;
 
@@ -40,8 +40,7 @@ public class SignRecordController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:signRecord:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SignRecord signRecord)
-    {
+    public TableDataInfo list(SignRecord signRecord) {
         startPage();
         List<SignRecord> list = signRecordService.selectSignRecordList(signRecord);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class SignRecordController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:signRecord:export')")
     @Log(title = "签到日志", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SignRecord signRecord)
-    {
+    public void export(HttpServletResponse response, SignRecord signRecord) {
         List<SignRecord> list = signRecordService.selectSignRecordList(signRecord);
         ExcelUtil<SignRecord> util = new ExcelUtil<SignRecord>(SignRecord.class);
         util.exportExcel(response, list, "签到日志数据");
@@ -65,8 +63,7 @@ public class SignRecordController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:signRecord:query')")
     @GetMapping(value = "/{signRecordId}")
-    public AjaxResult getInfo(@PathVariable("signRecordId") Long signRecordId)
-    {
+    public AjaxResult getInfo(@PathVariable("signRecordId") Long signRecordId) {
         return AjaxResult.success(signRecordService.selectSignRecordBySignRecordId(signRecordId));
     }
 
@@ -76,8 +73,7 @@ public class SignRecordController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:signRecord:add')")
     @Log(title = "签到日志", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody SignRecord signRecord)
-    {
+    public AjaxResult add(@RequestBody SignRecord signRecord) {
         return toAjax(signRecordService.insertSignRecord(signRecord));
     }
 
@@ -87,8 +83,7 @@ public class SignRecordController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:signRecord:edit')")
     @Log(title = "签到日志", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody SignRecord signRecord)
-    {
+    public AjaxResult edit(@RequestBody SignRecord signRecord) {
         return toAjax(signRecordService.updateSignRecord(signRecord));
     }
 
@@ -97,9 +92,8 @@ public class SignRecordController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:signRecord:remove')")
     @Log(title = "签到日志", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{signRecordIds}")
-    public AjaxResult remove(@PathVariable Long[] signRecordIds)
-    {
+    @DeleteMapping("/{signRecordIds}")
+    public AjaxResult remove(@PathVariable Long[] signRecordIds) {
         return toAjax(signRecordService.deleteSignRecordBySignRecordIds(signRecordIds));
     }
 }

@@ -18,8 +18,7 @@ import com.ruoyi.blog.service.ICategoryService;
  * @date 2021-08-28
  */
 @Service
-public class CategoryServiceImpl  extends ServiceImpl<CategoryMapper,Category> implements ICategoryService
-{
+public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements ICategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
 
@@ -30,8 +29,7 @@ public class CategoryServiceImpl  extends ServiceImpl<CategoryMapper,Category> i
      * @return 博客分类
      */
     @Override
-    public Category selectCategoryByCategoryId(Long categoryId)
-    {
+    public Category selectCategoryByCategoryId(Long categoryId) {
         return categoryMapper.selectCategoryByCategoryId(categoryId);
     }
 
@@ -42,8 +40,7 @@ public class CategoryServiceImpl  extends ServiceImpl<CategoryMapper,Category> i
      * @return 博客分类
      */
     @Override
-    public List<Category> selectCategoryList(Category category)
-    {
+    public List<Category> selectCategoryList(Category category) {
         return categoryMapper.selectCategoryList(category);
     }
 
@@ -54,8 +51,7 @@ public class CategoryServiceImpl  extends ServiceImpl<CategoryMapper,Category> i
      * @return 结果
      */
     @Override
-    public int insertCategory(Category category)
-    {
+    public int insertCategory(Category category) {
         category.setCreateTime(DateUtils.getNowDate());
         return categoryMapper.insert(category);
     }
@@ -67,8 +63,7 @@ public class CategoryServiceImpl  extends ServiceImpl<CategoryMapper,Category> i
      * @return 结果
      */
     @Override
-    public int updateCategory(Category category)
-    {
+    public int updateCategory(Category category) {
         category.setUpdateTime(DateUtils.getNowDate());
         return categoryMapper.updateById(category);
     }
@@ -80,8 +75,7 @@ public class CategoryServiceImpl  extends ServiceImpl<CategoryMapper,Category> i
      * @return 结果
      */
     @Override
-    public int deleteCategoryByCategoryIds(Long[] categoryIds)
-    {
+    public int deleteCategoryByCategoryIds(Long[] categoryIds) {
         return categoryMapper.deleteCategoryByCategoryIds(categoryIds);
     }
 
@@ -92,8 +86,7 @@ public class CategoryServiceImpl  extends ServiceImpl<CategoryMapper,Category> i
      * @return 结果
      */
     @Override
-    public int deleteCategoryByCategoryId(Long categoryId)
-    {
+    public int deleteCategoryByCategoryId(Long categoryId) {
         return categoryMapper.deleteById(categoryId);
     }
 

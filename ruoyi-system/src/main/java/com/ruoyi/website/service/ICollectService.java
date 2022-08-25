@@ -13,8 +13,7 @@ import com.ruoyi.website.domain.vo.CollectVO;
  * @author thh
  * @date 2021-10-05
  */
-public interface ICollectService  extends IService<Collect>
-{
+public interface ICollectService extends IService<Collect> {
     /**
      * 查询收藏
      *
@@ -71,6 +70,7 @@ public interface ICollectService  extends IService<Collect>
 
     /**
      * 查询自己的收藏列表
+     *
      * @param collect
      * @return
      */

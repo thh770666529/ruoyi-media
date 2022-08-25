@@ -29,8 +29,8 @@ import java.util.Map;
 
 
 /**
- * @Desc 首页controller
  * @author thh
+ * @Desc 首页controller
  */
 @RestController
 @RequestMapping("/index")
@@ -63,32 +63,32 @@ public class IndexController extends BaseController {
     private IAccountService accountService;
 
     @GetMapping("/getHotActorList")
-    public AjaxResult getHotActorList(){
+    public AjaxResult getHotActorList() {
         //查询前10的热门演员
         return AjaxResult.success(actorService.selectHotActorList(10));
     }
 
     @GetMapping("/getHotMovieList")
-    public AjaxResult getHotMovieList(){
+    public AjaxResult getHotMovieList() {
         //查询前12的热门电影
         return AjaxResult.success(movieService.selectHotMovieList(10));
     }
 
     @GetMapping("/getAllBannerList")
-    public AjaxResult getAllBannerList(){
+    public AjaxResult getAllBannerList() {
         List<WebsiteBanner> list = websiteBannerService.selectWebsiteBannerList(null);
         return AjaxResult.success(list);
     }
 
     @GetMapping("/getLinkList")
-    public AjaxResult getLinkList(){
+    public AjaxResult getLinkList() {
         List<WebsiteLink> list = websiteLinkService.selectWebsiteLinkList(null);
         return AjaxResult.success(list);
     }
 
 
     @GetMapping("/getHotArticleList")
-    public AjaxResult getHotArticleList(){
+    public AjaxResult getHotArticleList() {
         log.info("门户获取首页排行博客");
         List<Article> list = articleService.selectHotArticleList(10);
         return AjaxResult.success(list);
@@ -98,8 +98,7 @@ public class IndexController extends BaseController {
      * 查询最新的博客文章列表
      */
     @GetMapping("/getNewArticleList")
-    public TableDataInfo getNewArticleList(Article article)
-    {
+    public TableDataInfo getNewArticleList(Article article) {
         log.info("门户获取最新的博客文章列表");
         startPage();
         List<Article> list = articleService.selectNewArticleList();
@@ -108,7 +107,7 @@ public class IndexController extends BaseController {
 
 
     @GetMapping("/getHotTagList")
-    public AjaxResult getHotTagList(){
+    public AjaxResult getHotTagList() {
         log.info("门户获取最热标签");
         List<Tag> list = tagService.selectHotTagList(10);
         return AjaxResult.success(list);
@@ -116,8 +115,8 @@ public class IndexController extends BaseController {
 
 
     @GetMapping("/search")
-    public TableDataInfo search(SearchParamVO searchParamVO){
-        if (searchParamVO == null || StringUtils.isBlank(searchParamVO.getKeyword())){
+    public TableDataInfo search(SearchParamVO searchParamVO) {
+        if (searchParamVO == null || StringUtils.isBlank(searchParamVO.getKeyword())) {
             error("请输入关键字！");
         }
         searchLogService.insertSearchLog(searchParamVO.getKeyword());
@@ -128,10 +127,11 @@ public class IndexController extends BaseController {
 
     /**
      * 获取积分排行榜
+     *
      * @return
      */
     @GetMapping("/getBestUserIntegralList")
-    public TableDataInfo getBestUserIntegralList(Map<String, Object> params){
+    public TableDataInfo getBestUserIntegralList(Map<String, Object> params) {
         startPage();
         List<UserIntegralVO> list = accountService.selectBestUserIntegralList();
         return getDataTable(list);

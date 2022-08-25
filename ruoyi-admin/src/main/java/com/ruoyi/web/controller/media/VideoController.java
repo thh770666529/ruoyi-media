@@ -35,8 +35,7 @@ import javax.validation.constraints.NotNull;
  */
 @RestController
 @RequestMapping("/media/video")
-public class VideoController extends BaseController
-{
+public class VideoController extends BaseController {
     @Autowired
     private IVideoService videoService;
 
@@ -45,8 +44,7 @@ public class VideoController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:video:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Video video)
-    {
+    public TableDataInfo list(Video video) {
         startPage();
         List<Video> list = videoService.selectVideoList(video);
         return getDataTable(list);
@@ -58,8 +56,7 @@ public class VideoController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:video:export')")
     @Log(title = "电影视频", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Video video)
-    {
+    public void export(HttpServletResponse response, Video video) {
         List<Video> list = videoService.selectVideoList(video);
         ExcelUtil<Video> util = new ExcelUtil<Video>(Video.class);
         util.exportExcel(response, list, "电影视频数据");
@@ -70,8 +67,7 @@ public class VideoController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:video:query')")
     @GetMapping(value = "/{videoId}")
-    public AjaxResult getInfo(@PathVariable("videoId") Long videoId)
-    {
+    public AjaxResult getInfo(@PathVariable("videoId") Long videoId) {
         return AjaxResult.success(videoService.getById(videoId));
     }
 
@@ -81,8 +77,7 @@ public class VideoController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:video:add')")
     @Log(title = "电影视频", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Video video)
-    {
+    public AjaxResult add(@RequestBody Video video) {
         return toAjax(videoService.saveOrUpdate(video));
     }
 
@@ -92,8 +87,7 @@ public class VideoController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:video:edit')")
     @Log(title = "电影视频", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Video video)
-    {
+    public AjaxResult edit(@RequestBody Video video) {
         return toAjax(videoService.saveOrUpdate(video));
     }
 
@@ -102,9 +96,8 @@ public class VideoController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:video:remove')")
     @Log(title = "电影视频", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{movieVideoIds}")
-    public AjaxResult remove(@PathVariable @NotNull Long[] movieVideoIds)
-    {
+    @DeleteMapping("/{movieVideoIds}")
+    public AjaxResult remove(@PathVariable @NotNull Long[] movieVideoIds) {
         List<@NotNull Long> idList = Arrays.asList(movieVideoIds);
 
         return toAjax(videoService.removeByIds(idList));

@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -42,8 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2021-08-28
  */
 @Service
-public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  implements IArticleService
-{
+public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements IArticleService {
     @Autowired
     private ArticleMapper articleMapper;
 
@@ -66,8 +66,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
      * @return 博客文章
      */
     @Override
-    public Article selectArticleByArticleId(Long articleId)
-    {
+    public Article selectArticleByArticleId(Long articleId) {
         return articleMapper.selectArticleByArticleId(articleId);
     }
 
@@ -78,8 +77,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
      * @return 博客文章
      */
     @Override
-    public List<Article> selectArticleList(Article article)
-    {
+    public List<Article> selectArticleList(Article article) {
         return articleMapper.selectArticleList(article);
     }
 
@@ -97,8 +95,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
      * @return 结果
      */
     @Override
-    public int insertArticle(Article article)
-    {
+    public int insertArticle(Article article) {
         // 初始化数据
         article.setCreateTime(DateUtils.getNowDate());
         article.setSupportCount(0L);
@@ -117,8 +114,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
      * @return 结果
      */
     @Override
-    public int updateArticle(Article article)
-    {
+    public int updateArticle(Article article) {
         //删除热门文章 防止门户热门文章不同步的情况
         redisCache.deleteObject(BaseRedisKeyConstants.HOT_BLOG_ARTICLE);
         article.setUpdateTime(DateUtils.getNowDate());
@@ -132,8 +128,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
      * @return 结果
      */
     @Override
-    public int deleteArticleByArticleIds(Long[] articleIds)
-    {
+    public int deleteArticleByArticleIds(Long[] articleIds) {
         return articleMapper.deleteArticleByArticleIds(articleIds);
     }
 
@@ -144,8 +139,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
      * @return 结果
      */
     @Override
-    public int deleteArticleByArticleId(Long articleId)
-    {
+    public int deleteArticleByArticleId(Long articleId) {
         return articleMapper.deleteById(articleId);
     }
 
@@ -154,7 +148,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
         List<Article> articleList = redisCache.getCacheObject(BaseRedisKeyConstants.HOT_BLOG_ARTICLE);
         if (CollectionUtil.isEmpty(articleList)) {
             articleList = articleMapper.selectHotArticleList(1, 1, top);
-            if (CollectionUtil.isNotEmpty(articleList)){
+            if (CollectionUtil.isNotEmpty(articleList)) {
                 redisCache.setCacheObject(BaseRedisKeyConstants.HOT_BLOG_ARTICLE, articleList, BlogConstants.BLOG_ARTICLE_EXPIRATION, TimeUnit.DAYS);
             }
         }
@@ -168,7 +162,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
         queryWrapper.eq("is_publish", "1");
         queryWrapper.orderByDesc("create_time");
         //因为首页并不需要显示内容，所以需要排除掉内容字段
-        queryWrapper.select(Article.class, i -> !i.getProperty().equals("content") && !i.getProperty().equals("password") );
+        queryWrapper.select(Article.class, i -> !i.getProperty().equals("content") && !i.getProperty().equals("password"));
         return articleMapper.selectList(queryWrapper);
     }
 
@@ -193,12 +187,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
     public void thumbArticleById(Long articleId) {
         Long userId = SecurityUtils.getUserId();
         Integer redisJson = redisCache.getCacheObject(BaseRedisKeyConstants.THUMB_BLOG_SUPPORT + ":" + articleId + "#" + userId);
-        if (redisJson != null){
+        if (redisJson != null) {
             throw new ServiceException("24小时内无法重复点赞同一篇文章");
         } else {
             Article article = articleMapper.selectById(articleId);
             Long supportCount = article.getOpposeCount();
-            if (supportCount == null){
+            if (supportCount == null) {
                 supportCount = 0L;
             }
             article.setSupportCount(supportCount + 1);
@@ -265,10 +259,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
         // 文档解析
         List<String> fileContentList = new ArrayList<>();
         for (MultipartFile multipartFile : fileList) {
-            try(
+            try (
                     Reader reader = new InputStreamReader(multipartFile.getInputStream(), "utf-8");
                     BufferedReader br = new BufferedReader(reader);
-                    ) {
+            ) {
 
                 String line;
                 StringBuilder content = new StringBuilder();
@@ -347,7 +341,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>  imp
                 article.setCategoryName(category.getName());
                 this.insertArticle(article);
                 count++;
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 log.error("本地上传文档失败（替换图片文件失败）" + e.getMessage());
             }

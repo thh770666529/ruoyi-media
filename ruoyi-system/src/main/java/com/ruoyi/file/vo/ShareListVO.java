@@ -58,6 +58,6 @@ public class ShareListVO {
     /**
      * 标识码
      */
-    private String  identifier;
+    private String identifier;
 
 }

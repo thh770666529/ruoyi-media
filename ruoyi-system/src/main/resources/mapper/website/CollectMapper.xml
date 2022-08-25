@@ -1,76 +1,85 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.website.mapper.CollectMapper">
 
     <resultMap type="Collect" id="CollectResult">
-        <result property="collectId"    column="collect_id"    />
-        <result property="userId"    column="user_id"    />
-        <result property="targetId"    column="target_id"    />
-        <result property="status"    column="status"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="tableName"    column="table_name"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="updateBy"    column="update_by"    />
+        <result property="collectId" column="collect_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="targetId" column="target_id"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="tableName" column="table_name"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
     </resultMap>
 
     <resultMap type="CollectVO" id="CollectVOResult">
-        <result property="collectId"    column="collect_id"    />
-        <result property="userId"    column="user_id"    />
-        <result property="targetId"    column="target_id"    />
-        <result property="status"    column="status"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="tableName"    column="table_name"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="updateBy"    column="update_by"  />
+        <result property="collectId" column="collect_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="targetId" column="target_id"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="tableName" column="table_name"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
         <association property="movie" javaType="Movie">
             <result property="title" column="m_title"/>
-            <result property="type"  column="m_type"/>
-            <result property="images"  column="m_images"/>
-            <result property="description"  column="m_description"/>
-            <result property="categoryId"  column="m_category_id"/>
-            <result property="categoryName"  column="m_category_name"/>
-            <result property="createTime"  column="m_create_time"/>
-            <result property="clickCount"  column="m_click_count"/>
+            <result property="type" column="m_type"/>
+            <result property="images" column="m_images"/>
+            <result property="description" column="m_description"/>
+            <result property="categoryId" column="m_category_id"/>
+            <result property="categoryName" column="m_category_name"/>
+            <result property="createTime" column="m_create_time"/>
+            <result property="clickCount" column="m_click_count"/>
         </association>
         <association property="article" javaType="Article">
-            <result property="articleId"  column="a_article_id"/>
-            <result property="title"  column="a_title"/>
-            <result property="summary"  column="a_summary"/>
-            <result property="images"  column="a_images"/>
-            <result property="categoryId"  column="a_category_id"/>
-            <result property="categoryName"  column="a_category_name"/>
-            <result property="createTime"  column="a_create_time"/>
-            <result property="clickCount"  column="a_click_count"/>
-            <result property="type"  column="a_type"/>
-            <result property="collectCount"  column="a_collect_count"/>
-            <result property="author"  column="a_author"/>
-            <result property="level"  column="a_level"/>
+            <result property="articleId" column="a_article_id"/>
+            <result property="title" column="a_title"/>
+            <result property="summary" column="a_summary"/>
+            <result property="images" column="a_images"/>
+            <result property="categoryId" column="a_category_id"/>
+            <result property="categoryName" column="a_category_name"/>
+            <result property="createTime" column="a_create_time"/>
+            <result property="clickCount" column="a_click_count"/>
+            <result property="type" column="a_type"/>
+            <result property="collectCount" column="a_collect_count"/>
+            <result property="author" column="a_author"/>
+            <result property="level" column="a_level"/>
         </association>
         <association property="actor" javaType="Actor">
-            <result property="actorId"    column="ac_actor_id"    />
-            <result property="name"    column="ac_name"    />
-            <result property="avatar"    column="ac_avatar"    />
-            <result property="description"    column="ac_description"    />
-            <result property="awards"    column="ac_awards"    />
-            <result property="label"    column="ac_label"    />
-            <result property="clickCount"    column="ac_click_count"  />
-            <result property="collectCount"    column="ac_collect_count"  />
+            <result property="actorId" column="ac_actor_id"/>
+            <result property="name" column="ac_name"/>
+            <result property="avatar" column="ac_avatar"/>
+            <result property="description" column="ac_description"/>
+            <result property="awards" column="ac_awards"/>
+            <result property="label" column="ac_label"/>
+            <result property="clickCount" column="ac_click_count"/>
+            <result property="collectCount" column="ac_collect_count"/>
         </association>
 
     </resultMap>
 
 
     <sql id="selectCollectVo">
-        select collect_id, user_id, target_id, status, create_time, update_time, table_name, create_by, update_by from website_collect
+        select collect_id,
+               user_id,
+               target_id,
+               status,
+               create_time,
+               update_time,
+               table_name,
+               create_by,
+               update_by
+        from website_collect
     </sql>
 
 
     <select id="selectMyCollectList" parameterType="Collect" resultMap="CollectVOResult">
-      select
+        select
         <if test="tableName != null  and tableName == 'wm_movie'">
             m.title as m_title,
             m.type as m_type,
@@ -118,10 +127,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             INNER JOIN wm_actor ac ON ac.actor_id = c.target_id
         </if>
         <where>
-            <if test="userId != null  and userId != ''"> and c.user_id = #{userId}</if>
-            <if test="targetId != null  and targetId != ''"> and c.target_id = #{targetId}</if>
-            <if test="status != null "> and c.status = #{status}</if>
-            <if test="tableName != null  and tableName != ''"> and c.table_name = #{tableName}</if>
+            <if test="userId != null  and userId != ''">and c.user_id = #{userId}</if>
+            <if test="targetId != null  and targetId != ''">and c.target_id = #{targetId}</if>
+            <if test="status != null ">and c.status = #{status}</if>
+            <if test="tableName != null  and tableName != ''">and c.table_name = #{tableName}</if>
         </where>
     </select>
 
@@ -129,10 +138,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectCollectList" parameterType="Collect" resultMap="CollectResult">
         <include refid="selectCollectVo"/>
         <where>
-            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
-            <if test="targetId != null  and targetId != ''"> and target_id = #{targetId}</if>
-            <if test="status != null and status != '' "> and status = #{status}</if>
-            <if test="tableName != null  and tableName != ''"> and table_name = #{tableName}</if>
+            <if test="userId != null  and userId != ''">and user_id = #{userId}</if>
+            <if test="targetId != null  and targetId != ''">and target_id = #{targetId}</if>
+            <if test="status != null and status != '' ">and status = #{status}</if>
+            <if test="tableName != null  and tableName != ''">and table_name = #{tableName}</if>
         </where>
     </select>
 

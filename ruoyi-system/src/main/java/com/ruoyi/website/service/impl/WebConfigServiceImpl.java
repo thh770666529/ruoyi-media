@@ -1,7 +1,6 @@
 package com.ruoyi.website.service.impl;
 
 
-
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSON;
 import com.ruoyi.common.constant.Constants;
@@ -15,7 +14,9 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.website.mapper.WebConfigMapper;
 import com.ruoyi.website.domain.WebConfig;
 import com.ruoyi.website.service.IWebConfigService;
+
 import java.util.Date;
+
 import static com.ruoyi.common.constant.Constants.WEB_CONFIG_KEY;
 
 /**
@@ -25,8 +26,7 @@ import static com.ruoyi.common.constant.Constants.WEB_CONFIG_KEY;
  * @date 2021-06-08
  */
 @Service
-public class WebConfigServiceImpl implements IWebConfigService
-{
+public class WebConfigServiceImpl implements IWebConfigService {
     @Autowired
     private WebConfigMapper webConfigMapper;
 
@@ -41,7 +41,7 @@ public class WebConfigServiceImpl implements IWebConfigService
             return JSONObject.parseObject(webConfigResult, WebConfig.class);
         }
         WebConfig webConfig = webConfigMapper.selectById(WebConfigConstants.WEB_CONFIG_ID);
-        redisCache.setCacheObject(WEB_CONFIG_KEY,JSON.toJSONString(webConfig));
+        redisCache.setCacheObject(WEB_CONFIG_KEY, JSON.toJSONString(webConfig));
         return webConfig;
     }
 

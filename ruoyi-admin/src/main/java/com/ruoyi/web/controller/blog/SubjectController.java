@@ -23,8 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/blog/subject")
-public class SubjectController extends BaseController
-{
+public class SubjectController extends BaseController {
     @Autowired
     private ISubjectService subjectService;
 
@@ -33,8 +32,7 @@ public class SubjectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:subject:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Subject subject)
-    {
+    public TableDataInfo list(Subject subject) {
         startPage();
         List<Subject> list = subjectService.selectSubjectList(subject);
         return getDataTable(list);
@@ -46,8 +44,7 @@ public class SubjectController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:subject:export')")
     @Log(title = "文章专题", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Subject subject)
-    {
+    public void export(HttpServletResponse response, Subject subject) {
         List<Subject> list = subjectService.selectSubjectList(subject);
         ExcelUtil<Subject> util = new ExcelUtil<Subject>(Subject.class);
         util.exportExcel(response, list, "文章专题数据");
@@ -58,8 +55,7 @@ public class SubjectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:subject:query')")
     @GetMapping(value = "/{subjectId}")
-    public AjaxResult getInfo(@PathVariable("subjectId") Long subjectId)
-    {
+    public AjaxResult getInfo(@PathVariable("subjectId") Long subjectId) {
         return AjaxResult.success(subjectService.selectSubjectBySubjectId(subjectId));
     }
 
@@ -69,8 +65,7 @@ public class SubjectController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:subject:add')")
     @Log(title = "文章专题", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Subject subject)
-    {
+    public AjaxResult add(@RequestBody Subject subject) {
         return toAjax(subjectService.insertSubject(subject));
     }
 
@@ -80,8 +75,7 @@ public class SubjectController extends BaseController
     @PreAuthorize("@ss.hasPermi('blog:subject:edit')")
     @Log(title = "文章专题", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Subject subject)
-    {
+    public AjaxResult edit(@RequestBody Subject subject) {
         return toAjax(subjectService.updateSubject(subject));
     }
 
@@ -90,9 +84,8 @@ public class SubjectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('blog:subject:remove')")
     @Log(title = "文章专题", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{subjectIds}")
-    public AjaxResult remove(@PathVariable Long[] subjectIds)
-    {
+    @DeleteMapping("/{subjectIds}")
+    public AjaxResult remove(@PathVariable Long[] subjectIds) {
         return toAjax(subjectService.deleteSubjectBySubjectIds(subjectIds));
     }
 }

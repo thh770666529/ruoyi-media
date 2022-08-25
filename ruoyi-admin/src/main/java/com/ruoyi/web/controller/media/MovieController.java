@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.media;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.enums.VideoStatus;
 import com.ruoyi.common.exception.file.InvalidExtensionException;
@@ -37,8 +38,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/media/movie")
-public class MovieController extends BaseController
-{
+public class MovieController extends BaseController {
     @Autowired
     private IMovieService movieService;
 
@@ -47,8 +47,7 @@ public class MovieController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:movie:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Movie movie)
-    {
+    public TableDataInfo list(Movie movie) {
         startPage();
         List<MovieVO> list = movieService.selectMovieList(movie);
         return getDataTable(list);
@@ -60,8 +59,7 @@ public class MovieController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:movie:export')")
     @Log(title = "电影", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Movie movie)
-    {
+    public void export(HttpServletResponse response, Movie movie) {
         List<MovieVO> list = movieService.selectMovieList(movie);
         ExcelUtil<MovieVO> util = new ExcelUtil<MovieVO>(MovieVO.class);
         util.exportExcel(response, list, "电影数据");
@@ -72,8 +70,7 @@ public class MovieController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:movie:query')")
     @GetMapping(value = "/{movieId}")
-    public AjaxResult getInfo(@PathVariable("movieId") Long movieId)
-    {
+    public AjaxResult getInfo(@PathVariable("movieId") Long movieId) {
         return AjaxResult.success(movieService.selectMovieById(movieId));
     }
 
@@ -83,14 +80,13 @@ public class MovieController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:movie:add')")
     @Log(title = "电影", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody MovieVO movieVO)
-    {
+    public AjaxResult add(@RequestBody MovieVO movieVO) {
         Long userId = getUserId();
         movieVO.setPublishBy(userId + "");
         int row = movieService.insertMovie(movieVO);
-        if(row>0){
+        if (row > 0) {
             return AjaxResult.success(movieService.selectMovieById(movieVO.getMovieId()));
-        }else {
+        } else {
             return AjaxResult.error();
         }
     }
@@ -101,8 +97,7 @@ public class MovieController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:movie:edit')")
     @Log(title = "电影", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody MovieVO movieVO)
-    {
+    public AjaxResult edit(@RequestBody MovieVO movieVO) {
         return toAjax(movieService.updateMovie(movieVO));
     }
 
@@ -111,9 +106,8 @@ public class MovieController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:movie:remove')")
     @Log(title = "电影", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{movieIds}")
-    public AjaxResult remove(@PathVariable Long[] movieIds)
-    {
+    @DeleteMapping("/{movieIds}")
+    public AjaxResult remove(@PathVariable Long[] movieIds) {
         List<Long> ids = Arrays.asList(movieIds);
         return toAjax(movieService.removeByIds(ids));
     }
@@ -124,13 +118,13 @@ public class MovieController extends BaseController
      */
     @Log(title = "删除演员关联", businessType = BusinessType.DELETE)
     @DeleteMapping("/actor/{actorIds}")
-    public AjaxResult removeActorList(@PathVariable Long[] actorIds)
-    {
+    public AjaxResult removeActorList(@PathVariable Long[] actorIds) {
         return toAjax(movieService.removeActorList(actorIds));
     }
 
     /**
      * 上传电影视频
+     *
      * @param file
      * @return
      * @throws IOException
@@ -138,15 +132,14 @@ public class MovieController extends BaseController
     @Log(title = "电影视频", businessType = BusinessType.UPDATE)
     @PostMapping("/upload/video")
     public AjaxResult uploadVideo(@RequestParam("file") MultipartFile file) throws IOException, InvalidExtensionException {
-        if (!file.isEmpty())
-        {
-            String url = FileUploadUtils.upload2(RuoYiConfig.getMovieVideoPath(), file , MimeTypeUtils.MEDIA_EXTENSION);
+        if (!file.isEmpty()) {
+            String url = FileUploadUtils.upload2(RuoYiConfig.getMovieVideoPath(), file, MimeTypeUtils.MEDIA_EXTENSION);
             String filename = file.getOriginalFilename();
-            filename= filename.substring(0,filename.lastIndexOf("."));
+            filename = filename.substring(0, filename.lastIndexOf("."));
             String realVideoPath = RuoYiConfig.getProfile() + url;
             MultimediaInfo videoInfo = VideoUtils.getVideoInfoByFile(realVideoPath);
-            UploadVideoVO uploadVideoVO = new UploadVideoVO(url, filename, FileUploadUtils.getExtension(file), file.getSize(),videoInfo.getVideoTime(),VideoStatus.READY_CONVERT.getCode());
-            return  AjaxResult.success(uploadVideoVO);
+            UploadVideoVO uploadVideoVO = new UploadVideoVO(url, filename, FileUploadUtils.getExtension(file), file.getSize(), videoInfo.getVideoTime(), VideoStatus.READY_CONVERT.getCode());
+            return AjaxResult.success(uploadVideoVO);
         }
         return AjaxResult.error("上传视频异常，请联系管理员");
     }
@@ -159,9 +152,8 @@ public class MovieController extends BaseController
      */
     @Log(title = "通过网盘上传视频", businessType = BusinessType.File)
     @PostMapping("/uploadVideoByNetWorkDisk")
-    public AjaxResult uploadVideoByNetWorkDisk(@RequestBody NetWorkDiskVO netWorkDiskVO)
-    {
-        UploadVideoVO uploadVideoVO =  videoService.uploadVideoByNetWorkDisk(netWorkDiskVO);
-        return  AjaxResult.success(uploadVideoVO);
+    public AjaxResult uploadVideoByNetWorkDisk(@RequestBody NetWorkDiskVO netWorkDiskVO) {
+        UploadVideoVO uploadVideoVO = videoService.uploadVideoByNetWorkDisk(netWorkDiskVO);
+        return AjaxResult.success(uploadVideoVO);
     }
 }

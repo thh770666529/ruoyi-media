@@ -17,31 +17,42 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 @Data
 @TableName("blog_category")
-public class Category extends BaseEntity
-{
+public class Category extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    /** 唯一id */
+    /**
+     * 唯一id
+     */
     @TableId(type = IdType.AUTO)
     private Long categoryId;
 
-    /** 分类内容 */
+    /**
+     * 分类内容
+     */
     @Excel(name = "分类内容")
     private String name;
 
-    /** 分类简介 */
+    /**
+     * 分类简介
+     */
     @Excel(name = "分类简介")
     private String content;
 
-    /** 状态 */
+    /**
+     * 状态
+     */
     @Excel(name = "状态")
     private Integer status;
 
-    /** 排序字段，越大越靠前 */
+    /**
+     * 排序字段，越大越靠前
+     */
     @Excel(name = "排序字段，越大越靠前")
     private Long sort;
 
-    /** 点击数 */
+    /**
+     * 点击数
+     */
     @Excel(name = "点击数")
     private Long clickCount;
 

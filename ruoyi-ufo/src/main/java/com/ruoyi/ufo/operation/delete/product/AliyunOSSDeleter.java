@@ -22,7 +22,6 @@ public class AliyunOSSDeleter extends Deleter {
         ossClient.deleteObject(bucketName, deleteFile.getFileUrl().substring(1));
 
 
-
         // 关闭OSSClient。
         ossClient.shutdown();
     }

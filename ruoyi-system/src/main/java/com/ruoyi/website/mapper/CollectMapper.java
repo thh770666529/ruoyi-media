@@ -12,8 +12,7 @@ import com.ruoyi.website.domain.vo.CollectVO;
  * @author thh
  * @date 2021-10-05
  */
-public interface CollectMapper extends BaseMapper<Collect>
-{
+public interface CollectMapper extends BaseMapper<Collect> {
     /**
      * 查询收藏
      *
@@ -41,6 +40,7 @@ public interface CollectMapper extends BaseMapper<Collect>
 
     /**
      * 查询自己的收藏列表
+     *
      * @param collect
      * @return
      */

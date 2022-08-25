@@ -38,28 +38,28 @@ import org.apache.poi.xssf.usermodel.XSSFShape;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
+
 /**
  * Excel转html
- *
  */
 public class ExcelUtil {
     public static void main(String[] args) {
         ExcelUtil.excelToHtml("E:\\poi\\poi.xlsx", "E:\\poi\\testx.html");
     }
 
-       private static String UPLOAD_FILE="E:/";
+    private static String UPLOAD_FILE = "E:/";
 
 
-     /**
+    /**
      * 测试
      *
      * @param
      */
-    public static void excelToHtml(String path,String htmlPositon) {
+    public static void excelToHtml(String path, String htmlPositon) {
         InputStream is = null;
         String htmlExcel = null;
         String[] str = path.split("/");
-        String fileName = str[str.length-1];
+        String fileName = str[str.length - 1];
         try {
             File sourcefile = new File(path);
             is = new FileInputStream(sourcefile);
@@ -71,7 +71,7 @@ public class ExcelUtil {
                 HSSFWorkbook hWb = (HSSFWorkbook) wb;
                 htmlExcel = ExcelUtil.getExcelInfo(hWb, true);
             }
-            writeFile(htmlExcel,htmlPositon,fileName);
+            writeFile(htmlExcel, htmlPositon, fileName);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -84,13 +84,13 @@ public class ExcelUtil {
     }
 
     @SuppressWarnings("resource")
-    private static void writeFile(String content,String htmlPath, String fileName){
+    private static void writeFile(String content, String htmlPath, String fileName) {
         File file2 = new File(htmlPath);
         StringBuilder sb = new StringBuilder();
         try {
             file2.createNewFile();//创建文件
 
-            sb.append("<html><head><meta http-equiv=\"Content-Type\" charset=\"utf-8\"><title>"+fileName+"</title></head><body>");
+            sb.append("<html><head><meta http-equiv=\"Content-Type\" charset=\"utf-8\"><title>" + fileName + "</title></head><body>");
             sb.append("<div>");
             sb.append(content);
             sb.append("</div>");
@@ -111,12 +111,9 @@ public class ExcelUtil {
     /**
      * 程序入口方法
      *
-     * @param filePath
-     *            文件的路径
-     * @param isWithStyle
-     *            是否需要表格样式 包含 字体 颜色 边框 对齐方式
-     * @return
-     *         <table>
+     * @param filePath    文件的路径
+     * @param isWithStyle 是否需要表格样式 包含 字体 颜色 边框 对齐方式
+     * @return <table>
      *         ...
      *         </table>
      *         字符串
@@ -151,77 +148,77 @@ public class ExcelUtil {
     public static String getExcelInfo(Workbook wb, boolean isWithStyle) {
 
         StringBuffer sb = new StringBuffer();
-        for(int i=0;i<wb.getNumberOfSheets();i++) {
-              Sheet sheet = wb.getSheetAt(i);// 获取第一个Sheet的内容
-              String sheetName = sheet.getSheetName();
-              int lastRowNum = sheet.getLastRowNum();
-              Map<String, String> map[] = getRowSpanColSpanMap(sheet);
-              sb.append("<h3>"+sheetName+"</h3>");
-              sb.append("<table style='border-collapse:collapse;' width='100%'>");
-           // map等待存储excel图片
-              Map<String, PictureData> sheetIndexPicMap = getSheetPictrues(i, sheet, wb);
-              Map<String, String> imgMap = new HashMap<String, String>();
-              if (sheetIndexPicMap != null) {
-                  imgMap = printImg(sheetIndexPicMap);
-                  printImpToWb(imgMap, wb);
-              }
-              Row row = null; // 兼容
-              Cell cell = null; // 兼容
-              for (int rowNum = sheet.getFirstRowNum(); rowNum <= lastRowNum; rowNum++) {
-                  row = sheet.getRow(rowNum);
-                  if (row == null) {
-                      sb.append("<tr><td > &nbsp;</td></tr>");
-                      continue;
-                  }
-                  sb.append("<tr>");
-                  int lastColNum = row.getLastCellNum();
-                  for (int colNum = 0; colNum < lastColNum; colNum++) {
-                      cell = row.getCell(colNum);
-                      if (cell == null) { // 特殊情况 空白的单元格会返回null
-                          sb.append("<td>&nbsp;</td>");
-                          continue;
-                      }
-                      String imageHtml = "";
-                      String imageRowNum = i + "_" + rowNum + "_" + colNum;
-                      if (sheetIndexPicMap != null && sheetIndexPicMap.containsKey(imageRowNum)) {
-                          String imagePath = imgMap.get(imageRowNum);
-                          imageHtml = "<img src='" + imagePath + "' style='height:auto;'>";
-                      }
-                      String stringValue = getCellValue(cell);
-                      if (map[0].containsKey(rowNum + "," + colNum)) {
-                          String pointString = map[0].get(rowNum + "," + colNum);
-                          map[0].remove(rowNum + "," + colNum);
-                          int bottomeRow = Integer.valueOf(pointString.split(",")[0]);
-                          int bottomeCol = Integer.valueOf(pointString.split(",")[1]);
-                          int rowSpan = bottomeRow - rowNum + 1;
-                          int colSpan = bottomeCol - colNum + 1;
-                          sb.append("<td rowspan= '" + rowSpan + "' colspan= '" + colSpan + "' ");
-                      } else if (map[1].containsKey(rowNum + "," + colNum)) {
-                          map[1].remove(rowNum + "," + colNum);
-                          continue;
-                      } else {
-                          sb.append("<td ");
-                      }
-                      // 判断是否需要样式
-                      if (isWithStyle) {
-                          dealExcelStyle(wb, sheet, cell, sb);// 处理单元格样式
-                      }
-                      sb.append(">");
-                      if (sheetIndexPicMap != null && sheetIndexPicMap.containsKey(imageRowNum)) {
-                          sb.append(imageHtml);
-                      }
-                      if (stringValue == null || "".equals(stringValue.trim())) {
-                          sb.append(" &nbsp; ");
-                      } else {
-                          // 将ascii码为160的空格转换为html下的空格（&nbsp;）
-                          sb.append(stringValue.replace(String.valueOf((char) 160), "&nbsp;"));
-                      }
-                      sb.append("</td>");
-                  }
-                  sb.append("</tr>");
-              }
+        for (int i = 0; i < wb.getNumberOfSheets(); i++) {
+            Sheet sheet = wb.getSheetAt(i);// 获取第一个Sheet的内容
+            String sheetName = sheet.getSheetName();
+            int lastRowNum = sheet.getLastRowNum();
+            Map<String, String> map[] = getRowSpanColSpanMap(sheet);
+            sb.append("<h3>" + sheetName + "</h3>");
+            sb.append("<table style='border-collapse:collapse;' width='100%'>");
+            // map等待存储excel图片
+            Map<String, PictureData> sheetIndexPicMap = getSheetPictrues(i, sheet, wb);
+            Map<String, String> imgMap = new HashMap<String, String>();
+            if (sheetIndexPicMap != null) {
+                imgMap = printImg(sheetIndexPicMap);
+                printImpToWb(imgMap, wb);
+            }
+            Row row = null; // 兼容
+            Cell cell = null; // 兼容
+            for (int rowNum = sheet.getFirstRowNum(); rowNum <= lastRowNum; rowNum++) {
+                row = sheet.getRow(rowNum);
+                if (row == null) {
+                    sb.append("<tr><td > &nbsp;</td></tr>");
+                    continue;
+                }
+                sb.append("<tr>");
+                int lastColNum = row.getLastCellNum();
+                for (int colNum = 0; colNum < lastColNum; colNum++) {
+                    cell = row.getCell(colNum);
+                    if (cell == null) { // 特殊情况 空白的单元格会返回null
+                        sb.append("<td>&nbsp;</td>");
+                        continue;
+                    }
+                    String imageHtml = "";
+                    String imageRowNum = i + "_" + rowNum + "_" + colNum;
+                    if (sheetIndexPicMap != null && sheetIndexPicMap.containsKey(imageRowNum)) {
+                        String imagePath = imgMap.get(imageRowNum);
+                        imageHtml = "<img src='" + imagePath + "' style='height:auto;'>";
+                    }
+                    String stringValue = getCellValue(cell);
+                    if (map[0].containsKey(rowNum + "," + colNum)) {
+                        String pointString = map[0].get(rowNum + "," + colNum);
+                        map[0].remove(rowNum + "," + colNum);
+                        int bottomeRow = Integer.valueOf(pointString.split(",")[0]);
+                        int bottomeCol = Integer.valueOf(pointString.split(",")[1]);
+                        int rowSpan = bottomeRow - rowNum + 1;
+                        int colSpan = bottomeCol - colNum + 1;
+                        sb.append("<td rowspan= '" + rowSpan + "' colspan= '" + colSpan + "' ");
+                    } else if (map[1].containsKey(rowNum + "," + colNum)) {
+                        map[1].remove(rowNum + "," + colNum);
+                        continue;
+                    } else {
+                        sb.append("<td ");
+                    }
+                    // 判断是否需要样式
+                    if (isWithStyle) {
+                        dealExcelStyle(wb, sheet, cell, sb);// 处理单元格样式
+                    }
+                    sb.append(">");
+                    if (sheetIndexPicMap != null && sheetIndexPicMap.containsKey(imageRowNum)) {
+                        sb.append(imageHtml);
+                    }
+                    if (stringValue == null || "".equals(stringValue.trim())) {
+                        sb.append(" &nbsp; ");
+                    } else {
+                        // 将ascii码为160的空格转换为html下的空格（&nbsp;）
+                        sb.append(stringValue.replace(String.valueOf((char) 160), "&nbsp;"));
+                    }
+                    sb.append("</td>");
+                }
+                sb.append("</tr>");
+            }
 
-              sb.append("</table>");
+            sb.append("</table>");
         }
 
 
@@ -388,7 +385,7 @@ public class ExcelUtil {
         }
 
         @SuppressWarnings("rawtypes")
-        Map[] map = { map0, map1 };
+        Map[] map = {map0, map1};
         return map;
     }
 
@@ -401,43 +398,43 @@ public class ExcelUtil {
     private static String getCellValue(Cell cell) {
         String result = new String();
         switch (cell.getCellType()) {
-        case NUMERIC:// 数字类型
-            if (HSSFDateUtil.isCellDateFormatted(cell)) {// 处理日期格式、时间格式
-                SimpleDateFormat sdf = null;
-                if (cell.getCellStyle().getDataFormat() == HSSFDataFormat.getBuiltinFormat("h:mm")) {
-                    sdf = new SimpleDateFormat("HH:mm");
-                } else {// 日期
-                    sdf = new SimpleDateFormat("yyyy-MM-dd");
+            case NUMERIC:// 数字类型
+                if (HSSFDateUtil.isCellDateFormatted(cell)) {// 处理日期格式、时间格式
+                    SimpleDateFormat sdf = null;
+                    if (cell.getCellStyle().getDataFormat() == HSSFDataFormat.getBuiltinFormat("h:mm")) {
+                        sdf = new SimpleDateFormat("HH:mm");
+                    } else {// 日期
+                        sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    }
+                    Date date = cell.getDateCellValue();
+                    result = sdf.format(date);
+                } else if (cell.getCellStyle().getDataFormat() == 58) {
+                    // 处理自定义日期格式：m月d日(通过判断单元格的格式id解决，id的值是58)
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    double value = cell.getNumericCellValue();
+                    Date date = org.apache.poi.ss.usermodel.DateUtil.getJavaDate(value);
+                    result = sdf.format(date);
+                } else {
+                    double value = cell.getNumericCellValue();
+                    CellStyle style = cell.getCellStyle();
+                    DecimalFormat format = new DecimalFormat();
+                    String temp = style.getDataFormatString();
+                    // 单元格设置成常规
+                    if (temp.equals("General")) {
+                        format.applyPattern("#");
+                    }
+                    result = format.format(value);
                 }
-                Date date = cell.getDateCellValue();
-                result = sdf.format(date);
-            } else if (cell.getCellStyle().getDataFormat() == 58) {
-                // 处理自定义日期格式：m月d日(通过判断单元格的格式id解决，id的值是58)
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                double value = cell.getNumericCellValue();
-                Date date = org.apache.poi.ss.usermodel.DateUtil.getJavaDate(value);
-                result = sdf.format(date);
-            } else {
-                double value = cell.getNumericCellValue();
-                CellStyle style = cell.getCellStyle();
-                DecimalFormat format = new DecimalFormat();
-                String temp = style.getDataFormatString();
-                // 单元格设置成常规
-                if (temp.equals("General")) {
-                    format.applyPattern("#");
-                }
-                result = format.format(value);
-            }
-            break;
-        case STRING:// String类型
-            result = cell.getRichStringCellValue().toString();
-            break;
-        case BLANK:
-            result = "";
-            break;
-        default:
-            result = "";
-            break;
+                break;
+            case STRING:// String类型
+                result = cell.getRichStringCellValue().toString();
+                break;
+            case BLANK:
+                result = "";
+                break;
+            default:
+                result = "";
+                break;
         }
         return result;
     }
@@ -461,7 +458,7 @@ public class ExcelUtil {
             if (wb instanceof XSSFWorkbook) {
                 XSSFFont xf = ((XSSFCellStyle) cellStyle).getFont();
 //                short boldWeight = xf.getBoldweight();
-                short boldWeight = xf.getBold() ? (short)700 : (short)100;
+                short boldWeight = xf.getBold() ? (short) 700 : (short) 100;
                 sb.append("style='");
                 sb.append("font-weight:" + boldWeight + ";"); // 字体加粗
                 sb.append("font-size: " + xf.getFontHeight() / 2 + "%;"); // 字体大小
@@ -470,15 +467,15 @@ public class ExcelUtil {
                 XSSFColor xc = xf.getXSSFColor();
                 if (xc != null && !"".equals(xc)) {
                     String string = xc.getARGBHex();
-                    if(string!=null&& !"".equals(string)) {
+                    if (string != null && !"".equals(string)) {
                         sb.append("color:#" + string.substring(2) + ";"); // 字体颜色
                     }
                 }
 
                 XSSFColor bgColor = (XSSFColor) cellStyle.getFillForegroundColorColor();
-                if (bgColor != null && !"".equals(bgColor) && bgColor!=null) {
+                if (bgColor != null && !"".equals(bgColor) && bgColor != null) {
                     String argbHex = bgColor.getARGBHex();
-                    if(argbHex!=null && !"".equals(argbHex)) {
+                    if (argbHex != null && !"".equals(argbHex)) {
                         sb.append("background-color:#" + argbHex.substring(2) + ";"); // 背景颜色
                     }
                 }
@@ -495,7 +492,7 @@ public class ExcelUtil {
 
                 HSSFFont hf = ((HSSFCellStyle) cellStyle).getFont(wb);
 //                short boldWeight = hf.getBoldweight();
-                short boldWeight = hf.getBold() ? (short)700 : (short)100;
+                short boldWeight = hf.getBold() ? (short) 700 : (short) 100;
                 short fontColor = hf.getColor();
                 sb.append("style='");
                 HSSFPalette palette = ((HSSFWorkbook) wb).getCustomPalette(); // 类HSSFPalette用于求的颜色的国际标准形式
@@ -548,8 +545,10 @@ public class ExcelUtil {
 //        }
 //        return align;
 //    }
+
     /**
      * 单元格内容的水平对齐方式
+     *
      * @param alignment
      * @return
      */
@@ -599,6 +598,7 @@ public class ExcelUtil {
 
     /**
      * 单元格中内容的垂直排列方式
+     *
      * @param verticalAlignment
      * @return
      */
@@ -631,7 +631,7 @@ public class ExcelUtil {
                 return null;
             }
             sb.append("#");
-            for (int i = 0; i < hc.getTriplet().length; i ++) {
+            for (int i = 0; i < hc.getTriplet().length; i++) {
                 sb.append(fillWithZero(Integer.toHexString(hc.getTriplet()[i])));
             }
         }
@@ -660,9 +660,9 @@ public class ExcelUtil {
         return str;
     }
 
-    static String[] bordesr = { "border-top:", "border-right:", "border-bottom:", "border-left:" };
-    static String[] borderStyles = { "solid ", "solid ", "solid ", "solid ", "solid ", "solid ", "solid ", "solid ",
-            "solid ", "solid", "solid", "solid", "solid", "solid" };
+    static String[] bordesr = {"border-top:", "border-right:", "border-bottom:", "border-left:"};
+    static String[] borderStyles = {"solid ", "solid ", "solid ", "solid ", "solid ", "solid ", "solid ", "solid ",
+            "solid ", "solid", "solid", "solid", "solid", "solid"};
 
     private static String getBorderStyle(HSSFPalette palette, int b, short s, short t) {
         if (s == 0)

@@ -22,8 +22,7 @@ import com.ruoyi.blog.service.ITagService;
  * @date 2021-08-28
  */
 @Service
-public class TagServiceImpl implements ITagService
-{
+public class TagServiceImpl implements ITagService {
     @Autowired
     private TagMapper tagMapper;
 
@@ -37,8 +36,7 @@ public class TagServiceImpl implements ITagService
      * @return 文章标签
      */
     @Override
-    public Tag selectTagByTagId(Long tagId)
-    {
+    public Tag selectTagByTagId(Long tagId) {
         return tagMapper.selectTagByTagId(tagId);
     }
 
@@ -49,8 +47,7 @@ public class TagServiceImpl implements ITagService
      * @return 文章标签
      */
     @Override
-    public List<Tag> selectTagList(Tag tag)
-    {
+    public List<Tag> selectTagList(Tag tag) {
         return tagMapper.selectTagList(tag);
     }
 
@@ -61,8 +58,7 @@ public class TagServiceImpl implements ITagService
      * @return 结果
      */
     @Override
-    public int insertTag(Tag tag)
-    {
+    public int insertTag(Tag tag) {
         tag.setCreateTime(DateUtils.getNowDate());
         return tagMapper.insert(tag);
     }
@@ -74,8 +70,7 @@ public class TagServiceImpl implements ITagService
      * @return 结果
      */
     @Override
-    public int updateTag(Tag tag)
-    {
+    public int updateTag(Tag tag) {
         tag.setUpdateTime(DateUtils.getNowDate());
         return tagMapper.updateById(tag);
     }
@@ -87,8 +82,7 @@ public class TagServiceImpl implements ITagService
      * @return 结果
      */
     @Override
-    public int deleteTagByTagIds(Long[] tagIds)
-    {
+    public int deleteTagByTagIds(Long[] tagIds) {
         return tagMapper.deleteTagByTagIds(tagIds);
     }
 
@@ -99,8 +93,7 @@ public class TagServiceImpl implements ITagService
      * @return 结果
      */
     @Override
-    public int deleteTagByTagId(Long tagId)
-    {
+    public int deleteTagByTagId(Long tagId) {
         return tagMapper.deleteById(tagId);
     }
 
@@ -109,7 +102,7 @@ public class TagServiceImpl implements ITagService
         List<Tag> tagList = redisCache.getCacheObject(BaseRedisKeyConstants.HOT_BLOG_TAG);
         if (CollectionUtil.isEmpty(tagList)) {
             tagList = tagMapper.selectHotTagList(1, top);
-            if (CollectionUtil.isNotEmpty(tagList)){
+            if (CollectionUtil.isNotEmpty(tagList)) {
                 redisCache.setCacheObject(BaseRedisKeyConstants.HOT_BLOG_TAG, tagList, BlogConstants.BLOG_TAG_EXPIRATION, TimeUnit.DAYS);
             }
         }

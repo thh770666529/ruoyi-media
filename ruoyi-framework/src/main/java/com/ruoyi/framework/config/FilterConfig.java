@@ -3,6 +3,7 @@ package com.ruoyi.framework.config;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.DispatcherType;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -19,19 +20,17 @@ import com.ruoyi.common.utils.StringUtils;
  */
 @Configuration
 @ConditionalOnProperty(value = "xss.enabled", havingValue = "true")
-public class FilterConfig
-{
+public class FilterConfig {
     @Value("${xss.excludes}")
     private String excludes;
 
     @Value("${xss.urlPatterns}")
     private String urlPatterns;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @ConditionalOnProperty(value = "xss.enabled", havingValue = "true")
     @Bean
-    public FilterRegistrationBean xssFilterRegistration()
-    {
+    public FilterRegistrationBean xssFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setDispatcherTypes(DispatcherType.REQUEST);
         registration.setFilter(new XssFilter());
@@ -44,10 +43,9 @@ public class FilterConfig
         return registration;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Bean
-    public FilterRegistrationBean someFilterRegistration()
-    {
+    public FilterRegistrationBean someFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new RepeatableFilter());
         registration.addUrlPatterns("/*");

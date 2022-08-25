@@ -1,7 +1,6 @@
 package com.ruoyi.common.utils;
 
 
-
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 

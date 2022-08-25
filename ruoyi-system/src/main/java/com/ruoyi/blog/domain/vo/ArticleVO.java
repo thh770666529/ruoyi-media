@@ -15,8 +15,7 @@ import java.util.List;
  * @date 2021-08-28
  */
 @Data
-public class ArticleVO extends Article
-{
+public class ArticleVO extends Article {
     /**
      * 版权
      */

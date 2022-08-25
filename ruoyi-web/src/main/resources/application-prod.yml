@@ -24,13 +24,13 @@ logging:
 ufo:
   storage-type: 0  #存储类型 0 本地存储
   local-storage-path: /home/thh/projects/file_data  #本地文件存储路径
-  aliyun:  #阿里云oss基本配置
+  aliyun: #阿里云oss基本配置
     oss:
       access-key-id:
       access-key-secret:
       bucket-name:
       endpoint:
-  thumb-image:  #图片缩略图
+  thumb-image: #图片缩略图
     width: 150
     height: 150
 

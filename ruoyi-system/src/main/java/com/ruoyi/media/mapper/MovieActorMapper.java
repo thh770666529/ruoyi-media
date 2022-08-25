@@ -15,8 +15,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-05-16
  */
 @Repository
-public interface MovieActorMapper extends BaseMapper<MovieActor>
-{
+public interface MovieActorMapper extends BaseMapper<MovieActor> {
     /**
      * 查询电影演员关联
      *

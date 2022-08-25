@@ -33,8 +33,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/media/actor")
 @Slf4j
-public class ActorController extends BaseController
-{
+public class ActorController extends BaseController {
     @Autowired
     private IActorService actorService;
 
@@ -45,8 +44,7 @@ public class ActorController extends BaseController
      * 查询演员列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(Actor actor)
-    {
+    public TableDataInfo list(Actor actor) {
         startPage();
         List<Actor> list = actorService.selectActorList(actor);
         return getDataTable(list);
@@ -56,8 +54,7 @@ public class ActorController extends BaseController
      * 获取演员详细信息
      */
     @GetMapping(value = "/{actorId}")
-    public AjaxResult getInfo(HttpServletRequest request, @PathVariable("actorId") Long actorId)
-    {
+    public AjaxResult getInfo(HttpServletRequest request, @PathVariable("actorId") Long actorId) {
         log.info("门户获取演员详细信息id={}", actorId);
         String ip = IpUtils.getIpAddr(request);
         Actor actor = actorService.getById(actorId);
@@ -65,7 +62,7 @@ public class ActorController extends BaseController
             AjaxResult.error("演员已删除！请刷新查询列表！");
         }
         String clickJson = redisCache.getCacheObject(BaseRedisKeyConstants.ACTOR_CLICK + ":" + actor.getActorId() + "#" + ip);
-       // 判断ip用户是否点击过这个演员
+        // 判断ip用户是否点击过这个演员
         if (StringUtils.isEmpty(clickJson)) {
             //演员点击数
             Long clickCount = actor.getClickCount() + 1;

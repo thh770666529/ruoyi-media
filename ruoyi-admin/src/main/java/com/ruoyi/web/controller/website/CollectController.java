@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.website;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/website/collect")
-public class CollectController extends BaseController
-{
+public class CollectController extends BaseController {
     @Autowired
     private ICollectService collectService;
 
@@ -40,8 +40,7 @@ public class CollectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:collect:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Collect collect)
-    {
+    public TableDataInfo list(Collect collect) {
         startPage();
         List<Collect> list = collectService.selectCollectList(collect);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class CollectController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:collect:export')")
     @Log(title = "收藏", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Collect collect)
-    {
+    public void export(HttpServletResponse response, Collect collect) {
         List<Collect> list = collectService.selectCollectList(collect);
         ExcelUtil<Collect> util = new ExcelUtil<Collect>(Collect.class);
         util.exportExcel(response, list, "收藏数据");
@@ -65,8 +63,7 @@ public class CollectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:collect:query')")
     @GetMapping(value = "/{collectId}")
-    public AjaxResult getInfo(@PathVariable("collectId") Long collectId)
-    {
+    public AjaxResult getInfo(@PathVariable("collectId") Long collectId) {
         return AjaxResult.success(collectService.selectCollectByCollectId(collectId));
     }
 
@@ -76,8 +73,7 @@ public class CollectController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:collect:add')")
     @Log(title = "收藏", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Collect collect)
-    {
+    public AjaxResult add(@RequestBody Collect collect) {
         return toAjax(collectService.insertCollect(collect));
     }
 
@@ -87,8 +83,7 @@ public class CollectController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:collect:edit')")
     @Log(title = "收藏", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Collect collect)
-    {
+    public AjaxResult edit(@RequestBody Collect collect) {
         return toAjax(collectService.updateCollect(collect));
     }
 
@@ -97,9 +92,8 @@ public class CollectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:collect:remove')")
     @Log(title = "收藏", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{collectIds}")
-    public AjaxResult remove(@PathVariable Long[] collectIds)
-    {
+    @DeleteMapping("/{collectIds}")
+    public AjaxResult remove(@PathVariable Long[] collectIds) {
         return toAjax(collectService.deleteCollectByCollectIds(collectIds));
     }
 }

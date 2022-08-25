@@ -17,25 +17,34 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 @Data
 @TableName("blog_article_subject")
-public class ArticleSubject extends BaseEntity
-{
+public class ArticleSubject extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    /** 主键 */
+    /**
+     * 主键
+     */
     @TableId(type = IdType.AUTO)
     private Long articleSujectId;
 
-    /** 专题id */
+    /**
+     * 专题id
+     */
     private String subjectId;
 
-    /** 博客id */
+    /**
+     * 博客id
+     */
     private String articleId;
 
-    /** 状态 */
+    /**
+     * 状态
+     */
     @Excel(name = "状态")
     private Integer status;
 
-    /** 排序字段 */
+    /**
+     * 排序字段
+     */
     @Excel(name = "排序字段")
     private Long sort;
 

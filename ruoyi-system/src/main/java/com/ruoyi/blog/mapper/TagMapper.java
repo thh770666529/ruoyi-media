@@ -14,8 +14,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-08-28
  */
 @Repository
-public interface TagMapper extends BaseMapper<Tag>
-{
+public interface TagMapper extends BaseMapper<Tag> {
     /**
      * 查询文章标签
      *
@@ -42,6 +41,7 @@ public interface TagMapper extends BaseMapper<Tag>
 
     /**
      * 获取最热标签
+     *
      * @param status
      * @param top
      * @return

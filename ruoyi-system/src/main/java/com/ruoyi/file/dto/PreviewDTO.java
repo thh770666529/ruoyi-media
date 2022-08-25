@@ -10,10 +10,10 @@ public class PreviewDTO {
 
     private String token;
 
-   //批次号
+    //批次号
     private String shareBatchNum;
 
-   //提取码
+    //提取码
     private String extractionCode;
 
     private String isMin;

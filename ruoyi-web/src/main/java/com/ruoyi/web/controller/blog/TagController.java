@@ -18,8 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/blog/tag")
-public class TagController extends BaseController
-{
+public class TagController extends BaseController {
     @Autowired
     private ITagService tagService;
 
@@ -27,8 +26,7 @@ public class TagController extends BaseController
      * 查询文章标签列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(Tag tag)
-    {
+    public TableDataInfo list(Tag tag) {
         startPage();
         List<Tag> list = tagService.selectTagList(tag);
         return getDataTable(list);
@@ -38,8 +36,7 @@ public class TagController extends BaseController
      * 获取文章标签详细信息
      */
     @GetMapping(value = "/{tagId}")
-    public AjaxResult getInfo(@PathVariable("tagId") Long tagId)
-    {
+    public AjaxResult getInfo(@PathVariable("tagId") Long tagId) {
         return AjaxResult.success(tagService.selectTagByTagId(tagId));
     }
 }

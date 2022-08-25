@@ -43,7 +43,7 @@ public class RecoveryFileController extends BaseController {
     @RequestMapping(value = "/deleterecoveryfile", method = RequestMethod.POST)
     public AjaxResult deleteRecoveryFile(@RequestBody DeleteRecoveryFileDTO deleteRecoveryFileDTO) {
         RecoveryFile recoveryFile = recoveryFileService.getById(deleteRecoveryFileDTO.getRecoveryFileId());
-        UserFile userFile =userFileService.getById(recoveryFile.getUserFileId());
+        UserFile userFile = userFileService.getById(recoveryFile.getUserFileId());
         recoveryFileService.deleteRecoveryFile(userFile);
         recoveryFileService.removeById(deleteRecoveryFileDTO.getRecoveryFileId());
         return AjaxResult.success("删除成功");
@@ -59,7 +59,7 @@ public class RecoveryFileController extends BaseController {
         for (RecoveryFile recoveryFile : recoveryFileList) {
 
             RecoveryFile recoveryFile1 = recoveryFileService.getById(recoveryFile.getRecoveryFileId());
-            UserFile userFile =userFileService.getById(recoveryFile1.getUserFileId());
+            UserFile userFile = userFileService.getById(recoveryFile1.getUserFileId());
 
             recoveryFileService.deleteRecoveryFile(userFile);
             recoveryFileService.removeById(recoveryFile.getRecoveryFileId());

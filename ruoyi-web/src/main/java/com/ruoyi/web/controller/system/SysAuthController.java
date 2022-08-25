@@ -52,6 +52,7 @@ public class SysAuthController extends BaseController {
 
     @Autowired
     JustAuthConfig justAuthConfig;
+
     /**
      * 认证授权
      *
@@ -63,7 +64,7 @@ public class SysAuthController extends BaseController {
     public AjaxResult renderAuth(@PathVariable("source") String source) throws IOException {
         AuthClientConfig config = justAuthConfig.getConfig(source);
         if (config == null) {
-            return error("没有"+source+"的授权client信息！");
+            return error("没有" + source + "的授权client信息！");
         }
         AuthRequest authRequest = AuthUtils.getAuthRequest(source, config.getClientId(), config.getClientSecret(), justAuthConfig.getRedirectUri() + source, authStateCache);
         String authorizeUrl = authRequest.authorize(AuthStateUtils.createState());
@@ -108,7 +109,7 @@ public class SysAuthController extends BaseController {
                 String avatar = FileUploadUtils.uploadByUrl(RuoYiConfig.getAvatarPath(), response.getData().getAvatar());
                 sysUser.setAvatar(avatar);
                 boolean regFlag = userService.registerUser(sysUser);
-                if (!regFlag){
+                if (!regFlag) {
                     //return error("请求远程授权失败！");
                 }
                 AsyncManager.me().execute(AsyncFactory.recordLogininfor(sysUser.getUserName(), Constants.REGISTER,

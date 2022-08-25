@@ -23,6 +23,7 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,15 +32,13 @@ import java.nio.charset.Charset;
 
 /**
  * @author wangshuaijun
- * @description
- * 读取文件工具类：支持以下文件内容读取
+ * @description 读取文件工具类：支持以下文件内容读取
  * 1. word(.doc),word(.docx)
  * 2. excel(.xls),excel(xlsx)
  * 3. pdf
  * 4. txt
  * 5. ppt(.ppt),pptx(,pptx)
  * @date 2019年4月19日10:52:45
- *
  */
 public class ReadFileUtils {
     private static final Logger log = LoggerFactory.getLogger(ReadFileUtils.class);
@@ -54,7 +53,7 @@ public class ReadFileUtils {
     public static String getContentByPath(String fileurl) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(fileurl);
         String fileType = FileUtil.getFileExtendName(fileurl);
-        switch (fileType){
+        switch (fileType) {
             case "doc":
                 return readWord(fileType, fileInputStream);
             case "docx":
@@ -81,8 +80,9 @@ public class ReadFileUtils {
 
     /**
      * 根据文件类型返回文件内容
+     * <p>
+     * //     * @param filepath
      *
-//     * @param filepath
      * @return
      * @throws IOException
      */
@@ -105,8 +105,9 @@ public class ReadFileUtils {
 
     /**
      * 读取PDF中的内容
+     * <p>
+     * //     * @param filePath
      *
-//     * @param filePath
      * @return
      */
     public static String readPdf(InputStream inputStream) {
@@ -175,38 +176,38 @@ public class ReadFileUtils {
     private static String readExcel(String fileType, InputStream inputStream) {
 
         try {
-                Workbook wb;
-                //根据文件后缀（xls/xlsx）进行判断
-                if ("xls".equalsIgnoreCase(fileType)) {
-                    wb = new HSSFWorkbook(inputStream);
-                } else if ("xlsx".equalsIgnoreCase(fileType)) {
-                    wb = new XSSFWorkbook(inputStream);
-                } else {
-                    System.out.println("文件类型错误!");
-                    return "";
-                }
-                //开始解析,获取页签数
-                StringBuffer sb = new StringBuffer("");
-                for (int i = 0; i < wb.getNumberOfSheets(); i++) {
-                    Sheet sheet = wb.getSheetAt(i);     //读取sheet
-                    sb.append(sheet.getSheetName() + "_");
-                    int firstRowIndex = sheet.getFirstRowNum() + 1;   //第一行是列名，所以不读
-                    int lastRowIndex = sheet.getLastRowNum();
-                    for (int rIndex = firstRowIndex; rIndex <= lastRowIndex; rIndex++) {   //遍历行
-                        Row row = sheet.getRow(rIndex);
-                        if (row != null) {
-                            int firstCellIndex = row.getFirstCellNum();
-                            int lastCellIndex = row.getLastCellNum();
-                            for (int cIndex = firstCellIndex; cIndex < lastCellIndex; cIndex++) {   //遍历列
-                                Cell cell = row.getCell(cIndex);
-                                if (cell != null) {
-                                    sb.append(cell.toString());
-                                }
+            Workbook wb;
+            //根据文件后缀（xls/xlsx）进行判断
+            if ("xls".equalsIgnoreCase(fileType)) {
+                wb = new HSSFWorkbook(inputStream);
+            } else if ("xlsx".equalsIgnoreCase(fileType)) {
+                wb = new XSSFWorkbook(inputStream);
+            } else {
+                System.out.println("文件类型错误!");
+                return "";
+            }
+            //开始解析,获取页签数
+            StringBuffer sb = new StringBuffer("");
+            for (int i = 0; i < wb.getNumberOfSheets(); i++) {
+                Sheet sheet = wb.getSheetAt(i);     //读取sheet
+                sb.append(sheet.getSheetName() + "_");
+                int firstRowIndex = sheet.getFirstRowNum() + 1;   //第一行是列名，所以不读
+                int lastRowIndex = sheet.getLastRowNum();
+                for (int rIndex = firstRowIndex; rIndex <= lastRowIndex; rIndex++) {   //遍历行
+                    Row row = sheet.getRow(rIndex);
+                    if (row != null) {
+                        int firstCellIndex = row.getFirstCellNum();
+                        int lastCellIndex = row.getLastCellNum();
+                        for (int cIndex = firstCellIndex; cIndex < lastCellIndex; cIndex++) {   //遍历列
+                            Cell cell = row.getCell(cIndex);
+                            if (cell != null) {
+                                sb.append(cell.toString());
                             }
                         }
                     }
                 }
-                return sb.toString();
+            }
+            return sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -223,7 +224,7 @@ public class ReadFileUtils {
         String buffer = "";
         try {
             if ("doc".equalsIgnoreCase(fileType)) {
-               //   InputStream is = new FileInputStream(new File(path));
+                //   InputStream is = new FileInputStream(new File(path));
                 WordExtractor ex = new WordExtractor(inputStream);
                 buffer = ex.getText();
                 ex.close();

@@ -106,7 +106,7 @@ public class ShareController extends BaseController {
 
     @Log(title = "保存分享文件", businessType = BusinessType.File)
     @PostMapping("/savesharefile")
-    @Transactional(rollbackFor=Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public AjaxResult saveShareFile(@RequestBody SaveShareFileDTO saveShareFileDTO) {
 
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
@@ -124,7 +124,7 @@ public class ShareController extends BaseController {
                 List<UserFile> userfileList = userFileService.selectFileListLikeRightFilePath(userFile.getFilePath() + userFile.getFileName(), userFile.getUserId());
                 log.info("查询文件列表：" + JSON.toJSONString(userfileList));
                 String filePath = userFile.getFilePath();
-                userfileList.forEach(p->{
+                userfileList.forEach(p -> {
                     p.setUserFileId(null);
                     p.setUserId(userId);
                     p.setFilePath(p.getFilePath().replaceFirst(filePath + fileName, savefilePath + savefileName));
@@ -207,7 +207,7 @@ public class ShareController extends BaseController {
         String endTime = share.getEndTime();
         Date endTimeDate = null;
         endTimeDate = DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS, endTime);
-        if (new Date().after(endTimeDate))  {
+        if (new Date().after(endTimeDate)) {
             return error("分享已过期");
         } else {
             return success();

@@ -1,5 +1,7 @@
 package com.ruoyi.media.vo;
+
 import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -23,7 +25,7 @@ public class UploadVideoVO implements Serializable {
 
     private String status;
 
-    public UploadVideoVO(String url, String title, String ext, Long filesize,String length,String status) {
+    public UploadVideoVO(String url, String title, String ext, Long filesize, String length, String status) {
         this.url = url;
         this.title = title;
         this.ext = ext;

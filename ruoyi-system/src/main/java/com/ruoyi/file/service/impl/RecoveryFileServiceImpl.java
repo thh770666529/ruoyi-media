@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 @Service
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor = Exception.class)
 public class RecoveryFileServiceImpl extends ServiceImpl<RecoveryFileMapper, RecoveryFile> implements IRecoveryFileService {
     @Resource
     UserFileMapper userFileMapper;
@@ -39,19 +39,19 @@ public class RecoveryFileServiceImpl extends ServiceImpl<RecoveryFileMapper, Rec
     @Override
     public void deleteRecoveryFile(UserFile userFile) {
         if (userFile == null) {
-            return ;
+            return;
 
         }
         if (userFile.getIsDir() == 1) {
             updateFilePointCountByBatchNum(userFile.getDeleteBatchNum());
 
-        }else{
+        } else {
 
             UserFile userFileTemp = userFileMapper.selectById(userFile.getUserFileId());
             FileBean fileBean = fileMapper.selectById(userFileTemp.getFileId());
-            if (fileBean!=null){
+            if (fileBean != null) {
                 LambdaUpdateWrapper<FileBean> fileBeanLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-                fileBeanLambdaUpdateWrapper.set(FileBean::getPointCount, fileBean.getPointCount() -1)
+                fileBeanLambdaUpdateWrapper.set(FileBean::getPointCount, fileBean.getPointCount() - 1)
                         .eq(FileBean::getFileId, fileBean.getFileId());
                 fileMapper.update(null, fileBeanLambdaUpdateWrapper);
             }
@@ -59,7 +59,6 @@ public class RecoveryFileServiceImpl extends ServiceImpl<RecoveryFileMapper, Rec
         LambdaQueryWrapper<UserFile> userFileLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userFileLambdaQueryWrapper.eq(UserFile::getDeleteBatchNum, userFile.getDeleteBatchNum());
         userFileMapper.delete(userFileLambdaQueryWrapper);
-
 
 
     }
@@ -84,25 +83,23 @@ public class RecoveryFileServiceImpl extends ServiceImpl<RecoveryFileMapper, Rec
     }
 
 
-
-
     private void updateFilePointCountByBatchNum(String deleteBatchNum) {
         LambdaQueryWrapper<UserFile> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(UserFile::getDeleteBatchNum, deleteBatchNum);
         List<UserFile> fileList = userFileMapper.selectList(lambdaQueryWrapper);
 
-        new Thread(()->{
-            for (int i = 0; i < fileList.size(); i++){
+        new Thread(() -> {
+            for (int i = 0; i < fileList.size(); i++) {
                 UserFile userFileTemp = fileList.get(i);
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
-                        if (userFileTemp.getIsDir() != 1){
+                        if (userFileTemp.getIsDir() != 1) {
                             FileBean fileBean = fileMapper.selectById(userFileTemp.getFileId());
                             if (fileBean.getPointCount() != null) {
 
                                 LambdaUpdateWrapper<FileBean> fileBeanLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-                                fileBeanLambdaUpdateWrapper.set(FileBean::getPointCount, fileBean.getPointCount() -1)
+                                fileBeanLambdaUpdateWrapper.set(FileBean::getPointCount, fileBean.getPointCount() - 1)
                                         .eq(FileBean::getFileId, fileBean.getFileId());
                                 fileMapper.update(null, fileBeanLambdaUpdateWrapper);
 
@@ -114,6 +111,7 @@ public class RecoveryFileServiceImpl extends ServiceImpl<RecoveryFileMapper, Rec
             }
         }).start();
     }
+
     @Override
     public List<RecoveryFileListVo> selectRecoveryFileList(Long userId) {
         return recoveryFileMapper.selectRecoveryFileList(userId);

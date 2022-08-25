@@ -23,146 +23,215 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 @Data
 @TableName(value = "wm_movie")
-public class Movie extends BaseEntity
-{
+public class Movie extends BaseEntity {
 
-    /** 主键 */
+    /**
+     * 主键
+     */
     @TableId(type = IdType.AUTO)
     private Long movieId;
 
-    /** 封面 */
+    /**
+     * 封面
+     */
     @Excel(name = "封面")
     private String images;
 
-    /** 标题 */
+    /**
+     * 标题
+     */
     @Excel(name = "标题")
     private String title;
 
-    /** 电影类型 */
+    /**
+     * 电影类型
+     */
     @Excel(name = "电影类型")
     private String type;
 
-    /** 国家 */
+    /**
+     * 国家
+     */
     @Excel(name = "国家")
     private String country;
 
-    /** 标签 */
+    /**
+     * 标签
+     */
     @Excel(name = "标签")
     private String tagId;
 
-    /** 描述 */
+    /**
+     * 描述
+     */
     @Excel(name = "描述")
     private String description;
 
-    /** 发布人 */
+    /**
+     * 发布人
+     */
     @Excel(name = "发布人")
     private String publishBy;
 
-    /** 发布时间 */
+    /**
+     * 发布时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "发布时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date publishTime;
 
-    /** 状态（0发布 1停用） */
+    /**
+     * 状态（0发布 1停用）
+     */
     @Excel(name = "状态", readConverterExp = "0=发布,1=停用")
     private String status;
 
-    /** 删除标志（0代表存在 2代表删除） */
+    /**
+     * 删除标志（0代表存在 2代表删除）
+     */
     private String delFlag;
 
-    /** 点击数 */
+    /**
+     * 点击数
+     */
     @Excel(name = "点击数")
     private Long clickCount;
 
-    /** 评论数 */
+    /**
+     * 评论数
+     */
     @Excel(name = "评论数")
     private Long commentCount;
 
-    /** 关注数 */
+    /**
+     * 关注数
+     */
     @Excel(name = "关注数")
     private Long followCount;
 
-    /** 收藏数 */
+    /**
+     * 收藏数
+     */
     @Excel(name = "收藏数")
     private Long collectionCount;
 
-    /** 支持数 */
+    /**
+     * 支持数
+     */
     @Excel(name = "喜欢数")
     private Long supportCount;
 
-    /** 反对数 */
+    /**
+     * 反对数
+     */
     @Excel(name = "反对数")
     private Long opposeCount;
 
-    /** 分享数 */
+    /**
+     * 分享数
+     */
     @Excel(name = "分享数")
     private Long shareCount;
 
-    /** 是否可以评论 */
+    /**
+     * 是否可以评论
+     */
     @Excel(name = "是否可以评论")
     private Integer openComment;
 
-    /** 是否可以下载 */
+    /**
+     * 是否可以下载
+     */
     @Excel(name = "是否可以下载")
     private Integer openDownload;
 
-    /** 价格 */
+    /**
+     * 价格
+     */
     @Excel(name = "价格")
     private BigDecimal price;
 
-    /** 评分 */
+    /**
+     * 评分
+     */
     @Excel(name = "评分")
     private BigDecimal rate;
 
-    /** 分类Id */
+    /**
+     * 分类Id
+     */
     @Excel(name = "分类Id")
     private Integer categoryId;
 
-    /** 分类名称 */
+    /**
+     * 分类名称
+     */
     @Excel(name = "分类Id")
     private String categoryName;
 
-    /** 专属二维码 */
+    /**
+     * 专属二维码
+     */
     @Excel(name = "专属二维码")
     private String qrcodePath;
 
-    /** 是否开启密钥模式 */
+    /**
+     * 是否开启密钥模式
+     */
     private Integer openPassword;
 
-    /** 私密访问时的密钥 */
+    /**
+     * 私密访问时的密钥
+     */
     private String password;
 
-    /** 查询标签数组 */
+    /**
+     * 查询标签数组
+     */
     @TableField(exist = false)
     private List<String> tagIdList;
 
-    /** 查询发布年 */
+    /**
+     * 查询发布年
+     */
     @TableField(exist = false)
     private String publishYear;
 
 
-    /** 剧照 */
+    /**
+     * 剧照
+     */
     @Excel(name = "剧照")
     private String stills;
 
 
-    /** 视频总长度 */
+    /**
+     * 视频总长度
+     */
     @Excel(name = "视频总长度")
     private long totalVideoLength;
 
-    /** 简介 */
+    /**
+     * 简介
+     */
     @Excel(name = "简介")
     private String summary;
 
-    /** 拼音 */
+    /**
+     * 拼音
+     */
     @Excel(name = "简介")
     private String en;
 
-    /** 拼音 */
+    /**
+     * 拼音
+     */
     @Excel(name = "中文首字母")
     private String letter;
 
-    /** 语言 */
+    /**
+     * 语言
+     */
     @Excel(name = "语言")
     private String lang;
 

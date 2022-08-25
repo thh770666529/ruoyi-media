@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 
 @Slf4j
 @Service
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor = Exception.class)
 public class StorageServiceImpl extends ServiceImpl<StorageMapper, StorageBean> implements IStorageService {
     @Resource
     StorageMapper storageMapper;
@@ -39,7 +39,7 @@ public class StorageServiceImpl extends ServiceImpl<StorageMapper, StorageBean> 
             storageBean.setUserId(userId);
             storageBean.setTotalStorageSize(totalStorageSize);
             storageMapper.insert(storageBean);
-        } else  {
+        } else {
             totalStorageSize = storageBean.getTotalStorageSize();
         }
 
@@ -51,9 +51,10 @@ public class StorageServiceImpl extends ServiceImpl<StorageMapper, StorageBean> 
 
     /**
      * 获取初始化存储大小
+     *
      * @return
      */
-    private Long getInitStorageSize(){
+    private Long getInitStorageSize() {
         String initStorageSize = configService.selectConfigByKey(FileConstant.INIT_STORAGE_SIZE);
         return Long.parseLong(initStorageSize);
     }
@@ -63,7 +64,7 @@ public class StorageServiceImpl extends ServiceImpl<StorageMapper, StorageBean> 
         // 获取用户总存储大小
         Long totalStorageSize = this.getTotalStorageSize(userId);
         Long storageSize = userFileMapper.selectStorageSizeByUserId(userId);
-        if (storageSize == null ){
+        if (storageSize == null) {
             storageSize = 0L;
         }
         if (storageSize + fileSize > totalStorageSize) {

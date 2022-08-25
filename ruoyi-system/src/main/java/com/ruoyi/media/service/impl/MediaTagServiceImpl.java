@@ -1,6 +1,7 @@
 package com.ruoyi.media.service.impl;
 
 import java.util.List;
+
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,7 @@ import com.ruoyi.media.service.IMediaTagService;
  * @date 2021-09-11
  */
 @Service
-public class MediaTagServiceImpl implements IMediaTagService
-{
+public class MediaTagServiceImpl implements IMediaTagService {
     @Autowired
     private MediaTagMapper mediaTagMapper;
 
@@ -27,8 +27,7 @@ public class MediaTagServiceImpl implements IMediaTagService
      * @return 电影标签
      */
     @Override
-    public MediaTag selectMediaTagByTagId(Long tagId)
-    {
+    public MediaTag selectMediaTagByTagId(Long tagId) {
         return mediaTagMapper.selectMediaTagByTagId(tagId);
     }
 
@@ -39,8 +38,7 @@ public class MediaTagServiceImpl implements IMediaTagService
      * @return 电影标签
      */
     @Override
-    public List<MediaTag> selectMediaTagList(MediaTag mediaTag)
-    {
+    public List<MediaTag> selectMediaTagList(MediaTag mediaTag) {
         return mediaTagMapper.selectMediaTagList(mediaTag);
     }
 
@@ -51,8 +49,7 @@ public class MediaTagServiceImpl implements IMediaTagService
      * @return 结果
      */
     @Override
-    public int insertMediaTag(MediaTag mediaTag)
-    {
+    public int insertMediaTag(MediaTag mediaTag) {
         mediaTag.setCreateTime(DateUtils.getNowDate());
         return mediaTagMapper.insert(mediaTag);
     }
@@ -64,8 +61,7 @@ public class MediaTagServiceImpl implements IMediaTagService
      * @return 结果
      */
     @Override
-    public int updateMediaTag(MediaTag mediaTag)
-    {
+    public int updateMediaTag(MediaTag mediaTag) {
         mediaTag.setUpdateTime(DateUtils.getNowDate());
         return mediaTagMapper.updateById(mediaTag);
     }
@@ -77,8 +73,7 @@ public class MediaTagServiceImpl implements IMediaTagService
      * @return 结果
      */
     @Override
-    public int deleteMediaTagByTagIds(Long[] tagIds)
-    {
+    public int deleteMediaTagByTagIds(Long[] tagIds) {
         return mediaTagMapper.deleteMediaTagByTagIds(tagIds);
     }
 
@@ -89,8 +84,7 @@ public class MediaTagServiceImpl implements IMediaTagService
      * @return 结果
      */
     @Override
-    public int deleteMediaTagByTagId(Long tagId)
-    {
+    public int deleteMediaTagByTagId(Long tagId) {
         return mediaTagMapper.deleteById(tagId);
     }
 }

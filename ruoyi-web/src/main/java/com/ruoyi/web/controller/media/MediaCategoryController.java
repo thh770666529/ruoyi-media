@@ -18,8 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/media/category")
-public class MediaCategoryController extends BaseController
-{
+public class MediaCategoryController extends BaseController {
     @Autowired
     private IMediaCategoryService mediaCategoryService;
 
@@ -27,18 +26,17 @@ public class MediaCategoryController extends BaseController
      * 查询电影分类列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(MediaCategory mediaCategory)
-    {
+    public TableDataInfo list(MediaCategory mediaCategory) {
         startPage();
         List<MediaCategory> list = mediaCategoryService.selectMediaCategoryList(mediaCategory);
         return getDataTable(list);
     }
+
     /**
      * 获取电影分类详细信息
      */
     @GetMapping(value = "/{categoryId}")
-    public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId)
-    {
+    public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId) {
         return AjaxResult.success(mediaCategoryService.selectMediaCategoryByCategoryId(categoryId));
     }
 }

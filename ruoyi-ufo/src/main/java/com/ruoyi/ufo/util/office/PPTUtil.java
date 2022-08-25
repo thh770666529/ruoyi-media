@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 import javax.imageio.ImageIO;
+
 import com.ruoyi.common.utils.file.qiwen.FileUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -43,6 +44,7 @@ public class PPTUtil {
     public static void main(String[] args) {
         System.out.println(pptToHtml("E:\\poi\\Java02(团队协作工具之SVN) .ppt", "E:\\poi", "33333"));
     }
+
     /**
      * @param sourceFilePath
      * @param targetFolder
@@ -111,11 +113,11 @@ public class PPTUtil {
                 ppt.getSlides().get(i).draw(graphics);
                 // save the output
                 String imageDir = targetDir + "/" + imageFileName + "/";
-                 //   FileUtils.createDir(imageDir);// create image dir
+                //   FileUtils.createDir(imageDir);// create image dir
                 new File(imageDir).mkdirs();
                 // 相对路径
                 String relativeImagePath = imageFileName + "/" + imageFileName + "-" + (i + 1) + ".png";
-                 // 绝对路径
+                // 绝对路径
                 String imagePath = imageDir + imageFileName + "-" + (i + 1) + ".png";
                 sb.append("<br>");
                 sb.append("<img src=" + "\"" + relativeImagePath + "\"" + "/>");
@@ -154,10 +156,10 @@ public class PPTUtil {
                 }
                 BufferedImage img = new BufferedImage(pgsize.width, pgsize.height, BufferedImage.TYPE_INT_RGB);
                 Graphics2D graphics = img.createGraphics();
-                 // clear the drawing area
+                // clear the drawing area
                 graphics.setPaint(Color.white);
                 graphics.fill(new Rectangle2D.Float(0, 0, pgsize.width, pgsize.height));
-                   // render
+                // render
                 ppt.getSlides().get(i).draw(graphics);
                 String imageDir = targetDir + "/" + imageFileName + "/";
                 // create image dir

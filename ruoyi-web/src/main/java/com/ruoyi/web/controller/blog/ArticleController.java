@@ -29,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
@@ -43,8 +44,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/blog/article")
 @Slf4j
-public class ArticleController extends BaseController
-{
+public class ArticleController extends BaseController {
     @Autowired
     private IArticleService articleService;
 
@@ -62,12 +62,12 @@ public class ArticleController extends BaseController
 
     @Autowired
     private TokenService tokenService;
+
     /**
      * 门户搜索博客文章列表
      */
     @GetMapping("/searchArticleList")
-    public TableDataInfo searchArticleList(Article article)
-    {
+    public TableDataInfo searchArticleList(Article article) {
         log.info("门户通关关键字搜索博客文章列表");
         startPage();
         List<Article> list = articleService.selectSearchArticleList(article);
@@ -78,8 +78,7 @@ public class ArticleController extends BaseController
      * 门户搜索博客文章列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(Article article)
-    {
+    public TableDataInfo list(Article article) {
         log.info("门户搜索博客文章列表");
         startPage();
         List<Article> list = articleService.selectWebArticleList(article);
@@ -87,7 +86,7 @@ public class ArticleController extends BaseController
     }
 
     @GetMapping("/getSameArticleList/{articleId}")
-    public AjaxResult getSameArticleList(@PathVariable("articleId") Long articleId){
+    public AjaxResult getSameArticleList(@PathVariable("articleId") Long articleId) {
         log.info("门户获取相关文章");
         return AjaxResult.success(articleService.getSameArticleList(articleId));
     }
@@ -96,7 +95,7 @@ public class ArticleController extends BaseController
      * 获取博客文章详细信息
      */
     @GetMapping(value = "/{articleId}")
-    public AjaxResult getInfo(HttpServletRequest request, @PathVariable("articleId") Long articleId){
+    public AjaxResult getInfo(HttpServletRequest request, @PathVariable("articleId") Long articleId) {
         log.info("门户获取博客文章详细信息id={}", articleId);
         String ip = IpUtils.getIpAddr(request);
         Article article = articleService.selectWebArticleByArticleId(articleId);
@@ -106,7 +105,7 @@ public class ArticleController extends BaseController
         String clickJson = redisCache.getCacheObject(BaseRedisKeyConstants.BLOG_CLICK + ":" + article.getArticleId() + "#" + ip);
         // 判断ip用户是否点击过这个文章
         if (StringUtils.isEmpty(clickJson)) {
-             //增加博客点击数
+            //增加博客点击数
             Long clickCount = article.getClickCount() + 1;
             article.setClickCount(clickCount);
             articleService.updateArticle(article);
@@ -127,7 +126,7 @@ public class ArticleController extends BaseController
         }
         //设置博客分类
         String categoryId = articleVO.getCategoryId();
-        if (StringUtils.isNotBlank(categoryId)){
+        if (StringUtils.isNotBlank(categoryId)) {
             Category category = categoryService.selectCategoryByCategoryId(Long.valueOf(categoryId));
             articleVO.setCategoryData(category);
         }
@@ -141,7 +140,7 @@ public class ArticleController extends BaseController
         //thumbFlag 默认没有点赞
         articleVO.setThumbFlag(false);
         LoginUser loginUser = tokenService.getLoginUser(request);
-        if (loginUser!=null) {
+        if (loginUser != null) {
             Integer thumbCount = redisCache.getCacheObject(BaseRedisKeyConstants.THUMB_BLOG_SUPPORT + ":" + articleId + "#" + loginUser.getUserId());
             if (thumbCount != null) {
                 articleVO.setThumbFlag(true);
@@ -152,6 +151,7 @@ public class ArticleController extends BaseController
 
     /**
      * 设置博客版权
+     *
      * @param articleVO
      */
     private void setBlogCopyright(ArticleVO articleVO) {
@@ -176,7 +176,7 @@ public class ArticleController extends BaseController
 
     @GetMapping(value = "/checkPassword")
     public AjaxResult checkExtractionCode(CheckArticlePasswordVO checkArticlePasswordVO) {
-        log.info("文章校验密码，文章id{},输入的密码{}",checkArticlePasswordVO.getArticleId(), checkArticlePasswordVO.getPassword());
+        log.info("文章校验密码，文章id{},输入的密码{}", checkArticlePasswordVO.getArticleId(), checkArticlePasswordVO.getPassword());
         LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Article::getArticleId, checkArticlePasswordVO.getArticleId())
                 .eq(Article::getPassword, checkArticlePasswordVO.getPassword());

@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.website;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/website/collectFolder")
-public class CollectFolderController extends BaseController
-{
+public class CollectFolderController extends BaseController {
     @Autowired
     private ICollectFolderService collectFolderService;
 
@@ -40,8 +40,7 @@ public class CollectFolderController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:collectFolder:list')")
     @GetMapping("/list")
-    public TableDataInfo list(CollectFolder collectFolder)
-    {
+    public TableDataInfo list(CollectFolder collectFolder) {
         startPage();
         List<CollectFolder> list = collectFolderService.selectCollectFolderList(collectFolder);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class CollectFolderController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:collectFolder:export')")
     @Log(title = "收藏夹", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, CollectFolder collectFolder)
-    {
+    public void export(HttpServletResponse response, CollectFolder collectFolder) {
         List<CollectFolder> list = collectFolderService.selectCollectFolderList(collectFolder);
         ExcelUtil<CollectFolder> util = new ExcelUtil<CollectFolder>(CollectFolder.class);
         util.exportExcel(response, list, "收藏夹数据");
@@ -65,8 +63,7 @@ public class CollectFolderController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:collectFolder:query')")
     @GetMapping(value = "/{collectFolderId}")
-    public AjaxResult getInfo(@PathVariable("collectFolderId") Long collectFolderId)
-    {
+    public AjaxResult getInfo(@PathVariable("collectFolderId") Long collectFolderId) {
         return AjaxResult.success(collectFolderService.removeById(collectFolderId));
     }
 
@@ -76,8 +73,7 @@ public class CollectFolderController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:collectFolder:add')")
     @Log(title = "收藏夹", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody CollectFolder collectFolder)
-    {
+    public AjaxResult add(@RequestBody CollectFolder collectFolder) {
         return toAjax(collectFolderService.insertCollectFolder(collectFolder));
     }
 
@@ -87,8 +83,7 @@ public class CollectFolderController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:collectFolder:edit')")
     @Log(title = "收藏夹", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody CollectFolder collectFolder)
-    {
+    public AjaxResult edit(@RequestBody CollectFolder collectFolder) {
         return toAjax(collectFolderService.updateCollectFolder(collectFolder));
     }
 
@@ -97,9 +92,8 @@ public class CollectFolderController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:collectFolder:remove')")
     @Log(title = "收藏夹", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{collectFolderIds}")
-    public AjaxResult remove(@PathVariable Long[] collectFolderIds)
-    {
+    @DeleteMapping("/{collectFolderIds}")
+    public AjaxResult remove(@PathVariable Long[] collectFolderIds) {
         return toAjax(collectFolderService.deleteCollectFolderByCollectFolderIds(collectFolderIds));
     }
 }

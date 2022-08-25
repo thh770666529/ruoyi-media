@@ -11,8 +11,7 @@ import com.ruoyi.media.domain.MediaTag;
  * @author thh
  * @date 2021-09-11
  */
-public interface MediaTagMapper extends BaseMapper<MediaTag>
-{
+public interface MediaTagMapper extends BaseMapper<MediaTag> {
     /**
      * 查询电影标签
      *

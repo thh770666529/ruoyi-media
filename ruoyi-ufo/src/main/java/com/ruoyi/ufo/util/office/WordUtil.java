@@ -15,6 +15,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import fr.opensagres.poi.xwpf.converter.core.ImageManager;
 import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLConverter;
 import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLOptions;
@@ -34,20 +35,17 @@ public class WordUtil {
     /**
      * 将word2003转换为html文件 2017-2-27
      *
-     * @param wordPath
-     *            word文件路径
-     * @param wordName
-     *            word文件名称无后缀
-     * @param suffix
-     *            word文件后缀
+     * @param wordPath word文件路径
+     * @param wordName word文件名称无后缀
+     * @param suffix   word文件后缀
      * @throws IOException
      * @throws TransformerException
      * @throws ParserConfigurationException
      */
     public static String Word2003ToHtml(String wordPath, String wordName,
-            String suffix) throws IOException, TransformerException,
+                                        String suffix) throws IOException, TransformerException,
             ParserConfigurationException {
-        String htmlPath = wordPath + File.separator +  "html"
+        String htmlPath = wordPath + File.separator + "html"
                 + File.separator;
         String htmlName = wordName + ".html";
         final String imagePath = htmlPath + "image" + File.separator;
@@ -68,7 +66,7 @@ public class WordUtil {
         wordToHtmlConverter.setPicturesManager(new PicturesManager() {
             @Override
             public String savePicture(byte[] content, PictureType pictureType,
-                    String suggestedName, float widthInches, float heightInches) {
+                                      String suggestedName, float widthInches, float heightInches) {
                 File imgPath = new File(imagePath);
                 if (!imgPath.exists()) {// 图片目录不存在则创建
                     imgPath.mkdirs();
@@ -120,18 +118,15 @@ public class WordUtil {
     /**
      * 2007版本word转换成html 2017-2-27
      *
-     * @param wordPath
-     *            word文件路径
-     * @param wordName
-     *            word文件名称无后缀
-     * @param suffix
-     *            word文件后缀
+     * @param wordPath word文件路径
+     * @param wordName word文件名称无后缀
+     * @param suffix   word文件后缀
      * @return
      * @throws IOException
      */
     public static String Word2007ToHtml(String wordPath, String wordName, String suffix)
             throws IOException {
-        String htmlPath = wordPath + File.separator +  "html"
+        String htmlPath = wordPath + File.separator + "html"
                 + File.separator;
         String htmlName = wordName + ".html";
 //        String imagePath = htmlPath + "image" + File.separator;
@@ -168,12 +163,10 @@ public class WordUtil {
     }
 
 
-
-
     public static void main(String[] args) throws Exception,
             TransformerException, ParserConfigurationException {
         //System.out.println(Word2003ToHtml("e:/poi/", "poi", ".doc"));
-       // System.out.println(Word2007ToHtml("e:/poi/", "poi", ".docx"));
-      // System.out.println(Excel2003ToHtml("e:/poi/", "poi", ".xls"));
+        // System.out.println(Word2007ToHtml("e:/poi/", "poi", ".docx"));
+        // System.out.println(Excel2003ToHtml("e:/poi/", "poi", ".xls"));
     }
 }

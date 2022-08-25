@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.website.mapper.SignConfigMapper">
-    
+
     <resultMap type="SignConfig" id="SignConfigResult">
-        <result property="signConfigId"    column="sign_config_id"    />
-        <result property="signDay"    column="sign_day"    />
-        <result property="type"    column="type"    />
-        <result property="number"    column="number"    />
-        <result property="remark"    column="remark"    />
-        <result property="signSet"    column="sign_set"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateTime"    column="update_time"    />
+        <result property="signConfigId" column="sign_config_id"/>
+        <result property="signDay" column="sign_day"/>
+        <result property="type" column="type"/>
+        <result property="number" column="number"/>
+        <result property="remark" column="remark"/>
+        <result property="signSet" column="sign_set"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <sql id="selectSignConfigVo">
-        select sign_config_id, sign_day, type, number, remark, sign_set, create_time, update_time from website_sign_config
+        select sign_config_id,
+               sign_day,
+               type,
+               number,
+               remark,
+               sign_set,
+               create_time,
+               update_time
+        from website_sign_config
     </sql>
 
     <select id="selectSignConfigList" parameterType="SignConfig" resultMap="SignConfigResult">
         <include refid="selectSignConfigVo"/>
-        <where>  
-            <if test="type != null "> and type = #{type}</if>
-            <if test="signSet != null "> and sign_set = #{signSet}</if>
+        <where>
+            <if test="type != null ">and type = #{type}</if>
+            <if test="signSet != null ">and sign_set = #{signSet}</if>
         </where>
     </select>
-    
+
     <select id="selectSignConfigBySignConfigId" parameterType="Long" resultMap="SignConfigResult">
         <include refid="selectSignConfigVo"/>
         where sign_config_id = #{signConfigId}
     </select>
-        
+
     <insert id="insertSignConfig" parameterType="SignConfig" useGeneratedKeys="true" keyProperty="signConfigId">
         insert into website_sign_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -42,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="signSet != null">sign_set,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="signDay != null">#{signDay},</if>
             <if test="type != null">#{type},</if>
@@ -51,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="signSet != null">#{signSet},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSignConfig" parameterType="SignConfig">
@@ -69,11 +77,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteSignConfigBySignConfigId" parameterType="Long">
-        delete from website_sign_config where sign_config_id = #{signConfigId}
+        delete
+        from website_sign_config
+        where sign_config_id = #{signConfigId}
     </delete>
 
     <delete id="deleteSignConfigBySignConfigIds" parameterType="String">
-        delete from website_sign_config where sign_config_id in 
+        delete from website_sign_config where sign_config_id in
         <foreach item="signConfigId" collection="array" open="(" separator="," close=")">
             #{signConfigId}
         </foreach>

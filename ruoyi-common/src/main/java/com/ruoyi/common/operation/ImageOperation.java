@@ -11,9 +11,10 @@ import java.io.*;
 public class ImageOperation {
     /**
      * 左旋
-     * @param inFile 源文件
+     *
+     * @param inFile  源文件
      * @param outFile 目的文件
-     * @param angle 角度
+     * @param angle   角度
      * @throws IOException io异常
      */
     public static void leftTotation(File inFile, File outFile, int angle) throws IOException {
@@ -22,9 +23,10 @@ public class ImageOperation {
 
     /**
      * 右旋
-     * @param inFile 源文件
+     *
+     * @param inFile  源文件
      * @param outFile 目的文件
-     * @param angle 角度
+     * @param angle   角度
      * @throws IOException io异常
      */
     public static void rightTotation(File inFile, File outFile, int angle) throws IOException {
@@ -33,10 +35,11 @@ public class ImageOperation {
 
     /**
      * 压缩
-     * @param inFile 源文件
+     *
+     * @param inFile  源文件
      * @param outFile 目的文件
-     * @param width 图像宽
-     * @param height 图像高
+     * @param width   图像宽
+     * @param height  图像高
      * @throws IOException io异常
      */
     public static void thumbnailsImage(File inFile, File outFile, int width, int height) throws IOException {

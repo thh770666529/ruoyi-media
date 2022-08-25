@@ -1,6 +1,7 @@
 package com.ruoyi.website.mapper;
 
 import java.util.List;
+
 import com.ruoyi.website.domain.SearchLog;
 
 /**
@@ -9,8 +10,7 @@ import com.ruoyi.website.domain.SearchLog;
  * @author thh
  * @date 2021-12-11
  */
-public interface SearchLogMapper
-{
+public interface SearchLogMapper {
     /**
      * 查询搜索日志
      *
@@ -58,4 +58,4 @@ public interface SearchLogMapper
      * @return 结果
      */
     public int deleteSearchLogBySearchLogIds(Long[] searchLogIds);
-    }
+}

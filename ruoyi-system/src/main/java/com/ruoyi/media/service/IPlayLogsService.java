@@ -1,6 +1,7 @@
 package com.ruoyi.media.service;
 
 import java.util.List;
+
 import com.ruoyi.media.domain.PlayLogs;
 
 /**
@@ -9,8 +10,7 @@ import com.ruoyi.media.domain.PlayLogs;
  * @author thh
  * @date 2021-12-05
  */
-public interface IPlayLogsService
-{
+public interface IPlayLogsService {
 
     /**
      * 查询播放记录列表
@@ -30,10 +30,8 @@ public interface IPlayLogsService
 
 
     /**
-     *
-     *
      * @param videoId 视频id  userId用户id
      * @return 结果
      */
-    PlayLogs  selectPlayLogsByVideoId(String videoId);
+    PlayLogs selectPlayLogsByVideoId(String videoId);
 }

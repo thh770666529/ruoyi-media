@@ -1,6 +1,7 @@
 package com.ruoyi.common.utils.file;
 
 import java.util.Arrays;
+
 import com.vladsch.flexmark.ext.autolink.AutolinkExtension;
 import com.vladsch.flexmark.ext.emoji.EmojiExtension;
 import com.vladsch.flexmark.ext.emoji.EmojiImageType;
@@ -13,6 +14,7 @@ import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.MutableDataSet;
+
 /**
  * @ClassName MarkdownUtils
  * @Description markdown文件处理
@@ -29,12 +31,12 @@ public class MarkdownUtils {
      */
     public static String markdownToHtml(String markdown) {
         MutableDataSet options = new MutableDataSet().set(Parser.EXTENSIONS, Arrays.asList(
-                AutolinkExtension.create(),
-                EmojiExtension.create(),
-                StrikethroughExtension.create(),
-                TaskListExtension.create(),
-                TablesExtension.create()
-        ))
+                        AutolinkExtension.create(),
+                        EmojiExtension.create(),
+                        StrikethroughExtension.create(),
+                        TaskListExtension.create(),
+                        TablesExtension.create()
+                ))
                 // set GitHub table parsing options
                 .set(TablesExtension.WITH_CAPTION, false)
                 .set(TablesExtension.COLUMN_SPANS, false)

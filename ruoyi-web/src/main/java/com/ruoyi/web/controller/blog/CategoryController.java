@@ -19,8 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/blog/category")
-public class CategoryController extends BaseController
-{
+public class CategoryController extends BaseController {
     @Autowired
     private ICategoryService categoryService;
 
@@ -28,8 +27,7 @@ public class CategoryController extends BaseController
      * 查询博客分类列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(Category category)
-    {
+    public TableDataInfo list(Category category) {
         startPage();
         List<Category> list = categoryService.selectCategoryList(category);
         return getDataTable(list);
@@ -39,8 +37,7 @@ public class CategoryController extends BaseController
      * 获取博客分类详细信息
      */
     @GetMapping(value = "/{categoryId}")
-    public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId)
-    {
+    public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId) {
         return AjaxResult.success(categoryService.selectCategoryByCategoryId(categoryId));
     }
 }

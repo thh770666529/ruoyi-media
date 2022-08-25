@@ -10,15 +10,12 @@ import me.zhyd.oauth.request.*;
  *
  * @author ruoyi
  */
-public class AuthUtils
-{
+public class AuthUtils {
     @SuppressWarnings("deprecation")
     public static AuthRequest getAuthRequest(String source, String clientId, String clientSecret, String redirectUri,
-            AuthStateCache authStateCache)
-    {
+                                             AuthStateCache authStateCache) {
         AuthRequest authRequest = null;
-        switch (source.toLowerCase())
-        {
+        switch (source.toLowerCase()) {
             case "dingtalk":
                 authRequest = new AuthDingTalkRequest(AuthConfig.builder().clientId(clientId).clientSecret(clientSecret)
                         .redirectUri(redirectUri).build(), authStateCache);
@@ -140,8 +137,7 @@ public class AuthUtils
             default:
                 break;
         }
-        if (null == authRequest)
-        {
+        if (null == authRequest) {
             throw new AuthException("未获取到有效的Auth配置");
         }
         return authRequest;

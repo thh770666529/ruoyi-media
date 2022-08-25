@@ -1,4 +1,5 @@
 package com.ruoyi.common.utils.ffmpeg;
+
 import com.ruoyi.common.enums.FfmpegResolutionEnum;
 import com.ruoyi.common.utils.ffmpeg.m3u8.M3u8VideoUtils;
 import org.apache.commons.io.FilenameUtils;

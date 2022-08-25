@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -33,8 +34,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/media/movie")
 @Slf4j
-public class MovieController extends BaseController
-{
+public class MovieController extends BaseController {
     @Autowired
     private IMovieService movieService;
 
@@ -48,8 +48,7 @@ public class MovieController extends BaseController
      * 查询电影管理列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(MovieVO movieVO)
-    {
+    public TableDataInfo list(MovieVO movieVO) {
         startPage();
         List<MovieVO> list = movieService.selectWebMovieList(movieVO);
         return getDataTable(list);
@@ -59,8 +58,7 @@ public class MovieController extends BaseController
      * 通过演员相关电影列表
      */
     @GetMapping("/getListByActorId/{actorId}")
-    public TableDataInfo getListByActorId(@PathVariable("actorId") Long actorId)
-    {
+    public TableDataInfo getListByActorId(@PathVariable("actorId") Long actorId) {
         startPage();
         List<MovieVO> list = movieService.getListByActorId(actorId);
         return getDataTable(list);
@@ -70,8 +68,7 @@ public class MovieController extends BaseController
      * 获取电影管理详细信息
      */
     @GetMapping(value = "/{movieId}")
-    public AjaxResult getMovie(HttpServletRequest request, @PathVariable("movieId") Long movieId)
-    {
+    public AjaxResult getMovie(HttpServletRequest request, @PathVariable("movieId") Long movieId) {
         log.info("门户获取电影详细信息id={}", movieId);
         String ip = IpUtils.getIpAddr(request);
         MovieVO movieVO = movieService.selectWebMovieById(movieId);
@@ -85,7 +82,7 @@ public class MovieController extends BaseController
             Long clickCount = movieVO.getClickCount() + 1;
             movieVO.setClickCount(clickCount);
             Movie movie = new Movie();
-            BeanUtils.copyProperties(movieVO,movie);
+            BeanUtils.copyProperties(movieVO, movie);
             movieService.updateById(movie);
             //将该用户点击记录存储到redis中, 24小时后过期
             redisCache.setCacheObject(BaseRedisKeyConstants.MOVIE_CLICK + ":" + movieVO.getMovieId() + "#" + ip, movieVO.getClickCount().toString(),
@@ -99,19 +96,18 @@ public class MovieController extends BaseController
      * 获取电影管理详细信息
      */
     @GetMapping(value = "/video/{videoId}")
-    public AjaxResult getMovieVideoDetail(@PathVariable("videoId") Long videoId)
-    {
+    public AjaxResult getMovieVideoDetail(@PathVariable("videoId") Long videoId) {
         Video video = videoService.getById(videoId);
         Long movieId = video.getMovieId();
         MovieVO movieVO = movieService.selectWebMovieById(movieId);
         Map<String, Object> data = new HashMap<>(10);
-        data.put("video",video);
-        data.put("movie",movieVO);
+        data.put("video", video);
+        data.put("movie", movieVO);
         return AjaxResult.success(data);
     }
 
     @GetMapping("/getSameTypeMovieList/{movieId}")
-    public AjaxResult getSameTypeMovieList(@PathVariable("movieId") Long movieId){
+    public AjaxResult getSameTypeMovieList(@PathVariable("movieId") Long movieId) {
         log.info("门户获取相关电影");
         return AjaxResult.success(movieService.getSameTypeMovieList(movieId));
     }

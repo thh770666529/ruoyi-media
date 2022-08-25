@@ -26,6 +26,7 @@ public abstract class Uploader {
 
     /**
      * 普通上传
+     *
      * @param httpServletRequest http的request请求
      * @return 文件列表
      */
@@ -33,14 +34,16 @@ public abstract class Uploader {
 
     /**
      * 分片上传
+     *
      * @param httpServletRequest http的request请求
-     * @param uploadFile 分片上传参数
+     * @param uploadFile         分片上传参数
      * @return 文件列表
      */
     public abstract List<UploadFile> upload(HttpServletRequest httpServletRequest, UploadFile uploadFile);
 
     /**
      * 取消上传
+     *
      * @param uploadFile 分片上传参数
      */
     public abstract void cancelUpload(UploadFile uploadFile);
@@ -112,10 +115,11 @@ public abstract class Uploader {
 
     /**
      * 获取文件名称
+     *
      * @param fileName
      * @return
      */
-    protected String getFileName(String fileName){
+    protected String getFileName(String fileName) {
         if (!fileName.contains(".")) {
             return fileName;
         }

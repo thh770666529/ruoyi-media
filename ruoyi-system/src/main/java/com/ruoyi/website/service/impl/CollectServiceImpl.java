@@ -20,8 +20,7 @@ import com.ruoyi.website.service.ICollectService;
  * @date 2021-10-05
  */
 @Service
-public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> implements ICollectService
-{
+public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> implements ICollectService {
     @Autowired
     private CollectMapper collectMapper;
 
@@ -32,8 +31,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
      * @return 收藏
      */
     @Override
-    public Collect selectCollectByCollectId(Long collectId)
-    {
+    public Collect selectCollectByCollectId(Long collectId) {
         return collectMapper.selectCollectByCollectId(collectId);
     }
 
@@ -44,8 +42,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
      * @return 收藏
      */
     @Override
-    public List<Collect> selectCollectList(Collect collect)
-    {
+    public List<Collect> selectCollectList(Collect collect) {
         return collectMapper.selectCollectList(collect);
     }
 
@@ -56,8 +53,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
      * @return 结果
      */
     @Override
-    public int insertCollect(Collect collect)
-    {
+    public int insertCollect(Collect collect) {
         return collectMapper.insert(collect);
     }
 
@@ -68,8 +64,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
      * @return 结果
      */
     @Override
-    public int updateCollect(Collect collect)
-    {
+    public int updateCollect(Collect collect) {
         return collectMapper.updateById(collect);
     }
 
@@ -80,8 +75,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
      * @return 结果
      */
     @Override
-    public int deleteCollectByCollectIds(Long[] collectIds)
-    {
+    public int deleteCollectByCollectIds(Long[] collectIds) {
         return collectMapper.deleteCollectByCollectIds(collectIds);
     }
 
@@ -92,8 +86,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
      * @return 结果
      */
     @Override
-    public int deleteCollectByCollectId(Long collectId)
-    {
+    public int deleteCollectByCollectId(Long collectId) {
         return collectMapper.deleteById(collectId);
     }
 

@@ -1,6 +1,7 @@
 package com.ruoyi.website.service;
 
 import java.util.List;
+
 import com.ruoyi.website.domain.SearchLog;
 
 /**
@@ -9,8 +10,7 @@ import com.ruoyi.website.domain.SearchLog;
  * @author thh
  * @date 2021-12-11
  */
-public interface ISearchLogService
-{
+public interface ISearchLogService {
     /**
      * 查询搜索日志
      *

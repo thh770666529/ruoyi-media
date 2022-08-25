@@ -11,8 +11,7 @@ import com.ruoyi.media.domain.MediaCategory;
  * @author thh
  * @date 2021-09-11
  */
-public interface MediaCategoryMapper  extends BaseMapper<MediaCategory>
-{
+public interface MediaCategoryMapper extends BaseMapper<MediaCategory> {
     /**
      * 查询电影分类
      *

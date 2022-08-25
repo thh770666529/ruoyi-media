@@ -13,8 +13,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-08-28
  */
 @Repository
-public interface CategoryMapper extends BaseMapper<Category>
-{
+public interface CategoryMapper extends BaseMapper<Category> {
     /**
      * 查询博客分类
      *

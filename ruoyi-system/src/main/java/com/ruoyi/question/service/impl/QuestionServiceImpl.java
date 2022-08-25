@@ -27,13 +27,13 @@ import com.ruoyi.question.service.IQuestionService;
  * @date 2021-09-12
  */
 @Service
-public class QuestionServiceImpl implements IQuestionService
-{
+public class QuestionServiceImpl implements IQuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
     @Autowired
     private TokenUtil tokenUtil;
+
     /**
      * 查询问答
      *
@@ -41,8 +41,7 @@ public class QuestionServiceImpl implements IQuestionService
      * @return 问答
      */
     @Override
-    public Question selectQuestionByQuestionId(Long questionId)
-    {
+    public Question selectQuestionByQuestionId(Long questionId) {
         return questionMapper.selectQuestionByQuestionId(questionId);
     }
 
@@ -53,8 +52,7 @@ public class QuestionServiceImpl implements IQuestionService
      * @return 问答
      */
     @Override
-    public List<Question> selectQuestionList(Question question)
-    {
+    public List<Question> selectQuestionList(Question question) {
         return questionMapper.selectQuestionList(question);
     }
 
@@ -65,8 +63,7 @@ public class QuestionServiceImpl implements IQuestionService
      * @return 结果
      */
     @Override
-    public int insertQuestion(Question question)
-    {
+    public int insertQuestion(Question question) {
         // 设置用户登录信息
         setCurrentLoginUserInfo(question);
         // 保存当前评论时的设备信息
@@ -125,8 +122,7 @@ public class QuestionServiceImpl implements IQuestionService
      * @return 结果
      */
     @Override
-    public int updateQuestion(Question question)
-    {
+    public int updateQuestion(Question question) {
         question.setUpdateTime(DateUtils.getNowDate());
         return questionMapper.updateQuestion(question);
     }
@@ -138,8 +134,7 @@ public class QuestionServiceImpl implements IQuestionService
      * @return 结果
      */
     @Override
-    public int deleteQuestionByQuestionIds(Long[] questionIds)
-    {
+    public int deleteQuestionByQuestionIds(Long[] questionIds) {
         return questionMapper.deleteQuestionByQuestionIds(questionIds);
     }
 
@@ -150,8 +145,7 @@ public class QuestionServiceImpl implements IQuestionService
      * @return 结果
      */
     @Override
-    public int deleteQuestionByQuestionId(Long questionId)
-    {
+    public int deleteQuestionByQuestionId(Long questionId) {
         return questionMapper.deleteQuestionByQuestionId(questionId);
     }
 }

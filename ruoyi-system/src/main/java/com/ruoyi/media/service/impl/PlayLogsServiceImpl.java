@@ -26,8 +26,7 @@ import com.ruoyi.media.service.IPlayLogsService;
  * @date 2021-12-05
  */
 @Service
-public class PlayLogsServiceImpl implements IPlayLogsService
-{
+public class PlayLogsServiceImpl implements IPlayLogsService {
     @Autowired
     private PlayLogsMapper playLogsMapper;
 
@@ -41,8 +40,7 @@ public class PlayLogsServiceImpl implements IPlayLogsService
      * @return 播放记录
      */
     @Override
-    public List<PlayLogs> selectPlayLogsList(PlayLogs playLogs)
-    {
+    public List<PlayLogs> selectPlayLogsList(PlayLogs playLogs) {
         return playLogsMapper.selectPlayLogsList(playLogs);
     }
 
@@ -53,27 +51,26 @@ public class PlayLogsServiceImpl implements IPlayLogsService
      * @return 结果
      */
     @Override
-    public int insertOrUpdatePalyLogs(PlayLogs playLogs)
-    {
+    public int insertOrUpdatePalyLogs(PlayLogs playLogs) {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         PlayLogs queryPlayLog = new PlayLogs();
         queryPlayLog.setVideoId(playLogs.getVideoId());
-        String userId =  null;
-        if (loginUser != null){
+        String userId = null;
+        if (loginUser != null) {
             userId = loginUser.getUserId() + "";
             queryPlayLog.setUserId(userId);
         } else {
             setCurrentDeviceInfo(queryPlayLog);
         }
         PlayLogs dbPlayLogs = playLogsMapper.selectPlayLogsByCondition(queryPlayLog);
-        if (dbPlayLogs!= null){
+        if (dbPlayLogs != null) {
             dbPlayLogs.setUserId(userId);
             setCurrentDeviceInfo(dbPlayLogs);
             dbPlayLogs.setPlayPosition(playLogs.getPlayPosition());
             dbPlayLogs.setPlayDuration(playLogs.getPlayDuration());
             dbPlayLogs.setUpdateTime(DateUtils.getNowDate());
             return playLogsMapper.updatePlayLogs(dbPlayLogs);
-        }else {
+        } else {
             playLogs.setUserId(userId);
             setCurrentDeviceInfo(playLogs);
             playLogs.setCreateTime(DateUtils.getNowDate());
@@ -100,7 +97,7 @@ public class PlayLogsServiceImpl implements IPlayLogsService
         playLogs.setOperatingSystem(os.getName());
         playLogs.setIp(ip);
         String addressInfo = AddressUtils.getRealAddressByIP(ip);
-        if (!"内网IP".equals(addressInfo)){
+        if (!"内网IP".equals(addressInfo)) {
             String[] addressArr = addressInfo.split(" ");
             playLogs.setProvince(addressArr[0]);
             playLogs.setCity(addressArr[1]);
@@ -108,17 +105,16 @@ public class PlayLogsServiceImpl implements IPlayLogsService
     }
 
 
-
     @Override
-    public PlayLogs selectPlayLogsByVideoId(String videoId){
-        if (videoId == null){
+    public PlayLogs selectPlayLogsByVideoId(String videoId) {
+        if (videoId == null) {
             throw new RuntimeException("videoId不得为空");
         }
         PlayLogs playLogs = new PlayLogs();
         playLogs.setVideoId(videoId);
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
-        String userId =  null;
-        if (loginUser!= null){
+        String userId = null;
+        if (loginUser != null) {
             userId = loginUser.getUserId() + "";
             playLogs.setUserId(userId);
         } else {

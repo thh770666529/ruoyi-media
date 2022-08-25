@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.List;
@@ -42,7 +43,7 @@ public class MediaTask {
     @Resource
     private VideoMapper videoMapper;
 
-    public void convertVideoList(){
+    public void convertVideoList() {
         WebConfig webConfig = webConfigService.getWebConfig();
         String openSteamMedia = webConfig.getOpenSteamMedia();
         if (Constants.COMMON_SWITCH_CLOSE.equals(openSteamMedia)) {
@@ -53,20 +54,20 @@ public class MediaTask {
         List<Video> videoList = videoMapper.selectVideoList(videoCondition);
 
         List<Video> readyConvertVideoList = videoList.stream().map(
-                item -> {
-                    item.setStatus(VideoStatus.CONVERTING.getCode());
-                    videoMapper.updateById(item);
-                    return item;
-                })
+                        item -> {
+                            item.setStatus(VideoStatus.CONVERTING.getCode());
+                            videoMapper.updateById(item);
+                            return item;
+                        })
                 .collect(Collectors.toList());
         for (Video video : readyConvertVideoList) {
             String url = video.getUrl();
             Video newVideo = new Video();
-            BeanUtils.copyProperties(video,newVideo);
+            BeanUtils.copyProperties(video, newVideo);
             url = RuoYiConfig.getProfile() + url;
             try {
                 generateAllM3u8(url, newVideo);
-            }catch (Exception e){
+            } catch (Exception e) {
                 newVideo.setErrorMsg(e.getMessage());
             }
             newVideo.setStatus(VideoStatus.CONVERT_SUCCESS.getCode());
@@ -76,7 +77,7 @@ public class MediaTask {
     }
 
 
-    private void generateAllM3u8(String sourceFilePath,Video newVideo) {
+    private void generateAllM3u8(String sourceFilePath, Video newVideo) {
         File sourceFile = new File(sourceFilePath);
         if (!sourceFile.exists()) {
             log.error("文件不存在！sourceFilePath{}", sourceFilePath);
@@ -89,7 +90,7 @@ public class MediaTask {
         //源文件可能不是mp4格式 首先需要转成mp4格式
         String rootFolder = sourceFile.getParent();
         String sourceFileName = sourceFile.getName();
-        String m3u8Name = sourceFileName.substring(0, sourceFileName.lastIndexOf("."))+".m3u8";
+        String m3u8Name = sourceFileName.substring(0, sourceFileName.lastIndexOf(".")) + ".m3u8";
         String extension = FilenameUtils.getExtension(sourceFilePath);
         String folder1080p = rootFolder + "/" + "1080";
         String folder720p = rootFolder + "/" + "720";
@@ -100,24 +101,24 @@ public class MediaTask {
         if (width >= 1920) {
             boolean convert1080pFlag = VideoUtils.convertMp4(sourceFilePath, folder1080p, FfmpegResolutionEnum.RESOLUTION_1080P);
             VideoUtils.generateM3u8(folder1080p + "/" + sourceFileName, folder1080p + "/" + "hls");
-            m3u8Url1080 = folder1080p + "/" + "hls"+"/"+m3u8Name;
+            m3u8Url1080 = folder1080p + "/" + "hls" + "/" + m3u8Name;
             boolean convert720pFlag = VideoUtils.convertMp4(sourceFilePath, folder720p, FfmpegResolutionEnum.RESOLUTION_720P);
             VideoUtils.generateM3u8(folder720p + "/" + sourceFileName, folder720p + "/" + "hls");
-            m3u8Url720 = folder720p + "/" + "hls"+"/"+m3u8Name;
+            m3u8Url720 = folder720p + "/" + "hls" + "/" + m3u8Name;
             boolean convert360pFlag = VideoUtils.convertMp4(sourceFilePath, folder360p, FfmpegResolutionEnum.RESOLUTION_360P);
             VideoUtils.generateM3u8(folder360p + "/" + sourceFileName, folder360p + "/" + "hls");
-            m3u8Url360 = folder360p + "/" + "hls"+"/"+m3u8Name;
+            m3u8Url360 = folder360p + "/" + "hls" + "/" + m3u8Name;
         } else if (width < 1920 && width >= 720) {
             boolean convert720pFlag = VideoUtils.convertMp4(sourceFilePath, folder720p, FfmpegResolutionEnum.RESOLUTION_720P);
             VideoUtils.generateM3u8(folder720p + "/" + sourceFileName, folder720p + "/" + "hls");
-            m3u8Url720 = folder720p + "/" + "hls"+"/"+m3u8Name;
+            m3u8Url720 = folder720p + "/" + "hls" + "/" + m3u8Name;
             boolean convert360pFlag = VideoUtils.convertMp4(sourceFilePath, folder360p, FfmpegResolutionEnum.RESOLUTION_360P);
             VideoUtils.generateM3u8(folder360p + "/" + sourceFileName, folder360p + "/" + "hls");
-            m3u8Url360 = folder360p + "/" + "hls"+"/"+m3u8Name;
+            m3u8Url360 = folder360p + "/" + "hls" + "/" + m3u8Name;
         } else {
             boolean convert360pFlag = VideoUtils.convertMp4(sourceFilePath, folder360p, FfmpegResolutionEnum.RESOLUTION_360P);
             VideoUtils.generateM3u8(folder360p + "/" + sourceFileName, folder360p + "/" + "hls");
-            m3u8Url360 = folder360p + "/" + "hls"+"/"+m3u8Name;
+            m3u8Url360 = folder360p + "/" + "hls" + "/" + m3u8Name;
         }
         newVideo.setSuperDefinitionUrl(getPath(m3u8Url1080));
         newVideo.setHighDefinitionUrl(getPath(m3u8Url720));
@@ -126,15 +127,16 @@ public class MediaTask {
 
     /**
      * 获取文件路径
+     *
      * @param path
      * @return
      */
-    private String getPath(String path){
-        if (StringUtils.isEmpty(path)){
+    private String getPath(String path) {
+        if (StringUtils.isEmpty(path)) {
             return "";
         }
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
-        String currentPath = "/"+StringUtils.substring(path, dirLastIndex);
+        String currentPath = "/" + StringUtils.substring(path, dirLastIndex);
         return currentPath;
     }
 }

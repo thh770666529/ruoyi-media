@@ -5,8 +5,7 @@ package com.ruoyi.common.enums;
  *
  * @author ruoyi
  */
-public enum BusinessType
-{
+public enum BusinessType {
     /**
      * 其它
      */

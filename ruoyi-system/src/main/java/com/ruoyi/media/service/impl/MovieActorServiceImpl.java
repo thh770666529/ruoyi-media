@@ -16,8 +16,7 @@ import com.ruoyi.media.service.IMovieActorService;
  * @date 2021-05-16
  */
 @Service
-public class MovieActorServiceImpl implements IMovieActorService
-{
+public class MovieActorServiceImpl implements IMovieActorService {
     @Autowired
     private MovieActorMapper movieActorMapper;
 
@@ -28,8 +27,7 @@ public class MovieActorServiceImpl implements IMovieActorService
      * @return 电影演员关联
      */
     @Override
-    public MovieActor selectMovieActorById(Long actorId)
-    {
+    public MovieActor selectMovieActorById(Long actorId) {
         return movieActorMapper.selectMovieActorById(actorId);
     }
 
@@ -40,8 +38,7 @@ public class MovieActorServiceImpl implements IMovieActorService
      * @return 电影演员关联
      */
     @Override
-    public List<MovieActorVO> selectMovieActorList(MovieActorVO movieActorVO)
-    {
+    public List<MovieActorVO> selectMovieActorList(MovieActorVO movieActorVO) {
         return movieActorMapper.selectMovieActorList(movieActorVO);
     }
 
@@ -52,8 +49,7 @@ public class MovieActorServiceImpl implements IMovieActorService
      * @return 结果
      */
     @Override
-    public int insertMovieActor(MovieActor movieActor)
-    {
+    public int insertMovieActor(MovieActor movieActor) {
         return movieActorMapper.insertMovieActor(movieActor);
     }
 
@@ -64,8 +60,7 @@ public class MovieActorServiceImpl implements IMovieActorService
      * @return 结果
      */
     @Override
-    public int updateMovieActor(MovieActor movieActor)
-    {
+    public int updateMovieActor(MovieActor movieActor) {
         return movieActorMapper.updateMovieActor(movieActor);
     }
 
@@ -76,8 +71,7 @@ public class MovieActorServiceImpl implements IMovieActorService
      * @return 结果
      */
     @Override
-    public int deleteMovieActorByIds(Long[] actorIds)
-    {
+    public int deleteMovieActorByIds(Long[] actorIds) {
         return movieActorMapper.deleteMovieActorByIds(actorIds);
     }
 
@@ -88,8 +82,7 @@ public class MovieActorServiceImpl implements IMovieActorService
      * @return 结果
      */
     @Override
-    public int deleteMovieActorById(Long actorId)
-    {
+    public int deleteMovieActorById(Long actorId) {
         return movieActorMapper.deleteMovieActorById(actorId);
     }
 }

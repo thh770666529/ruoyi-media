@@ -11,8 +11,7 @@ import com.ruoyi.website.domain.CollectFolder;
  * @author thh
  * @date 2021-10-05
  */
-public interface CollectFolderMapper extends BaseMapper<CollectFolder>
-{
+public interface CollectFolderMapper extends BaseMapper<CollectFolder> {
     /**
      * 查询收藏夹
      *

@@ -14,8 +14,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-08-28
  */
 @Repository
-public interface SubjectMapper extends BaseMapper<Subject>
-{
+public interface SubjectMapper extends BaseMapper<Subject> {
     /**
      * 查询文章专题
      *

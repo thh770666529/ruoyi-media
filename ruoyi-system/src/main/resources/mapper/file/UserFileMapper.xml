@@ -7,22 +7,24 @@
 <mapper namespace="com.ruoyi.file.mapper.UserFileMapper">
 
     <resultMap type="com.ruoyi.file.vo.FileListVo" id="FileListVoResult">
-        <result property="userFileId"    column="user_file_id"    />
-        <result property="deleteBatchNum"    column="delete_batch_num"    />
-        <result property="deleteFlag"    column="delete_flag"    />
-        <result property="deleteTime"    column="delete_time"    />
-        <result property="extendName"    column="extend_name"    />
-        <result property="fileId"    column="file_id"    />
-        <result property="fileName"    column="file_name"    />
-        <result property="filePath"    column="file_path"    />
-        <result property="isDir"    column="is_dir"    />
-        <result property="uploadTime"    column="upload_time"    />
-        <result property="userId"    column="user_id"    />
+        <result property="userFileId" column="user_file_id"/>
+        <result property="deleteBatchNum" column="delete_batch_num"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="deleteTime" column="delete_time"/>
+        <result property="extendName" column="extend_name"/>
+        <result property="fileId" column="file_id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="filePath" column="file_path"/>
+        <result property="isDir" column="is_dir"/>
+        <result property="uploadTime" column="upload_time"/>
+        <result property="userId" column="user_id"/>
     </resultMap>
 
     <update id="replaceFilePath">
-        UPDATE qiwen_user_file SET filepath=REPLACE(filepath, #{oldFilePath}, #{filePath})
-        WHERE filepath LIKE N'${oldFilePath}%' and userId = #{userId};
+        UPDATE qiwen_user_file
+        SET filepath=REPLACE(filepath, #{oldFilePath}, #{filePath})
+        WHERE filepath LIKE N'${oldFilePath}%'
+          and userId = #{userId};
     </update>
 
     <select id="userFileList" resultMap="FileListVoResult">
@@ -44,18 +46,18 @@
             <if test="userFile.fileName != null">
                 and a.file_name = #{userFile.fileName}
             </if>
-                and a.delete_flag = 0
+            and a.delete_flag = 0
         </where>
-        ORDER BY  is_dir desc
+        ORDER BY is_dir desc
         <if test="beginCount != null and pageCount != null">
             limit #{beginCount}, #{pageCount}
         </if>
     </select>
 
-    <sql id="selectByExtendName" >
+    <sql id="selectByExtendName">
         left join qiwen_file on qiwen_file.file_id = qiwen_user_file.file_id
         where extend_name in
-        <foreach collection="fileNameList" open="(" close=")" separator="," item="fileName" >
+        <foreach collection="fileNameList" open="(" close=")" separator="," item="fileName">
             #{fileName}
         </foreach>
         and user_id = #{userId}
@@ -64,7 +66,7 @@
     <sql id="selectByNotExtendName">
         left join qiwen_file on qiwen_file.file_id = qiwen_user_file.file_id
         where extend_name not in
-        <foreach collection="fileNameList" open="(" close=")" separator="," item="fileName" >
+        <foreach collection="fileNameList" open="(" close=")" separator="," item="fileName">
             #{fileName}
         </foreach>
         and user_id = #{userId}
@@ -94,8 +96,10 @@
 
 
     <update id="updateFilepathByFilepath">
-        UPDATE qiwen_user_file SET file_path=REPLACE(file_path, #{param1}, #{param2})
-        WHERE file_path like N'${param1}%' and user_id = #{param3}
+        UPDATE qiwen_user_file
+        SET file_path=REPLACE(file_path, #{param1}, #{param2})
+        WHERE file_path like N'${param1}%'
+          and user_id = #{param3}
     </update>
 
     <update id="updateFilepathByPathAndName">
@@ -111,8 +115,9 @@
     </update>
 
     <select id="selectStorageSizeByUserId" resultType="java.lang.Long" parameterType="java.lang.Long">
-        SELECT SUM(file_size) FROM qiwen_user_file
-        LEFT JOIN qiwen_file ON qiwen_file.file_id = qiwen_user_file.file_id
+        SELECT SUM(file_size)
+        FROM qiwen_user_file
+                 LEFT JOIN qiwen_file ON qiwen_file.file_id = qiwen_user_file.file_id
         WHERE qiwen_user_file.user_id = #{userId}
     </select>
 

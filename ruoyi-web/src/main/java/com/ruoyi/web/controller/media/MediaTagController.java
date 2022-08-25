@@ -22,8 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/media/tag")
-public class MediaTagController extends BaseController
-{
+public class MediaTagController extends BaseController {
     @Autowired
     private IMediaTagService mediaTagService;
 
@@ -31,8 +30,7 @@ public class MediaTagController extends BaseController
      * 查询电影标签列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(MediaTag mediaTag)
-    {
+    public TableDataInfo list(MediaTag mediaTag) {
         startPage();
         List<MediaTag> list = mediaTagService.selectMediaTagList(mediaTag);
         return getDataTable(list);
@@ -43,8 +41,7 @@ public class MediaTagController extends BaseController
      * 获取电影标签详细信息
      */
     @GetMapping(value = "/{tagId}")
-    public AjaxResult getInfo(@PathVariable("tagId") Long tagId)
-    {
+    public AjaxResult getInfo(@PathVariable("tagId") Long tagId) {
         return AjaxResult.success(mediaTagService.selectMediaTagByTagId(tagId));
     }
 }

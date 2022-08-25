@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.media.mapper.MovieActorMapper">
 
     <resultMap type="MovieActor" id="MovieActorResult">
-        <result property="actorId"    column="actor_id"    />
-        <result property="movieId"    column="movie_id"    />
-        <result property="type"    column="type"    />
+        <result property="actorId" column="actor_id"/>
+        <result property="movieId" column="movie_id"/>
+        <result property="type" column="type"/>
     </resultMap>
 
     <resultMap type="MovieActorVO" id="MovieActorVOResult">
-        <result property="actorId"    column="actor_id"    />
-        <result property="movieId"    column="movie_id"    />
-        <result property="name"    column="name"    />
-        <result property="avatar"    column="avatar"    />
-        <result property="label"    column="label"    />
+        <result property="actorId" column="actor_id"/>
+        <result property="movieId" column="movie_id"/>
+        <result property="name" column="name"/>
+        <result property="avatar" column="avatar"/>
+        <result property="label" column="label"/>
     </resultMap>
 
 
     <sql id="selectMovieActorVo">
-        select actor_id, movie_id, type from wm_movie_actor
+        select actor_id, movie_id, type
+        from wm_movie_actor
     </sql>
 
     <select id="selectMovieActorList" parameterType="MovieActorVO" resultMap="MovieActorVOResult">
@@ -28,9 +29,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from wm_movie_actor ma,wm_actor a
         <where>
             ma.actor_id = a.actor_id
-            <if test="actorId != null "> AND ma.actor_id = #{actorId}</if>
-            <if test="movieId != null "> AND ma.movie_id = #{movieId}</if>
-            <if test="type != null  and type != ''"> AND ma.type = #{type}</if>
+            <if test="actorId != null ">AND ma.actor_id = #{actorId}</if>
+            <if test="movieId != null ">AND ma.movie_id = #{movieId}</if>
+            <if test="type != null  and type != ''">AND ma.type = #{type}</if>
         </where>
     </select>
 
@@ -45,12 +46,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actorId != null">actor_id,</if>
             <if test="movieId != null">movie_id,</if>
             <if test="type != null">type,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="actorId != null">#{actorId},</if>
             <if test="movieId != null">#{movieId},</if>
             <if test="type != null">#{type},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateMovieActor" parameterType="MovieActor">
@@ -63,7 +64,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteMovieActorById" parameterType="Long">
-        delete from wm_movie_actor where actor_id = #{actorId}
+        delete
+        from wm_movie_actor
+        where actor_id = #{actorId}
     </delete>
 
     <delete id="deleteMovieActorByIds" parameterType="String">

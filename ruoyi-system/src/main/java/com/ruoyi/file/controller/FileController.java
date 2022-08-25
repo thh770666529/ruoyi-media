@@ -73,7 +73,6 @@ public class FileController extends BaseController {
     UFOFactory ufoFactory;
 
 
-
     public static Executor executor = Executors.newFixedThreadPool(20);
 
     @Log(title = "创建文件", businessType = BusinessType.File)
@@ -100,7 +99,7 @@ public class FileController extends BaseController {
     }
 
 
-    @Log(title = "文件重命名" , businessType = BusinessType.File)
+    @Log(title = "文件重命名", businessType = BusinessType.File)
     @PostMapping("/renamefile")
     public AjaxResult renameFile(@RequestBody RenameFileDTO renameFileDto) {
 
@@ -156,8 +155,7 @@ public class FileController extends BaseController {
     }
 
 
-
-    @Log(title = "批量删除文件" , businessType = BusinessType.File)
+    @Log(title = "批量删除文件", businessType = BusinessType.File)
     @PostMapping("/batchdeletefile")
     public AjaxResult deleteImageByIds(@RequestBody BatchDeleteFileDTO batchDeleteFileDto) {
 
@@ -167,14 +165,14 @@ public class FileController extends BaseController {
         // DigestUtils.md5Hex("data");
         for (UserFile userFile : userFiles) {
             //userFile.setDeleteBatchNum(uuid);
-            userFileService.deleteUserFile(userFile.getUserFileId(),loginUser.getUserId());
+            userFileService.deleteUserFile(userFile.getUserFileId(), loginUser.getUserId());
             fileDealComp.deleteESByUserFileId(userFile.getUserFileId());
         }
         return AjaxResult.success("批量删除文件成功");
     }
 
 
-    @Log(title = "可以删除文件或者目录" , businessType = BusinessType.File)
+    @Log(title = "可以删除文件或者目录", businessType = BusinessType.File)
     @PostMapping("/deletefile")
     public AjaxResult deleteFile(@RequestBody DeleteFileDTO deleteFileDto) {
 
@@ -186,7 +184,7 @@ public class FileController extends BaseController {
     }
 
 
-    @Log(title = "解压文件" , businessType = BusinessType.File)
+    @Log(title = "解压文件", businessType = BusinessType.File)
     @PostMapping("/unzipfile")
     public AjaxResult unzipFile(@RequestBody UnzipFileDTO unzipFileDto) {
 
@@ -217,9 +215,9 @@ public class FileController extends BaseController {
         }
 
         List<FileBean> fileBeanList = new ArrayList<>();
-        for (int i = 0; i < fileEntryNameList.size(); i++){
+        for (int i = 0; i < fileEntryNameList.size(); i++) {
             String entryName = fileEntryNameList.get(i);
-            log.info("文件名："+ entryName);
+            log.info("文件名：" + entryName);
             executor.execute(() -> {
                 String totalFileUrl = unzipUrl + entryName;
                 File currentFile = FileOperation.newFile(totalFileUrl);
@@ -231,13 +229,13 @@ public class FileController extends BaseController {
                 userFile.setUserId(loginUser.getUserId());
                 userFile.setFilePath(FileUtil.pathSplitFormat(unzipFileDto.getFilePath() + entryName.replace(currentFile.getName(), "")).replace("\\", "/"));
 
-                if (currentFile.isDirectory()){
+                if (currentFile.isDirectory()) {
 
                     userFile.setIsDir(1);
 
                     userFile.setFileName(currentFile.getName());
                     tempFileBean.setTimeStampName(currentFile.getName());
-                }else{
+                } else {
 
                     userFile.setIsDir(0);
                     userFile.setExtendName(FileUtil.getFileExtendName(totalFileUrl));
@@ -261,7 +259,7 @@ public class FileController extends BaseController {
     }
 
 
-    @Log(title = "文件或者目录移动" , businessType = BusinessType.File)
+    @Log(title = "文件或者目录移动", businessType = BusinessType.File)
     @PostMapping("/movefile")
     public AjaxResult moveFile(@RequestBody MoveFileDTO moveFileDto) {
 
@@ -276,8 +274,7 @@ public class FileController extends BaseController {
     }
 
 
-
-    @Log(title = "批量移动文件" , businessType = BusinessType.File)
+    @Log(title = "批量移动文件", businessType = BusinessType.File)
     @PostMapping("/batchmovefile")
     public AjaxResult batchMoveFile(@RequestBody BatchMoveFileDTO batchMoveFileDto) {
 
@@ -293,7 +290,7 @@ public class FileController extends BaseController {
     }
 
 
-    @Log(title = "通过文件类型选择文件" , businessType = BusinessType.File)
+    @Log(title = "通过文件类型选择文件", businessType = BusinessType.File)
     @GetMapping("/selectfilebyfiletype")
     public AjaxResult selectFileByFileType(int fileType, Long currentPage, Long pageCount) {
 
@@ -316,11 +313,11 @@ public class FileController extends BaseController {
             arrList.addAll(Arrays.asList(FileUtil.IMG_FILE));
             arrList.addAll(Arrays.asList(FileUtil.VIDEO_FILE));
             arrList.addAll(Arrays.asList(FileUtil.MUSIC_FILE));
-            fileList = userFileService.selectFileNotInExtendNames(arrList,beginCount, pageCount, userId);
-            total =    userFileService.selectCountNotInExtendNames(arrList,beginCount, pageCount, userId);
+            fileList = userFileService.selectFileNotInExtendNames(arrList, beginCount, pageCount, userId);
+            total = userFileService.selectCountNotInExtendNames(arrList, beginCount, pageCount, userId);
         } else {
-            fileList = userFileService.selectFileByExtendName(getFileExtendsByType(fileType), beginCount, pageCount,userId);
-            total =    userFileService.selectCountByExtendName(getFileExtendsByType(fileType), beginCount, pageCount,userId);
+            fileList = userFileService.selectFileByExtendName(getFileExtendsByType(fileType), beginCount, pageCount, userId);
+            total = userFileService.selectCountByExtendName(getFileExtendsByType(fileType), beginCount, pageCount, userId);
         }
         Map<String, Object> map = new HashMap<>();
         map.put("total", total);
@@ -330,8 +327,7 @@ public class FileController extends BaseController {
     }
 
 
-
-    @Log(title = "获取文件树" , businessType = BusinessType.File)
+    @Log(title = "获取文件树", businessType = BusinessType.File)
     @GetMapping("/getfiletree")
     public AjaxResult getFileTree() {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
@@ -342,24 +338,24 @@ public class FileController extends BaseController {
         resultTreeNode.setLabel("/");
         resultTreeNode.setId(0L);
         long id = 1;
-        for (int i = 0; i < userFileList.size(); i++){
+        for (int i = 0; i < userFileList.size(); i++) {
             UserFile userFile = userFileList.get(i);
             String filePath = userFile.getFilePath() + userFile.getFileName() + "/";
 
             Queue<String> queue = new LinkedList<>();
 
             String[] strArr = filePath.split("/");
-            for (int j = 0; j < strArr.length; j++){
-                if (!"".equals(strArr[j]) && strArr[j] != null){
+            for (int j = 0; j < strArr.length; j++) {
+                if (!"".equals(strArr[j]) && strArr[j] != null) {
                     queue.add(strArr[j]);
                 }
 
             }
-            if (queue.size() == 0){
+            if (queue.size() == 0) {
                 continue;
             }
 
-            resultTreeNode = fileDealComp.insertTreeNode(resultTreeNode, id++, "/" , queue);
+            resultTreeNode = fileDealComp.insertTreeNode(resultTreeNode, id++, "/", queue);
 
 
         }
@@ -378,7 +374,7 @@ public class FileController extends BaseController {
 
     @Log(title = "获取文件列表", businessType = BusinessType.File)
     @GetMapping("/getfilelist")
-    public AjaxResult getFileList(FileListDTO fileListDto){
+    public AjaxResult getFileList(FileListDTO fileListDto) {
 
         UserFile userFile = new UserFile();
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());

@@ -14,7 +14,8 @@ public interface IFiletransferService {
 
     /**
      * 上传文件
-     * @param request 请求
+     *
+     * @param request       请求
      * @param UploadFileDto 文件信息
      */
     void uploadFile(HttpServletRequest request, UploadFileDTO UploadFileDto, Long userId);
@@ -23,6 +24,7 @@ public interface IFiletransferService {
 
     /**
      * 预览文件
+     *
      * @param httpServletResponse
      * @param previewDTO
      */

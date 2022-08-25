@@ -132,7 +132,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
      */
     @Transactional
     @Override
-    public int insertMovie(MovieVO movieVO){
+    public int insertMovie(MovieVO movieVO) {
         // 初始化数据
         this.initData(movieVO);
         int rows = movieMapper.insert(movieVO);
@@ -149,13 +149,13 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     }
 
     /**
-     *初始化数据
+     * 初始化数据
      *
      * @param movieVO
      */
     private void initData(MovieVO movieVO) {
         String title = movieVO.getTitle();
-        if (StringUtils.isNotBlank(title)){
+        if (StringUtils.isNotBlank(title)) {
             String en = PinyinUtil.getPinyin(title, "");
             String letter = PinyinUtil.getFirstLetter(title, "");
             movieVO.setEn(en);
@@ -225,7 +225,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         movieActorMapper.deleteByMap(movieActorMap);
         this.insertActor(movieVO, MovieActorType.ACTOR);
         this.insertActor(movieVO, MovieActorType.DIRECTOR);
-        if (StringUtils.isBlank(movieVO.getQrcodePath())){
+        if (StringUtils.isBlank(movieVO.getQrcodePath())) {
             String url = "movie/" + movieVO.getMovieId();
             String qrcodePath = generateQr(url);
             movieVO.setQrcodePath(qrcodePath);
@@ -315,7 +315,6 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     }
 
 
-
     /**
      * 添加高亮
      *
@@ -390,6 +389,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
 
     /**
      * 生成二维码
+     *
      * @param url
      * @return
      */
@@ -402,7 +402,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
                 .setWidth(300)
                 .setHeight(300);
         File logoFile = new File(logoPath);
-        if (logoFile.exists()){
+        if (logoFile.exists()) {
             qrConfig.setImg(logoFile);
         }
         String qrRootPath = RuoYiConfig.getQrPath();
@@ -419,7 +419,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(qrRootPath, dirLastIndex);
         if (file.exists()) {
-            return  "/" + currentDir + "/" + fileName;
+            return "/" + currentDir + "/" + fileName;
         } else {
             return "";
         }

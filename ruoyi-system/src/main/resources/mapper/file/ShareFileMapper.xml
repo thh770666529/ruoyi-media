@@ -6,63 +6,57 @@
 
 <mapper namespace="com.ruoyi.file.mapper.ShareFileMapper">
     <resultMap type="com.ruoyi.file.vo.ShareFileListVO" id="ShareFileResult">
-        <result property="shareFileId"    column="share_file_id"    />
-        <result property="shareBatchNum"    column="share_batch_num"    />
-        <result property="shareFilePath"    column="share_file_path"    />
-        <result property="userFileId"    column="user_file_id"    />
-        <result property="extractionCode"    column="extraction_code"    />
+        <result property="shareFileId" column="share_file_id"/>
+        <result property="shareBatchNum" column="share_batch_num"/>
+        <result property="shareFilePath" column="share_file_path"/>
+        <result property="userFileId" column="user_file_id"/>
+        <result property="extractionCode" column="extraction_code"/>
     </resultMap>
 
     <insert id="batchInsertShareFile" parameterType="java.util.List">
         INSERT ignore INTO qiwen_share_file (share_batch_num, user_file_id, share_file_path)
         VALUES
         <foreach collection="list" item="file" index="index" separator=",">
-        (#{file.shareBatchNum}, #{file.userFileId}, #{file.shareFilePath})
+            (#{file.shareBatchNum}, #{file.userFileId}, #{file.shareFilePath})
         </foreach>
     </insert>
 
     <select id="selectShareFileList" resultMap="ShareFileResult">
-        select * from qiwen_share_file a
-        left join qiwen_share on qiwen_share.share_batch_num = a.share_batch_num
-        left join qiwen_user_file b on b.user_file_id = a.user_file_id
-        left join qiwen_file c on c.file_id = b.file_id
+        select *
+        from qiwen_share_file a
+                 left join qiwen_share on qiwen_share.share_batch_num = a.share_batch_num
+                 left join qiwen_user_file b on b.user_file_id = a.user_file_id
+                 left join qiwen_file c on c.file_id = b.file_id
         where a.share_batch_num = #{shareBatchNum}
-        and a.share_file_path = #{shareFilePath}
+          and a.share_file_path = #{shareFilePath}
     </select>
 
 
-<!--    <update id="updateFile" parameterType="java">-->
-<!--        <choose>-->
-<!--            <when test="isDir == 1">-->
-<!--                UPDATE file SET filename=#{fileName}, uploadTime = #{uploadTime}-->
-<!--                where fileId = #{fileId};-->
-<!--                UPDATE file SET filepath=REPLACE(filepath, #{oldFilePath}, #{filePath}) WHERE filepath LIKE N'${oldFilePath}%';-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                update file-->
-<!--                <set>-->
-<!--                    <if test="fileName != null">-->
-<!--                        fileName = #{fileName},-->
-<!--                    </if>-->
-<!--                    <if test="uploadTime != null">-->
-<!--                        uploadTime = #{uploadTime},-->
-<!--                    </if>-->
-<!--                    <if test="fileUrl != null">-->
-<!--                        fileUrl = #{fileUrl},-->
-<!--                    </if>-->
-<!--                </set>-->
-<!--                where fileId = #{fileId}-->
-<!--            </otherwise>-->
-<!--        </choose>-->
+    <!--    <update id="updateFile" parameterType="java">-->
+    <!--        <choose>-->
+    <!--            <when test="isDir == 1">-->
+    <!--                UPDATE file SET filename=#{fileName}, uploadTime = #{uploadTime}-->
+    <!--                where fileId = #{fileId};-->
+    <!--                UPDATE file SET filepath=REPLACE(filepath, #{oldFilePath}, #{filePath}) WHERE filepath LIKE N'${oldFilePath}%';-->
+    <!--            </when>-->
+    <!--            <otherwise>-->
+    <!--                update file-->
+    <!--                <set>-->
+    <!--                    <if test="fileName != null">-->
+    <!--                        fileName = #{fileName},-->
+    <!--                    </if>-->
+    <!--                    <if test="uploadTime != null">-->
+    <!--                        uploadTime = #{uploadTime},-->
+    <!--                    </if>-->
+    <!--                    <if test="fileUrl != null">-->
+    <!--                        fileUrl = #{fileUrl},-->
+    <!--                    </if>-->
+    <!--                </set>-->
+    <!--                where fileId = #{fileId}-->
+    <!--            </otherwise>-->
+    <!--        </choose>-->
 
-<!--    </update>-->
-
-
-
-
-
-
-
+    <!--    </update>-->
 
 
 </mapper>

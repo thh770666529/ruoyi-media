@@ -17,8 +17,7 @@ import com.ruoyi.media.service.IActorService;
  * @date 2021-05-16
  */
 @Service
-public class ActorServiceImpl extends ServiceImpl<ActorMapper, Actor> implements IActorService
-{
+public class ActorServiceImpl extends ServiceImpl<ActorMapper, Actor> implements IActorService {
     @Autowired
     private ActorMapper actorMapper;
 
@@ -30,13 +29,13 @@ public class ActorServiceImpl extends ServiceImpl<ActorMapper, Actor> implements
      * @return 演员
      */
     @Override
-    public List<Actor> selectActorList(Actor actor)
-    {
+    public List<Actor> selectActorList(Actor actor) {
         return actorMapper.selectActorList(actor);
     }
 
     /**
      * 查询热门演员
+     *
      * @param top
      * @return
      */
@@ -46,8 +45,8 @@ public class ActorServiceImpl extends ServiceImpl<ActorMapper, Actor> implements
     }
 
     @Override
-    public List<Actor> selectNotSelectedList(Actor actor,Long[] ids) {
-        return actorMapper.selectNotSelectedListByIds(actor,ids);
+    public List<Actor> selectNotSelectedList(Actor actor, Long[] ids) {
+        return actorMapper.selectNotSelectedListByIds(actor, ids);
     }
 
 }

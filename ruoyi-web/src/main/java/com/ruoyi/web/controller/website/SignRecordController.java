@@ -22,8 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/website/signRecord")
-public class SignRecordController extends BaseController
-{
+public class SignRecordController extends BaseController {
     @Autowired
     private ISignRecordService signRecordService;
 
@@ -31,8 +30,7 @@ public class SignRecordController extends BaseController
      * 查询签到日志列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(SignRecord signRecord)
-    {
+    public TableDataInfo list(SignRecord signRecord) {
         startPage();
         List<SignRecord> list = signRecordService.selectSignRecordList(signRecord);
         return getDataTable(list);
@@ -43,8 +41,7 @@ public class SignRecordController extends BaseController
      * 获取个人签到数据
      */
     @GetMapping("/getSignRecord")
-    public AjaxResult getSignRecord()
-    {
+    public AjaxResult getSignRecord() {
         return AjaxResult.success(signRecordService.getSignRecord());
     }
 
@@ -52,8 +49,7 @@ public class SignRecordController extends BaseController
      * 签到
      */
     @PostMapping("/signIn")
-    public AjaxResult signIn()
-    {
+    public AjaxResult signIn() {
         return AjaxResult.success(signRecordService.sign());
     }
 

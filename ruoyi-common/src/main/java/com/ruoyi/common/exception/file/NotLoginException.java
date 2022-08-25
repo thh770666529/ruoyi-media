@@ -1,9 +1,10 @@
 package com.ruoyi.common.exception.file;
 
-public class NotLoginException extends RuntimeException{
+public class NotLoginException extends RuntimeException {
     public NotLoginException() {
         super("未登录");
     }
+
     public NotLoginException(Throwable cause) {
         super("未登录", cause);
     }

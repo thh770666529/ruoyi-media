@@ -7,5 +7,6 @@ import java.io.InputStream;
 
 public abstract class Downloader {
     public abstract void download(HttpServletResponse httpServletResponse, DownloadFile uploadFile);
+
     public abstract InputStream getInputStream(DownloadFile downloadFile);
 }

@@ -26,13 +26,13 @@ import com.ruoyi.website.service.ISearchLogService;
  * @date 2021-12-11
  */
 @Service
-public class SearchLogServiceImpl implements ISearchLogService
-{
+public class SearchLogServiceImpl implements ISearchLogService {
     @Autowired
     private SearchLogMapper searchLogMapper;
 
     @Autowired
     private TokenUtil tokenUtil;
+
     /**
      * 查询搜索日志
      *
@@ -40,8 +40,7 @@ public class SearchLogServiceImpl implements ISearchLogService
      * @return 搜索日志
      */
     @Override
-    public SearchLog selectSearchLogBySearchLogId(Long searchLogId)
-    {
+    public SearchLog selectSearchLogBySearchLogId(Long searchLogId) {
         return searchLogMapper.selectSearchLogBySearchLogId(searchLogId);
     }
 
@@ -52,8 +51,7 @@ public class SearchLogServiceImpl implements ISearchLogService
      * @return 搜索日志
      */
     @Override
-    public List<SearchLog> selectSearchLogList(SearchLog searchLog)
-    {
+    public List<SearchLog> selectSearchLogList(SearchLog searchLog) {
         return searchLogMapper.selectSearchLogList(searchLog);
     }
 
@@ -67,7 +65,7 @@ public class SearchLogServiceImpl implements ISearchLogService
     public int insertSearchLog(String keyword) {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         SearchLog searchLog = new SearchLog();
-        if (loginUser != null){
+        if (loginUser != null) {
             searchLog.setUserId(loginUser.getUserId() + "");
         }
         searchLog.setCreateTime(DateUtils.getNowDate());
@@ -78,6 +76,7 @@ public class SearchLogServiceImpl implements ISearchLogService
 
     /**
      * 设置设备信息
+     *
      * @param searchLog
      */
     private void setCurrentDeviceInfo(SearchLog searchLog) {
@@ -94,7 +93,7 @@ public class SearchLogServiceImpl implements ISearchLogService
         searchLog.setOperatingSystem(os.getName());
         searchLog.setIp(ip);
         String addressInfo = AddressUtils.getRealAddressByIP(ip);
-        if (!"内网IP".equals(addressInfo)){
+        if (!"内网IP".equals(addressInfo)) {
             String[] addressArr = addressInfo.split(" ");
             searchLog.setProvince(addressArr[0]);
             searchLog.setCity(addressArr[1]);
@@ -109,8 +108,7 @@ public class SearchLogServiceImpl implements ISearchLogService
      * @return 结果
      */
     @Override
-    public int updateSearchLog(SearchLog searchLog)
-    {
+    public int updateSearchLog(SearchLog searchLog) {
         return searchLogMapper.updateSearchLog(searchLog);
     }
 
@@ -121,8 +119,7 @@ public class SearchLogServiceImpl implements ISearchLogService
      * @return 结果
      */
     @Override
-    public int deleteSearchLogBySearchLogIds(Long[] searchLogIds)
-    {
+    public int deleteSearchLogBySearchLogIds(Long[] searchLogIds) {
         return searchLogMapper.deleteSearchLogBySearchLogIds(searchLogIds);
     }
 
@@ -133,8 +130,7 @@ public class SearchLogServiceImpl implements ISearchLogService
      * @return 结果
      */
     @Override
-    public int deleteSearchLogBySearchLogId(Long searchLogId)
-    {
+    public int deleteSearchLogBySearchLogId(Long searchLogId) {
         return searchLogMapper.deleteSearchLogBySearchLogId(searchLogId);
     }
 }

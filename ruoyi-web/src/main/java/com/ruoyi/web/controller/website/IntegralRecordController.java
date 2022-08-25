@@ -20,14 +20,13 @@ import java.util.List;
 
 /**
  * 积分记录Controller
- * 
+ *
  * @author thh
  * @date 2022-05-13
  */
 @RestController
 @RequestMapping("/website/integralRecord")
-public class IntegralRecordController extends BaseController
-{
+public class IntegralRecordController extends BaseController {
     @Autowired
     private IIntegralRecordService integralRecordService;
 
@@ -39,8 +38,7 @@ public class IntegralRecordController extends BaseController
      * 查询积分记录列表
      */
     @GetMapping("/myList")
-    public TableDataInfo myList(IntegralRecord integralRecord)
-    {
+    public TableDataInfo myList(IntegralRecord integralRecord) {
         startPage();
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         integralRecord.setUserId(String.valueOf(loginUser.getUserId()));
@@ -53,8 +51,7 @@ public class IntegralRecordController extends BaseController
      * 获取积分记录详细信息
      */
     @GetMapping(value = "/{integralRecordId}")
-    public AjaxResult getInfo(@PathVariable("integralRecordId") Long integralRecordId)
-    {
+    public AjaxResult getInfo(@PathVariable("integralRecordId") Long integralRecordId) {
         return AjaxResult.success(integralRecordService.selectIntegralRecordByIntegralRecordId(integralRecordId));
     }
 }

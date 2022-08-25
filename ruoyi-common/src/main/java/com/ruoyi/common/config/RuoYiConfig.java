@@ -10,27 +10,40 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties(prefix = "ruoyi")
-public class RuoYiConfig
-{
-    /** 项目名称 */
+public class RuoYiConfig {
+    /**
+     * 项目名称
+     */
     private String name;
 
-    /** 版本 */
+    /**
+     * 版本
+     */
     private String version;
 
-    /** 版权年份 */
+    /**
+     * 版权年份
+     */
     private String copyrightYear;
 
-    /** 实例演示开关 */
+    /**
+     * 实例演示开关
+     */
     private boolean demoEnabled;
 
-    /** 上传路径 */
+    /**
+     * 上传路径
+     */
     private static String profile;
 
-    /** 获取地址开关 */
+    /**
+     * 获取地址开关
+     */
     private static boolean addressEnabled;
 
-    /** 验证码类型 */
+    /**
+     * 验证码类型
+     */
     private static String captchaType;
 
     public static String getCaptchaType() {
@@ -41,79 +54,65 @@ public class RuoYiConfig
         RuoYiConfig.captchaType = captchaType;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getVersion()
-    {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(String version)
-    {
+    public void setVersion(String version) {
         this.version = version;
     }
 
-    public String getCopyrightYear()
-    {
+    public String getCopyrightYear() {
         return copyrightYear;
     }
 
-    public void setCopyrightYear(String copyrightYear)
-    {
+    public void setCopyrightYear(String copyrightYear) {
         this.copyrightYear = copyrightYear;
     }
 
-    public boolean isDemoEnabled()
-    {
+    public boolean isDemoEnabled() {
         return demoEnabled;
     }
 
-    public void setDemoEnabled(boolean demoEnabled)
-    {
+    public void setDemoEnabled(boolean demoEnabled) {
         this.demoEnabled = demoEnabled;
     }
 
-    public static String getProfile()
-    {
+    public static String getProfile() {
         return profile;
     }
 
-    public void setProfile(String profile)
-    {
+    public void setProfile(String profile) {
         RuoYiConfig.profile = profile;
     }
 
-    public static boolean isAddressEnabled()
-    {
+    public static boolean isAddressEnabled() {
         return addressEnabled;
     }
 
-    public void setAddressEnabled(boolean addressEnabled)
-    {
+    public void setAddressEnabled(boolean addressEnabled) {
         RuoYiConfig.addressEnabled = addressEnabled;
     }
 
     /**
      * 获取头像上传路径
      */
-    public static String getAvatarPath()
-    {
+    public static String getAvatarPath() {
         return getProfile() + "/avatar";
     }
 
     /**
      * 获取图片上传路径
      */
-    public static String getImagePath()
-    {
+    public static String getImagePath() {
         return getProfile() + "/common/image";
     }
 
@@ -121,56 +120,49 @@ public class RuoYiConfig
     /**
      * 获取电演员头像上传路径
      */
-    public static String getActorAvatarPath()
-    {
+    public static String getActorAvatarPath() {
         return getProfile() + "/actor/avatar";
     }
 
     /**
      * 获取电影封面上传路径
      */
-    public static String getMovieImagesPath()
-    {
+    public static String getMovieImagesPath() {
         return getProfile() + "/movie/images";
     }
 
     /**
      * 获取电影视频上传路径
      */
-    public static String getMovieVideoPath()
-    {
+    public static String getMovieVideoPath() {
         return getProfile() + "/movie/video";
     }
 
     /**
      * 获取下载路径
      */
-    public static String getDownloadPath()
-    {
+    public static String getDownloadPath() {
         return getProfile() + "/download/";
     }
 
     /**
      * 获取上传路径
      */
-    public static String getUploadPath()
-    {
+    public static String getUploadPath() {
         return getProfile() + "/upload";
     }
 
     /**
      * 获取导入上传路径
      */
-    public static String getImportPath()
-    {
+    public static String getImportPath() {
         return getProfile() + "/import";
     }
 
     /**
      * 获取QR地址
      */
-    public static String getQrPath()
-    {
+    public static String getQrPath() {
         return getProfile() + "/qr";
     }
 }

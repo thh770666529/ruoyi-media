@@ -15,8 +15,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-05-16
  */
 @Repository
-public interface MovieMapper extends BaseMapper<Movie>
-{
+public interface MovieMapper extends BaseMapper<Movie> {
 
     /**
      * 查询电影列表
@@ -27,9 +26,9 @@ public interface MovieMapper extends BaseMapper<Movie>
     public List<MovieVO> selectMovieList(Movie movie);
 
 
-
     /**
      * 查询前几的热门电影
+     *
      * @param top
      * @return
      */
@@ -37,6 +36,7 @@ public interface MovieMapper extends BaseMapper<Movie>
 
     /**
      * 查询演员相关电影
+     *
      * @param actorId
      * @return
      */
@@ -52,6 +52,7 @@ public interface MovieMapper extends BaseMapper<Movie>
 
     /**
      * 门户查询电影列表
+     *
      * @param movieVO
      * @return
      */
@@ -59,6 +60,7 @@ public interface MovieMapper extends BaseMapper<Movie>
 
     /**
      * 搜索电影列表
+     *
      * @param searchParamVO
      * @return
      */

@@ -22,10 +22,14 @@ public class JustAuthConfig {
 
     private String redirectUri;
 
-    /** 默认密码 */
+    /**
+     * 默认密码
+     */
     private String defaultPwd;
 
-    /** 站点地址 */
+    /**
+     * 站点地址
+     */
     private String websiteUrl;
 
     public String getDefaultPwd() {

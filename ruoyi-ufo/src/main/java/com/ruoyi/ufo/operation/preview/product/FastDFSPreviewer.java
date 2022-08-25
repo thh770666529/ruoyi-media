@@ -123,13 +123,13 @@ public class FastDFSPreviewer extends Previewer {
                             downloadByteArray);
                     outputStream.write(bytes);
                     fileOffset += bufferSize;
-                    int percent = (int)((double) fileOffset / (double) fileSize * 100);
+                    int percent = (int) ((double) fileOffset / (double) fileSize * 100);
                     log.debug("正在下载文件:{}, 进度：{}", previewFile.getFileUrl(), percent + "%");
                 }
                 bytes = fastFileStorageClient.downloadFile(group,
                         path,
                         fileOffset,
-                        previewFile.getFileSize() -  fileOffset,
+                        previewFile.getFileSize() - fileOffset,
                         downloadByteArray);
                 outputStream.write(bytes);
                 log.debug("正在下载文件:{}, 进度：{}", previewFile.getFileUrl(), 100 + "%");

@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.website;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/website/link")
-public class WebsiteLinkController extends BaseController
-{
+public class WebsiteLinkController extends BaseController {
     @Autowired
     private IWebsiteLinkService websiteLinkService;
 
@@ -40,8 +40,7 @@ public class WebsiteLinkController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:link:list')")
     @GetMapping("/list")
-    public TableDataInfo list(WebsiteLink websiteLink)
-    {
+    public TableDataInfo list(WebsiteLink websiteLink) {
         startPage();
         List<WebsiteLink> list = websiteLinkService.selectWebsiteLinkList(websiteLink);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class WebsiteLinkController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:link:export')")
     @Log(title = "站点友情链接", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, WebsiteLink websiteLink)
-    {
+    public void export(HttpServletResponse response, WebsiteLink websiteLink) {
         List<WebsiteLink> list = websiteLinkService.selectWebsiteLinkList(websiteLink);
         ExcelUtil<WebsiteLink> util = new ExcelUtil<WebsiteLink>(WebsiteLink.class);
         util.exportExcel(response, list, "站点友情链接数据");
@@ -65,8 +63,7 @@ public class WebsiteLinkController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:link:query')")
     @GetMapping(value = "/{linkId}")
-    public AjaxResult getInfo(@PathVariable("linkId") Long linkId)
-    {
+    public AjaxResult getInfo(@PathVariable("linkId") Long linkId) {
         return AjaxResult.success(websiteLinkService.selectWebsiteLinkById(linkId));
     }
 
@@ -76,8 +73,7 @@ public class WebsiteLinkController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:link:add')")
     @Log(title = "站点友情链接", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody WebsiteLink websiteLink)
-    {
+    public AjaxResult add(@RequestBody WebsiteLink websiteLink) {
         return toAjax(websiteLinkService.insertWebsiteLink(websiteLink));
     }
 
@@ -87,8 +83,7 @@ public class WebsiteLinkController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:link:edit')")
     @Log(title = "站点友情链接", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody WebsiteLink websiteLink)
-    {
+    public AjaxResult edit(@RequestBody WebsiteLink websiteLink) {
         return toAjax(websiteLinkService.updateWebsiteLink(websiteLink));
     }
 
@@ -97,9 +92,8 @@ public class WebsiteLinkController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:link:remove')")
     @Log(title = "站点友情链接", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{linkIds}")
-    public AjaxResult remove(@PathVariable Long[] linkIds)
-    {
+    @DeleteMapping("/{linkIds}")
+    public AjaxResult remove(@PathVariable Long[] linkIds) {
         return toAjax(websiteLinkService.deleteWebsiteLinkByIds(linkIds));
     }
 }

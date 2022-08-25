@@ -1,44 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.website.mapper.CreditsFlowMapper">
-    
+
     <resultMap type="CreditsFlow" id="CreditsFlowResult">
-        <result property="creditsId"    column="credits_id"    />
-        <result property="creditsCode"    column="credits_code"    />
-        <result property="userId"    column="user_id"    />
-        <result property="accountId"    column="account_id"    />
-        <result property="account"    column="account"    />
-        <result property="preAccount"    column="pre_account"    />
-        <result property="postAcount"    column="post_acount"    />
-        <result property="remark"    column="remark"    />
-        <result property="status"    column="status"    />
-        <result property="creditsType"    column="credits_type"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="creditsDesc"    column="credits_desc"    />
+        <result property="creditsId" column="credits_id"/>
+        <result property="creditsCode" column="credits_code"/>
+        <result property="userId" column="user_id"/>
+        <result property="accountId" column="account_id"/>
+        <result property="account" column="account"/>
+        <result property="preAccount" column="pre_account"/>
+        <result property="postAcount" column="post_acount"/>
+        <result property="remark" column="remark"/>
+        <result property="status" column="status"/>
+        <result property="creditsType" column="credits_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="creditsDesc" column="credits_desc"/>
     </resultMap>
 
     <sql id="selectCreditsFlowVo">
-        select credits_id, credits_code, user_id, account_id, account, pre_account, post_acount, remark, status, credits_type, create_time, update_time, del_flag, credits_desc from website_credits_flow
+        select credits_id,
+               credits_code,
+               user_id,
+               account_id,
+               account,
+               pre_account,
+               post_acount,
+               remark,
+               status,
+               credits_type,
+               create_time,
+               update_time,
+               del_flag,
+               credits_desc
+        from website_credits_flow
     </sql>
 
     <select id="selectCreditsFlowList" parameterType="CreditsFlow" resultMap="CreditsFlowResult">
         <include refid="selectCreditsFlowVo"/>
-        <where>  
-            <if test="creditsCode != null  and creditsCode != ''"> and credits_code like concat('%', #{creditsCode}, '%')</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="creditsType != null  and creditsType != ''"> and credits_type = #{creditsType}</if>
+        <where>
+            <if test="creditsCode != null  and creditsCode != ''">and credits_code like concat('%', #{creditsCode},
+                '%')
+            </if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="creditsType != null  and creditsType != ''">and credits_type = #{creditsType}</if>
         </where>
     </select>
-    
+
     <select id="selectCreditsFlowByCreditsId" parameterType="Long" resultMap="CreditsFlowResult">
         <include refid="selectCreditsFlowVo"/>
         where credits_id = #{creditsId}
     </select>
-        
+
     <insert id="insertCreditsFlow" parameterType="CreditsFlow">
         insert into website_credits_flow
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -56,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
             <if test="delFlag != null">del_flag,</if>
             <if test="creditsDesc != null">credits_desc,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="creditsId != null">#{creditsId},</if>
             <if test="creditsCode != null">#{creditsCode},</if>
@@ -72,7 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
             <if test="delFlag != null">#{delFlag},</if>
             <if test="creditsDesc != null">#{creditsDesc},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateCreditsFlow" parameterType="CreditsFlow">
@@ -96,11 +112,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteCreditsFlowByCreditsId" parameterType="Long">
-        delete from website_credits_flow where credits_id = #{creditsId}
+        delete
+        from website_credits_flow
+        where credits_id = #{creditsId}
     </delete>
 
     <delete id="deleteCreditsFlowByCreditsIds" parameterType="String">
-        delete from website_credits_flow where credits_id in 
+        delete from website_credits_flow where credits_id in
         <foreach item="creditsId" collection="array" open="(" separator="," close=")">
             #{creditsId}
         </foreach>

@@ -186,7 +186,7 @@ public class FastDFSUploader extends Uploader {
 
                 log.info("上传文件 result = {}", storePath.getPath());
             } else {
-                log.info("正在上传第{}块：" , uploadFile.getChunkNumber());
+                log.info("正在上传第{}块：", uploadFile.getChunkNumber());
 
                 String path = redisUtil.getObject(uploadFile.getIdentifier() + "_storage_path");
 

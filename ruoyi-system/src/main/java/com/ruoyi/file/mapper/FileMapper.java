@@ -13,8 +13,4 @@ public interface FileMapper extends BaseMapper<FileBean> {
 //    void updateFile(FileBean fileBean);
 
 
-
-
-
-
 }

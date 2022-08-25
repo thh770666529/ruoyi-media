@@ -26,8 +26,7 @@ import com.ruoyi.framework.security.handle.LogoutSuccessHandlerImpl;
  * @author ruoyi
  */
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter
-{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 自定义用户认证逻辑
      */
@@ -72,8 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      */
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception
-    {
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
@@ -93,8 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      * authenticated       |   用户登录后可访问
      */
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception
-    {
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
         // 注解标记允许匿名访问的url
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity.authorizeRequests();
         permitAllUrl.getUrls().forEach(url -> registry.antMatchers(url).permitAll());
@@ -113,11 +110,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
                 .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()
                 .antMatchers("/filetransfer/preview**",
-                                         "/filetransfer/downloadfile**",
-                                         "/share/sharefileList",
-                                         "/share/sharetype",
-                                         "/share/checkextractioncode",
-                                          "/share/checkendtime").permitAll()
+                        "/filetransfer/downloadfile**",
+                        "/share/sharefileList",
+                        "/share/sharetype",
+                        "/share/checkextractioncode",
+                        "/share/checkendtime").permitAll()
 
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
@@ -137,8 +134,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      * 强散列哈希加密实现
      */
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder()
-    {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -146,8 +142,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      * 身份认证接口
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception
-    {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 }

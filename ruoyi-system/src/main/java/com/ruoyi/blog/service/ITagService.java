@@ -11,8 +11,7 @@ import com.ruoyi.blog.domain.Tag;
  * @author thh
  * @date 2021-08-28
  */
-public interface ITagService
-{
+public interface ITagService {
     /**
      * 查询文章标签
      *
@@ -63,6 +62,7 @@ public interface ITagService
 
     /**
      * 获取热门标签
+     *
      * @param top
      * @return
      */
@@ -70,6 +70,7 @@ public interface ITagService
 
     /**
      * 通过标签数组获取标签列表
+     *
      * @param tagIdList
      * @return
      */

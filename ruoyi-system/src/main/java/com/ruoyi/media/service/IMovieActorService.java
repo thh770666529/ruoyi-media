@@ -1,6 +1,7 @@
 package com.ruoyi.media.service;
 
 import java.util.List;
+
 import com.ruoyi.media.domain.MovieActor;
 import com.ruoyi.media.domain.vo.MovieActorVO;
 
@@ -10,8 +11,7 @@ import com.ruoyi.media.domain.vo.MovieActorVO;
  * @author thh
  * @date 2021-05-16
  */
-public interface IMovieActorService
-{
+public interface IMovieActorService {
     /**
      * 查询电影演员关联
      *

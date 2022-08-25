@@ -20,44 +20,63 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 @Data
 @TableName("blog_subject")
-public class Subject extends BaseEntity
-{
+public class Subject extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    /** 主键 */
+    /**
+     * 主键
+     */
     @TableId(type = IdType.AUTO)
     private Long subjectId;
 
-    /** 专题名称 */
+    /**
+     * 专题名称
+     */
     @Excel(name = "专题名称")
     private String name;
 
-    /** 简介 */
+    /**
+     * 简介
+     */
     @Excel(name = "简介")
     private String summary;
 
-    /** 封面图片 */
+    /**
+     * 封面图片
+     */
     @Excel(name = "封面图片")
     private String images;
 
-    /** 图标 */
+    /**
+     * 图标
+     */
     private String icon;
 
-    /** 专题点击数 */
+    /**
+     * 专题点击数
+     */
     private Long clickCount;
 
-    /** 专题收藏数 */
+    /**
+     * 专题收藏数
+     */
     private Long collectCount;
 
-    /** 排序字段 */
+    /**
+     * 排序字段
+     */
     @Excel(name = "排序字段")
     private Long sort;
 
-    /** 状态 */
+    /**
+     * 状态
+     */
     @Excel(name = "状态")
     private Integer status;
 
-    /** 文章专题Item信息 */
+    /**
+     * 文章专题Item信息
+     */
     @TableField(exist = false)
     private List<ArticleSubject> articleSubjectList;
 

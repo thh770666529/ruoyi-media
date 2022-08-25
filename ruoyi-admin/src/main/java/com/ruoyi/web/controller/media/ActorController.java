@@ -34,8 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/media/actor")
-public class ActorController extends BaseController
-{
+public class ActorController extends BaseController {
     @Autowired
     private IActorService actorService;
 
@@ -44,8 +43,7 @@ public class ActorController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:actor:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Actor actor)
-    {
+    public TableDataInfo list(Actor actor) {
         startPage();
         List<Actor> list = actorService.selectActorList(actor);
         return getDataTable(list);
@@ -56,10 +54,9 @@ public class ActorController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:actor:list')")
     @GetMapping("/notSelectedList/{actorIds}")
-    public TableDataInfo notSelectedList(Actor actor,@PathVariable Long[] actorIds)
-    {
+    public TableDataInfo notSelectedList(Actor actor, @PathVariable Long[] actorIds) {
         startPage();
-        List<Actor> list = actorService.selectNotSelectedList(actor,actorIds);
+        List<Actor> list = actorService.selectNotSelectedList(actor, actorIds);
         return getDataTable(list);
     }
 
@@ -69,8 +66,7 @@ public class ActorController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:actor:export')")
     @Log(title = "演员", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Actor actor)
-    {
+    public void export(HttpServletResponse response, Actor actor) {
         List<Actor> list = actorService.selectActorList(actor);
         ExcelUtil<Actor> util = new ExcelUtil<Actor>(Actor.class);
         util.exportExcel(response, list, "演员数据");
@@ -81,8 +77,7 @@ public class ActorController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:actor:query')")
     @GetMapping(value = "/{actorId}")
-    public AjaxResult getInfo(@PathVariable("actorId") Long actorId)
-    {
+    public AjaxResult getInfo(@PathVariable("actorId") Long actorId) {
         return AjaxResult.success(actorService.getById(actorId));
     }
 
@@ -92,8 +87,7 @@ public class ActorController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:actor:add')")
     @Log(title = "演员", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Actor actor)
-    {
+    public AjaxResult add(@RequestBody Actor actor) {
         actor.setClickCount(0L);
         actor.setCollectCount(0L);
         return toAjax(actorService.save(actor));
@@ -105,8 +99,7 @@ public class ActorController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:actor:edit')")
     @Log(title = "演员", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Actor actor)
-    {
+    public AjaxResult edit(@RequestBody Actor actor) {
         return toAjax(actorService.saveOrUpdate(actor));
     }
 
@@ -115,12 +108,11 @@ public class ActorController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:actor:remove')")
     @Log(title = "演员", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{actorIds}")
-    public AjaxResult remove(@PathVariable Long[] actorIds)
-    {
-        if (StringUtils.isEmpty(actorIds)){
-           return error();
-        }else {
+    @DeleteMapping("/{actorIds}")
+    public AjaxResult remove(@PathVariable Long[] actorIds) {
+        if (StringUtils.isEmpty(actorIds)) {
+            return error();
+        } else {
             List<Long> ids = Arrays.asList(actorIds);
             return toAjax(actorService.removeByIds(ids));
         }

@@ -11,8 +11,7 @@ import com.ruoyi.website.domain.Comment;
  * @author thh
  * @date 2021-06-05
  */
-public interface ICommentService extends IService<Comment>
-{
+public interface ICommentService extends IService<Comment> {
     /**
      * 查询评论
      *
@@ -55,20 +54,22 @@ public interface ICommentService extends IService<Comment>
 
     /**
      * 回复评论
+     *
      * @param comment
      */
     public int reply(Comment comment);
 
     /**
      * 查询文章电影下的评论列表
+     *
      * @param comment
      * @return
      */
     public List<Comment> selectTreeComment(Comment comment);
 
 
-    public List<Comment> getCommentListByParentCommentId (Comment commentCondition,Long parentCommentId);
+    public List<Comment> getCommentListByParentCommentId(Comment commentCondition, Long parentCommentId);
 
 
-    public List<Comment> getAllCommentList(Comment commentCondition,Long parentCommentId);
+    public List<Comment> getAllCommentList(Comment commentCondition, Long parentCommentId);
 }

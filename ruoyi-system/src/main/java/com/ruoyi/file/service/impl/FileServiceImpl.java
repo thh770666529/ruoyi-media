@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 
 @Slf4j
 @Service
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor = Exception.class)
 public class FileServiceImpl extends ServiceImpl<FileMapper, FileBean> implements IFileService {
 
     @Resource
@@ -23,17 +23,17 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileBean> implement
     public void increaseFilePointCount(Long fileId) {
         FileBean fileBean = fileMapper.selectById(fileId);
         if (fileBean == null) {
-            log.error("文件不存在，fileId : {}", fileId );
+            log.error("文件不存在，fileId : {}", fileId);
             return;
         }
-        fileBean.setPointCount(fileBean.getPointCount()+1);
+        fileBean.setPointCount(fileBean.getPointCount() + 1);
         fileMapper.updateById(fileBean);
     }
 
     @Override
     public void decreaseFilePointCount(Long fileId) {
         FileBean fileBean = fileMapper.selectById(fileId);
-        fileBean.setPointCount(fileBean.getPointCount()-1);
+        fileBean.setPointCount(fileBean.getPointCount() - 1);
         fileMapper.updateById(fileBean);
     }
 

@@ -1,6 +1,7 @@
 package com.ruoyi.media.mapper;
 
 import java.util.List;
+
 import com.ruoyi.media.domain.PlayLogs;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,8 +11,7 @@ import org.apache.ibatis.annotations.Param;
  * @author thh
  * @date 2021-12-05
  */
-public interface PlayLogsMapper
-{
+public interface PlayLogsMapper {
     /**
      * 查询播放记录
      *
@@ -63,6 +63,7 @@ public interface PlayLogsMapper
 
     /**
      * 根据条件查询明细
+     *
      * @param playLogs 条件
      * @return 结果
      */

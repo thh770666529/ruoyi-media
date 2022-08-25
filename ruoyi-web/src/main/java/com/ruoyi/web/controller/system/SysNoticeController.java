@@ -22,8 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/notice")
-public class SysNoticeController extends BaseController
-{
+public class SysNoticeController extends BaseController {
     @Autowired
     private ISysNoticeService noticeService;
 
@@ -31,8 +30,7 @@ public class SysNoticeController extends BaseController
      * 获取通知公告列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(SysNotice notice)
-    {
+    public TableDataInfo list(SysNotice notice) {
         startPage();
         List<SysNotice> list = noticeService.selectNoticeList(notice);
         return getDataTable(list);
@@ -42,8 +40,7 @@ public class SysNoticeController extends BaseController
      * 根据通知公告编号获取详细信息
      */
     @GetMapping(value = "/{noticeId}")
-    public AjaxResult getInfo(@PathVariable Long noticeId)
-    {
+    public AjaxResult getInfo(@PathVariable Long noticeId) {
         return AjaxResult.success(noticeService.selectNoticeById(noticeId));
     }
 }

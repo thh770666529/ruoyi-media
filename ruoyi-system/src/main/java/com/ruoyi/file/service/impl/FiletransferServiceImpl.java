@@ -44,7 +44,7 @@ import java.util.zip.ZipOutputStream;
 
 @Slf4j
 @Service
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor = Exception.class)
 public class FiletransferServiceImpl implements IFiletransferService {
 
     @Resource
@@ -79,12 +79,12 @@ public class FiletransferServiceImpl implements IFiletransferService {
         }
 
         List<UploadFile> uploadFileList = uploader.upload(request, uploadFile);
-        for (int i = 0; i < uploadFileList.size(); i++){
+        for (int i = 0; i < uploadFileList.size(); i++) {
             uploadFile = uploadFileList.get(i);
             FileBean fileBean = new FileBean();
             BeanUtil.copyProperties(uploadFileDto, fileBean);
             fileBean.setTimeStampName(uploadFile.getTimeStampName());
-            if (uploadFile.getSuccess() == 1){
+            if (uploadFile.getSuccess() == 1) {
                 fileBean.setFileUrl(uploadFile.getUrl());
                 fileBean.setFileSize(uploadFile.getFileSize());
                 fileBean.setStorageType(uploadFile.getStorageType());
@@ -193,7 +193,7 @@ public class FiletransferServiceImpl implements IFiletransferService {
                     }
                 }
             } catch (Exception e) {
-                log.error("压缩过程中出现异常:"+ e);
+                log.error("压缩过程中出现异常:" + e);
             } finally {
                 try {
                     out.close();
@@ -203,9 +203,9 @@ public class FiletransferServiceImpl implements IFiletransferService {
             }
             Downloader downloader = ufoFactory.getDownloader(StorageTypeEnum.LOCAL.getStorageType());
             DownloadFile downloadFile = new DownloadFile();
-            downloadFile.setFileUrl("temp" + File.separator+userFile.getFileName() + ".zip");
+            downloadFile.setFileUrl("temp" + File.separator + userFile.getFileName() + ".zip");
             downloader.download(httpServletResponse, downloadFile);
-            String zipPath = PathUtil.getStaticPath() + "temp" + File.separator+userFile.getFileName() + ".zip";
+            String zipPath = PathUtil.getStaticPath() + "temp" + File.separator + userFile.getFileName() + ".zip";
             File file = new File(zipPath);
             if (file.exists()) {
                 file.delete();
@@ -273,7 +273,7 @@ public class FiletransferServiceImpl implements IFiletransferService {
     }
 
     @Override
-    public Long selectStorageSizeByUserId(Long userId){
+    public Long selectStorageSizeByUserId(Long userId) {
         return userFileMapper.selectStorageSizeByUserId(userId);
     }
 }

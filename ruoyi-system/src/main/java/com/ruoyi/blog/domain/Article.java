@@ -20,114 +20,173 @@ import java.util.List;
  */
 @Data
 @TableName("blog_article")
-public class Article extends BaseEntity
-{
+public class Article extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    /** 主键 */
+    /**
+     * 主键
+     */
     @TableId(type = IdType.AUTO)
     private Long articleId;
 
-    /** 博客标题 */
+    /**
+     * 博客标题
+     */
     @Excel(name = "博客标题")
     private String title;
 
-    /** 文章简介 */
+    /**
+     * 文章简介
+     */
     @Excel(name = "文章简介")
     private String summary;
 
-    /** 文章内容 */
+    /**
+     * 文章内容
+     */
     @Excel(name = "文章内容")
     private String content;
 
-    /** 标签 */
+    /**
+     * 标签
+     */
     @Excel(name = "标签")
     private String tagId;
 
-    /** 查询标签数组 */
+    /**
+     * 查询标签数组
+     */
     @TableField(exist = false)
     private List<String> tagIdList;
 
-    /** 博客点击数 */
+    /**
+     * 博客点击数
+     */
     private Long clickCount;
 
-    /** 博客收藏数 */
+    /**
+     * 博客收藏数
+     */
     private Long collectCount;
 
-    /** 标题图片 */
+    /**
+     * 标题图片
+     */
     @Excel(name = "标题图片")
     private String images;
 
-    /** 状态 */
+    /**
+     * 状态
+     */
     @Excel(name = "状态")
     private Integer status;
 
-    /** 管理员 */
+    /**
+     * 管理员
+     */
     private String adminUserId;
 
-    /** 是否原创 */
+    /**
+     * 是否原创
+     */
     @Excel(name = "是否原创")
     private String isOriginal;
 
-    /** 作者 */
+    /**
+     * 作者
+     */
     private String author;
 
-    /** 文章出处 */
+    /**
+     * 文章出处
+     */
     private String articlesPart;
 
-    /** 博客分类 */
+    /**
+     * 博客分类
+     */
     @Excel(name = "博客分类")
     private String categoryId;
 
-    /** 博客分类 */
+    /**
+     * 博客分类
+     */
     @Excel(name = "博客分类名称")
     private String categoryName;
 
-    /** 推荐等级 */
+    /**
+     * 推荐等级
+     */
     @Excel(name = "推荐等级")
     private Integer level;
 
-    /** 删除标志 */
+    /**
+     * 删除标志
+     */
     private String delFlag;
 
-    /** 是否发布 */
+    /**
+     * 是否发布
+     */
     @Excel(name = "是否发布")
     private String isPublish;
 
-    /** 排序字段 */
+    /**
+     * 排序字段
+     */
     @Excel(name = "排序字段")
     private Integer sort;
 
-    /** 是否开启评论 */
+    /**
+     * 是否开启评论
+     */
     @Excel(name = "是否开启评论")
     private Integer openComment;
 
-    /** 类型 */
+    /**
+     * 类型
+     */
     @Excel(name = "类型")
     private Integer type;
 
-    /** 外链 */
+    /**
+     * 外链
+     */
     private String outsideLink;
 
-    /** 投稿用户 */
+    /**
+     * 投稿用户
+     */
     private String userId;
 
-    /** 文章来源 */
+    /**
+     * 文章来源
+     */
     private Integer articleSource;
 
-    /** 文章专属二维码地址 */
+    /**
+     * 文章专属二维码地址
+     */
     private String qrcodePath;
 
-    /** 是否开启密钥模式 */
+    /**
+     * 是否开启密钥模式
+     */
     private Integer openPassword;
 
-    /** 文章私密访问时的密钥 */
+    /**
+     * 文章私密访问时的密钥
+     */
     private String password;
 
-    /** 支持数 */
+    /**
+     * 支持数
+     */
     private Long supportCount;
 
-    /** 反对数 */
+    /**
+     * 反对数
+     */
     private Long opposeCount;
 
 }

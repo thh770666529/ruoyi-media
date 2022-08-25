@@ -8,11 +8,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  *
  * @author ruoyi
  */
-public class RuoYiServletInitializer extends SpringBootServletInitializer
-{
+public class RuoYiServletInitializer extends SpringBootServletInitializer {
     @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application)
-    {
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(AdminApplication.class);
     }
 }

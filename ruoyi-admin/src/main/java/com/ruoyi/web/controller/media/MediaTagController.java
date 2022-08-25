@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.media;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/media/tag")
-public class MediaTagController extends BaseController
-{
+public class MediaTagController extends BaseController {
     @Autowired
     private IMediaTagService mediaTagService;
 
@@ -40,8 +40,7 @@ public class MediaTagController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:tag:list')")
     @GetMapping("/list")
-    public TableDataInfo list(MediaTag mediaTag)
-    {
+    public TableDataInfo list(MediaTag mediaTag) {
         startPage();
         List<MediaTag> list = mediaTagService.selectMediaTagList(mediaTag);
         return getDataTable(list);
@@ -53,8 +52,7 @@ public class MediaTagController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:tag:export')")
     @Log(title = "电影标签", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, MediaTag mediaTag)
-    {
+    public void export(HttpServletResponse response, MediaTag mediaTag) {
         List<MediaTag> list = mediaTagService.selectMediaTagList(mediaTag);
         ExcelUtil<MediaTag> util = new ExcelUtil<MediaTag>(MediaTag.class);
         util.exportExcel(response, list, "电影标签数据");
@@ -65,8 +63,7 @@ public class MediaTagController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:tag:query')")
     @GetMapping(value = "/{tagId}")
-    public AjaxResult getInfo(@PathVariable("tagId") Long tagId)
-    {
+    public AjaxResult getInfo(@PathVariable("tagId") Long tagId) {
         return AjaxResult.success(mediaTagService.selectMediaTagByTagId(tagId));
     }
 
@@ -76,8 +73,7 @@ public class MediaTagController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:tag:add')")
     @Log(title = "电影标签", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody MediaTag mediaTag)
-    {
+    public AjaxResult add(@RequestBody MediaTag mediaTag) {
         return toAjax(mediaTagService.insertMediaTag(mediaTag));
     }
 
@@ -87,8 +83,7 @@ public class MediaTagController extends BaseController
     @PreAuthorize("@ss.hasPermi('media:tag:edit')")
     @Log(title = "电影标签", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody MediaTag mediaTag)
-    {
+    public AjaxResult edit(@RequestBody MediaTag mediaTag) {
         return toAjax(mediaTagService.updateMediaTag(mediaTag));
     }
 
@@ -97,9 +92,8 @@ public class MediaTagController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('media:tag:remove')")
     @Log(title = "电影标签", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{tagIds}")
-    public AjaxResult remove(@PathVariable Long[] tagIds)
-    {
+    @DeleteMapping("/{tagIds}")
+    public AjaxResult remove(@PathVariable Long[] tagIds) {
         return toAjax(mediaTagService.deleteMediaTagByTagIds(tagIds));
     }
 }

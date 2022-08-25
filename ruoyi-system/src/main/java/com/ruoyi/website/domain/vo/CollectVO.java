@@ -22,9 +22,8 @@ import java.util.Map;
  * @date 2021-10-05
  */
 @Data
-public class CollectVO extends Collect
-{
-    Movie movie ;
+public class CollectVO extends Collect {
+    Movie movie;
 
     Article article;
 

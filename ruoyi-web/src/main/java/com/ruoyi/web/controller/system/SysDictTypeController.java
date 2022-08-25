@@ -24,14 +24,12 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/dict/type")
-public class SysDictTypeController extends BaseController
-{
+public class SysDictTypeController extends BaseController {
     @Autowired
     private ISysDictTypeService dictTypeService;
 
     @GetMapping("/list")
-    public TableDataInfo list(SysDictType dictType)
-    {
+    public TableDataInfo list(SysDictType dictType) {
         startPage();
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
         return getDataTable(list);
@@ -42,19 +40,16 @@ public class SysDictTypeController extends BaseController
      * 查询字典类型详细
      */
     @GetMapping(value = "/{dictId}")
-    public AjaxResult getInfo(@PathVariable Long dictId)
-    {
+    public AjaxResult getInfo(@PathVariable Long dictId) {
         return AjaxResult.success(dictTypeService.selectDictTypeById(dictId));
     }
-
 
 
     /**
      * 获取字典选择框列表
      */
     @GetMapping("/optionselect")
-    public AjaxResult optionselect()
-    {
+    public AjaxResult optionselect() {
         List<SysDictType> dictTypes = dictTypeService.selectDictTypeAll();
         return AjaxResult.success(dictTypes);
     }

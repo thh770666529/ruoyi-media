@@ -11,8 +11,7 @@ import com.ruoyi.website.domain.CollectFolder;
  * @author thh
  * @date 2021-10-05
  */
-public interface ICollectFolderService extends IService<CollectFolder>
-{
+public interface ICollectFolderService extends IService<CollectFolder> {
     /**
      * 查询收藏夹
      *

@@ -34,8 +34,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/media/playLogs")
-public class PlayLogsController extends BaseController
-{
+public class PlayLogsController extends BaseController {
     @Autowired
     private IPlayLogsService playLogsService;
 
@@ -53,8 +52,7 @@ public class PlayLogsController extends BaseController
      * 查询播放记录列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(PlayLogs playLogs)
-    {
+    public TableDataInfo list(PlayLogs playLogs) {
         startPage();
         List<PlayLogs> list = playLogsService.selectPlayLogsList(playLogs);
         return getDataTable(list);
@@ -65,8 +63,7 @@ public class PlayLogsController extends BaseController
      * 获取播放记录详细信息
      */
     @PostMapping("/getPlayLogs")
-    public AjaxResult getPlayLogs(@RequestBody PlayLogs playLogs)
-    {
+    public AjaxResult getPlayLogs(@RequestBody PlayLogs playLogs) {
         return AjaxResult.success(playLogsService.selectPlayLogsByVideoId(playLogs.getVideoId()));
     }
 
@@ -74,8 +71,7 @@ public class PlayLogsController extends BaseController
      * 新增或者更新播放记录
      */
     @PostMapping("/insertOrUpdatePalyLogs")
-    public AjaxResult insertOrUpdatePalyLogs(@RequestBody PlayLogs playLogs)
-    {
+    public AjaxResult insertOrUpdatePalyLogs(@RequestBody PlayLogs playLogs) {
         return toAjax(playLogsService.insertOrUpdatePalyLogs(playLogs));
     }
 }

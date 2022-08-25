@@ -11,8 +11,7 @@ import lombok.Data;
  * @date 2021-06-08
  */
 @Data
-public class WebConfigVO extends WebConfig
-{
+public class WebConfigVO extends WebConfig {
 
 
 }

@@ -33,8 +33,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/website/webConfig")
-public class WebConfigController extends BaseController
-{
+public class WebConfigController extends BaseController {
     @Autowired
     private IWebConfigService webConfigService;
 
@@ -45,8 +44,7 @@ public class WebConfigController extends BaseController
     @PreAuthorize("@ss.hasPermi('website:webConfig:edit')")
     @Log(title = "站点配置", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody WebConfigVO webConfigVO)
-    {
+    public AjaxResult edit(@RequestBody WebConfigVO webConfigVO) {
         return toAjax(webConfigService.updateWebConfig(webConfigVO));
     }
 
@@ -55,10 +53,9 @@ public class WebConfigController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('website:webConfig:query')")
     @Log(title = "getWebConfig", businessType = BusinessType.OTHER)
-	@PostMapping("/getWebConfig")
-    public AjaxResult getWebConfig()
-    {
-        return  AjaxResult.success(webConfigService.getWebConfig());
+    @PostMapping("/getWebConfig")
+    public AjaxResult getWebConfig() {
+        return AjaxResult.success(webConfigService.getWebConfig());
     }
 
 

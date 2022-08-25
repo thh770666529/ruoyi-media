@@ -1,6 +1,7 @@
 package com.ruoyi.website.service;
 
 import java.util.List;
+
 import com.ruoyi.website.domain.SignRecord;
 import com.ruoyi.website.domain.vo.SignRecordVO;
 
@@ -10,8 +11,7 @@ import com.ruoyi.website.domain.vo.SignRecordVO;
  * @author thh
  * @date 2021-12-11
  */
-public interface ISignRecordService
-{
+public interface ISignRecordService {
     /**
      * 查询签到日志
      *
@@ -62,12 +62,14 @@ public interface ISignRecordService
 
     /**
      * 获取签到数据
+     *
      * @return
      */
     SignRecordVO getSignRecord();
 
     /**
      * 签到
+     *
      * @return
      */
     SignRecordVO sign();

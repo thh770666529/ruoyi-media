@@ -45,10 +45,11 @@ public class WebsiteTask {
 
     @Autowired
     private IAccountService accountService;
+
     /**
      * 初始化账户列表
      */
-    public void initAccountList(){
+    public void initAccountList() {
         // 查询出需要初始化账户的用户
         List<SysUser> userList = sysUserMapper.selectNotAccountList();
         // 循环添加账户表数据

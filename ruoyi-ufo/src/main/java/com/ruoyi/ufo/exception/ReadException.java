@@ -1,6 +1,6 @@
 package com.ruoyi.ufo.exception;
 
-public class ReadException extends RuntimeException{
+public class ReadException extends RuntimeException {
     public ReadException(Throwable cause) {
         super("文件读取出现了异常", cause);
     }

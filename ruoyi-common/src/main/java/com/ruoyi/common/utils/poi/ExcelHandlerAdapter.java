@@ -5,14 +5,12 @@ package com.ruoyi.common.utils.poi;
  *
  * @author ruoyi
  */
-public interface ExcelHandlerAdapter
-{
+public interface ExcelHandlerAdapter {
     /**
      * 格式化
      *
      * @param value 单元格数据值
-     * @param args excel注解args参数组
-     *
+     * @param args  excel注解args参数组
      * @return 处理后的值
      */
     Object format(Object value, String[] args);

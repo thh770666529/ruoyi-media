@@ -13,8 +13,7 @@ import org.springframework.stereotype.Repository;
  * @date 2021-06-05
  */
 @Repository
-public interface CommentMapper extends BaseMapper<Comment>
-{
+public interface CommentMapper extends BaseMapper<Comment> {
     /**
      * 查询评论
      *

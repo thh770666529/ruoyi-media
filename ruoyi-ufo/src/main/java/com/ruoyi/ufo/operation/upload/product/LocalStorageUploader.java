@@ -81,7 +81,7 @@ public class LocalStorageUploader extends Uploader {
         return saveUploadFileList;
     }
 
-    private List<UploadFile> doUpload(StandardMultipartHttpServletRequest standardMultipartHttpServletRequest,  Iterator<String> iter, UploadFile uploadFile) throws IOException, NotSameFileExpection {
+    private List<UploadFile> doUpload(StandardMultipartHttpServletRequest standardMultipartHttpServletRequest, Iterator<String> iter, UploadFile uploadFile) throws IOException, NotSameFileExpection {
         String savePath = getLocalFileSavePath();
         List<UploadFile> saveUploadFileList = new ArrayList<UploadFile>();
         MultipartFile multipartfile = standardMultipartHttpServletRequest.getFile(iter.next());
@@ -140,7 +140,7 @@ public class LocalStorageUploader extends Uploader {
 //                throw new NotSameFileExpection();
 //            }
             tempFile.renameTo(file);
-            if (FileUtil.isImageFile(uploadFile.getFileType())){
+            if (FileUtil.isImageFile(uploadFile.getFileType())) {
                 int thumbImageWidth = UFOAutoConfiguration.thumbImageWidth;
                 int thumbImageHeight = UFOAutoConfiguration.thumbImageHeight;
                 int width = thumbImageWidth == 0 ? 150 : thumbImageWidth;

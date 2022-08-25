@@ -1,49 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.website.mapper.IntegralRecordMapper">
-    
+
     <resultMap type="IntegralRecord" id="IntegralRecordResult">
-        <result property="integralRecordId"    column="integral_record_id"    />
-        <result property="integralType"    column="integral_type"    />
-        <result property="integralName"    column="integral_name"    />
-        <result property="value"    column="value"    />
-        <result property="remark"    column="remark"    />
-        <result property="userId"    column="user_id"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="status"    column="status"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="oldValue"    column="old_value"    />
-        <result property="resourceId"    column="resource_id"    />
+        <result property="integralRecordId" column="integral_record_id"/>
+        <result property="integralType" column="integral_type"/>
+        <result property="integralName" column="integral_name"/>
+        <result property="value" column="value"/>
+        <result property="remark" column="remark"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="oldValue" column="old_value"/>
+        <result property="resourceId" column="resource_id"/>
     </resultMap>
 
     <sql id="selectIntegralRecordVo">
-        select integral_record_id, integral_type, integral_name, `value`, remark, user_id, create_time, update_time, status, del_flag, create_by, update_by, old_value, resource_id from website_integral_record
+        select integral_record_id,
+               integral_type,
+               integral_name,
+               `value`,
+               remark,
+               user_id,
+               create_time,
+               update_time,
+               status,
+               del_flag,
+               create_by,
+               update_by,
+               old_value,
+               resource_id
+        from website_integral_record
     </sql>
 
     <select id="selectIntegralRecordList" parameterType="IntegralRecord" resultMap="IntegralRecordResult">
         <include refid="selectIntegralRecordVo"/>
-        <where>  
-            <if test="integralType != null "> and integral_type = #{integralType}</if>
-            <if test="integralName != null  and integralName != ''"> and integral_name like concat('%', #{integralName}, '%')</if>
-            <if test="value != null "> and `value` = #{value}</if>
-            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="oldValue != null "> and old_value = #{oldValue}</if>
-            <if test="resourceId != null and resourceId != '' "> and resource_id = #{resourceId}</if>
+        <where>
+            <if test="integralType != null ">and integral_type = #{integralType}</if>
+            <if test="integralName != null  and integralName != ''">and integral_name like concat('%', #{integralName},
+                '%')
+            </if>
+            <if test="value != null ">and `value` = #{value}</if>
+            <if test="userId != null  and userId != ''">and user_id = #{userId}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="oldValue != null ">and old_value = #{oldValue}</if>
+            <if test="resourceId != null and resourceId != '' ">and resource_id = #{resourceId}</if>
         </where>
     </select>
-    
+
     <select id="selectIntegralRecordByIntegralRecordId" parameterType="Long" resultMap="IntegralRecordResult">
         <include refid="selectIntegralRecordVo"/>
         where integral_record_id = #{integralRecordId}
     </select>
-        
-    <insert id="insertIntegralRecord" parameterType="IntegralRecord" useGeneratedKeys="true" keyProperty="integralRecordId">
+
+    <insert id="insertIntegralRecord" parameterType="IntegralRecord" useGeneratedKeys="true"
+            keyProperty="integralRecordId">
         insert into website_integral_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="integralType != null">integral_type,</if>
@@ -59,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="oldValue != null">old_value,</if>
             <if test="resourceId != null">resource_id,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="integralType != null">#{integralType},</if>
             <if test="integralName != null">#{integralName},</if>
@@ -74,7 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="oldValue != null">#{oldValue},</if>
             <if test="resourceId != null">#{resourceId},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateIntegralRecord" parameterType="IntegralRecord">
@@ -98,11 +115,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteIntegralRecordByIntegralRecordId" parameterType="Long">
-        delete from website_integral_record where integral_record_id = #{integralRecordId}
+        delete
+        from website_integral_record
+        where integral_record_id = #{integralRecordId}
     </delete>
 
     <delete id="deleteIntegralRecordByIntegralRecordIds" parameterType="String">
-        delete from website_integral_record where integral_record_id in 
+        delete from website_integral_record where integral_record_id in
         <foreach item="integralRecordId" collection="array" open="(" separator="," close=")">
             #{integralRecordId}
         </foreach>

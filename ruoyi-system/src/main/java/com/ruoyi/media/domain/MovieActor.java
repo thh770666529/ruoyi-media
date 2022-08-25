@@ -15,18 +15,23 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 @Data
 @TableName("wm_movie_actor")
-public class MovieActor
-{
+public class MovieActor {
 
-    /** 演员ID */
+    /**
+     * 演员ID
+     */
     @Excel(name = "演员ID")
     private Long actorId;
 
-    /** 电影ID */
+    /**
+     * 电影ID
+     */
     @Excel(name = "电影ID")
     private Long movieId;
 
-    /** 类型 */
+    /**
+     * 类型
+     */
     @Excel(name = "类型")
     private String type;
 }
