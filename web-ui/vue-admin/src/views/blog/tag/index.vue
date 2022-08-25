@@ -1,6 +1,15 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="标签内容" prop="content">
+        <el-input
+          v-model="queryParams.content"
+          placeholder="请输入标签内容"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
           <el-option
@@ -123,7 +132,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标签名">
-          <el-input v-model="form.content" :min-height="192"/>
+          <el-input v-model="form.content" :min-height="192" placeholder="请输入内容"  />
         </el-form-item>
         <el-form-item label="样式属性" prop="cssClass">
           <el-input v-model="form.cssClass" placeholder="请输入样式属性" />
@@ -166,7 +175,7 @@
 import { listTag, getTag, delTag, addTag, updateTag } from "@/api/blog/tag";
 
 export default {
-  name: "Tag",
+  name: "BlogTag",
   dicts: [ 'article_status' ],
   data() {
     return {
