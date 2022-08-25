@@ -1,21 +1,4 @@
-/*
- * JAVE - A Java Audio/Video Encoder (based on FFMPEG)
- *
- * Copyright (C) 2008-2009 Carlo Pelliccia (www.sauronsoftware.it)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+
 package com.ruoyi.common.utils.ffmpeg;
 
 import com.ruoyi.common.constant.FfmpegConstant;
@@ -35,11 +18,11 @@ import java.util.regex.Pattern;
 /**
  * Main class of the package. Instances can encode audio and video streams.
  *
- * @author Carlo Pelliccia
+ * @author thh
  */
 public class Encoder {
 
-    private static final String THREAD_NUM ="10";
+    private static final String THREAD_NUM = "10";
     /**
      * This regexp is used to parse the ffmpeg output about the supported
      * formats.
@@ -110,7 +93,7 @@ public class Encoder {
     private static final Pattern p2 = Pattern.compile(
             "^\\s*Duration: (\\d\\d):(\\d\\d):(\\d\\d)\\.(\\d).*$",
             Pattern.CASE_INSENSITIVE);
-    private static final  Pattern p3 = Pattern.compile(
+    private static final Pattern p3 = Pattern.compile(
             "^\\s*Stream #\\S+: ((?:Audio)|(?:Video)|(?:Data)): (.*)\\s*$",
             Pattern.CASE_INSENSITIVE);
 
@@ -497,11 +480,12 @@ public class Encoder {
     }
 
     /**
-     *  ffmpeg -h full   # 列出ffmpeg的参数说明
-     * @param url 播放地址
+     * ffmpeg -h full   # 列出ffmpeg的参数说明
+     *
+     * @param url       播放地址
      * @param userAgent ua
-     * @param timeout 单位秒
-     * @param ifProxy 代理
+     * @param timeout   单位秒
+     * @param ifProxy   代理
      * @return
      * @throws InputFormatException
      * @throws EncoderException
@@ -555,10 +539,10 @@ public class Encoder {
     }
 
 
-    public boolean generateM3u8(String videoPath,String outFolder) throws EncoderException {
+    public boolean generateM3u8(String videoPath, String outFolder) throws EncoderException {
         File file = new File(videoPath);
         String videoName = file.getName();
-        String m3u8Name = videoName.substring(0, videoName.lastIndexOf("."))+".m3u8";
+        String m3u8Name = videoName.substring(0, videoName.lastIndexOf(".")) + ".m3u8";
         FFMPEGExecutor ffmpeg = locator.createExecutor();
         ffmpeg.addArgument("-i");
         ffmpeg.addArgument(videoPath);
@@ -567,8 +551,8 @@ public class Encoder {
         ffmpeg.addArgument("-hls_list_size");
         ffmpeg.addArgument("0");
         ffmpeg.addArgument("-hls_segment_filename");
-        ffmpeg.addArgument(outFolder  +File.separator+ m3u8Name.substring(0,m3u8Name.lastIndexOf(".")) + "_%05d.ts");
-        ffmpeg.addArgument(outFolder  + File.separator+m3u8Name );
+        ffmpeg.addArgument(outFolder + File.separator + m3u8Name.substring(0, m3u8Name.lastIndexOf(".")) + "_%05d.ts");
+        ffmpeg.addArgument(outFolder + File.separator + m3u8Name);
         try {
             CmdResult cmdResult = ffmpeg.execute2();
             return cmdResult.isSuccess();
@@ -582,6 +566,7 @@ public class Encoder {
 
     /**
      * 视频编码，生成mp4文件
+     *
      * @param videoPath
      * @param output
      * @param ffmpegResolutionEnum
@@ -600,11 +585,11 @@ public class Encoder {
         ffmpeg.addArgument("-pix_fmt");
         ffmpeg.addArgument("yuv420p");
         ffmpeg.addArgument("-b:a");
-        ffmpeg.addArgument(ffmpegResolutionEnum.getBitRate()+"k");
+        ffmpeg.addArgument(ffmpegResolutionEnum.getBitRate() + "k");
         ffmpeg.addArgument("-b:v");
-        ffmpeg.addArgument(ffmpegResolutionEnum.getTotalBitRate()+"k");
+        ffmpeg.addArgument(ffmpegResolutionEnum.getTotalBitRate() + "k");
         ffmpeg.addArgument("-r");
-        ffmpeg.addArgument(ffmpegResolutionEnum.getFrameRate()+"");
+        ffmpeg.addArgument(ffmpegResolutionEnum.getFrameRate() + "");
         ffmpeg.addArgument("-threads");
         ffmpeg.addArgument(THREAD_NUM);
         ffmpeg.addArgument("-preset");
@@ -622,13 +607,14 @@ public class Encoder {
 
     /**
      * 视频编码，生成mp4文件
+     *
      * @param videoPath
      * @param output
      * @return
      * @throws EncoderException
      */
-    public  boolean convertMp4(String videoPath,String output) throws EncoderException {
-        return convertMp4( videoPath, output,FfmpegResolutionEnum.RESOLUTION_1080P);
+    public boolean convertMp4(String videoPath, String output) throws EncoderException {
+        return convertMp4(videoPath, output, FfmpegResolutionEnum.RESOLUTION_1080P);
     }
 
     /**
@@ -1142,9 +1128,6 @@ public class Encoder {
             ffmpeg.destroy();
         }
     }
-
-
-
 
 
 }

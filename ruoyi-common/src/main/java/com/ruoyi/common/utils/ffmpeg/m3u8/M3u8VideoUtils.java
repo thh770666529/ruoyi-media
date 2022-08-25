@@ -5,6 +5,7 @@ import com.ruoyi.common.utils.ffmpeg.VideoUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -30,16 +31,16 @@ public class M3u8VideoUtils {
     }
 
 
-    public static void clearM3u8(String m3u8FolderPath){
+    public static void clearM3u8(String m3u8FolderPath) {
         //删除原来已经生成的m3u8及ts文件
         File m3u8dir = new File(m3u8FolderPath);
-        if (m3u8dir.isFile()){
+        if (m3u8dir.isFile()) {
             return;
         }
-        if(!m3u8dir.exists()){
+        if (!m3u8dir.exists()) {
             m3u8dir.mkdirs();
         }
-        if(m3u8dir.exists()&& m3u8dir.getPath().indexOf(File.separator+"hls")>=0) {//在hls目录方可删除，以免错误删除
+        if (m3u8dir.exists() && m3u8dir.getPath().indexOf(File.separator + "hls") >= 0) {//在hls目录方可删除，以免错误删除
             String[] children = m3u8dir.list();
             //删除目录中的文件
             for (int i = 0; i < children.length; i++) {
@@ -87,38 +88,39 @@ public class M3u8VideoUtils {
 
     /**
      * 获取m3u8path
+     *
      * @param m3u8path
      * @return
      * @throws FileNotFoundException
      */
     public static M3U8 getM3U8ByFile(String m3u8path) throws FileNotFoundException {
         try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(m3u8path)));
-                M3U8 m3U8 = new M3U8();
-                String line;
-                float seconds = 0;
-                int mIndex;
-                while ((line = reader.readLine()) != null) {
-                    if (line.startsWith("#")) {
-                        if (line.startsWith("#EXTINF:")) {
-                            line = line.substring(8);
-                            if ((mIndex = line.indexOf(",")) != -1) {
-                                line = line.substring(0, mIndex + 1);
-                            }
-                            try {
-                                seconds = Float.parseFloat(line);
-                            } catch (Exception e) {
-                                seconds = 0;
-                            }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(m3u8path)));
+            M3U8 m3U8 = new M3U8();
+            String line;
+            float seconds = 0;
+            int mIndex;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("#")) {
+                    if (line.startsWith("#EXTINF:")) {
+                        line = line.substring(8);
+                        if ((mIndex = line.indexOf(",")) != -1) {
+                            line = line.substring(0, mIndex + 1);
                         }
-                        continue;
+                        try {
+                            seconds = Float.parseFloat(line);
+                        } catch (Exception e) {
+                            seconds = 0;
+                        }
                     }
-                    m3U8.addTs(new M3U8.Ts(line, seconds));
-                    seconds = 0;
+                    continue;
                 }
-               reader.close();
-               return m3U8;
-        }catch (Exception e){
+                m3U8.addTs(new M3U8.Ts(line, seconds));
+                seconds = 0;
+            }
+            reader.close();
+            return m3U8;
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -210,24 +212,23 @@ public class M3u8VideoUtils {
         }
 
         File file = new File(pathname);
-        try(InputStream inputStream = HttpUtils.doGet(urlStr))
-        {
+        try (InputStream inputStream = HttpUtils.doGet(urlStr)) {
 
-                FileOutputStream fos = new FileOutputStream(file);
-                byte[] temp = new byte[2048];
-                int len;
-                while ((len = inputStream.read(temp)) != -1) {
-                    fos.write(temp, 0, len);
-                }
-                fos.flush();
-                fos.close();
-                inputStream.close();
-                log.info("文件" + pathname + "下載完成！");
-                if (file.exists()) {
-                    return file.length();
-                }
-        }catch (Exception e){
-            log.error("文件" + pathname + "下載失敗！error=>{}",e.getMessage());
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] temp = new byte[2048];
+            int len;
+            while ((len = inputStream.read(temp)) != -1) {
+                fos.write(temp, 0, len);
+            }
+            fos.flush();
+            fos.close();
+            inputStream.close();
+            log.info("文件" + pathname + "下載完成！");
+            if (file.exists()) {
+                return file.length();
+            }
+        } catch (Exception e) {
+            log.error("文件" + pathname + "下載失敗！error=>{}", e.getMessage());
         }
         return 0;
     }

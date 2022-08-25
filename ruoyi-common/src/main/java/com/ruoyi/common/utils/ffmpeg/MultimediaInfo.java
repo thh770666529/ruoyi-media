@@ -6,9 +6,9 @@ import java.util.Formatter;
 import java.util.Locale;
 
 /**
- * Instances of this class report informations about a decoded multimedia file.
+ * 多媒体文件的信息类
  *
- * @author Carlo Pelliccia
+ * @author thh
  */
 @Data
 public class MultimediaInfo {

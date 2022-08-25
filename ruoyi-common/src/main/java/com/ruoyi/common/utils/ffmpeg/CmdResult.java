@@ -1,7 +1,6 @@
 package com.ruoyi.common.utils.ffmpeg;
 
 /**
- * Created by leo on 2017/2/10.
  * cmd命令执行后结果类
  */
 public class CmdResult {

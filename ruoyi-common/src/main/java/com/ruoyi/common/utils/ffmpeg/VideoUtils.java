@@ -1,9 +1,6 @@
 package com.ruoyi.common.utils.ffmpeg;
-
-import com.ruoyi.common.constant.FfmpegConstant;
 import com.ruoyi.common.enums.FfmpegResolutionEnum;
 import com.ruoyi.common.utils.ffmpeg.m3u8.M3u8VideoUtils;
-import org.apache.commons.compress.compressors.FileNameUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *
+ * video工具类
  */
 public class VideoUtils {
 
@@ -27,7 +24,7 @@ public class VideoUtils {
         //String outStr = "C:\\Users\\King\\Desktop\\ruoyi\\hls\\";
         boolean b1 = convertMp4(inputStr, outStr, FfmpegResolutionEnum.RESOLUTION_1080P);
         //boolean b1 = generateM3u8(inputStr, outStr);
-       // String sourcePath = "C:\\Users\\King\\Desktop\\ruoyi\\5a9eba75-b89d-4772-9208-375c6cb905be\\5a9eba75-b89d-4772-9208-375c6cb905be.mp4";
+        // String sourcePath = "C:\\Users\\King\\Desktop\\ruoyi\\5a9eba75-b89d-4772-9208-375c6cb905be\\5a9eba75-b89d-4772-9208-375c6cb905be.mp4";
         //generateAllM3u8(sourcePath);
         long end = System.currentTimeMillis();
         log.info("耗时={}", (end - start));
@@ -164,7 +161,7 @@ public class VideoUtils {
         } catch (Exception e) {
             log.error("获取播放播放时长异常 videoPath=" + videoPath, e);
         }
-        return m ;
+        return m;
     }
 
     /**

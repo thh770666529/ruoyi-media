@@ -1,49 +1,53 @@
 package com.ruoyi.common.utils.ffmpeg;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A ffmpeg process wrapper.
+ * ffmpeg执行类
  *
- * @author Carlo Pelliccia
+ * @author thh
  */
 public class FFMPEGExecutor {
 
+    private static final Logger log = LoggerFactory.getLogger(FFMPEGExecutor.class);
+
     /**
-     * The path of the ffmpeg executable.
+     * ffmpeg执行路径
      */
     private String ffmpegExecutablePath;
 
     /**
-     * Arguments for the executable.
+     * 执行参数.
      */
-    private ArrayList args = new ArrayList();
+    private List args = new ArrayList();
 
     /**
-     * The process representing the ffmpeg execution.
+     * ffmpeg进程
      */
     private Process ffmpeg = null;
 
     /**
-     * A process killer to kill the ffmpeg process with a shutdown hook, useful
-     * if the jvm execution is shutted down during an ongoing encoding process.
+     * ffmpeg杀手
      */
     private ProcessKiller ffmpegKiller = null;
 
     /**
-     * A stream reading from the ffmpeg process standard output channel.
+     * 执行输入流
      */
     private InputStream inputStream = null;
 
     /**
-     * A stream writing in the ffmpeg process standard input channel.
+     * 执行输出流
      */
     private OutputStream outputStream = null;
 
     /**
-     * A stream reading from the ffmpeg process standard error channel.
+     * 错误流
      */
     private InputStream errorStream = null;
 
@@ -56,19 +60,13 @@ public class FFMPEGExecutor {
         this.ffmpegExecutablePath = ffmpegExecutablePath;
     }
 
-    /**
-     * Adds an argument to the ffmpeg executable call.
-     *
-     * @param arg The argument.
-     */
+
     public void addArgument(String arg) {
         args.add(arg);
     }
 
     /**
-     * Executes the ffmpeg process with the previous given arguments.
-     *
-     * @throws IOException If the process call fails.
+     * 使用前面给定的参数执行 ffmpeg 进程
      */
     public void execute() throws IOException {
         int argsSize = args.size();
@@ -107,13 +105,12 @@ public class FFMPEGExecutor {
                     String line;
                     try {
                         while ((line = reader.readLine()) != null) {
-                            System.out.println(line);
+                            log.debug(line);
                             stringBuilder.append(line);
                         }
                         reader.close();
                     } catch (IOException e) {
                         e.printStackTrace();
-
                     }
                 }
             }).start();
@@ -121,41 +118,28 @@ public class FFMPEGExecutor {
             cmdResult.setSuccess(true);
             cmdResult.setMsg(stringBuilder.toString());
         } catch (Exception e) {
+            log.error("ffmpeg执行异常", e);
             throw new RuntimeException("ffmpeg执行异常" + e.getMessage());
         }
         return cmdResult;
     }
 
-    /**
-     * Returns a stream reading from the ffmpeg process standard output channel.
-     *
-     * @return A stream reading from the ffmpeg process standard output channel.
-     */
+
     public InputStream getInputStream() {
         return inputStream;
     }
 
-    /**
-     * Returns a stream writing in the ffmpeg process standard input channel.
-     *
-     * @return A stream writing in the ffmpeg process standard input channel.
-     */
+
     public OutputStream getOutputStream() {
         return outputStream;
     }
 
-    /**
-     * Returns a stream reading from the ffmpeg process standard error channel.
-     *
-     * @return A stream reading from the ffmpeg process standard error channel.
-     */
+
     public InputStream getErrorStream() {
         return errorStream;
     }
 
-    /**
-     * If there's a ffmpeg execution in progress, it kills it.
-     */
+
     public void destroy() {
         if (inputStream != null) {
             try {
@@ -169,7 +153,6 @@ public class FFMPEGExecutor {
             try {
                 outputStream.close();
             } catch (Throwable t) {
-                ;
             }
             outputStream = null;
         }
@@ -177,7 +160,6 @@ public class FFMPEGExecutor {
             try {
                 errorStream.close();
             } catch (Throwable t) {
-                ;
             }
             errorStream = null;
         }
