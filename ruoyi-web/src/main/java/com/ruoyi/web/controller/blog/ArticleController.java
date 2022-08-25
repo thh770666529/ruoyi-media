@@ -10,7 +10,7 @@ import com.ruoyi.blog.service.IArticleService;
 import com.ruoyi.blog.service.ICategoryService;
 import com.ruoyi.blog.service.ITagService;
 import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.constant.BaseRedisKeyConstants;
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.BlogConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -102,7 +102,7 @@ public class ArticleController extends BaseController {
         if (article == null || article.getStatus() != 1 || !"1".equals(article.getIsPublish())) {
             AjaxResult.error("博客文章已删除！请刷新查询列表！");
         }
-        String clickJson = redisCache.getCacheObject(BaseRedisKeyConstants.BLOG_CLICK + ":" + article.getArticleId() + "#" + ip);
+        String clickJson = redisCache.getCacheObject(CacheConstants.BLOG_CLICK_KEY + article.getArticleId() + "#" + ip);
         // 判断ip用户是否点击过这个文章
         if (StringUtils.isEmpty(clickJson)) {
             //增加博客点击数
@@ -110,7 +110,7 @@ public class ArticleController extends BaseController {
             article.setClickCount(clickCount);
             articleService.updateArticle(article);
             //将该用户点击记录存储到redis中, 24小时后过期
-            redisCache.setCacheObject(BaseRedisKeyConstants.BLOG_CLICK + ":" + article.getArticleId() + "#" + ip, article.getClickCount().toString(),
+            redisCache.setCacheObject(CacheConstants.BLOG_CLICK_KEY + article.getArticleId() + "#" + ip, article.getClickCount().toString(),
                     24, TimeUnit.HOURS);
         }
         ArticleVO articleVO = new ArticleVO();
@@ -141,7 +141,7 @@ public class ArticleController extends BaseController {
         articleVO.setThumbFlag(false);
         LoginUser loginUser = tokenService.getLoginUser(request);
         if (loginUser != null) {
-            Integer thumbCount = redisCache.getCacheObject(BaseRedisKeyConstants.THUMB_BLOG_SUPPORT + ":" + articleId + "#" + loginUser.getUserId());
+            Integer thumbCount = redisCache.getCacheObject(CacheConstants.THUMB_BLOG_SUPPORT_KEY + articleId + "#" + loginUser.getUserId());
             if (thumbCount != null) {
                 articleVO.setThumbFlag(true);
             }

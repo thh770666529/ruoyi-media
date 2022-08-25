@@ -59,26 +59,6 @@ public class Constants {
     public static final String LOGIN_FAIL = "Error";
 
     /**
-     * 验证码 redis key
-     */
-    public static final String CAPTCHA_CODE_KEY = "captcha_codes:";
-
-    /**
-     * 登录用户 redis key
-     */
-    public static final String LOGIN_TOKEN_KEY = "login_tokens:";
-
-    /**
-     * 防重提交 redis key
-     */
-    public static final String REPEAT_SUBMIT_KEY = "repeat_submit:";
-
-    /**
-     * 限流 redis key
-     */
-    public static final String RATE_LIMIT_KEY = "rate_limit:";
-
-    /**
      * 验证码有效期（分钟）
      */
     public static final Integer CAPTCHA_EXPIRATION = 2;
@@ -124,16 +104,6 @@ public class Constants {
     public static final String JWT_AUTHORITIES = "authorities";
 
     /**
-     * 参数管理 cache key
-     */
-    public static final String SYS_CONFIG_KEY = "sys_config:";
-
-    /**
-     * 字典管理 cache key
-     */
-    public static final String SYS_DICT_KEY = "sys_dict:";
-
-    /**
      * 资源映射路径 前缀
      */
     public static final String RESOURCE_PREFIX = "/profile";
@@ -163,11 +133,6 @@ public class Constants {
      */
     public static final String[] JOB_ERROR_STR = {"java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
             "org.springframework", "org.apache", "com.ruoyi.common.utils.file"};
-
-    /**
-     * 网站站点配置 cache key
-     */
-    public static final String WEB_CONFIG_KEY = "web_config";
 
     /**
      * 通用开关(开启)

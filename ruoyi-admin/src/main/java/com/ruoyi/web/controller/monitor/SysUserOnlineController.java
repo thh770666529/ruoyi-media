@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.monitor;
 
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -37,7 +38,7 @@ public class SysUserOnlineController extends BaseController {
     @PreAuthorize("@ss.hasPermi('monitor:online:list')")
     @GetMapping("/list")
     public TableDataInfo list(String ipaddr, String userName) {
-        Collection<String> keys = redisCache.keys(Constants.LOGIN_TOKEN_KEY + "*");
+        Collection<String> keys = redisCache.keys(CacheConstants.LOGIN_TOKEN_KEY + "*");
         List<SysUserOnline> userOnlineList = new ArrayList<SysUserOnline>();
         for (String key : keys) {
             LoginUser user = redisCache.getCacheObject(key);
@@ -69,7 +70,7 @@ public class SysUserOnlineController extends BaseController {
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
     @DeleteMapping("/{tokenId}")
     public AjaxResult forceLogout(@PathVariable String tokenId) {
-        redisCache.deleteObject(Constants.LOGIN_TOKEN_KEY + tokenId);
+        redisCache.deleteObject(CacheConstants.LOGIN_TOKEN_KEY + tokenId);
         return AjaxResult.success();
     }
 }

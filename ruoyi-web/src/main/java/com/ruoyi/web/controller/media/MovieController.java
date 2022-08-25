@@ -2,7 +2,7 @@ package com.ruoyi.web.controller.media;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.constant.BaseRedisKeyConstants;
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -75,7 +75,7 @@ public class MovieController extends BaseController {
         if (movieVO == null) {
             AjaxResult.error("电影已删除！请刷新查询列表！");
         }
-        String clickJson = redisCache.getCacheObject(BaseRedisKeyConstants.MOVIE_CLICK + ":" + movieVO.getMovieId() + "#" + ip);
+        String clickJson = redisCache.getCacheObject(CacheConstants.MOVIE_CLICK_KEY + movieVO.getMovieId() + "#" + ip);
         // 判断ip用户是否点击过这个电影
         if (StringUtils.isEmpty(clickJson)) {
             //电影点击数
@@ -85,7 +85,7 @@ public class MovieController extends BaseController {
             BeanUtils.copyProperties(movieVO, movie);
             movieService.updateById(movie);
             //将该用户点击记录存储到redis中, 24小时后过期
-            redisCache.setCacheObject(BaseRedisKeyConstants.MOVIE_CLICK + ":" + movieVO.getMovieId() + "#" + ip, movieVO.getClickCount().toString(),
+            redisCache.setCacheObject(CacheConstants.MOVIE_CLICK_KEY + movieVO.getMovieId() + "#" + ip, movieVO.getClickCount().toString(),
                     24, TimeUnit.HOURS);
         }
         return AjaxResult.success(movieVO);

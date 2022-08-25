@@ -22,7 +22,7 @@
       </el-form-item>
       <el-row :gutter="16">
         <el-col class="gutter-row" :span="16">
-          <el-form-item prop="code" v-if="captchaOnOff">
+          <el-form-item prop="code" v-if="captchaEnabled">
             <el-input v-model="loginForm.code" size="large" @keyup.enter.native="handleLogin"  type="text" autocomplete="off" placeholder="验证码">
               <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
             </el-input>
@@ -114,7 +114,7 @@
         },
         loading: false,
         // 验证码开关
-        captchaOnOff: true,
+        captchaEnabled: true,
         // 注册开关
         register: false,
         redirect: undefined,
@@ -156,8 +156,8 @@
       },
       getCode() {
         getCodeImg().then(res => {
-          this.captchaOnOff = res.captchaOnOff === undefined ? true : res.captchaOnOff;
-          if (this.captchaOnOff) {
+          this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
+          if (this.captchaEnabled) {
             this.codeUrl = "data:image/gif;base64," + res.img;
             this.loginForm.uuid = res.uuid;
           }
@@ -239,7 +239,7 @@
               //window.location.href =  this.redirect || "/";
             }).catch(() => {
               this.loading = false;
-              if (this.captchaOnOff) {
+              if (this.captchaEnabled) {
                 this.getCode();
               }
             });

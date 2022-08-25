@@ -1,5 +1,6 @@
 package com.ruoyi.framework.web.service;
 
+import com.ruoyi.common.constant.CacheConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.utils.StringUtils;
@@ -39,9 +40,9 @@ public class SysRegisterService {
     public String register(RegisterBody registerBody) {
         String msg = "", username = registerBody.getUsername(), password = registerBody.getPassword();
 
-        boolean captchaOnOff = configService.selectCaptchaOnOff();
+        boolean captchaEnabled = configService.selectCaptchaEnabled();
         // 验证码开关
-        if (captchaOnOff) {
+        if (captchaEnabled) {
             validateCaptcha(username, registerBody.getCode(), registerBody.getUuid());
         }
 
@@ -82,7 +83,7 @@ public class SysRegisterService {
      * @return 结果
      */
     public void validateCaptcha(String username, String code, String uuid) {
-        String verifyKey = Constants.CAPTCHA_CODE_KEY + StringUtils.nvl(uuid, "");
+        String verifyKey = CacheConstants.CAPTCHA_CODE_KEY + StringUtils.nvl(uuid, "");
         String captcha = redisCache.getCacheObject(verifyKey);
         redisCache.deleteObject(verifyKey);
         if (captcha == null) {

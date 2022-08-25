@@ -3,8 +3,7 @@ package com.ruoyi.website.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSON;
-import com.ruoyi.common.constant.Constants;
-import com.ruoyi.common.constant.WebConfigConstants;
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.website.domain.vo.WebConfigVO;
@@ -16,8 +15,6 @@ import com.ruoyi.website.domain.WebConfig;
 import com.ruoyi.website.service.IWebConfigService;
 
 import java.util.Date;
-
-import static com.ruoyi.common.constant.Constants.WEB_CONFIG_KEY;
 
 /**
  * 站点配置Service业务层处理
@@ -33,15 +30,17 @@ public class WebConfigServiceImpl implements IWebConfigService {
     @Autowired
     private RedisCache redisCache;
 
+    public static final String WEB_CONFIG_ID = "web_config";
+
 
     @Override
     public WebConfig getWebConfig() {
-        String webConfigResult = redisCache.getCacheObject(WEB_CONFIG_KEY);
+        String webConfigResult = redisCache.getCacheObject(CacheConstants.WEB_CONFIG_KEY);
         if (StringUtils.isNotEmpty(webConfigResult)) {
             return JSONObject.parseObject(webConfigResult, WebConfig.class);
         }
-        WebConfig webConfig = webConfigMapper.selectById(WebConfigConstants.WEB_CONFIG_ID);
-        redisCache.setCacheObject(WEB_CONFIG_KEY, JSON.toJSONString(webConfig));
+        WebConfig webConfig = webConfigMapper.selectById(WEB_CONFIG_ID);
+        redisCache.setCacheObject(CacheConstants.WEB_CONFIG_KEY, JSON.toJSONString(webConfig));
         return webConfig;
     }
 
@@ -54,7 +53,7 @@ public class WebConfigServiceImpl implements IWebConfigService {
             BeanUtils.copyProperties(webConfigVO, webConfig);
             webConfigMapper.insert(webConfig);
         } else {
-            WebConfig webConfig = webConfigMapper.selectById(WebConfigConstants.WEB_CONFIG_ID);
+            WebConfig webConfig = webConfigMapper.selectById(WEB_CONFIG_ID);
             // 更新网站配置【使用Spring工具类提供的深拷贝】
             BeanUtils.copyProperties(webConfigVO, webConfig);
             webConfig.setUpdateTime(new Date());
@@ -62,7 +61,7 @@ public class WebConfigServiceImpl implements IWebConfigService {
         }
 
         // 修改配置后，清空Redis中的 WEB_CONFIG
-        redisCache.deleteObject(Constants.WEB_CONFIG_KEY);
+        redisCache.deleteObject(CacheConstants.WEB_CONFIG_KEY);
         // 同时清空Redis中的登录方式
         //Collection<String> keys = redisCache.keys(Constants.LOGIN_TOKEN_KEY + "*");
         //redisCache.deleteObject(keys);

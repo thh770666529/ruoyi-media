@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.ruoyi.blog.domain.Article;
-import com.ruoyi.common.constant.BaseRedisKeyConstants;
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.BlogConstants;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.utils.DateUtils;
@@ -99,11 +99,11 @@ public class TagServiceImpl implements ITagService {
 
     @Override
     public List<Tag> selectHotTagList(int top) {
-        List<Tag> tagList = redisCache.getCacheObject(BaseRedisKeyConstants.HOT_BLOG_TAG);
+        List<Tag> tagList = redisCache.getCacheObject(CacheConstants.HOT_BLOG_TAG_KEY);
         if (CollectionUtil.isEmpty(tagList)) {
             tagList = tagMapper.selectHotTagList(1, top);
             if (CollectionUtil.isNotEmpty(tagList)) {
-                redisCache.setCacheObject(BaseRedisKeyConstants.HOT_BLOG_TAG, tagList, BlogConstants.BLOG_TAG_EXPIRATION, TimeUnit.DAYS);
+                redisCache.setCacheObject(CacheConstants.HOT_BLOG_TAG_KEY, tagList, BlogConstants.BLOG_TAG_EXPIRATION, TimeUnit.DAYS);
             }
         }
         return tagList;

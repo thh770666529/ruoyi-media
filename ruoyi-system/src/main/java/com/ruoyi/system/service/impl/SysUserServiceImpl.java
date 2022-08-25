@@ -6,7 +6,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.validation.Validator;
 
-import com.ruoyi.common.constant.BaseRedisKeyConstants;
+import cn.hutool.core.util.StrUtil;
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.enums.IntegralTypeEnum;
 import com.ruoyi.common.utils.bean.BeanValidators;
@@ -527,7 +528,7 @@ public class SysUserServiceImpl implements ISysUserService {
         int limit = integralTypeEnum.getLimit();
         String integralName = integralTypeEnum.getName();
         // 2.判断是否超过每天限制
-        String integralLimitJson = redisCache.getCacheObject(BaseRedisKeyConstants.USER_INTEGRAL_ADD_LIMIT + ":" + userId + ":" + integralName);
+        String integralLimitJson = redisCache.getCacheObject(CacheConstants.USER_INTEGRAL_ADD_LIMIT_KEY + userId + StrUtil.COLON + integralName);
         int integralLimit = 0;
         if (StringUtils.isNotEmpty(integralLimitJson)) {
             integralLimit = Integer.valueOf(integralLimitJson);
@@ -562,7 +563,7 @@ public class SysUserServiceImpl implements ISysUserService {
         //5.更新账户的积分
         account.setAccountAmount(account.getAccountAmount() + integral);
         accountService.updateAccount(account);
-        redisCache.setCacheObject(BaseRedisKeyConstants.USER_INTEGRAL_ADD_LIMIT + ":" + userId + ":" + integralName, String.valueOf(integralLimit + 1), 1, TimeUnit.DAYS);
+        redisCache.setCacheObject(CacheConstants.USER_INTEGRAL_ADD_LIMIT_KEY + userId + StrUtil.COLON + integralName, String.valueOf(integralLimit + 1), 1, TimeUnit.DAYS);
         integralRecordService.insertIntegralRecord(integralRecord);
     }
 }

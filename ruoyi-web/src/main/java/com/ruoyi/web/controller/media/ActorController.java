@@ -1,7 +1,7 @@
 package com.ruoyi.web.controller.media;
 
 import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.constant.BaseRedisKeyConstants;
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -61,7 +61,7 @@ public class ActorController extends BaseController {
         if (actor == null) {
             AjaxResult.error("演员已删除！请刷新查询列表！");
         }
-        String clickJson = redisCache.getCacheObject(BaseRedisKeyConstants.ACTOR_CLICK + ":" + actor.getActorId() + "#" + ip);
+        String clickJson = redisCache.getCacheObject(CacheConstants.ACTOR_CLICK_KEY + actor.getActorId() + "#" + ip);
         // 判断ip用户是否点击过这个演员
         if (StringUtils.isEmpty(clickJson)) {
             //演员点击数
@@ -69,7 +69,7 @@ public class ActorController extends BaseController {
             actor.setClickCount(clickCount);
             actorService.updateById(actor);
             //将该用户点击记录存储到redis中, 24小时后过期
-            redisCache.setCacheObject(BaseRedisKeyConstants.ACTOR_CLICK + ":" + actor.getActorId() + "#" + ip, actor.getClickCount().toString(),
+            redisCache.setCacheObject(CacheConstants.ACTOR_CLICK_KEY + actor.getActorId() + "#" + ip, actor.getClickCount().toString(),
                     24, TimeUnit.HOURS);
         }
         return AjaxResult.success(actor);

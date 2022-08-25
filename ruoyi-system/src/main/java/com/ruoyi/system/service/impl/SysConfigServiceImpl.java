@@ -1,7 +1,7 @@
 package com.ruoyi.system.service.impl;
 
 import com.ruoyi.common.annotation.DataSource;
-import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.core.text.Convert;
@@ -83,19 +83,18 @@ public class SysConfigServiceImpl implements ISysConfigService {
         return retConfig;
     }
 
-
     /**
      * 获取验证码开关
      *
      * @return true开启，false关闭
      */
     @Override
-    public boolean selectCaptchaOnOff() {
-        String captchaOnOff = selectConfigByKey("sys.account.captchaOnOff");
-        if (StringUtils.isEmpty(captchaOnOff)) {
+    public boolean selectCaptchaEnabled() {
+        String captchaEnabled = selectConfigByKey("sys.account.captchaEnabled");
+        if (StringUtils.isEmpty(captchaEnabled)) {
             return true;
         }
-        return Convert.toBool(captchaOnOff);
+        return Convert.toBool(captchaEnabled);
     }
 
     /**
@@ -173,7 +172,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
      */
     @Override
     public void clearConfigCache() {
-        Collection<String> keys = redisCache.keys(Constants.SYS_CONFIG_KEY + "*");
+        Collection<String> keys = redisCache.keys(CacheConstants.SYS_CONFIG_KEY + "*");
         redisCache.deleteObject(keys);
     }
 
@@ -209,6 +208,6 @@ public class SysConfigServiceImpl implements ISysConfigService {
      * @return 缓存键key
      */
     private String getCacheKey(String configKey) {
-        return Constants.SYS_CONFIG_KEY + configKey;
+        return CacheConstants.SYS_CONFIG_KEY + configKey;
     }
 }

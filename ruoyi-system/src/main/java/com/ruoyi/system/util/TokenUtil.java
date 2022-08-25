@@ -1,5 +1,6 @@
 package com.ruoyi.system.util;
 
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.redis.RedisCache;
@@ -211,6 +212,6 @@ public class TokenUtil {
     }
 
     private String getTokenKey(String uuid) {
-        return Constants.LOGIN_TOKEN_KEY + uuid;
+        return CacheConstants.LOGIN_TOKEN_KEY + uuid;
     }
 }

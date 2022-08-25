@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson2.JSON;
+import com.ruoyi.common.constant.CacheConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -61,7 +62,7 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor {
         String submitKey = StringUtils.trimToEmpty(request.getHeader(header));
 
         // 唯一标识（指定key + url + 消息头）
-        String cacheRepeatKey = Constants.REPEAT_SUBMIT_KEY + url + submitKey;
+        String cacheRepeatKey = CacheConstants.REPEAT_SUBMIT_KEY + url + submitKey;
 
         Object sessionObj = redisCache.getCacheObject(cacheRepeatKey);
         if (sessionObj != null) {

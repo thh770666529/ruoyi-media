@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 
+import com.ruoyi.common.constant.CacheConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -201,6 +202,6 @@ public class TokenService {
     }
 
     private String getTokenKey(String uuid) {
-        return Constants.LOGIN_TOKEN_KEY + uuid;
+        return CacheConstants.LOGIN_TOKEN_KEY + uuid;
     }
 }

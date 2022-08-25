@@ -3,6 +3,7 @@ package com.ruoyi.blog.service.impl;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -15,7 +16,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.blog.domain.Category;
 import com.ruoyi.blog.service.ICategoryService;
-import com.ruoyi.common.constant.BaseRedisKeyConstants;
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.BlogConstants;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.model.LoginUser;
@@ -28,6 +29,7 @@ import com.ruoyi.common.utils.file.MarkdownUtils;
 import com.ruoyi.system.util.TokenUtil;
 import com.ruoyi.website.domain.WebConfig;
 import com.ruoyi.website.service.IWebConfigService;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -116,7 +118,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public int updateArticle(Article article) {
         //删除热门文章 防止门户热门文章不同步的情况
-        redisCache.deleteObject(BaseRedisKeyConstants.HOT_BLOG_ARTICLE);
+        redisCache.deleteObject(CacheConstants.HOT_BLOG_ARTICLE_KEY);
         article.setUpdateTime(DateUtils.getNowDate());
         return articleMapper.updateById(article);
     }
@@ -145,11 +147,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public List<Article> selectHotArticleList(int top) {
-        List<Article> articleList = redisCache.getCacheObject(BaseRedisKeyConstants.HOT_BLOG_ARTICLE);
+        List<Article> articleList = redisCache.getCacheObject(CacheConstants.HOT_BLOG_ARTICLE_KEY);
         if (CollectionUtil.isEmpty(articleList)) {
             articleList = articleMapper.selectHotArticleList(1, 1, top);
             if (CollectionUtil.isNotEmpty(articleList)) {
-                redisCache.setCacheObject(BaseRedisKeyConstants.HOT_BLOG_ARTICLE, articleList, BlogConstants.BLOG_ARTICLE_EXPIRATION, TimeUnit.DAYS);
+                redisCache.setCacheObject(CacheConstants.HOT_BLOG_ARTICLE_KEY, articleList, BlogConstants.BLOG_ARTICLE_EXPIRATION, TimeUnit.DAYS);
             }
         }
         return articleList;
@@ -186,7 +188,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public void thumbArticleById(Long articleId) {
         Long userId = SecurityUtils.getUserId();
-        Integer redisJson = redisCache.getCacheObject(BaseRedisKeyConstants.THUMB_BLOG_SUPPORT + ":" + articleId + "#" + userId);
+        Integer redisJson = redisCache.getCacheObject(CacheConstants.THUMB_BLOG_SUPPORT_KEY + articleId + "#" + userId);
         if (redisJson != null) {
             throw new ServiceException("24小时内无法重复点赞同一篇文章");
         } else {
@@ -197,7 +199,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             }
             article.setSupportCount(supportCount + 1);
             articleMapper.updateById(article);
-            redisCache.setCacheObject(BaseRedisKeyConstants.THUMB_BLOG_SUPPORT + ":" + articleId + "#" + userId, 1);
+            redisCache.setCacheObject(CacheConstants.THUMB_BLOG_SUPPORT_KEY + articleId + "#" + userId, 1);
         }
     }
 
@@ -245,7 +247,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         for (MultipartFile file : fileList) {
             String fileOriginalName = file.getOriginalFilename();
 
-            if (fileOriginalName.indexOf(".md") > -1) {
+            if (fileOriginalName.contains(".md")) {
                 newFileList.add(file);
                 // 获取文件名
                 fileNameList.add(FilenameUtils.getBaseName(fileOriginalName));
@@ -260,7 +262,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<String> fileContentList = new ArrayList<>();
         for (MultipartFile multipartFile : fileList) {
             try (
-                    Reader reader = new InputStreamReader(multipartFile.getInputStream(), "utf-8");
+                    Reader reader = new InputStreamReader(multipartFile.getInputStream(), StandardCharsets.UTF_8);
                     BufferedReader br = new BufferedReader(reader);
             ) {
 
@@ -277,10 +279,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             }
         }
         String imagesList = ServletUtils.getParameter("imagesList");
-        List<Map<String, String>> list = JSON.parseArray(imagesList, Map.class);
+        List<Map> list = JSON.parseArray(imagesList, Map.class);
         Map<String, String> imagesMap = new HashMap<>();
-        for (Map<String, String> item : list) {
-            imagesMap.put(item.get("fileOldName"), item.get("url"));
+        for (Map item : list) {
+            imagesMap.put(MapUtils.getString(item, "fileOldName"), MapUtils.getString(item, "url"));
         }
         // 需要替换的图片Map
         Map<String, String> matchUrlMap = new HashMap<>();
@@ -304,7 +306,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                         // 那么就需要遍历全部的map和他匹配
                         for (Map.Entry<String, String> map : imagesMap.entrySet()) {
                             // 查看Map中的图片是否在需要替换的key中
-                            if (pictureUrl.indexOf(map.getKey()) > -1) {
+                            if (pictureUrl.contains(map.getKey())) {
                                 matchUrlMap.put(pictureUrl, map.getValue());
                                 break;
                             }
@@ -342,8 +344,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 this.insertArticle(article);
                 count++;
             } catch (Exception e) {
-                e.printStackTrace();
-                log.error("本地上传文档失败（替换图片文件失败）" + e.getMessage());
+                log.error("本地上传文档失败（替换图片文件失败）" + e);
             }
         }
         return count;
