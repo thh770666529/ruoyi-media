@@ -19,14 +19,14 @@ public class KaptchaTextCreator extends DefaultTextCreator {
         int x = random.nextInt(10);
         int y = random.nextInt(10);
         StringBuilder suChinese = new StringBuilder();
-        int randomoperands = (int) Math.round(Math.random() * 2);
+        int randomoperands = random.nextInt(3);
         if (randomoperands == 0) {
             result = x * y;
             suChinese.append(CNUMBERS[x]);
             suChinese.append("*");
             suChinese.append(CNUMBERS[y]);
         } else if (randomoperands == 1) {
-            if (!(x == 0) && y % x == 0) {
+            if ((x != 0) && y % x == 0) {
                 result = y / x;
                 suChinese.append(CNUMBERS[y]);
                 suChinese.append("/");
@@ -37,7 +37,7 @@ public class KaptchaTextCreator extends DefaultTextCreator {
                 suChinese.append("+");
                 suChinese.append(CNUMBERS[y]);
             }
-        } else if (randomoperands == 2) {
+        } else {
             if (x >= y) {
                 result = x - y;
                 suChinese.append(CNUMBERS[x]);
@@ -49,11 +49,6 @@ public class KaptchaTextCreator extends DefaultTextCreator {
                 suChinese.append("-");
                 suChinese.append(CNUMBERS[x]);
             }
-        } else {
-            result = x + y;
-            suChinese.append(CNUMBERS[x]);
-            suChinese.append("+");
-            suChinese.append(CNUMBERS[y]);
         }
         suChinese.append("=?@" + result);
         return suChinese.toString();
