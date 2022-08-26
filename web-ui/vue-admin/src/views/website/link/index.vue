@@ -198,19 +198,7 @@ export default {
         linkTarget: null,
       },
       // 表单参数
-      // 表单参数
       form: {
-        linkId: null,
-        createTime: null,
-        updateTime: null,
-        status: '0',
-        sort: null,
-        linkName: null,
-        linkUrl: null,
-        linkTarget: null,
-        createBy: null,
-        updateBy: null,
-        remark: null
       },
       // 表单校验
       rules: {
@@ -264,8 +252,6 @@ export default {
         linkName: null,
         linkUrl: null,
         linkTarget: null,
-        createBy: null,
-        updateBy: null,
         remark: null
       };
       this.resetForm("form");
