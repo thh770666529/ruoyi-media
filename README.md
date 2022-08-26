@@ -2,7 +2,9 @@
 
 借助**ruoyi**这个平台开发一套资源平台。直接采用了[RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue)前后端分离基础平台。打造一款开源的电影视频平台，集成了奇文网盘，涉及了电影 博客 问答多个模块。后台和门户用的都是vue+springboot
 
+gitee地址： https://gitee.com/tanhuihuang/ruoyi-media
 
+github地址：https://github.com/thh770666529/ruoyi-media
 
 ## 技术要点
 
