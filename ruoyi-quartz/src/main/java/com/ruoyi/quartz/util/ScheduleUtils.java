@@ -77,8 +77,7 @@ public class ScheduleUtils {
         }
 
         // 判断任务是否过期
-        if (StringUtils.isNotNull(CronUtils.getNextExecution(job.getCronExpression())))
-        {
+        if (StringUtils.isNotNull(CronUtils.getNextExecution(job.getCronExpression()))) {
             // 执行调度任务
             scheduler.scheduleJob(jobDetail, trigger);
         }
