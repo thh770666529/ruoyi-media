@@ -22,9 +22,9 @@
         <bitwalker.version>1.21</bitwalker.version>
         <swagger.version>3.0.0</swagger.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
-        <pagehelper.boot.version>1.4.1</pagehelper.boot.version>
-        <fastjson.version>2.0.7</fastjson.version>
-        <oshi.version>6.1.6</oshi.version>
+        <pagehelper.boot.version>1.4.3</pagehelper.boot.version>
+        <fastjson.version>2.0.12</fastjson.version>
+        <oshi.version>6.2.2</oshi.version>
         <jna.version>5.10.0</jna.version>
         <commons.io.version>2.10.0</commons.io.version>
         <commons.fileupload.version>1.4</commons.fileupload.version>
@@ -39,7 +39,7 @@
         <thumbnailator.version>0.4.13</thumbnailator.version>
         <fastdfs-client.version>1.26.2</fastdfs-client.version>
         <aliyun-sdk-oss.version>3.10.2</aliyun-sdk-oss.version>
-        <hutool.version>5.6.7</hutool.version>
+        <hutool.version>5.8.5</hutool.version>
         <xdocreport.version>2.0.2</xdocreport.version>
         <pdfbox.version>2.0.18</pdfbox.version>
         <JustAuth.version>1.16.4</JustAuth.version>
