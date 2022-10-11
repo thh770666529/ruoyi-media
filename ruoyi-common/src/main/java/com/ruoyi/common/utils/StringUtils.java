@@ -27,21 +27,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      */
     private static final char SEPARATOR = '_';
 
-
-    /**
-     * 转成字符串
-     *
-     * @param str
-     * @return
-     */
-    public static String toStr(Object str) {
-        return toStr(str, "");
-    }
-
-    public static String toStr(Object str, String defaultValue) {
-        return null == str ? defaultValue : String.valueOf(str);
-    }
-
     /**
      * 获取参数不为空值
      *
@@ -308,6 +293,26 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
+     * 判断给定的set列表中是否包含数组array 判断给定的数组array中是否包含给定的元素value
+     *
+     * @param set   给定的集合
+     * @param array 给定的数组
+     * @return boolean 结果
+     */
+    public static boolean containsAny(Collection<String> collection, String... array) {
+        if (isEmpty(collection) || isEmpty(array)) {
+            return false;
+        } else {
+            for (String str : array) {
+                if (collection.contains(str)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    /**
      * 查找指定字符串是否包含指定字符串列表中的任意一个字符串同时串忽略大小写
      *
      * @param cs                  指定字符串
@@ -477,7 +482,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return (T) obj;
     }
 
-
     /**
      * 数字左边补齐0，使之达到指定长度。注意，如果数字转换为字符串后，长度大于size，则只保留 最后size个字符。
      *
@@ -516,5 +520,4 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return sb.toString();
     }
-
 }
