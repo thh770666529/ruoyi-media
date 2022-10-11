@@ -602,6 +602,9 @@ public class ExcelUtil<T> {
             if (isSubListValue(vo)) {
                 subList = getListCellValue(vo);
                 subMergedLastRowNum = subMergedLastRowNum + subList.size();
+            } else {
+                subMergedFirstRowNum++;
+                subMergedLastRowNum++;
             }
 
             int column = 0;
