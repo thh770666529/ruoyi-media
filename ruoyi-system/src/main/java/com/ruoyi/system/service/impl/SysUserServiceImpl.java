@@ -9,6 +9,7 @@ import javax.validation.Validator;
 import cn.hutool.core.util.StrUtil;
 import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.core.redis.RedisCache;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.IntegralTypeEnum;
 import com.ruoyi.common.utils.bean.BeanValidators;
 import com.ruoyi.website.domain.Account;
@@ -172,13 +173,16 @@ public class SysUserServiceImpl implements ISysUserService {
     /**
      * 校验用户名称是否唯一
      *
-     * @param userName 用户名称
+     * @param user 用户信息
      * @return 结果
      */
     @Override
-    public String checkUserNameUnique(String userName) {
-        int count = userMapper.checkUserNameUnique(userName);
-        if (count > 0) {
+    public String checkUserNameUnique(SysUser user)
+    {
+        Long userId = Convert.toLong(user.getUserId(), -1L);
+        SysUser info = userMapper.checkUserNameUnique(user.getUserName());
+        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        {
             return UserConstants.NOT_UNIQUE;
         }
         return UserConstants.UNIQUE;
