@@ -90,29 +90,6 @@ public class CommonController {
         }
     }
 
-    /**
-     * 通用上传请求
-     */
-    @PostMapping("/uploadFileList")
-    public AjaxResult uploadFile(List<MultipartFile> fileList) throws Exception {
-        try {
-            String filePath = RuoYiConfig.getUploadPath();
-            List<Map<String, Object>> uploadFileList = new ArrayList<>();
-            for (MultipartFile file : fileList) {
-                String url = FileUploadUtils.upload2(filePath, file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
-                Map<String, Object> fileData = new HashMap<>();
-                fileData.put("fileName", FilenameUtils.getName(url));
-                fileData.put("fileOldName", file.getOriginalFilename());
-                fileData.put("filesize", file.getSize());
-                fileData.put("url", url);
-                uploadFileList.add(fileData);
-            }
-            return AjaxResult.success(uploadFileList);
-        } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
-        }
-    }
-
 
     /**
      * 通用上传请求（多个）

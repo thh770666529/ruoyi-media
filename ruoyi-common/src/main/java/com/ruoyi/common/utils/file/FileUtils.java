@@ -6,6 +6,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -280,31 +282,35 @@ public class FileUtils {
      * @param urlString 被下载的文件地址
      * @param filename  本地文件名
      */
-    public static void download(String urlString, String filename) {
+    public static void download(String urlString, String filename) throws IOException {
         URL url;
+        InputStream is = null;
+        // 输出的文件流s
+        OutputStream os = null;
         try {
             url = new URL(urlString);
             // 打开连接
             URLConnection con = url.openConnection();
             // 输入流
-            InputStream is = con.getInputStream();
+            is = con.getInputStream();
             // 1K的数据缓冲
             byte[] bs = new byte[1024];
             // 读取到的数据长度
             int len;
             // 输出的文件流s
-            OutputStream os = new FileOutputStream(filename);
+            os = Files.newOutputStream(Paths.get(filename));
             // 开始读取
             while ((len = is.read(bs)) != -1) {
                 os.write(bs, 0, len);
             }
-            // 完毕，关闭所有链接
-            os.close();
-            is.close();
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            IOUtils.close(os);
+            IOUtils.close(is);
         }
     }
 }

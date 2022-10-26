@@ -18,7 +18,6 @@ import com.ruoyi.blog.domain.Category;
 import com.ruoyi.blog.service.ICategoryService;
 import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.BlogConstants;
-import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.exception.ServiceException;
@@ -241,112 +240,135 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public int uploadLocalBlog(List<MultipartFile> fileList) {
-
-        List<MultipartFile> newFileList = new ArrayList<>();
-        List<String> fileNameList = new ArrayList<>();
-        for (MultipartFile file : fileList) {
-            String fileOriginalName = file.getOriginalFilename();
-
-            if (fileOriginalName.contains(".md")) {
-                newFileList.add(file);
-                // 获取文件名
-                fileNameList.add(FilenameUtils.getBaseName(fileOriginalName));
-            } else {
-                throw new ServiceException("目前仅支持Markdown文件");
-            }
+        // 网站配置
+        WebConfig webConfig = webConfigService.getWebConfig();
+        // 查询最热门的分类
+        Category category = categoryService.getTopOne();
+        // 如果设置分类，抛异常或者给个null值
+        if (category == null) {
+            category = new Category();
+            category.setCategoryId(null);
+            category.setName(null);
         }
-        if (newFileList.size() == 0) {
-            throw new ServiceException("请选中需要上传的文件");
-        }
-        // 文档解析
-        List<String> fileContentList = new ArrayList<>();
+
+        String html;
+        // 0.把上传的图片list 转化成map key:原文件名称（originalFilenames） value: 图片链接地址（url）
+        Map<String, String> imagesMap = getUploadImageMap();
+        int count = 0;
         for (MultipartFile multipartFile : fileList) {
-            try (
-                    Reader reader = new InputStreamReader(multipartFile.getInputStream(), StandardCharsets.UTF_8);
-                    BufferedReader br = new BufferedReader(reader);
-            ) {
-
-                String line;
-                StringBuilder content = new StringBuilder();
-                while ((line = br.readLine()) != null) {
-                    content.append(line + "\n");
-                }
-                // 将Markdown转换成html
-                String articleContent = MarkdownUtils.markdownToHtml(content.toString());
-                fileContentList.add(articleContent);
-            } catch (Exception e) {
-                log.error("文件解析出错:" + e.getMessage());
+            String artileTitle = FilenameUtils.getBaseName(multipartFile.getOriginalFilename());
+            // 1.校验 Markdown文件
+            verifyBlog(multipartFile);
+            // 2.文档解析,把每个markdown文件解析成html
+            html = parseArticle2Html(multipartFile);
+            // 4.文章内容 匹配图片正则 "<img\\s+(?:[^>]*)src\\s*=\\s*([^>]+)>"
+            List<String> matchImageList = this.match(html, "<img\\s+(?:[^>]*)src\\s*=\\s*([^>]+)>");
+            // 匹配图片map key：markdown里的图片url，  value：图片链接
+            Map<String, String> matchUrlMap = getMatchUrlMap(matchImageList, imagesMap);
+            // 5. 文章内容，全局替换图片
+            // 循环替换里面的图片
+            for (Map.Entry<String, String> map : matchUrlMap.entrySet()) {
+                html = html.replace(map.getKey(), map.getValue());
             }
+            saveArticle(webConfig, category, html, artileTitle);
+            count++;
         }
-        String imagesList = ServletUtils.getParameter("imagesList");
-        List<Map> list = JSON.parseArray(imagesList, Map.class);
-        Map<String, String> imagesMap = new HashMap<>();
-        for (Map item : list) {
-            imagesMap.put(MapUtils.getString(item, "fileOldName"), MapUtils.getString(item, "url"));
-        }
-        // 需要替换的图片Map
-        Map<String, String> matchUrlMap = new HashMap<>();
-        for (String blogContent : fileContentList) {
-            List<String> matchList = this.match(blogContent, "<img\\s+(?:[^>]*)src\\s*=\\s*([^>]+)>");
-            for (String matchStr : matchList) {
-                String[] splitList = matchStr.split("\"");
-                // 取出中间的图片
-                if (splitList.length >= 5) {
-                    // alt 和 src的先后顺序
-                    // 得到具体的图片路径
-                    String pictureUrl = "";
-                    if (matchStr.indexOf("alt") > matchStr.indexOf("src")) {
-                        pictureUrl = splitList[1];
-                    } else {
-                        pictureUrl = splitList[3];
-                    }
+        return count;
+    }
 
-                    // 判断是网络图片还是本地图片
-                    if (!pictureUrl.startsWith("http")) {
-                        // 那么就需要遍历全部的map和他匹配
-                        for (Map.Entry<String, String> map : imagesMap.entrySet()) {
-                            // 查看Map中的图片是否在需要替换的key中
-                            if (pictureUrl.contains(map.getKey())) {
-                                matchUrlMap.put(pictureUrl, map.getValue());
-                                break;
-                            }
+    private void saveArticle(WebConfig webConfig, Category category, String html, String artileTitle) {
+        Article article = new Article();
+        article.setArticlesPart(webConfig.getName());
+        article.setLevel(4);
+        article.setTitle(artileTitle);
+        article.setSummary(artileTitle);
+        article.setContent(html);
+        article.setIsOriginal("1");
+        article.setIsPublish("0");
+        article.setOpenComment(1);
+        article.setType(0);
+        article.setStatus(1);
+        article.setOpenPassword(0);
+        article.setCategoryId(category.getCategoryId() + "");
+        article.setCategoryName(category.getName());
+        this.insertArticle(article);
+    }
+
+    private Map<String, String> getMatchUrlMap(List<String> matchImageList, Map<String, String> imagesMap) {
+        Map<String, String> matchUrlMap = new HashMap<>();
+        for (String matchStr : matchImageList) {
+            String[] splitList = matchStr.split("\"");
+            // 取出中间的图片
+            if (splitList.length >= 5) {
+                // alt 和 src的先后顺序
+                // 得到具体的图片路径
+                String pictureUrl = "";
+                if (matchStr.indexOf("alt") > matchStr.indexOf("src")) {
+                    pictureUrl = splitList[1];
+                } else {
+                    pictureUrl = splitList[3];
+                }
+                // 判断是网络图片还是本地图片
+                if (!pictureUrl.startsWith("http")) {
+                    // 那么就需要遍历全部的map和他匹配
+                    for (Map.Entry<String, String> map : imagesMap.entrySet()) {
+                        // 查看Map中的图片是否在需要替换的key中
+                        if (pictureUrl.contains(map.getKey())) {
+                            matchUrlMap.put(pictureUrl, map.getValue());
+                            break;
                         }
                     }
                 }
             }
         }
-        // 开始进行图片替换操作
-        WebConfig webConfig = webConfigService.getWebConfig();
-        Category category = categoryService.getTopOne();
+        return matchUrlMap;
+    }
 
-        int count = 0;
-        for (int i = 0; i < fileContentList.size(); i++) {
-            try {
-                String content = fileContentList.get(i);
-                // 循环替换里面的图片
-                for (Map.Entry<String, String> map : matchUrlMap.entrySet()) {
-                    content = content.replace(map.getKey(), map.getValue());
-                }
-                Article article = new Article();
-                article.setArticlesPart(webConfig.getName());
-                article.setLevel(4);
-                article.setTitle(fileNameList.get(i));
-                article.setSummary(fileNameList.get(i));
-                article.setContent(content);
-                article.setIsOriginal("1");
-                article.setIsPublish("0");
-                article.setOpenComment(1);
-                article.setType(0);
-                article.setStatus(1);
-                article.setOpenPassword(0);
-                article.setCategoryId(category.getCategoryId() + "");
-                article.setCategoryName(category.getName());
-                this.insertArticle(article);
-                count++;
-            } catch (Exception e) {
-                log.error("本地上传文档失败（替换图片文件失败）" + e);
-            }
+    // 获取上传图片list
+    private Map<String, String> getUploadImageMap() {
+        String imagesList = ServletUtils.getParameter("imagesList");
+        List<Map> list = JSON.parseArray(imagesList, Map.class);
+        Map<String, String> imagesMap = new HashMap<>();
+        for (Map item : list) {
+            imagesMap.put(MapUtils.getString(item, "originalFilenames"), MapUtils.getString(item, "url"));
         }
-        return count;
+        return imagesMap;
+    }
+
+    /**
+     * 解析文章
+     *
+     * @param multipartFile
+     * @return java.lang.String
+     */
+    private String parseArticle2Html(MultipartFile multipartFile) {
+        try (
+                Reader reader = new InputStreamReader(multipartFile.getInputStream(), StandardCharsets.UTF_8);
+                BufferedReader br = new BufferedReader(reader);
+        ) {
+
+            String line;
+            StringBuilder content = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+            // 将Markdown转换成html
+            return MarkdownUtils.markdownToHtml(content.toString());
+        } catch (Exception e) {
+            log.error("文件解析出错:" + e.getMessage());
+            throw new ServiceException("文件解析出错,无法转化为html");
+        }
+    }
+
+    /**
+     * 校验文章
+     *
+     * @param multipartFile
+     */
+    private void verifyBlog(MultipartFile multipartFile) {
+        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        if (extension == null || extension.endsWith(".md")) {
+            throw new ServiceException("目前仅支持Markdown文件");
+        }
     }
 }

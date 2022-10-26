@@ -7,13 +7,16 @@
     <img-preview ></img-preview>
     <!-- 视频预览 -->
     <video-preview></video-preview>
+    <theme-picker />
   </div>
 </template>
 
 <script>
-import globalUploader from '@/components/common/GlobalUploader'
-import ImgPreview from '@/components/common/ImgPreview'
-import VideoPreview from '@/components/common/VideoPreview'
+import globalUploader from '@/components/common/GlobalUploader';
+import ImgPreview from '@/components/common/ImgPreview';
+import VideoPreview from '@/components/common/VideoPreview';
+import ThemePicker from "@/components/ThemePicker";
+
 export default  {
   name:  'App',
   metaInfo() {
@@ -27,7 +30,8 @@ export default  {
   components: {
     globalUploader,
     ImgPreview,
-    VideoPreview
+    VideoPreview,
+    ThemePicker
   },
   computed: {
     // 网盘页面文件上传/预览相关组件是否显示
@@ -38,3 +42,8 @@ export default  {
   }
 }
 </script>
+<style scoped>
+#app .theme-picker {
+  display: none;
+}
+</style>
