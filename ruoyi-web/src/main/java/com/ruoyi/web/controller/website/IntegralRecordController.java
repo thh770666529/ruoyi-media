@@ -52,6 +52,6 @@ public class IntegralRecordController extends BaseController {
      */
     @GetMapping(value = "/{integralRecordId}")
     public AjaxResult getInfo(@PathVariable("integralRecordId") Long integralRecordId) {
-        return AjaxResult.success(integralRecordService.selectIntegralRecordByIntegralRecordId(integralRecordId));
+        return success(integralRecordService.selectIntegralRecordByIntegralRecordId(integralRecordId));
     }
 }

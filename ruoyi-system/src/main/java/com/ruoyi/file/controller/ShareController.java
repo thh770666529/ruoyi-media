@@ -100,7 +100,7 @@ public class ShareController extends BaseController {
         }
         shareFileService.batchInsertShareFile(saveFileList);
         shareSecretVO.setShareBatchNum(uuid);
-        return AjaxResult.success(shareSecretVO);
+        return success(shareSecretVO);
     }
 
 
@@ -157,7 +157,7 @@ public class ShareController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("total", total);
         map.put("list", shareList);
-        return AjaxResult.success(map);
+        return success(map);
     }
 
 
@@ -170,7 +170,7 @@ public class ShareController extends BaseController {
         for (ShareFileListVO shareFileListVO : list) {
             shareFileListVO.setShareFilePath(shareFilePath);
         }
-        return AjaxResult.success(list);
+        return success(list);
     }
 
     @Log(title = "分享类型", businessType = BusinessType.File)
@@ -181,7 +181,7 @@ public class ShareController extends BaseController {
         Share share = shareService.getOne(lambdaQueryWrapper);
         ShareTypeVO shareTypeVO = new ShareTypeVO();
         shareTypeVO.setShareType(share.getShareType());
-        return AjaxResult.success(shareTypeVO);
+        return success(shareTypeVO);
     }
 
     @Log(title = "校验提取码", businessType = BusinessType.File)

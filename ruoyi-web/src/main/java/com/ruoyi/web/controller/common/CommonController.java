@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.common;
 
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
@@ -25,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author ruoyi
  */
 @RestController
-public class CommonController {
+public class CommonController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
 
     @Autowired
@@ -73,7 +74,7 @@ public class CommonController {
             ajax.put("url", url);
             return ajax;
         } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
+            return error(e.getMessage());
         }
     }
 

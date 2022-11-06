@@ -70,7 +70,7 @@ public class SysAuthController extends BaseController {
         String authorizeUrl = authRequest.authorize(AuthStateUtils.createState());
         Map data = new HashMap();
         data.put("authorizeUrl", authorizeUrl);
-        return AjaxResult.success(data);
+        return success(data);
     }
 
 
@@ -143,7 +143,7 @@ public class SysAuthController extends BaseController {
         if (userMapper.checkAuthUser(userId, source) > 0) {
             return error(source + "平台账号已经绑定");
         }
-        return AjaxResult.success();
+        return success();
     }
 
     /**

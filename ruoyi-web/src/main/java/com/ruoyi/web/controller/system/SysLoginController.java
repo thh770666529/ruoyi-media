@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.system;
 
 import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysMenu;
 import com.ruoyi.common.core.domain.entity.SysUser;
@@ -28,7 +29,7 @@ import java.util.Set;
  * @author ruoyi
  */
 @RestController
-public class SysLoginController {
+public class SysLoginController extends BaseController {
     @Autowired
     private SysLoginService loginService;
 
@@ -94,6 +95,6 @@ public class SysLoginController {
         // 用户信息
         SysUser user = loginUser.getUser();
         List<SysMenu> menus = menuService.selectMenuTreeByUserId(user.getUserId());
-        return AjaxResult.success(menuService.buildMenus(menus));
+        return success(menuService.buildMenus(menus));
     }
 }

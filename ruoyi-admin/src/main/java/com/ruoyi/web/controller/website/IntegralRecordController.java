@@ -63,7 +63,7 @@ public class IntegralRecordController extends BaseController {
     @PreAuthorize("@ss.hasPermi('website:integralRecord:query')")
     @GetMapping(value = "/{integralRecordId}")
     public AjaxResult getInfo(@PathVariable("integralRecordId") Long integralRecordId) {
-        return AjaxResult.success(integralRecordService.selectIntegralRecordByIntegralRecordId(integralRecordId));
+        return success(integralRecordService.selectIntegralRecordByIntegralRecordId(integralRecordId));
     }
 
     /**

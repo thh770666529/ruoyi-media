@@ -101,7 +101,7 @@ public class CollectController extends BaseController {
      */
     @PostMapping("/checkCollectFlag")
     public AjaxResult checkCollectFlag(@RequestBody CheckCollectFlagVO checkCollectFlagVO) {
-        return AjaxResult.success(collectService.checkCollectFlag(checkCollectFlagVO));
+        return success(collectService.checkCollectFlag(checkCollectFlagVO));
     }
 
     /**

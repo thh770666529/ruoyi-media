@@ -64,7 +64,7 @@ public class CollectController extends BaseController {
     @PreAuthorize("@ss.hasPermi('website:collect:query')")
     @GetMapping(value = "/{collectId}")
     public AjaxResult getInfo(@PathVariable("collectId") Long collectId) {
-        return AjaxResult.success(collectService.selectCollectByCollectId(collectId));
+        return success(collectService.selectCollectByCollectId(collectId));
     }
 
     /**

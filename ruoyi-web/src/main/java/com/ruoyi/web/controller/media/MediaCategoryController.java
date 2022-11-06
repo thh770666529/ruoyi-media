@@ -37,6 +37,6 @@ public class MediaCategoryController extends BaseController {
      */
     @GetMapping(value = "/{categoryId}")
     public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId) {
-        return AjaxResult.success(mediaCategoryService.selectMediaCategoryByCategoryId(categoryId));
+        return success(mediaCategoryService.selectMediaCategoryByCategoryId(categoryId));
     }
 }

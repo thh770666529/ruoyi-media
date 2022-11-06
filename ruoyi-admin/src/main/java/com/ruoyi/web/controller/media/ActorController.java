@@ -78,7 +78,7 @@ public class ActorController extends BaseController {
     @PreAuthorize("@ss.hasPermi('media:actor:query')")
     @GetMapping(value = "/{actorId}")
     public AjaxResult getInfo(@PathVariable("actorId") Long actorId) {
-        return AjaxResult.success(actorService.getById(actorId));
+        return success(actorService.getById(actorId));
     }
 
     /**

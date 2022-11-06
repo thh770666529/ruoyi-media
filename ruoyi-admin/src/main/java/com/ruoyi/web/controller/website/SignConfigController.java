@@ -64,7 +64,7 @@ public class SignConfigController extends BaseController {
     @PreAuthorize("@ss.hasPermi('website:signConfig:query')")
     @GetMapping(value = "/{signConfigId}")
     public AjaxResult getInfo(@PathVariable("signConfigId") Long signConfigId) {
-        return AjaxResult.success(signConfigService.selectSignConfigBySignConfigId(signConfigId));
+        return success(signConfigService.selectSignConfigBySignConfigId(signConfigId));
     }
 
     /**

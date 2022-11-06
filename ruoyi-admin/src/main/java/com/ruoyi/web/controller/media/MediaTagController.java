@@ -64,7 +64,7 @@ public class MediaTagController extends BaseController {
     @PreAuthorize("@ss.hasPermi('media:tag:query')")
     @GetMapping(value = "/{tagId}")
     public AjaxResult getInfo(@PathVariable("tagId") Long tagId) {
-        return AjaxResult.success(mediaTagService.selectMediaTagByTagId(tagId));
+        return success(mediaTagService.selectMediaTagByTagId(tagId));
     }
 
     /**

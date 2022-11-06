@@ -64,7 +64,7 @@ public class QuestionController extends BaseController {
     @PreAuthorize("@ss.hasPermi('question:question:query')")
     @GetMapping(value = "/{questionId}")
     public AjaxResult getInfo(@PathVariable("questionId") Long questionId) {
-        return AjaxResult.success(questionService.selectQuestionByQuestionId(questionId));
+        return success(questionService.selectQuestionByQuestionId(questionId));
     }
 
     /**

@@ -64,7 +64,7 @@ public class CollectFolderController extends BaseController {
     @PreAuthorize("@ss.hasPermi('website:collectFolder:query')")
     @GetMapping(value = "/{collectFolderId}")
     public AjaxResult getInfo(@PathVariable("collectFolderId") Long collectFolderId) {
-        return AjaxResult.success(collectFolderService.removeById(collectFolderId));
+        return success(collectFolderService.removeById(collectFolderId));
     }
 
     /**

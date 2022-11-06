@@ -64,7 +64,7 @@ public class CreditsFlowController extends BaseController {
     @PreAuthorize("@ss.hasPermi('website:creditsFlow:query')")
     @GetMapping(value = "/{creditsId}")
     public AjaxResult getInfo(@PathVariable("creditsId") Long creditsId) {
-        return AjaxResult.success(creditsFlowService.selectCreditsFlowByCreditsId(creditsId));
+        return success(creditsFlowService.selectCreditsFlowByCreditsId(creditsId));
     }
 
     /**

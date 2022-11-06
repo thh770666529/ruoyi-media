@@ -58,9 +58,9 @@ public class CommentController extends BaseController {
     public AjaxResult reply(@RequestBody Comment comment) {
         int count = commentService.reply(comment);
         if (count > 0) {
-            return AjaxResult.success(comment);
+            return success(comment);
         } else {
-            return AjaxResult.error();
+            return error();
         }
     }
 
@@ -110,7 +110,7 @@ public class CommentController extends BaseController {
      */
     @GetMapping(value = "/{commentId}")
     public AjaxResult getInfo(@PathVariable("commentId") Long commentId) {
-        return AjaxResult.success(commentService.selectCommentById(commentId));
+        return success(commentService.selectCommentById(commentId));
     }
 
 

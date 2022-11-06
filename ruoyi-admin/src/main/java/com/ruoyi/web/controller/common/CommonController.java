@@ -86,7 +86,7 @@ public class CommonController {
             ajax.put("url", url);
             return ajax;
         } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
+            return error(e.getMessage());
         }
     }
 
@@ -118,7 +118,7 @@ public class CommonController {
             ajax.put("originalFilenames", StringUtils.join(originalFilenames, FILE_DELIMETER));
             return ajax;
         } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
+            return error(e.getMessage());
         }
     }
 
@@ -140,9 +140,9 @@ public class CommonController {
                 return ajax;
             }
         } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
+            return error(e.getMessage());
         }
-        return AjaxResult.error("上传图片异常，请联系管理员");
+        return error("上传图片异常，请联系管理员");
     }
 
 

@@ -42,6 +42,6 @@ public class MediaTagController extends BaseController {
      */
     @GetMapping(value = "/{tagId}")
     public AjaxResult getInfo(@PathVariable("tagId") Long tagId) {
-        return AjaxResult.success(mediaTagService.selectMediaTagByTagId(tagId));
+        return success(mediaTagService.selectMediaTagByTagId(tagId));
     }
 }

@@ -59,7 +59,7 @@ public class SysLogininforController extends BaseController {
     @DeleteMapping("/clean")
     public AjaxResult clean() {
         logininforService.cleanLogininfor();
-        return AjaxResult.success();
+        return success();
     }
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:unlock')")

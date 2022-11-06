@@ -76,7 +76,7 @@ public class SysUserController extends BaseController {
         List<SysUser> userList = util.importExcel(file.getInputStream());
         String operName = getUsername();
         String message = userService.importUser(userList, updateSupport, operName);
-        return AjaxResult.success(message);
+        return success(message);
     }
 
     @PostMapping("/importTemplate")
@@ -113,13 +113,13 @@ public class SysUserController extends BaseController {
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysUser user) {
         if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user))) {
-            return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
+            return error("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
         } else if (StringUtils.isNotEmpty(user.getPhonenumber())
                 && UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user))) {
-            return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
+            return error("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
         } else if (StringUtils.isNotEmpty(user.getEmail())
                 && UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user))) {
-            return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
+            return error("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
         user.setCreateBy(getUsername());
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
@@ -136,10 +136,10 @@ public class SysUserController extends BaseController {
         userService.checkUserAllowed(user);
         if (StringUtils.isNotEmpty(user.getPhonenumber())
                 && UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user))) {
-            return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
+            return error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         } else if (StringUtils.isNotEmpty(user.getEmail())
                 && UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user))) {
-            return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
+            return error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
         user.setUpdateBy(getUsername());
         return toAjax(userService.updateUser(user));
@@ -215,6 +215,6 @@ public class SysUserController extends BaseController {
     @GetMapping("/deptTree")
     public AjaxResult deptTree(SysDept dept)
     {
-        return AjaxResult.success(deptService.selectDeptTreeList(dept));
+        return success(deptService.selectDeptTreeList(dept));
     }
 }

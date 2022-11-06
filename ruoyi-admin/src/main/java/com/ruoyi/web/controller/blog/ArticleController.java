@@ -65,7 +65,7 @@ public class ArticleController extends BaseController {
     @PreAuthorize("@ss.hasPermi('blog:article:query')")
     @GetMapping(value = "/{articleId}")
     public AjaxResult getInfo(@PathVariable("articleId") Long articleId) {
-        return AjaxResult.success(articleService.selectArticleByArticleId(articleId));
+        return success(articleService.selectArticleByArticleId(articleId));
     }
 
     /**
@@ -116,9 +116,9 @@ public class ArticleController extends BaseController {
                 fileData.put("filesize", file.getSize());
                 uploadFileList.add(fileData);
             }
-            return AjaxResult.success(uploadFileList);
+            return success(uploadFileList);
         } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
+            return error(e.getMessage());
         }
     }
 

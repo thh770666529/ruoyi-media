@@ -41,7 +41,7 @@ public class SysDictTypeController extends BaseController {
      */
     @GetMapping(value = "/{dictId}")
     public AjaxResult getInfo(@PathVariable Long dictId) {
-        return AjaxResult.success(dictTypeService.selectDictTypeById(dictId));
+        return success(dictTypeService.selectDictTypeById(dictId));
     }
 
 
@@ -51,6 +51,6 @@ public class SysDictTypeController extends BaseController {
     @GetMapping("/optionselect")
     public AjaxResult optionselect() {
         List<SysDictType> dictTypes = dictTypeService.selectDictTypeAll();
-        return AjaxResult.success(dictTypes);
+        return success(dictTypes);
     }
 }

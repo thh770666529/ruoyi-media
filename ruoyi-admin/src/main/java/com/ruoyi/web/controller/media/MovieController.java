@@ -71,7 +71,7 @@ public class MovieController extends BaseController {
     @PreAuthorize("@ss.hasPermi('media:movie:query')")
     @GetMapping(value = "/{movieId}")
     public AjaxResult getInfo(@PathVariable("movieId") Long movieId) {
-        return AjaxResult.success(movieService.selectMovieById(movieId));
+        return success(movieService.selectMovieById(movieId));
     }
 
     /**
@@ -85,9 +85,9 @@ public class MovieController extends BaseController {
         movieVO.setPublishBy(userId + "");
         int row = movieService.insertMovie(movieVO);
         if (row > 0) {
-            return AjaxResult.success(movieService.selectMovieById(movieVO.getMovieId()));
+            return success(movieService.selectMovieById(movieVO.getMovieId()));
         } else {
-            return AjaxResult.error();
+            return error();
         }
     }
 
@@ -139,9 +139,9 @@ public class MovieController extends BaseController {
             String realVideoPath = RuoYiConfig.getProfile() + url;
             MultimediaInfo videoInfo = VideoUtils.getVideoInfoByFile(realVideoPath);
             UploadVideoVO uploadVideoVO = new UploadVideoVO(url, filename, FileUploadUtils.getExtension(file), file.getSize(), videoInfo.getVideoTime(), VideoStatus.READY_CONVERT.getCode());
-            return AjaxResult.success(uploadVideoVO);
+            return success(uploadVideoVO);
         }
-        return AjaxResult.error("上传视频异常，请联系管理员");
+        return error("上传视频异常，请联系管理员");
     }
 
     @Autowired
@@ -154,6 +154,6 @@ public class MovieController extends BaseController {
     @PostMapping("/uploadVideoByNetWorkDisk")
     public AjaxResult uploadVideoByNetWorkDisk(@RequestBody NetWorkDiskVO netWorkDiskVO) {
         UploadVideoVO uploadVideoVO = videoService.uploadVideoByNetWorkDisk(netWorkDiskVO);
-        return AjaxResult.success(uploadVideoVO);
+        return success(uploadVideoVO);
     }
 }

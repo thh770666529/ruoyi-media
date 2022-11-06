@@ -56,7 +56,7 @@ public class SubjectController extends BaseController {
     @PreAuthorize("@ss.hasPermi('blog:subject:query')")
     @GetMapping(value = "/{subjectId}")
     public AjaxResult getInfo(@PathVariable("subjectId") Long subjectId) {
-        return AjaxResult.success(subjectService.selectSubjectBySubjectId(subjectId));
+        return success(subjectService.selectSubjectBySubjectId(subjectId));
     }
 
     /**

@@ -88,7 +88,7 @@ public class MovieController extends BaseController {
             redisCache.setCacheObject(CacheConstants.MOVIE_CLICK_KEY + movieVO.getMovieId() + "#" + ip, movieVO.getClickCount().toString(),
                     24, TimeUnit.HOURS);
         }
-        return AjaxResult.success(movieVO);
+        return success(movieVO);
     }
 
 
@@ -103,13 +103,13 @@ public class MovieController extends BaseController {
         Map<String, Object> data = new HashMap<>(10);
         data.put("video", video);
         data.put("movie", movieVO);
-        return AjaxResult.success(data);
+        return success(data);
     }
 
     @GetMapping("/getSameTypeMovieList/{movieId}")
     public AjaxResult getSameTypeMovieList(@PathVariable("movieId") Long movieId) {
         log.info("门户获取相关电影");
-        return AjaxResult.success(movieService.getSameTypeMovieList(movieId));
+        return success(movieService.getSameTypeMovieList(movieId));
     }
 
     @Log(title = "校验密码", businessType = BusinessType.PASSWORD)
