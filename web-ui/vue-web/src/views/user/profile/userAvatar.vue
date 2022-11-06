@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="user-info-head" @click="editCropper()"><img v-bind:src="options.img" title="点击上传头像" class="img-circle img-lg" /></div>
-    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body @opened="modalOpened"  @close="closeDialog()">
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body @opened="modalOpened"  @close="closeDialog">
       <el-row>
         <el-col :xs="24" :md="12" :style="{height: '350px'}">
           <vue-cropper
@@ -12,6 +12,7 @@
             :autoCropWidth="options.autoCropWidth"
             :autoCropHeight="options.autoCropHeight"
             :fixedBox="options.fixedBox"
+            :outputType="options.outputType"
             @realTime="realTime"
             v-if="visible"
           />
@@ -24,7 +25,7 @@
       </el-row>
       <br />
       <el-row>
-        <el-col :lg="2" :md="2">
+        <el-col :lg="2" :sm="3" :xs="3">
           <el-upload action="#" :http-request="requestUpload" :show-file-list="false" :before-upload="beforeUpload">
             <el-button size="small">
               选择
@@ -32,19 +33,19 @@
             </el-button>
           </el-upload>
         </el-col>
-        <el-col :lg="{span: 1, offset: 2}" :md="2">
+        <el-col :lg="{span: 1, offset: 2}" :sm="2" :xs="2">
           <el-button icon="el-icon-plus" size="small" @click="changeScale(1)"></el-button>
         </el-col>
-        <el-col :lg="{span: 1, offset: 1}" :md="2">
+        <el-col :lg="{span: 1, offset: 1}" :sm="2" :xs="2">
           <el-button icon="el-icon-minus" size="small" @click="changeScale(-1)"></el-button>
         </el-col>
-        <el-col :lg="{span: 1, offset: 1}" :md="2">
+        <el-col :lg="{span: 1, offset: 1}" :sm="2" :xs="2">
           <el-button icon="el-icon-refresh-left" size="small" @click="rotateLeft()"></el-button>
         </el-col>
-        <el-col :lg="{span: 1, offset: 1}" :md="2">
+        <el-col :lg="{span: 1, offset: 1}" :sm="2" :xs="2">
           <el-button icon="el-icon-refresh-right" size="small" @click="rotateRight()"></el-button>
         </el-col>
-        <el-col :lg="{span: 2, offset: 6}" :md="2">
+        <el-col :lg="{span: 2, offset: 6}" :sm="2" :xs="2">
           <el-button type="primary" size="small" @click="uploadImg()">提 交</el-button>
         </el-col>
       </el-row>
@@ -56,6 +57,7 @@
 import store from "@/store";
 import { VueCropper } from "vue-cropper";
 import { uploadAvatar } from "@/api/system/user";
+import { debounce } from '@/utils'
 
 export default {
   components: { VueCropper },
@@ -77,9 +79,11 @@ export default {
         autoCrop: true, // 是否默认生成截图框
         autoCropWidth: 200, // 默认生成截图框宽度
         autoCropHeight: 200, // 默认生成截图框高度
-        fixedBox: true // 固定截图框大小 不允许改变
+        fixedBox: true, // 固定截图框大小 不允许改变
+        outputType:"png" // 默认生成截图为PNG格式
       },
-      previews: {}
+      previews: {},
+      resizeHandler: null
     };
   },
   methods: {
@@ -90,6 +94,16 @@ export default {
     // 打开弹出层结束时的回调
     modalOpened() {
       this.visible = true;
+      if (!this.resizeHandler) {
+        this.resizeHandler = debounce(() => {
+          this.refresh()
+        }, 100)
+      }
+      window.addEventListener("resize", this.resizeHandler)
+    },
+    // 刷新组件
+    refresh() {
+      this.$refs.cropper.refresh();
     },
     // 覆盖默认的上传行为
     requestUpload() {
@@ -126,7 +140,7 @@ export default {
         formData.append("avatarfile", data);
         uploadAvatar(formData).then(response => {
           this.open = false;
-          this.options.img = this.fileUploadHost + response.imgUrl;
+          this.options.img = process.env.VUE_APP_BASE_API + response.imgUrl;
           store.commit('SET_AVATAR', this.options.img);
           this.$modal.msgSuccess("修改成功");
           this.visible = false;
@@ -140,7 +154,8 @@ export default {
     // 关闭窗口
     closeDialog() {
       this.options.img = store.getters.avatar
-	    this.visible = false;
+      this.visible = false;
+      window.removeEventListener("resize", this.resizeHandler)
     }
   }
 };
@@ -168,38 +183,5 @@ export default {
   cursor: pointer;
   line-height: 110px;
   border-radius: 50%;
-}
-
-/* image */
-.img-circle {
-  border-radius: 50%;
-}
-
-.img-lg {
-  width: 120px;
-  height: 120px;
-}
-
-.avatar-upload-preview {
-  position: absolute;
-  top: 50%;
-  transform: translate(50%, -50%);
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  box-shadow: 0 0 4px #ccc;
-  overflow: hidden;
-}
-
-/* 拖拽列样式 */
-.sortable-ghost{
-  opacity: .8;
-  color: #fff!important;
-  background: #42b983!important;
-}
-
-.top-right-btn {
-  position: relative;
-  float: right;
 }
 </style>
