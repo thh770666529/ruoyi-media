@@ -3,7 +3,7 @@
     <!-- 日志存放路径 -->
     <property name="log.path" value="/home/ruoyi-admin/logs"/>
     <!-- 日志输出格式 -->
-    <property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n"/>
+    <property name="log.pattern" value="%d{HH:mm:ss.SSS} traceId=[%X{traceId}] spanId=[%X{spanId}] [%thread] %-5level %logger{20} - [%method,%line] - %msg%n"/>
 
     <!-- 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -71,23 +71,39 @@
         </encoder>
     </appender>
 
+    <!-- 环境配置 -->
+    <springProperty scope="context" name="plumelog.appName" source="plumelog.appName"/>
+    <springProperty scope="context" name="plumelog.redisHost" source="plumelog.redisHost"/>
+    <springProperty scope="context" name="plumelog.redisPort" source="plumelog.redisPort"/>
+    <springProperty scope="context" name="plumelog.redisAuth" source="plumelog.redisAuth"/>
+    <springProperty scope="context" name="plumelog.redisDb" source="plumelog.redisDb"/>
+    <springProperty scope="context" name="plumelog.env" source="spring.profiles.active"/>
+    <!-- 输出plumelog -->
+    <appender name="plumelog" class="com.plumelog.logback.appender.RedisAppender">
+        <appName>${plumelog.appName}</appName>
+        <redisHost>${plumelog.redisHost}</redisHost>
+        <redisAuth>${plumelog.redisAuth}</redisAuth>
+        <redisDb>${plumelog.redisDb}</redisDb>
+        <env>${plumelog.env}</env>
+    </appender>
+
+
     <!-- 系统模块日志级别控制  -->
     <logger name="com.ruoyi" level="info"/>
     <!-- Spring日志级别控制  -->
     <logger name="org.springframework" level="warn"/>
 
-    <root level="info">
-        <appender-ref ref="console"/>
-    </root>
-
     <!--系统操作日志-->
     <root level="info">
+        <appender-ref ref="console"/>
         <appender-ref ref="file_info"/>
         <appender-ref ref="file_error"/>
+        <appender-ref ref="plumelog"/>
     </root>
 
     <!--系统用户操作日志-->
     <logger name="sys-user" level="info">
         <appender-ref ref="sys-user"/>
+        <appender-ref ref="plumelog"/>
     </logger>
 </configuration> 

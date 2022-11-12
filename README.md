@@ -18,6 +18,7 @@ github地址：https://github.com/thh770666529/ruoyi-media
 - [vue-video-player](https://github.com/surmon-china/vue-video-player)：一款基于 [video.js](https://docs.videojs.com/) 开发的视频播放组件
 - 集成了奇文网盘[qiwen-file](https://gitee.com/qiwen-cloud/qiwen-file)
 - 后台管理系统模块增加了资源管理模块、媒资管理模块、站点配置模块、博客模块、问答模块
+- 集成plumelog日志，计划去除原sysLog日志。日志统一在plumelog上查看。
 
 
 

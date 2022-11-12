@@ -96,5 +96,8 @@ xss:
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
 
-
+plumelog:
+  appName: ruoyi-media-admin
+  redisHost: 127.0.0.1:6379
+  redisAuth:
 
