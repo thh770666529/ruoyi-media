@@ -392,7 +392,7 @@ public class FileController extends BaseController {
         userFileLambdaQueryWrapper.eq(UserFile::getUserId, userFile.getUserId())
                 .eq(UserFile::getFilePath, userFile.getFilePath())
                 .eq(UserFile::getDeleteFlag, 0);
-        int total = userFileService.count(userFileLambdaQueryWrapper);
+        long total = userFileService.count(userFileLambdaQueryWrapper);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", total);

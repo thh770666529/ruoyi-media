@@ -113,10 +113,9 @@
                 <p>演员</p>
                 <div class="start" :key="index" v-for="(item,index) in actorList">
                   <router-link :to="'/actor/' + item.actorId" tag="a" :title="item.name" target="_blank" active-class="fsize20 #333" exact>
-                    <img class="default-img" :alt="item.name" :src="fileUploadHost + item.avatar">
+                    <ImagePreview width="128px" height="170px" :alt="item.name" :src="`${item.avatar}`"></ImagePreview>
                     <p>{{item.name | ellipsis(10) }}</p>
                   </router-link>
-                  <!--<p>饰:森鸟帆高</p>-->
                 </div>
                 <span  style="color:#ef4238"  v-if="actorList.length === 0">
                   演员信息未录入
@@ -138,7 +137,8 @@
                 </div>
               </div>
               <div class="images-aside"  >
-                <el-image  class="default-img" v-for="(file, index) in movieImagesList" :key="index" :src="`${fileUploadHost}${file.url}`" ></el-image>
+                <!--        剧照        -->
+                <ImagePreview width="128px" height="170px" :src="`${movie.stills}`"></ImagePreview>
               </div>
             </div>
           </el-tab-pane>
@@ -172,7 +172,15 @@
               <li class="othermovie-model" :key="index" v-for="(item,index) in sameTypeMovieList">
                 <a :href="`/movie/` + item.movieId">
                   <div class="movie-poster">
-                    <img v-if="item.images" :alt="item.title" :src="fileUploadHost + item.images">
+                    <el-image
+                      fit="cover"
+                      :alt="item.name"
+                      :src="fileUploadHost + item.images"
+                      :style="`width:128px;height:170px;margin: 0 8px 8px 0;`">
+                      <div slot="error" class="image-slot">
+                        <i class="el-icon-picture-outline"></i>
+                      </div>
+                    </el-image>
                   </div>
                   <p>{{item.title}}</p>
                 </a>
@@ -242,30 +250,10 @@ export default {
         if (this.videoList.length > 0 ) {
           this.video = this.videoList[0]
         }
-        //获取剧照
-        this.getStills(this.movie.stills);
       });
       movieApi.getSameTypeMovieList(this.movieId).then(response => {
         this.sameTypeMovieList = response.data;
       });
-    },
-    getStills(val){
-      if (val) {
-        let temp = 1;
-        // 首先将值转为数组
-        const list = val.split(',');
-        // 然后将数组转为对象数组
-        this.movieImagesList = list.map(item => {
-          if (typeof item === "string") {
-            item = { name: item, url: item };
-          }
-          item.uid = item.uid || new Date().getTime() + temp++;
-          return item;
-        });
-      } else {
-        this.movieImagesList = [];
-        return [];
-      }
     },
     //播放
     play(videoId){
