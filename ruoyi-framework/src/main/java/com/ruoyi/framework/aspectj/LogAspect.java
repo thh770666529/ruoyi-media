@@ -6,6 +6,7 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.enums.BusinessStatus;
 import com.ruoyi.common.enums.HttpMethod;
+import com.ruoyi.common.filter.PropertyPreExcludeFilter;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -38,6 +39,9 @@ import java.util.Map;
 @Component
 public class LogAspect {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
+
+    /** 排除敏感属性字段 */
+    public static final String[] EXCLUDE_PROPERTIES = { "password", "oldPassword", "newPassword", "confirmPassword" };
 
     /**
      * 处理完请求后执行
@@ -72,7 +76,7 @@ public class LogAspect {
             // 请求的地址
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             operLog.setOperIp(ip);
-            operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
+            operLog.setOperUrl(StringUtils.substring(ServletUtils.getRequest().getRequestURI(), 0, 255));
             if (loginUser != null) {
                 operLog.setOperName(loginUser.getUsername());
             }
@@ -145,19 +149,27 @@ public class LogAspect {
      * 参数拼装
      */
     private String argsArrayToString(Object[] paramsArray) {
-        String params = "";
+        StringBuilder params = new StringBuilder();
         if (paramsArray != null && paramsArray.length > 0) {
             for (Object o : paramsArray) {
                 if (StringUtils.isNotNull(o) && !isFilterObject(o)) {
                     try {
-                        Object jsonObj = JSON.toJSON(o);
-                        params += jsonObj.toString() + " ";
+                        String jsonObj = JSON.toJSONString(o, excludePropertyPreFilter());
+                        params.append(jsonObj.toString()).append(" ");
                     } catch (Exception e) {
                     }
                 }
             }
         }
-        return params.trim();
+        return params.toString().trim();
+    }
+
+    /**
+     * 忽略敏感属性
+     */
+    public PropertyPreExcludeFilter excludePropertyPreFilter()
+    {
+        return new PropertyPreExcludeFilter().addExcludes(EXCLUDE_PROPERTIES);
     }
 
     /**

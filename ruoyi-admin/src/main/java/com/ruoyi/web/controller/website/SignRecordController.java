@@ -64,7 +64,7 @@ public class SignRecordController extends BaseController {
     @PreAuthorize("@ss.hasPermi('website:signRecord:query')")
     @GetMapping(value = "/{signRecordId}")
     public AjaxResult getInfo(@PathVariable("signRecordId") Long signRecordId) {
-        return AjaxResult.success(signRecordService.selectSignRecordBySignRecordId(signRecordId));
+        return success(signRecordService.selectSignRecordBySignRecordId(signRecordId));
     }
 
     /**

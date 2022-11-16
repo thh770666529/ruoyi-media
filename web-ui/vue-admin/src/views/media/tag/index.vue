@@ -163,7 +163,7 @@
   import { listTag, getTag, delTag, addTag, updateTag } from "@/api/media/tag";
 
   export default {
-    name: "Tag",
+    name: "MediaTag",
     dicts: ['common_switch'],
     data() {
       return {

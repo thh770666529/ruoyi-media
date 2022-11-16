@@ -509,8 +509,8 @@ export default {
       },
       uploadLocalArticleHost: process.env.VUE_APP_BASE_API + '/blog/article/uploadLocalFile',
       uploadLocalImageList: [],
-      //上传多文件URL
-      commonUploadFileListUrl: process.env.VUE_APP_BASE_API + '/common/uploadFileList',
+      //上传文章图片URL
+      commonUploadFileListUrl: process.env.VUE_APP_BASE_API + '/blog/article/uploadFileList',
       localUploadFileUrl: '',
       localUploadVisible: false, // 是否显示本地上传弹出层
       multipleSelection: [], //多选，用于批量下载markDown
@@ -913,8 +913,8 @@ export default {
             let data = res.data;
             this.uploadLocalImageList = data.map((file) => {
               return {
-                fileName: file.fileName,
-                fileOldName: file.fileOldName,
+                newFileName: file.newFileName,
+                originalFilenames: file.originalFilenames,
                 filesize: file.filesize,
                 url: this.fileUploadHost + file.url
               };

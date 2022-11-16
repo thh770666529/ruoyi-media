@@ -21,7 +21,8 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css' //样式
 import globalFunction from '@/utils/globalFunction'
 import plugins from './plugins' // plugins
-
+// 图片预览组件
+import ImagePreview from "@/components/ImagePreview"
 
 Vue.config.devtools = process.env.VUE_APP_ENV === 'dev' || process.env.VUE_APP_ENV === 'stage'
 Vue.config.silent = process.env.VUE_APP_ENV === 'prod'
@@ -56,6 +57,7 @@ Vue.component('FourthRecommend', FourthRecommend);
 Vue.component('HotArticle', HotArticle);
 Vue.component('Comment', Comment);
 Vue.component('Collect', Collect);
+Vue.component('ImagePreview', ImagePreview);
 
 for(let key in globalFunction) {
   Vue.prototype[key] = globalFunction[key]

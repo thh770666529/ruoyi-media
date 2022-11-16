@@ -82,7 +82,7 @@ public class FileController extends BaseController {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         List<UserFile> userFiles = userFileService.selectUserFileByNameAndPath(createFileDto.getFileName(), createFileDto.getFilePath(), loginUser.getUserId());
         if (userFiles != null && !userFiles.isEmpty()) {
-            return AjaxResult.error(("同名文件已存在"));
+            return error(("同名文件已存在"));
         }
 
         UserFile userFile = new UserFile();
@@ -95,7 +95,7 @@ public class FileController extends BaseController {
 
         userFileService.save(userFile);
         //fileDealComp.uploadESByUserFileId(userFile.getUserFileId());
-        return AjaxResult.success();
+        return success();
     }
 
 
@@ -108,7 +108,7 @@ public class FileController extends BaseController {
 
         List<UserFile> userFiles = userFileService.selectUserFileByNameAndPath(renameFileDto.getFileName(), renameFileDto.getFilePath(), loginUser.getUserId());
         if (userFiles != null && !userFiles.isEmpty()) {
-            return AjaxResult.error("同名文件已存在");
+            return error("同名文件已存在");
         }
 
         if (1 == userFile.getIsDir()) {
@@ -151,7 +151,7 @@ public class FileController extends BaseController {
 
         }
         fileDealComp.uploadESByUserFileId(renameFileDto.getUserFileId());
-        return AjaxResult.success();
+        return success();
     }
 
 
@@ -168,7 +168,7 @@ public class FileController extends BaseController {
             userFileService.deleteUserFile(userFile.getUserFileId(), loginUser.getUserId());
             fileDealComp.deleteESByUserFileId(userFile.getUserFileId());
         }
-        return AjaxResult.success("批量删除文件成功");
+        return success("批量删除文件成功");
     }
 
 
@@ -179,7 +179,7 @@ public class FileController extends BaseController {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         userFileService.deleteUserFile(deleteFileDto.getUserFileId(), loginUser.getUserId());
         fileDealComp.deleteESByUserFileId(deleteFileDto.getUserFileId());
-        return AjaxResult.success();
+        return success();
 
     }
 
@@ -195,7 +195,7 @@ public class FileController extends BaseController {
         String unzipUrl = zipFileUrl.replace("." + extendName, "");
         String[] arr = unzipFileDto.getFileUrl().split("\\.");
         if (arr.length <= 1) {
-            return AjaxResult.error("文件名格式错误！");
+            return error("文件名格式错误！");
         }
         List<String> fileEntryNameList = new ArrayList<>();
         if ("zip".equals(arr[1])) {
@@ -206,12 +206,12 @@ public class FileController extends BaseController {
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("rar解压失败" + e);
-                return AjaxResult.error("rar解压失败！");
+                return error("rar解压失败！");
 
 
             }
         } else {
-            return AjaxResult.error("不支持的文件格式！");
+            return error("不支持的文件格式！");
         }
 
         List<FileBean> fileBeanList = new ArrayList<>();
@@ -254,7 +254,7 @@ public class FileController extends BaseController {
             });
 
         }
-        return AjaxResult.success();
+        return success();
 
     }
 
@@ -269,7 +269,7 @@ public class FileController extends BaseController {
         String fileName = moveFileDto.getFileName();
         String extendName = moveFileDto.getExtendName();
         userFileService.updateFilepathByFilepath(oldfilePath, newfilePath, fileName, extendName, loginUser.getUserId());
-        return AjaxResult.success();
+        return success();
 
     }
 
@@ -285,7 +285,7 @@ public class FileController extends BaseController {
         for (UserFile userFile : fileList) {
             userFileService.updateFilepathByFilepath(userFile.getFilePath(), newfilePath, userFile.getFileName(), userFile.getExtendName(), loginUser.getUserId());
         }
-        return AjaxResult.success("批量移动文件成功");
+        return success("批量移动文件成功");
 
     }
 
@@ -322,7 +322,7 @@ public class FileController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("total", total);
         map.put("list", fileList);
-        return AjaxResult.success(map);
+        return success(map);
 
     }
 
@@ -367,7 +367,7 @@ public class FileController extends BaseController {
                 return (int) i;
             }
         });
-        return AjaxResult.success(resultTreeNode);
+        return success(resultTreeNode);
 
     }
 
@@ -392,12 +392,12 @@ public class FileController extends BaseController {
         userFileLambdaQueryWrapper.eq(UserFile::getUserId, userFile.getUserId())
                 .eq(UserFile::getFilePath, userFile.getFilePath())
                 .eq(UserFile::getDeleteFlag, 0);
-        int total = userFileService.count(userFileLambdaQueryWrapper);
+        long total = userFileService.count(userFileLambdaQueryWrapper);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", total);
         map.put("list", fileList);
-        return AjaxResult.success(map);
+        return success(map);
 
     }
 
@@ -405,7 +405,7 @@ public class FileController extends BaseController {
     @GetMapping("/search")
     public AjaxResult searchFile(SearchFileDTO searchFileDTO) {
 
-        return AjaxResult.success("文件搜索");
+        return success("文件搜索");
     }
 
 }

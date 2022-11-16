@@ -4,9 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.file.MimeTypeUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/common")
-public class CommonController {
+public class CommonController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
 
     @Autowired
@@ -86,30 +86,7 @@ public class CommonController {
             ajax.put("url", url);
             return ajax;
         } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
-        }
-    }
-
-    /**
-     * 通用上传请求
-     */
-    @PostMapping("/uploadFileList")
-    public AjaxResult uploadFile(List<MultipartFile> fileList) throws Exception {
-        try {
-            String filePath = RuoYiConfig.getUploadPath();
-            List<Map<String, Object>> uploadFileList = new ArrayList<>();
-            for (MultipartFile file : fileList) {
-                String url = FileUploadUtils.upload2(filePath, file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
-                Map<String, Object> fileData = new HashMap<>();
-                fileData.put("fileName", FilenameUtils.getName(url));
-                fileData.put("fileOldName", file.getOriginalFilename());
-                fileData.put("filesize", file.getSize());
-                fileData.put("url", url);
-                uploadFileList.add(fileData);
-            }
-            return AjaxResult.success(uploadFileList);
-        } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
+            return error(e.getMessage());
         }
     }
 
@@ -141,7 +118,7 @@ public class CommonController {
             ajax.put("originalFilenames", StringUtils.join(originalFilenames, FILE_DELIMETER));
             return ajax;
         } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
+            return error(e.getMessage());
         }
     }
 
@@ -163,9 +140,9 @@ public class CommonController {
                 return ajax;
             }
         } catch (Exception e) {
-            return AjaxResult.error(e.getMessage());
+            return error(e.getMessage());
         }
-        return AjaxResult.error("上传图片异常，请联系管理员");
+        return error("上传图片异常，请联系管理员");
     }
 
 

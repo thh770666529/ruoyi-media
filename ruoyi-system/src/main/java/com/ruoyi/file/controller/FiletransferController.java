@@ -80,7 +80,7 @@ public class FiletransferController extends BaseController {
 
         boolean isCheckSuccess = storageService.checkStorage(loginUser.getUserId(), uploadFileDto.getTotalSize());
         if (!isCheckSuccess) {
-            return AjaxResult.error("存储空间不足");
+            return error("存储空间不足");
         }
 
         UploadFileVo uploadFileVo = new UploadFileVo();
@@ -114,7 +114,7 @@ public class FiletransferController extends BaseController {
 
             }
         }
-        return AjaxResult.success(uploadFileVo);
+        return success(uploadFileVo);
     }
 
 
@@ -124,7 +124,7 @@ public class FiletransferController extends BaseController {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         filetransferService.uploadFile(request, uploadFileDto, loginUser.getUserId());
         UploadFileVo uploadFileVo = new UploadFileVo();
-        return AjaxResult.success(uploadFileVo);
+        return success(uploadFileVo);
 
     }
 
@@ -229,7 +229,7 @@ public class FiletransferController extends BaseController {
         storage.setStorageSize(storageSize);
         Long totalStorageSize = storageService.getTotalStorageSize(loginUser.getUserId());
         storage.setTotalStorageSize(totalStorageSize);
-        return AjaxResult.success(storage);
+        return success(storage);
 
     }
 

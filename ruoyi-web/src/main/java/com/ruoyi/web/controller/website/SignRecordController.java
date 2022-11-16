@@ -42,7 +42,7 @@ public class SignRecordController extends BaseController {
      */
     @GetMapping("/getSignRecord")
     public AjaxResult getSignRecord() {
-        return AjaxResult.success(signRecordService.getSignRecord());
+        return success(signRecordService.getSignRecord());
     }
 
     /**
@@ -50,7 +50,7 @@ public class SignRecordController extends BaseController {
      */
     @PostMapping("/signIn")
     public AjaxResult signIn() {
-        return AjaxResult.success(signRecordService.sign());
+        return success(signRecordService.sign());
     }
 
 }

@@ -4,6 +4,7 @@ import com.google.code.kaptcha.Producer;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.utils.sign.Base64;
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @author ruoyi
  */
 @RestController
-public class CaptchaController {
+public class CaptchaController extends BaseController {
     @Resource(name = "captchaProducer")
     private Producer captchaProducer;
 
@@ -78,7 +79,7 @@ public class CaptchaController {
         try {
             ImageIO.write(image, "jpg", os);
         } catch (IOException e) {
-            return AjaxResult.error(e.getMessage());
+            return error(e.getMessage());
         }
 
         ajax.put("uuid", uuid);

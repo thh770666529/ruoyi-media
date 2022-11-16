@@ -46,6 +46,15 @@ spring:
       # 热部署开关
       enabled: true
 
+# 用户配置
+user:
+  password:
+    # 密码最大错误次数
+    maxRetryCount: 5
+    # 密码锁定时间（默认10分钟）
+    lockTime: 10
+
+
 # token配置
 token:
   # 令牌自定义标识
@@ -88,3 +97,7 @@ xss:
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
 
+plumelog:
+  appName: ruoyi-media-web
+  redisHost: 127.0.0.1:6379
+  redisAuth:

@@ -72,6 +72,6 @@ public class ActorController extends BaseController {
             redisCache.setCacheObject(CacheConstants.ACTOR_CLICK_KEY + actor.getActorId() + "#" + ip, actor.getClickCount().toString(),
                     24, TimeUnit.HOURS);
         }
-        return AjaxResult.success(actor);
+        return success(actor);
     }
 }

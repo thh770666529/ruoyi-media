@@ -41,6 +41,6 @@ public class SysNoticeController extends BaseController {
      */
     @GetMapping(value = "/{noticeId}")
     public AjaxResult getInfo(@PathVariable Long noticeId) {
-        return AjaxResult.success(noticeService.selectNoticeById(noticeId));
+        return success(noticeService.selectNoticeById(noticeId));
     }
 }

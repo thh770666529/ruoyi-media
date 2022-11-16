@@ -38,6 +38,6 @@ public class CategoryController extends BaseController {
      */
     @GetMapping(value = "/{categoryId}")
     public AjaxResult getInfo(@PathVariable("categoryId") Long categoryId) {
-        return AjaxResult.success(categoryService.selectCategoryByCategoryId(categoryId));
+        return success(categoryService.selectCategoryByCategoryId(categoryId));
     }
 }

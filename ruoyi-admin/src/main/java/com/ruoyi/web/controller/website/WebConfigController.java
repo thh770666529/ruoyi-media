@@ -55,7 +55,7 @@ public class WebConfigController extends BaseController {
     @Log(title = "getWebConfig", businessType = BusinessType.OTHER)
     @PostMapping("/getWebConfig")
     public AjaxResult getWebConfig() {
-        return AjaxResult.success(webConfigService.getWebConfig());
+        return success(webConfigService.getWebConfig());
     }
 
 

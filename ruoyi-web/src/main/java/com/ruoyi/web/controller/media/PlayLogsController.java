@@ -64,7 +64,7 @@ public class PlayLogsController extends BaseController {
      */
     @PostMapping("/getPlayLogs")
     public AjaxResult getPlayLogs(@RequestBody PlayLogs playLogs) {
-        return AjaxResult.success(playLogsService.selectPlayLogsByVideoId(playLogs.getVideoId()));
+        return success(playLogsService.selectPlayLogsByVideoId(playLogs.getVideoId()));
     }
 
     /**

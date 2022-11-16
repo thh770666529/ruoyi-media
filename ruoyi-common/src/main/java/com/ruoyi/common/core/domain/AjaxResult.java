@@ -100,6 +100,27 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
+     * 返回警告消息
+     *
+     * @param msg 返回内容
+     * @return 警告消息
+     */
+    public static AjaxResult warn(String msg) {
+        return AjaxResult.warn(msg, null);
+    }
+
+    /**
+     * 返回警告消息
+     *
+     * @param msg  返回内容
+     * @param data 数据对象
+     * @return 警告消息
+     */
+    public static AjaxResult warn(String msg, Object data) {
+        return new AjaxResult(HttpStatus.WARN, msg, data);
+    }
+
+    /**
      * 返回错误消息
      *
      * @return
@@ -141,11 +162,11 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
-     * 链式调用
+     * 方便链式调用
      *
      * @param key   键
-     * @param value 内容
-     * @return 警告消息
+     * @param value 值
+     * @return 数据对象
      */
     @Override
     public AjaxResult put(String key, Object value) {

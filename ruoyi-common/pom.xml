@@ -131,13 +131,11 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
-
         <!-- mybatis-plus 增强CRUD -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
-
 
         <!-- 解析HTML -->
         <dependency>
@@ -148,14 +146,12 @@
         <dependency>
             <groupId>com.github.junrar</groupId>
             <artifactId>junrar</artifactId>
-            <version>7.4.0</version>
         </dependency>
 
         <!--图片压缩-->
         <dependency>
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
-            <version>0.4.13</version>
         </dependency>
 
         <!--hutool-->
@@ -174,14 +170,12 @@
         <dependency>
             <groupId>me.zhyd.oauth</groupId>
             <artifactId>JustAuth</artifactId>
-            <version>${JustAuth.version}</version>
         </dependency>
 
         <!--Markdown 转 Html-->
         <dependency>
             <groupId>com.vladsch.flexmark</groupId>
             <artifactId>flexmark-all</artifactId>
-            <version>${flexmark.version}</version>
         </dependency>
 
         <!-- 拼音库 -->

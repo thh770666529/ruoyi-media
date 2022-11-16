@@ -2,7 +2,9 @@
 
 借助**ruoyi**这个平台开发一套资源平台。直接采用了[RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue)前后端分离基础平台。打造一款开源的电影视频平台，集成了奇文网盘，涉及了电影 博客 问答多个模块。后台和门户用的都是vue+springboot
 
+gitee地址： https://gitee.com/tanhuihuang/ruoyi-media
 
+github地址：https://github.com/thh770666529/ruoyi-media
 
 ## 技术要点
 
@@ -16,6 +18,7 @@
 - [vue-video-player](https://github.com/surmon-china/vue-video-player)：一款基于 [video.js](https://docs.videojs.com/) 开发的视频播放组件
 - 集成了奇文网盘[qiwen-file](https://gitee.com/qiwen-cloud/qiwen-file)
 - 后台管理系统模块增加了资源管理模块、媒资管理模块、站点配置模块、博客模块、问答模块
+- 集成plumelog日志，计划去除原sysLog日志。日志统一在plumelog上查看。
 
 
 

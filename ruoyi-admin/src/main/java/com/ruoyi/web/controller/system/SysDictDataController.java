@@ -67,7 +67,7 @@ public class SysDictDataController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:dict:query')")
     @GetMapping(value = "/{dictCode}")
     public AjaxResult getInfo(@PathVariable Long dictCode) {
-        return AjaxResult.success(dictDataService.selectDictDataById(dictCode));
+        return success(dictDataService.selectDictDataById(dictCode));
     }
 
     /**
@@ -79,7 +79,7 @@ public class SysDictDataController extends BaseController {
         if (StringUtils.isNull(data)) {
             data = new ArrayList<SysDictData>();
         }
-        return AjaxResult.success(data);
+        return success(data);
     }
 
     /**
@@ -128,6 +128,6 @@ public class SysDictDataController extends BaseController {
             List<SysDictData> sysDictData = dictTypeService.selectDictDataByType(dictType);
             data.put(dictType, sysDictData);
         }
-        return AjaxResult.success(data);
+        return success(data);
     }
 }

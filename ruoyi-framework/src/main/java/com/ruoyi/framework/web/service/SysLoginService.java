@@ -2,17 +2,14 @@ package com.ruoyi.framework.web.service;
 
 import javax.annotation.Resource;
 
-import com.ruoyi.common.constant.CacheConstants;
-import com.ruoyi.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
@@ -24,9 +21,11 @@ import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.MessageUtils;
 import com.ruoyi.common.utils.ServletUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.ip.IpUtils;
 import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
+import com.ruoyi.framework.security.context.AuthenticationContextHolder;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
 
@@ -52,6 +51,9 @@ public class SysLoginService {
     @Autowired
     private ISysConfigService configService;
 
+    @Autowired
+    private SysPermissionService permissionService;
+
     /**
      * 登录验证
      *
@@ -70,9 +72,10 @@ public class SysLoginService {
         // 用户验证
         Authentication authentication = null;
         try {
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+            AuthenticationContextHolder.setContext(authenticationToken);
             // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
-            authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            authentication = authenticationManager.authenticate(authenticationToken);
         } catch (Exception e) {
             if (e instanceof BadCredentialsException) {
                 AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
@@ -81,6 +84,8 @@ public class SysLoginService {
                 AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, e.getMessage()));
                 throw new ServiceException(e.getMessage());
             }
+        } finally {
+            AuthenticationContextHolder.clearContext();
         }
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
@@ -88,9 +93,6 @@ public class SysLoginService {
         // 生成token
         return tokenService.createToken(loginUser);
     }
-
-    @Autowired
-    private SysPermissionService permissionService;
 
     /**
      * 登录验证
@@ -122,6 +124,7 @@ public class SysLoginService {
         return tokenService.createToken(loginUser2);
     }
 
+
     /**
      * 校验验证码
      *
@@ -146,6 +149,8 @@ public class SysLoginService {
 
     /**
      * 记录登录信息
+     *
+     * @param userId 用户ID
      */
     public void recordLoginInfo(Long userId) {
         SysUser sysUser = new SysUser();

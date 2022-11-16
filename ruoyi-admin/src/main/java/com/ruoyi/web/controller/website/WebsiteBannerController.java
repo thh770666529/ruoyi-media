@@ -64,7 +64,7 @@ public class WebsiteBannerController extends BaseController {
     @PreAuthorize("@ss.hasPermi('website:banner:query')")
     @GetMapping(value = "/{bannerId}")
     public AjaxResult getInfo(@PathVariable("bannerId") Long bannerId) {
-        return AjaxResult.success(websiteBannerService.selectWebsiteBannerById(bannerId));
+        return success(websiteBannerService.selectWebsiteBannerById(bannerId));
     }
 
     /**

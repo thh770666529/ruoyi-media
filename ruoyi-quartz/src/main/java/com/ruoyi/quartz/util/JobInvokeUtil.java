@@ -1,13 +1,13 @@
 package com.ruoyi.quartz.util;
 
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.utils.spring.SpringUtils;
-import com.ruoyi.quartz.domain.SysJob;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.spring.SpringUtils;
+import com.ruoyi.quartz.domain.SysJob;
 
 /**
  * 任务执行工具
@@ -46,10 +46,10 @@ public class JobInvokeUtil {
             throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
         if (StringUtils.isNotNull(methodParams) && methodParams.size() > 0) {
-            Method method = bean.getClass().getDeclaredMethod(methodName, getMethodParamsType(methodParams));
+            Method method = bean.getClass().getMethod(methodName, getMethodParamsType(methodParams));
             method.invoke(bean, getMethodParamsValue(methodParams));
         } else {
-            Method method = bean.getClass().getDeclaredMethod(methodName);
+            Method method = bean.getClass().getMethod(methodName);
             method.invoke(bean);
         }
     }

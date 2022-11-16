@@ -3,11 +3,15 @@ package com.ruoyi.web.controller.blog;
 import com.ruoyi.blog.domain.Article;
 import com.ruoyi.blog.service.IArticleService;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.file.FileUploadUtils;
+import com.ruoyi.common.utils.file.MimeTypeUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 博客文章Controller
@@ -58,7 +65,7 @@ public class ArticleController extends BaseController {
     @PreAuthorize("@ss.hasPermi('blog:article:query')")
     @GetMapping(value = "/{articleId}")
     public AjaxResult getInfo(@PathVariable("articleId") Long articleId) {
-        return AjaxResult.success(articleService.selectArticleByArticleId(articleId));
+        return success(articleService.selectArticleByArticleId(articleId));
     }
 
     /**
@@ -91,6 +98,33 @@ public class ArticleController extends BaseController {
         return toAjax(articleService.deleteArticleByArticleIds(articleIds));
     }
 
+    /**
+     * 通用上传请求
+     */
+    @PostMapping("/uploadFileList")
+    public AjaxResult uploadFile(List<MultipartFile> fileList) throws Exception {
+        try {
+            String filePath = RuoYiConfig.getUploadPath();
+            List<Map<String, Object>> uploadFileList = new ArrayList<>();
+            for (MultipartFile file : fileList) {
+                String url = FileUploadUtils.upload2(filePath, file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
+                Map<String, Object> fileData = new HashMap<>();
+                fileData.put("url", url);
+                fileData.put("fileName", FilenameUtils.getName(url));
+                fileData.put("newFileName", FilenameUtils.getName(url));
+                fileData.put("originalFilenames", file.getOriginalFilename());
+                fileData.put("filesize", file.getSize());
+                uploadFileList.add(fileData);
+            }
+            return success(uploadFileList);
+        } catch (Exception e) {
+            return error(e.getMessage());
+        }
+    }
+
+    /**
+     * 上传本地文章
+     */
     @Log(title = "博客文章", businessType = BusinessType.INSERT)
     @PostMapping("/uploadLocalFile")
     public AjaxResult uploadPics(@RequestBody List<MultipartFile> fileList) throws IOException {

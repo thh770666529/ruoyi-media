@@ -46,7 +46,7 @@ public class RecoveryFileController extends BaseController {
         UserFile userFile = userFileService.getById(recoveryFile.getUserFileId());
         recoveryFileService.deleteRecoveryFile(userFile);
         recoveryFileService.removeById(deleteRecoveryFileDTO.getRecoveryFileId());
-        return AjaxResult.success("删除成功");
+        return success("删除成功");
     }
 
 
@@ -64,7 +64,7 @@ public class RecoveryFileController extends BaseController {
             recoveryFileService.deleteRecoveryFile(userFile);
             recoveryFileService.removeById(recoveryFile.getRecoveryFileId());
         }
-        return AjaxResult.success("批量删除成功");
+        return success("批量删除成功");
     }
 
     @Log(title = "回收文件列表", businessType = BusinessType.File)
@@ -83,7 +83,7 @@ public class RecoveryFileController extends BaseController {
     public AjaxResult restoreFile(@RequestBody RestoreFileDTO restoreFileDto) {
         LoginUser loginUser = tokenUtil.getLoginUser(ServletUtils.getRequest());
         recoveryFileService.restorefile(restoreFileDto.getDeleteBatchNum(), restoreFileDto.getFilePath(), loginUser.getUserId());
-        return AjaxResult.success("还原成功！");
+        return success("还原成功！");
     }
 
 }

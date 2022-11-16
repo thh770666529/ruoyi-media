@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.core.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ import com.ruoyi.system.service.ISysConfigService;
  * @author ruoyi
  */
 @RestController
-public class CaptchaController {
+public class CaptchaController extends BaseController {
     @Resource(name = "captchaProducer")
     private Producer captchaProducer;
 
@@ -77,7 +78,7 @@ public class CaptchaController {
         try {
             ImageIO.write(image, "jpg", os);
         } catch (IOException e) {
-            return AjaxResult.error(e.getMessage());
+            return error(e.getMessage());
         }
 
         ajax.put("uuid", uuid);

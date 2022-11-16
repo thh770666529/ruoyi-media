@@ -37,6 +37,6 @@ public class TagController extends BaseController {
      */
     @GetMapping(value = "/{tagId}")
     public AjaxResult getInfo(@PathVariable("tagId") Long tagId) {
-        return AjaxResult.success(tagService.selectTagByTagId(tagId));
+        return success(tagService.selectTagByTagId(tagId));
     }
 }

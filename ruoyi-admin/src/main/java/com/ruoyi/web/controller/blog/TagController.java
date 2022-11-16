@@ -56,7 +56,7 @@ public class TagController extends BaseController {
     @PreAuthorize("@ss.hasPermi('blog:tag:query')")
     @GetMapping(value = "/{tagId}")
     public AjaxResult getInfo(@PathVariable("tagId") Long tagId) {
-        return AjaxResult.success(tagService.selectTagByTagId(tagId));
+        return success(tagService.selectTagByTagId(tagId));
     }
 
     /**

@@ -39,7 +39,8 @@ public class SysRegisterService {
      */
     public String register(RegisterBody registerBody) {
         String msg = "", username = registerBody.getUsername(), password = registerBody.getPassword();
-
+        SysUser sysUser = new SysUser();
+        sysUser.setUserName(username);
         boolean captchaEnabled = configService.selectCaptchaEnabled();
         // 验证码开关
         if (captchaEnabled) {
@@ -56,11 +57,9 @@ public class SysRegisterService {
         } else if (password.length() < UserConstants.PASSWORD_MIN_LENGTH
                 || password.length() > UserConstants.PASSWORD_MAX_LENGTH) {
             msg = "密码长度必须在5到20个字符之间";
-        } else if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(username))) {
+        } else if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(sysUser))) {
             msg = "保存用户'" + username + "'失败，注册账号已存在";
         } else {
-            SysUser sysUser = new SysUser();
-            sysUser.setUserName(username);
             sysUser.setNickName(username);
             sysUser.setPassword(SecurityUtils.encryptPassword(registerBody.getPassword()));
             boolean regFlag = userService.registerUser(sysUser);

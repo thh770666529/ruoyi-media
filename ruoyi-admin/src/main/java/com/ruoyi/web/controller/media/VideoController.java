@@ -68,7 +68,7 @@ public class VideoController extends BaseController {
     @PreAuthorize("@ss.hasPermi('media:video:query')")
     @GetMapping(value = "/{videoId}")
     public AjaxResult getInfo(@PathVariable("videoId") Long videoId) {
-        return AjaxResult.success(videoService.getById(videoId));
+        return success(videoService.getById(videoId));
     }
 
     /**

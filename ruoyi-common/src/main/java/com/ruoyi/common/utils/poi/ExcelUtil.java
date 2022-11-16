@@ -594,16 +594,20 @@ public class ExcelUtil<T> {
         int endNo = Math.min(startNo + sheetSize, list.size());
         int rowNo = (1 + rownum) - startNo;
         for (int i = startNo; i < endNo; i++) {
-            rowNo = i > 1 ? rowNo + 1 : rowNo + i;
+            rowNo = isSubList() ? (i > 1 ? rowNo + 1 : rowNo + i) : i + 1 + rownum - startNo;
             row = sheet.createRow(rowNo);
             // 得到导出对象.
             T vo = (T) list.get(i);
             Collection<?> subList = null;
-            if (isSubListValue(vo)) {
-                subList = getListCellValue(vo);
-                subMergedLastRowNum = subMergedLastRowNum + subList.size();
+            if (isSubList()) {
+                if (isSubListValue(vo)) {
+                    subList = getListCellValue(vo);
+                    subMergedLastRowNum = subMergedLastRowNum + subList.size();
+                } else {
+                    subMergedFirstRowNum++;
+                    subMergedLastRowNum++;
+                }
             }
-
             int column = 0;
             for (Object[] os : fields) {
                 Field field = (Field) os[0];
@@ -700,7 +704,6 @@ public class ExcelUtil<T> {
             String key = StringUtils.format("header_{}_{}", excel.headerColor(), excel.headerBackgroundColor());
             if (!headerStyles.containsKey(key)) {
                 CellStyle style = wb.createCellStyle();
-                style = wb.createCellStyle();
                 style.cloneStyleFrom(styles.get("data"));
                 style.setAlignment(HorizontalAlignment.CENTER);
                 style.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -731,7 +734,6 @@ public class ExcelUtil<T> {
             String key = StringUtils.format("data_{}_{}_{}", excel.align(), excel.color(), excel.backgroundColor());
             if (!styles.containsKey(key)) {
                 CellStyle style = wb.createCellStyle();
-                style = wb.createCellStyle();
                 style.setAlignment(excel.align());
                 style.setVerticalAlignment(VerticalAlignment.CENTER);
                 style.setBorderRight(BorderStyle.THIN);
@@ -788,6 +790,9 @@ public class ExcelUtil<T> {
             // 对于任何以表达式触发字符 =-+@开头的单元格，直接使用tab字符作为前缀，防止CSV注入。
             if (StringUtils.startsWithAny(cellValue, FORMULA_STR)) {
                 cellValue = RegExUtils.replaceFirst(cellValue, FORMULA_REGEX_STR, "\t$0");
+            }
+            if (value instanceof Collection && StringUtils.equals("[]", cellValue)) {
+                cellValue = StringUtils.EMPTY;
             }
             cell.setCellValue(StringUtils.isNull(cellValue) ? attr.defaultValue() : cellValue + attr.suffix());
         } else if (ColumnType.NUMERIC == attr.cellType()) {

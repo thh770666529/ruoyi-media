@@ -1,38 +1,6 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="24">
-      <el-col :span="18" :xs="24">
-        <el-card class="box-card">
-          <el-tabs v-model="activeTab" tab-position="left">
-            <el-tab-pane label="基本资料"   name="userinfo">
-              <span slot="label"><i class="el-icon-user-solid"></i> 基本资料</span>
-              <userInfo :user="user" />
-            </el-tab-pane>
-            <el-tab-pane label="我的收藏" name="MyCollect">
-              <span slot="label"><i class="el-icon-collection-tag"></i> 我的收藏</span>
-              <el-button type="danger" class="mb20" size="mini" @click="close">关闭</el-button>
-              <el-tabs type="border-card">
-                <el-tab-pane label="電影">
-                  <userCollect tableName="wm_movie"></userCollect>
-                </el-tab-pane>
-                <el-tab-pane label="博客">
-                  <userCollect tableName="blog_article"></userCollect>
-                </el-tab-pane>
-                <el-tab-pane label="演员">
-                  <userCollect tableName="wm_actor"></userCollect>
-                </el-tab-pane>
-                <el-tab-pane label="问答">
-                  <userCollect tableName="qa_question"></userCollect>
-                </el-tab-pane>
-              </el-tabs>
-            </el-tab-pane>
-            <el-tab-pane label="修改密码" name="resetPwd">
-              <span slot="label"><i class="el-icon-s-tools"></i> 修改密码</span>
-              <resetPwd :user="user" />
-            </el-tab-pane>
-          </el-tabs>
-        </el-card>
-      </el-col>
+    <el-row :gutter="20">
       <el-col :span="6" :xs="24">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
@@ -69,6 +37,38 @@
               </li>
             </ul>
           </div>
+        </el-card>
+      </el-col>
+      <el-col :span="18" :xs="24">
+        <el-card class="box-card">
+          <el-tabs v-model="activeTab" tab-position="left">
+            <el-tab-pane label="基本资料"   name="userinfo">
+              <span slot="label"><i class="el-icon-user-solid"></i> 基本资料</span>
+              <userInfo :user="user" />
+            </el-tab-pane>
+            <el-tab-pane label="我的收藏" name="MyCollect">
+              <span slot="label"><i class="el-icon-collection-tag"></i> 我的收藏</span>
+              <el-button type="danger" class="mb20" size="mini" @click="close">关闭</el-button>
+              <el-tabs type="border-card">
+                <el-tab-pane label="電影">
+                  <userCollect tableName="wm_movie"></userCollect>
+                </el-tab-pane>
+                <el-tab-pane label="博客">
+                  <userCollect tableName="blog_article"></userCollect>
+                </el-tab-pane>
+                <el-tab-pane label="演员">
+                  <userCollect tableName="wm_actor"></userCollect>
+                </el-tab-pane>
+                <el-tab-pane label="问答">
+                  <userCollect tableName="qa_question"></userCollect>
+                </el-tab-pane>
+              </el-tabs>
+            </el-tab-pane>
+            <el-tab-pane label="修改密码" name="resetPwd">
+              <span slot="label"><i class="el-icon-s-tools"></i> 修改密码</span>
+              <resetPwd :user="user" />
+            </el-tab-pane>
+          </el-tabs>
         </el-card>
       </el-col>
     </el-row>
@@ -113,7 +113,6 @@ export default {
 <style scoped>
   .app-container {
     padding: 20px;
-    width: 1300px;
     margin: auto;
   }
 

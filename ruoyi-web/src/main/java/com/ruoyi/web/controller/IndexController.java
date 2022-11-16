@@ -65,25 +65,25 @@ public class IndexController extends BaseController {
     @GetMapping("/getHotActorList")
     public AjaxResult getHotActorList() {
         //查询前10的热门演员
-        return AjaxResult.success(actorService.selectHotActorList(10));
+        return success(actorService.selectHotActorList(10));
     }
 
     @GetMapping("/getHotMovieList")
     public AjaxResult getHotMovieList() {
         //查询前12的热门电影
-        return AjaxResult.success(movieService.selectHotMovieList(10));
+        return success(movieService.selectHotMovieList(10));
     }
 
     @GetMapping("/getAllBannerList")
     public AjaxResult getAllBannerList() {
         List<WebsiteBanner> list = websiteBannerService.selectWebsiteBannerList(null);
-        return AjaxResult.success(list);
+        return success(list);
     }
 
     @GetMapping("/getLinkList")
     public AjaxResult getLinkList() {
         List<WebsiteLink> list = websiteLinkService.selectWebsiteLinkList(null);
-        return AjaxResult.success(list);
+        return success(list);
     }
 
 
@@ -91,7 +91,7 @@ public class IndexController extends BaseController {
     public AjaxResult getHotArticleList() {
         log.info("门户获取首页排行博客");
         List<Article> list = articleService.selectHotArticleList(10);
-        return AjaxResult.success(list);
+        return success(list);
     }
 
     /**
@@ -110,7 +110,7 @@ public class IndexController extends BaseController {
     public AjaxResult getHotTagList() {
         log.info("门户获取最热标签");
         List<Tag> list = tagService.selectHotTagList(10);
-        return AjaxResult.success(list);
+        return success(list);
     }
 
 

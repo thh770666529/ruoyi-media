@@ -26,6 +26,6 @@ public class WebConfigController extends BaseController {
      */
     @PostMapping("/getWebConfig")
     public AjaxResult getWebConfig() {
-        return AjaxResult.success(webConfigService.getWebConfig());
+        return success(webConfigService.getWebConfig());
     }
 }

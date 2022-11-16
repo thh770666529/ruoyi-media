@@ -1,17 +1,16 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch">
       <el-form-item label="部门名称" prop="deptName">
         <el-input
           v-model="queryParams.deptName"
           placeholder="请输入部门名称"
           clearable
-          size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="部门状态" clearable size="small">
+        <el-select v-model="queryParams.status" placeholder="部门状态" clearable>
           <el-option
             v-for="dict in dict.type.sys_normal_disable"
             :key="dict.value"
@@ -298,9 +297,13 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改部门";
-      });
-      listDeptExcludeChild(row.deptId).then(response => {
-        this.deptOptions = this.handleTree(response.data, "deptId");
+        listDeptExcludeChild(row.deptId).then(response => {
+          this.deptOptions = this.handleTree(response.data, "deptId");
+          if (this.deptOptions.length == 0) {
+            const noResultsOptions = { deptId: this.form.parentId, deptName: this.form.parentName, children: [] };
+            this.deptOptions.push(noResultsOptions);
+          }
+        });
       });
     },
     /** 提交按钮 */

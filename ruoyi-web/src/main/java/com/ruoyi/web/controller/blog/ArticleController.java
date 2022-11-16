@@ -88,7 +88,7 @@ public class ArticleController extends BaseController {
     @GetMapping("/getSameArticleList/{articleId}")
     public AjaxResult getSameArticleList(@PathVariable("articleId") Long articleId) {
         log.info("门户获取相关文章");
-        return AjaxResult.success(articleService.getSameArticleList(articleId));
+        return success(articleService.getSameArticleList(articleId));
     }
 
     /**
@@ -146,7 +146,7 @@ public class ArticleController extends BaseController {
                 articleVO.setThumbFlag(true);
             }
         }
-        return AjaxResult.success(articleVO);
+        return success(articleVO);
     }
 
     /**
@@ -170,7 +170,7 @@ public class ArticleController extends BaseController {
     public AjaxResult thumbArticle(@PathVariable("articleId") Long articleId) {
         log.info("门户点赞博客文章id={}", articleId);
         articleService.thumbArticleById(articleId);
-        return AjaxResult.success();
+        return success();
     }
 
 

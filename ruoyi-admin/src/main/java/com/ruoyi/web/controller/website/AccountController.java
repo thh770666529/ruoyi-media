@@ -64,7 +64,7 @@ public class AccountController extends BaseController {
     @PreAuthorize("@ss.hasPermi('website:account:query')")
     @GetMapping(value = "/{accountId}")
     public AjaxResult getInfo(@PathVariable("accountId") Long accountId) {
-        return AjaxResult.success(accountService.selectAccountByAccountId(accountId));
+        return success(accountService.selectAccountByAccountId(accountId));
     }
 
     /**

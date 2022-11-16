@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.CommentStatusEnum;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.*;
@@ -213,8 +214,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // 遍历所有节点数据
         for (Comment comment : commentList) {
             // 如果当前节点 ID 与父节点 ID 一致，表示当前数据是该节点的子节点
-            if (String.valueOf(StringUtils.toStr(id)).
-                    equals(String.valueOf(StringUtils.toStr(comment.getParentCommentId())))) {
+
+            if (Convert.toStr(id, "").
+                    equals(Convert.toStr(comment.getParentCommentId()))) {
                 childList.add(comment);
             }
         }

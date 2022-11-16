@@ -64,7 +64,7 @@ public class WebsiteLinkController extends BaseController {
     @PreAuthorize("@ss.hasPermi('website:link:query')")
     @GetMapping(value = "/{linkId}")
     public AjaxResult getInfo(@PathVariable("linkId") Long linkId) {
-        return AjaxResult.success(websiteLinkService.selectWebsiteLinkById(linkId));
+        return success(websiteLinkService.selectWebsiteLinkById(linkId));
     }
 
     /**
