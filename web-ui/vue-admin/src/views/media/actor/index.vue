@@ -72,7 +72,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="actorList" @selection-change="handleSelectionChange">
+    <!-- <el-table v-loading="loading" :data="actorList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键" align="left" prop="actorId" width="50" />
       <el-table-column label="姓名" align="center" prop="name"  width="150" />
@@ -102,7 +102,32 @@
           >删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
+
+    <el-row style="display: flex;flex-wrap: wrap;" v-loading="loading">
+      <el-col v-for="(item, index) in actorList" :key="index" style="margin: 5px 5px; width: 18%;">
+        <el-card :body-style="{ padding: '0px' }">
+          <img :src="fileUploadHost+item.avatar" class="image-avatar" @click="handleDetail(item)">
+
+          <div style="padding: 14px;">
+            <span>{{item.name}}</span>
+            <div class="bottom clearfix">
+              <!-- <span class="description" >{{labelFormat2(item.label)}}</span> -->
+              <span class="description">{{item.description}}</span>
+
+              <el-button size="mini" type="text" icon="el-icon-search" @click="handleDetail(item)"
+                v-hasPermi="['media:actor:list']">查看</el-button>
+
+              <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(item)"
+                v-hasPermi="['media:actor:edit']">修改</el-button>
+
+              <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(item)"
+                v-hasPermi="['media:actor:remove']">删除</el-button>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
 
     <pagination
       v-show="total>0"
@@ -364,6 +389,10 @@
         this.download('media/actor/export', {
           ...this.queryParams
         }, `actor_${new Date().getTime()}.xlsx`)
+      },
+      /** 演员详情操作 */
+      handleDetail(row) {
+        this.$router.push("/media/actor/detail/" + row.actorId);
       }
     }
   };
@@ -399,6 +428,21 @@
     width: 200px;
     height: 288px;
     display: block;
+  }
+  .image-avatar {
+    width: 100%;
+    display: block;
+    height: 200px;
+    cursor: pointer;
+  }
+  .description {
+    display: inline-block;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 12px;
+    color: #999;
   }
 
 </style>

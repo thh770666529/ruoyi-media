@@ -156,4 +156,14 @@ public class MovieController extends BaseController {
         UploadVideoVO uploadVideoVO = videoService.uploadVideoByNetWorkDisk(netWorkDiskVO);
         return success(uploadVideoVO);
     }
+
+    /**
+     * 通过演员相关电影列表
+     */
+    @GetMapping("/getListByActorId/{actorId}")
+    public TableDataInfo getListByActorId(@PathVariable("actorId") Long actorId) {
+        startPage();
+        List<MovieVO> list = movieService.getListByActorId(actorId);
+        return getDataTable(list);
+    }
 }

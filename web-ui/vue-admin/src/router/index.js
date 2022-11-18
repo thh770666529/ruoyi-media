@@ -179,6 +179,22 @@ export const dynamicRoutes = [
     }
  ]
 },
+
+{
+    path: '/media',
+    component: Layout,
+    hidden: true,
+    permissions: ['media:actor:list'],
+    children: [
+    {
+     path: 'actor/detail/:id?',
+     component: () => import('@/views/media/actor/detail'),
+     name: 'ActorDetail',
+     meta: { title: '演员详情' }
+    }
+ ]
+},
+
   {
     path: '/share/:shareBatchNum',
     name: 'Share',

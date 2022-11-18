@@ -62,5 +62,13 @@ export function deleteMovieActor(actorIds) {
 }
 
 
+export function getListByActorId(actorId) {
+  return request({
+    url: '/media/movie/getListByActorId/' + actorId,
+    method: 'get'
+  })
+}
+
+
 // 通过网盘上传视频
 export const uploadVideoByNetWorkDisk = data => request.post('/media/movie/uploadVideoByNetWorkDisk', data);
