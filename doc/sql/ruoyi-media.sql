@@ -2000,7 +2000,7 @@ delimiter ;
 
 -- 缓存列表
 
-delete from sys_menu where menu_id in ('114', '115', '116');
+delete from sys_menu where menu_id in ('114', '115', '116', '117');
 insert into sys_menu values('114',  '缓存列表', '2',   '6', 'cacheList',  'monitor/cache/list',       '', 1, 0, 'C', '0', '0', 'monitor:cache:list',      'redis-list',    'admin', sysdate(), '', null, '缓存列表菜单');
 insert into sys_menu values('115',  '表单构建', '3',   '1', 'build',      'tool/build/index',         '', 1, 0, 'C', '0', '0', 'tool:build:list',         'build',         'admin', sysdate(), '', null, '表单构建菜单');
 insert into sys_menu values('116',  '代码生成', '3',   '2', 'gen',        'tool/gen/index',           '', 1, 0, 'C', '0', '0', 'tool:gen:list',           'code',          'admin', sysdate(), '', null, '代码生成菜单');
@@ -2046,6 +2046,5 @@ CREATE TABLE `website_credits_flow`  (
   `credits_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`credits_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '积分流水表' ROW_FORMAT = Dynamic;
-insert into sys_role_menu values ('2', '1060');
 
 SET FOREIGN_KEY_CHECKS = 1;
