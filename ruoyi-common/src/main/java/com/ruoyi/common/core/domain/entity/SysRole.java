@@ -1,6 +1,7 @@
 package com.ruoyi.common.core.domain.entity;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -41,7 +42,7 @@ public class SysRole extends BaseEntity {
      * 角色排序
      */
     @Excel(name = "角色排序")
-    private String roleSort;
+    private Integer roleSort;
 
     /**
      * 数据范围（1：所有数据权限；2：自定义数据权限；3：本部门数据权限；4：本部门及以下数据权限；5：仅本人数据权限）
@@ -134,12 +135,12 @@ public class SysRole extends BaseEntity {
         this.roleKey = roleKey;
     }
 
-    @NotBlank(message = "显示顺序不能为空")
-    public String getRoleSort() {
+    @NotNull(message = "显示顺序不能为空")
+    public Integer getRoleSort() {
         return roleSort;
     }
 
-    public void setRoleSort(String roleSort) {
+    public void setRoleSort(Integer roleSort) {
         this.roleSort = roleSort;
     }
 
